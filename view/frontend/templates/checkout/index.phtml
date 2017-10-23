@@ -1,9 +1,17 @@
 <?php /** @var Digia\AvardaCheckout\Block\Checkout $block */ ?>
-<h1>Hello World!</h1>
+<?php
+  $devMode = $block->getIsDevMode();
+?>
+
 <div id="checkout-root"></div>
+
 <script type="text/javascript">
 console.log('Hello from config!');
 // TODO: Inject all the required configs here
 </script>
-<!-- TODO: How to handle dev vs production srcs? -->
-<script type="text/javascript" src="http://127.0.0.1:8080/build/main.bundle.js"></script>
+
+<?php if($devMode) : ?>
+  <script type="text/javascript" src="http://avarda.box:8080/assets/bundle.js"></script>
+<?php else : ?>
+  <script type="text/javascript" src="<?php echo $block->getViewFileUrl('Digia_AvardaCheckout::js/bundle.js');?>"></script>
+<?php endif ?>

@@ -9,7 +9,8 @@ use \Magento\Framework\View\Element\Template\Context;
 class Checkout extends Template {
 
   private $devMode = true;
-  private $storeManager;
+  private $checkoutSession;
+  private $quoteIdMaskFactory;
 
   /**
    * @param Context               $context               [description]
@@ -18,9 +19,13 @@ class Checkout extends Template {
    */
   public function __construct(
     Context $context,
+    \Magento\Checkout\Model\Session $checkoutSession,
+    \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
     array $data = []
   ) {
     parent::__construct($context, $data);
+    $this->checkoutSession = $checkoutSession;
+    $this->quoteIdMaskFactory = $quoteIdMaskFactory;  
   }
 
   public function getIsDevMode() {
@@ -31,8 +36,10 @@ class Checkout extends Template {
     return $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA );
   }
 
-  public function foobar() {
-    echo "foobar\n";
-    return json_encode($this->_scopeConfig);
+  public function getMaskedQuoteId() {
+    return $this->quoteIdMaskFactory->create()->load(
+      $this->checkoutSession->getQuote()->getId(),
+      'quote_id'
+      )->getMaskedId();
   }
 }

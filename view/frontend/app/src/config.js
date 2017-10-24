@@ -3,7 +3,7 @@ import Joi from 'joi-browser';
 import type {Config} from '$src/types';
 
 const configSchema = Joi.object().keys({
-  maskedCartId: Joi.string(),
+  maskedQuoteId: Joi.string(),
   customerId: Joi.string(),
   baseUrl: Joi.string().required(),
   baseMediaUrl: Joi.string().required(),

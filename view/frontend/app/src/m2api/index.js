@@ -29,15 +29,15 @@ export const getApiUrl = (path: string, query?: Object): string =>
       : '',
   ].join('');
 
-export const m2get = (url: string) => callApi(url, {method: 'GET'});
+export const apiGet = (url: string) => callApi(url, {method: 'GET'});
 
-export const m2post = (url: string, data: Serializeable) =>
+export const apiPost = (url: string, data: Serializeable) =>
   callApi(url, {
     method: 'POST',
     body: JSON.stringify(data),
   });
 
-export const m2put = (url: string, data: Serializeable) =>
+export const apiPut = (url: string, data: Serializeable) =>
   callApi(url, {method: 'PUT', body: JSON.stringify(data)});
 
-export const m2delete = (url: string) => callApi(url, {method: 'DELETE'});
+export const apiDelete = (url: string) => callApi(url, {method: 'DELETE'});

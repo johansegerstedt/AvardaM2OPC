@@ -10,7 +10,7 @@ export type Action<Type: $Subtype<string>, Payload> = {|
 export type Config = {
   baseUrl: string,
   baseMediaUrl: string,
-  maskedGuestCartId: ?string,
+  maskedQuoteId: ?string,
   customerId: ?string,
 };
 

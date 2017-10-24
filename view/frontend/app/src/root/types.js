@@ -1,23 +1,6 @@
 // @flow
-
-type Cart = {
-  id: string,
-  items: string[], // CartITems ->
-};
-
-type Item = {
-  id: string,
-  sku: string,
-  qty: string,
-};
-
-type Product = {
-  id: string,
-  sku: string,
-};
+import type {CartState} from '$src/cart/types';
 
 export type AppState = {
-  cart: Cart,
-  cartItems: Item[],
-  products: Product[],
+  cart: {cart: CartState},
 };

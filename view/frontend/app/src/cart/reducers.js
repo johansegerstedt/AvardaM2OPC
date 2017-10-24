@@ -2,7 +2,7 @@
 import {combineReducers} from 'redux';
 import {handleActions} from 'redux-actions';
 import {ActionTypes} from './constants';
-import type {CartState, CartItemState} from './types';
+import type {CartState} from './types';
 
 const cart: (CartState, any) => CartState = handleActions(
   {
@@ -11,7 +11,7 @@ const cart: (CartState, any) => CartState = handleActions(
   null,
 );
 
-const cartItems = (state): {string: CartItemState} => state;
+// TODO const cartItems = (state): {string: CartItemState} => state;
 
 export default combineReducers({
   cart,

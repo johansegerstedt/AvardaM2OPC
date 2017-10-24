@@ -1,13 +1,25 @@
 // @flow
 import {takeLatest} from 'redux-saga';
-import {all, call, fork, put} from 'redux-saga/effects';
-import {fetchCartSuccess} from './actions';
+import {all, fork, put} from 'redux-saga/effects';
+import {fetchCartSuccess, fetchCartFailure} from './actions';
 import {ActionTypes as Cart} from './constants';
+import {getApiUrl, apiGet} from '$src/m2api';
+import config from '$src/config';
 
 function* fetchCart() {
-  // eslint-disable-next-line no-console
-  console.log('fetching the cart');
-  yield put(fetchCartSuccess({id: 'todo'}));
+  // TODO: Handle guest cart vs logged in cart!
+  const url = getApiUrl(
+    config.maskedQuoteId
+      ? `/V1/guest-carts/${config.maskedQuoteId}/`
+      : '/V1/carts/mine/',
+  );
+
+  try {
+    const data = yield apiGet(url);
+    yield put(fetchCartSuccess(data));
+  } catch (err) {
+    yield put(fetchCartFailure(err.toString()));
+  }
 }
 
 export default function* saga(): Generator<*, *, *> {

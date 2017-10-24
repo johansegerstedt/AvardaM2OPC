@@ -1,16 +1,15 @@
 // @flow
+import 'babel-polyfill';
 import React from 'react';
 import ReactDOM from 'react-dom';
+import Root from './root/components/Root';
+import configureStore from './root/configureStore';
 
-type Props = {
-  name?: string,
-};
-
-const Hello = ({name = 'World'}: Props = {}) => (
-  <h1>{`Hello from React, ${name}!`}</h1>
-);
+import './index.scss';
 
 const container = document.getElementById('checkout-root');
+
 if (container !== null) {
-  ReactDOM.render(<Hello />, container);
+  const store = configureStore();
+  ReactDOM.render(<Root store={store} />, container);
 }

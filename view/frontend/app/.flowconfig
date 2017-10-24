@@ -9,3 +9,4 @@ src/
 all=warn
 
 [options]
+module.name_mapper='^.*\.scss$' -> 'css-module-flow'

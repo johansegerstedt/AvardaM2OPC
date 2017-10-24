@@ -8,7 +8,7 @@ use \Magento\Framework\View\Element\Template\Context;
 
 class Checkout extends Template {
 
-  private $devMode = false;
+  private $devMode = true;
 
   /**
    * @param Context               $context               [description]

@@ -10,3 +10,4 @@ all=warn
 
 [options]
 module.name_mapper='^.*\.scss$' -> 'css-module-flow'
+module.name_mapper='^\$src/\(.*\)$' -> '<PROJECT_ROOT>/src/\1'

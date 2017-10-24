@@ -1,6 +1,13 @@
 <?php /** @var Digia\AvardaCheckout\Block\Checkout $block */ ?>
 <?php
   $devMode = $block->getIsDevMode();
+  $config = [
+    "baseUrl" => $block->getBaseUrl(),
+    "baseMediaUrl" => $block->getBaseMediaUrl(),
+  ];
+  //$config->baseUrl = $block->getBaseUrl();
+  //$config->baseMediaUrl = $block->getBaseMediaUrl();
+  // echo $block->foobar();
 ?>
 
 <div id="checkout-root"></div>
@@ -8,6 +15,7 @@
 <script type="text/javascript">
 console.log('Hello from config!');
 // TODO: Inject all the required configs here
+window.__avarda_checkout_config__ = <?php echo json_encode($config); ?>;
 </script>
 
 <?php if($devMode) : ?>

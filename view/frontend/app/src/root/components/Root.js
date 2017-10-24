@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import {Provider} from 'react-redux';
+import CartContainer from '$src/cart/components/CartContainer';
 import type {AppState} from '../types';
 import type {Action} from '../../types';
 import type {Store} from 'redux';
@@ -15,7 +16,7 @@ class Root extends React.Component<Props, State> {
     const {store} = this.props;
     return (
       <Provider store={store}>
-        <h1>Hello from React!</h1>
+        <CartContainer />
       </Provider>
     );
   }

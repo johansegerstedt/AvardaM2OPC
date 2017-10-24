@@ -38,4 +38,9 @@ export default {
     port: 8080,
     public: 'avarda.box:8080',
   },
+  resolve: {
+    alias: {
+      $src: path.resolve(__dirname, 'src/'),
+    },
+  },
 };

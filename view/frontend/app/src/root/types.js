@@ -1,5 +1,23 @@
 // @flow
 
+type Cart = {
+  id: string,
+  items: string[], // CartITems ->
+};
+
+type Item = {
+  id: string,
+  sku: string,
+  qty: string,
+};
+
+type Product = {
+  id: string,
+  sku: string,
+};
+
 export type AppState = {
-  foo: boolean,
+  cart: Cart,
+  cartItems: Item[],
+  products: Product[],
 };

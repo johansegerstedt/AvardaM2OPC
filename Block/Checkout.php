@@ -9,6 +9,7 @@ use \Magento\Framework\View\Element\Template\Context;
 class Checkout extends Template {
 
   private $devMode = true;
+  private $storeManager;
 
   /**
    * @param Context               $context               [description]
@@ -24,5 +25,14 @@ class Checkout extends Template {
 
   public function getIsDevMode() {
     return $this->devMode;
+  }
+
+  public function getBaseMediaUrl() {
+    return $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA );
+  }
+
+  public function foobar() {
+    echo "foobar\n";
+    return json_encode($this->_scopeConfig);
   }
 }

@@ -1,6 +1,15 @@
 // @flow
-import type {CartState} from '$src/cart/types';
+import type {Selector as _Selector} from 'reselect';
+import type {CartState, CartItemState} from '$src/cart/types';
+import type {CartActions} from '$src/cart/actions';
 
 export type AppState = {
-  cart: {cart: CartState},
+  cart: CartState,
+  cartItems: CartItemState,
 };
+
+export type Selector<Props, Result> = _Selector<AppState, Props, Result>;
+
+export type Actions = CartActions;
+
+export type Reducer<Value> = (Value, Actions) => Value;

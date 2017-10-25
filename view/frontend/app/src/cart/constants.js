@@ -1,4 +1,18 @@
 // @flow
+import {schema} from 'normalizr';
+
+/*
+API
+ */
+export const cartItemSchema = new schema.Entity(
+  'cartItems',
+  {},
+  {idAttribute: 'item_id'},
+);
+
+export const cartSchema = new schema.Entity('cart', {
+  items: [cartItemSchema],
+});
 
 /*
 ACTIONS

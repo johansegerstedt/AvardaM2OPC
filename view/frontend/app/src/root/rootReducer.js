@@ -1,11 +1,11 @@
 // @flow
 import {combineReducers} from 'redux';
-import cart from '$src/cart/reducers';
-import type {AppState} from './types';
-import type {Action} from '../types';
+import {cart, cartItems} from '$src/cart/reducers';
+import type {AppState, Actions} from './types';
 
-const mainReducer: (AppState, Action<*, *>) => AppState = combineReducers({
+const mainReducer: (AppState, Actions) => AppState = combineReducers({
   cart,
+  cartItems,
 });
 
 export default mainReducer;

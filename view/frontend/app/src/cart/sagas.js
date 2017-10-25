@@ -1,8 +1,9 @@
 // @flow
 import {takeLatest} from 'redux-saga';
 import {all, fork, put} from 'redux-saga/effects';
+import {normalize} from 'normalizr';
 import {fetchCartSuccess, fetchCartFailure} from './actions';
-import {ActionTypes as Cart} from './constants';
+import {ActionTypes as Cart, cartSchema} from './constants';
 import {getApiUrl, apiGet} from '$src/m2api';
 import config from '$src/config';
 
@@ -16,7 +17,7 @@ function* fetchCart() {
 
   try {
     const data = yield apiGet(url);
-    yield put(fetchCartSuccess(data));
+    yield put(fetchCartSuccess(normalize(data, cartSchema)));
   } catch (err) {
     yield put(fetchCartFailure(err.toString()));
   }

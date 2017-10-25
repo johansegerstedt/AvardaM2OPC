@@ -16,6 +16,7 @@
     "babel-core": "^6.26.0",
     "babel-eslint": "^8.0.1",
     "babel-loader": "^7.1.2",
+    "babel-plugin-flow-react-proptypes": "^6.1.0",
     "babel-plugin-transform-async-to-generator": "^6.24.1",
     "babel-plugin-transform-object-rest-spread": "^6.26.0",
     "babel-plugin-transform-react-jsx": "^6.24.1",
@@ -46,12 +47,17 @@
   "dependencies": {
     "babel-polyfill": "^6.26.0",
     "joi-browser": "^10.6.1",
+    "lodash": "^4.17.4",
+    "normalizr": "^3.2.4",
+    "prop-types": "^15.6.0",
     "query-string": "^5.0.0",
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
+    "react-i18next": "^6.0.6",
     "react-redux": "^5.0.6",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",
-    "redux-saga": "^0.16.0"
+    "redux-saga": "^0.16.0",
+    "reselect": "^3.0.1"
   }
 }

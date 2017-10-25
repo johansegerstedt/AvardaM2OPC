@@ -5,7 +5,7 @@ import type {ById, EntitiesState, Normalized, Reference} from '$src/types';
 STATE
  */
 
-export type Addresses = {
+export type Address = {
   id: number,
   customer_id: number,
   region: Region,
@@ -56,6 +56,29 @@ export type Cart = {
   customer_tax_class_id: number,
   store_id: number,
   extension_attributes: ExtensionAttributes,
+  grand_total: number,
+  base_grand_total: number,
+  subtotal: number,
+  base_subtotal: number,
+  discount_amount: number,
+  base_discount_amount: number,
+  subtotal_with_discount: number,
+  base_subtotal_with_discount: number,
+  shipping_amount: number,
+  base_shipping_amount: number,
+  shipping_discount_amount: number,
+  base_shipping_discount_amount: number,
+  tax_amount: number,
+  base_tax_amount: number,
+  weee_tax_applied_amount: null | number,
+  shipping_tax_amount: number,
+  base_shipping_tax_amount: number,
+  subtotal_incl_tax: number,
+  shipping_incl_tax: number,
+  base_shipping_incl_tax: number,
+  base_currency_code: string,
+  quote_currency_code: string,
+  total_segments: TotalSegments[],
 };
 
 export type Currency = {
@@ -81,12 +104,16 @@ export type Customer = {
   lastname: string,
   store_id: number,
   website_id: number,
-  addresses: Addresses[],
+  addresses: Address[],
   disable_auto_group_change: number,
 };
 
 export type ExtensionAttributes = {
   shipping_assignments: ShippingAssignments[],
+};
+
+export type ExtensionAttributes1 = {
+  tax_grandtotal_details: TaxGrandtotalDetails[],
 };
 
 export type CartItem = {
@@ -97,6 +124,38 @@ export type CartItem = {
   price: number,
   product_type: string,
   quote_id: string,
+  base_price: number,
+  row_total: number,
+  base_row_total: number,
+  row_total_with_discount: number,
+  tax_amount: number,
+  base_tax_amount: number,
+  tax_percent: number,
+  discount_amount: number,
+  base_discount_amount: number,
+  discount_percent: number,
+  price_incl_tax: number,
+  base_price_incl_tax: number,
+  row_total_incl_tax: number,
+  base_row_total_incl_tax: number,
+  options: string,
+  weee_tax_applied_amount: null | number,
+  weee_tax_applied: null | number,
+};
+
+export type Items1 = {
+  item_id: number,
+  sku: string,
+  qty: number,
+  name: string,
+  price: number,
+  product_type: string,
+  quote_id: string,
+};
+
+export type Rates = {
+  percent: string,
+  title: string,
 };
 
 export type Region = {
@@ -113,6 +172,20 @@ export type Shipping = {
 export type ShippingAssignments = {
   shipping: Shipping,
   items: CartItem[],
+};
+
+export type TaxGrandtotalDetails = {
+  amount: number,
+  rates: Rates[],
+  group_id: number,
+};
+
+export type TotalSegments = {
+  code: string,
+  title: string,
+  value: number,
+  extension_attributes?: ExtensionAttributes1,
+  area?: string,
 };
 
 export type CartState = {

@@ -7,7 +7,11 @@ type Props = {
   cartItems: CartItem[],
 };
 
-const ItemRow = ({item: {name, price, qty}}: {item: CartItem}) => [
+const ItemRow = ({
+  item: {name, price_incl_tax, row_total_incl_tax, qty},
+}: {
+  item: CartItem,
+}) => [
   <tr key="0" className="item-info">
     <td data-th="Item" className="col item">
       <a
@@ -38,7 +42,7 @@ const ItemRow = ({item: {name, price, qty}}: {item: CartItem}) => [
     <td className="col price" data-th="Price">
       <span className="price-excluding-tax" data-label="Excl. Tax">
         <span className="cart-price">
-          <span className="price">{formatCurrency(price)}</span>{' '}
+          <span className="price">{formatCurrency(price_incl_tax)}</span>{' '}
         </span>
       </span>
     </td>
@@ -67,7 +71,9 @@ const ItemRow = ({item: {name, price, qty}}: {item: CartItem}) => [
     <td className="col subtotal" data-th="Subtotal">
       <span className="price-excluding-tax" data-label="Excl. Tax">
         <span className="cart-price">
-          <span className="price">{formatCurrency(price * qty)}</span>{' '}
+          <span className="price">
+            {formatCurrency(row_total_incl_tax)}
+          </span>{' '}
         </span>
       </span>
     </td>

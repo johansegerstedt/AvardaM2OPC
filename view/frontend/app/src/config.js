@@ -3,8 +3,12 @@ import Joi from 'joi-browser';
 import type {Config} from '$src/types';
 
 const configSchema = Joi.object().keys({
-  maskedQuoteId: Joi.string(),
-  customerId: Joi.string(),
+  maskedQuoteId: Joi.string()
+    .optional()
+    .allow(null),
+  customerId: Joi.string()
+    .optional()
+    .allow(null),
   baseUrl: Joi.string().required(),
   baseMediaUrl: Joi.string().required(),
 });

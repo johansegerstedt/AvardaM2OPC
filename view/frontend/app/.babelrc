@@ -1,8 +1,4 @@
 {
-  "presets": ["env", "flow"],
-  "plugins": [
-    "babel-plugin-transform-react-jsx",
-    "babel-plugin-transform-object-rest-spread",
-    "flow-react-proptypes"
-  ]
+  "presets": ["env", "stage-2", "flow", "react"],
+  "plugins": ["flow-react-proptypes"]
 }

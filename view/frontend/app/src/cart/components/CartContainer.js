@@ -2,7 +2,7 @@
 import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {fetchCartRequest} from '../actions';
+import {fetchCartRequest, updateCartItems} from '../actions';
 import {getAllCartItems, getCart} from '../selectors';
 import CartSummary from './CartSummary';
 import CartForm from './CartForm';
@@ -13,6 +13,7 @@ type Props = {
   cart: null | CartType,
   cartItems: CartItem[],
   fetchCartRequest(): void,
+  updateCartItems(CartItem[]): void,
 };
 
 // TODO
@@ -28,12 +29,12 @@ class Cart extends React.Component<Props> {
   render() {
     // eslint-disable-next-line no-console
     console.log(this.props);
-    const {cart, cartItems} = this.props;
+    const {cart, cartItems, updateCartItems} = this.props;
 
     return cart ? (
       <div className="cart-container">
         <CartSummary />
-        <CartForm cartItems={cartItems} />
+        <CartForm cartItems={cartItems} updateCartItems={updateCartItems} />
         <GiftOptionsCart />
         <CartDiscount />
       </div>
@@ -49,6 +50,6 @@ const mapStateToProps = state => ({
 });
 
 const mapDispatchToProps = dispatch =>
-  bindActionCreators({fetchCartRequest}, dispatch);
+  bindActionCreators({fetchCartRequest, updateCartItems}, dispatch);
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

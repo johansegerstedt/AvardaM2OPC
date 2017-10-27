@@ -1,7 +1,7 @@
 // @flow
 import {combineReducers} from 'redux';
 import {handleActions} from 'redux-actions';
-import {fetchCartSuccess} from './actions';
+import {fetchCartSuccess, updateCartItemsSuccess} from './actions';
 import {ActionTypes} from './constants';
 import type {ActionType} from 'redux-actions';
 import type {ById} from '$src/types';
@@ -29,6 +29,17 @@ export const cartItemsById: Reducer<null | ById<Cart>> = handleActions(
       state,
       {payload: {entities}}: ActionType<typeof fetchCartSuccess>,
     ) => entities.cartItems,
+    [ActionTypes.UPDATE_ITEMS_SUCCESS]: (
+      state = {},
+      {payload: items = []}: ActionType<typeof updateCartItemsSuccess>,
+    ) =>
+      items.reduce(
+        (newState, {item_id, qty}) => ({
+          ...newState,
+          [item_id]: {...state[item_id], qty},
+        }),
+        state,
+      ),
   },
   null,
 );

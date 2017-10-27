@@ -1,14 +1,16 @@
 // @flow
 import React from 'react';
+import {get} from 'lodash';
 import {formatCurrency} from '$src/utils/format';
 import type {CartItem} from '../types';
 
 type Props = {
   cartItems: CartItem[],
+  updateCartItems(CartItem[]): void,
 };
 
 const ItemRow = ({
-  item: {name, price_incl_tax, row_total_incl_tax, qty},
+  item: {name, item_id, price_incl_tax, qty},
 }: {
   item: CartItem,
 }) => [
@@ -54,7 +56,7 @@ const ItemRow = ({
         <div className="control qty">
           <input
             id="cart-98-qty"
-            name="cart[98][qty]"
+            name={`cart[${item_id}][qty]`} // Used to get updated quantities!
             data-cart-item-id="24-MB02"
             defaultValue={qty}
             type="number"
@@ -72,7 +74,7 @@ const ItemRow = ({
       <span className="price-excluding-tax" data-label="Excl. Tax">
         <span className="cart-price">
           <span className="price">
-            {formatCurrency(row_total_incl_tax)}
+            {formatCurrency(price_incl_tax * qty)}
           </span>{' '}
         </span>
       </span>
@@ -105,13 +107,35 @@ const ItemRow = ({
 ];
 
 class CartForm extends React.Component<Props> {
+  updateCartItems: EventHandler = event => {
+    event.preventDefault();
+    const {cartItems, updateCartItems} = this.props;
+    const quantities = cartItems.reduce(
+      (qtyById, {item_id}) => ({
+        ...qtyById,
+        [item_id]: parseInt(
+          get(document.forms, `cartForm['cart[${item_id}][qty]'].value`),
+        ),
+      }),
+      {},
+    );
+
+    const updates = cartItems
+      .filter(({item_id, qty}) => qty !== quantities[item_id])
+      .map(item => ({...item, qty: quantities[item.item_id]}));
+
+    updateCartItems(updates);
+  };
+
   render() {
     const {cartItems} = this.props;
     return (
       <form
         id="form-validate"
+        name="cartForm"
         className="form form-cart"
-        noValidate="novalidate">
+        noValidate="novalidate"
+        onSubmit={this.updateCartItems}>
         <div className="cart table-wrapper">
           <table id="shopping-cart-table" className="cart items data table">
             <caption role="heading" aria-level={2} className="table-caption">
@@ -148,7 +172,6 @@ class CartForm extends React.Component<Props> {
             <span>Continue Shopping</span>
           </a>
           <button
-            type="submit"
             name="update_cart_action"
             data-cart-empty
             value="empty_cart"

@@ -24,6 +24,9 @@ const FETCH_FAILURE: 'fetchCartFailure' = 'fetchCartFailure';
 const UPDATE_ITEMS_REQUEST: 'updateCartItemsRequest' = 'updateCartItemsRequest';
 const UPDATE_ITEMS_SUCCESS: 'updateCartItemsSuccess' = 'updateCartItemsSuccess';
 const UPDATE_ITEMS_FAILURE: 'updateCartItemsFailure' = 'updateCartItemsFailure';
+const DELETE_ITEM_REQUEST: 'deleteCartItemRequest' = 'deleteCartItemRequest';
+const DELETE_ITEM_SUCCESS: 'deleteCartItemSuccess' = 'deleteCartItemSuccess';
+const DELETE_ITEM_FAILURE: 'deleteItemFailure' = 'deleteItemFailure';
 
 export const ActionTypes = {
   FETCH_REQUEST,
@@ -32,4 +35,7 @@ export const ActionTypes = {
   UPDATE_ITEMS_SUCCESS,
   UPDATE_ITEMS_REQUEST,
   UPDATE_ITEMS_FAILURE,
+  DELETE_ITEM_SUCCESS,
+  DELETE_ITEM_REQUEST,
+  DELETE_ITEM_FAILURE,
 };

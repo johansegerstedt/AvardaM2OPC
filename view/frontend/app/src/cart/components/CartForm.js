@@ -7,12 +7,15 @@ import type {CartItem} from '../types';
 type Props = {
   cartItems: CartItem[],
   updateCartItems(CartItem[]): void,
+  deleteCartItem(itemId: string): void,
 };
 
 const ItemRow = ({
   item: {name, item_id, price_incl_tax, qty},
+  deleteItem,
 }: {
   item: CartItem,
+  deleteItem: EventHandler,
 }) => [
   <tr key="0" className="item-info">
     <td data-th="Item" className="col item">
@@ -98,7 +101,8 @@ const ItemRow = ({
           href="#"
           title="Remove item"
           className="action action-delete"
-          data-post="{&quot;action&quot;:&quot;http:\/\/avarda.box\/checkout\/cart\/delete\/&quot;,&quot;data&quot;:{&quot;id&quot;:&quot;98&quot;,&quot;uenc&quot;:&quot;aHR0cDovL2F2YXJkYS5ib3gvY2hlY2tvdXQvY2FydC8,&quot;}}">
+          onClick={deleteItem}
+          data-itemid={item_id}>
           <span>Remove item </span>
         </a>
       </div>
@@ -125,6 +129,15 @@ class CartForm extends React.Component<Props> {
       .map(item => ({...item, qty: quantities[item.item_id]}));
 
     updateCartItems(updates);
+  };
+
+  deleteCartItem: EventHandler = event => {
+    const {deleteCartItem} = this.props;
+    event.preventDefault();
+    const itemId: ?string = get(event.target, 'dataset.itemid');
+    if (typeof itemId === 'string') {
+      deleteCartItem(itemId);
+    }
   };
 
   render() {
@@ -159,7 +172,11 @@ class CartForm extends React.Component<Props> {
             </thead>
             <tbody className="cart item">
               {cartItems.map(item => (
-                <ItemRow key={item.item_id} item={item} />
+                <ItemRow
+                  key={item.item_id}
+                  item={item}
+                  deleteItem={this.deleteCartItem}
+                />
               ))}
             </tbody>
           </table>

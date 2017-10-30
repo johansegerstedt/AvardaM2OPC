@@ -34,10 +34,28 @@ export const updateCartItemsFailure = createAction(
   (error: Error): string => error.toString(),
 );
 
+export const deleteCartItem = createAction(
+  Cart.DELETE_ITEM_REQUEST,
+  (itemId: string): string => itemId,
+);
+
+export const deleteCartItemSuccess = createAction(
+  Cart.DELETE_ITEM_SUCCESS,
+  (deletedId: string): string => deletedId,
+);
+
+export const deleteCartItemFailure = createAction(
+  Cart.DELETE_ITEM_FAILURE,
+  (err: Error): string => err.toString(),
+);
+
 export type CartActions =
   | ActionType<typeof fetchCartRequest>
   | ActionType<typeof fetchCartSuccess>
   | ActionType<typeof fetchCartFailure>
   | ActionType<typeof updateCartItems>
   | ActionType<typeof updateCartItemsSuccess>
-  | ActionType<typeof updateCartItemsFailure>;
+  | ActionType<typeof updateCartItemsFailure>
+  | ActionType<typeof deleteCartItem>
+  | ActionType<typeof deleteCartItemSuccess>
+  | ActionType<typeof deleteCartItemFailure>;

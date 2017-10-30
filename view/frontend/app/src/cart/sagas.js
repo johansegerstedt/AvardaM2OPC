@@ -1,5 +1,5 @@
 // @flow
-import {takeLatest} from 'redux-saga';
+import {takeEvery, takeLatest} from 'redux-saga';
 import {all, fork, put} from 'redux-saga/effects';
 import {normalize} from 'normalizr';
 import {merge} from 'lodash';
@@ -9,10 +9,14 @@ import {
   fetchCartFailure,
   updateCartItemsSuccess,
   updateCartItemsFailure,
+  deleteCartItem as deleteCartItemCreator,
+  deleteCartItemSuccess,
+  deleteCartItemFailure,
 } from './actions';
 import {ActionTypes as Cart, cartSchema} from './constants';
-import {getApiUrl, apiGet, apiPut} from '$src/m2api';
+import {getApiUrl, apiDelete, apiGet, apiPut} from '$src/m2api';
 import config from '$src/config';
+import type {ActionType} from 'redux-actions';
 
 function* fetchCart() {
   const url = getApiUrl(getCartApiPath());
@@ -53,6 +57,23 @@ function* updateCartItems(
   }
 }
 
+function* deleteCartItem({
+  payload: itemId,
+}: ActionType<typeof deleteCartItemCreator>) {
+  const baseUrl = getApiUrl(getCartApiPath());
+  const url = `${baseUrl}/items/${itemId}`;
+  try {
+    const data = yield apiDelete(url);
+    const deleteSuccess = data === true;
+    if (!deleteSuccess) {
+      throw new Error(`Couldn't delete item ${itemId}.`);
+    }
+    yield put(deleteCartItemSuccess(itemId));
+  } catch (err) {
+    yield put(deleteCartItemFailure(err));
+  }
+}
+
 export default function* saga(): Generator<*, *, *> {
   yield all([
     yield fork(function*() {
@@ -60,6 +81,9 @@ export default function* saga(): Generator<*, *, *> {
     }),
     yield fork(function*() {
       yield takeLatest(Cart.UPDATE_ITEMS_REQUEST, updateCartItems);
+    }),
+    yield fork(function*() {
+      yield takeEvery(Cart.DELETE_ITEM_REQUEST, deleteCartItem);
     }),
   ]);
 }

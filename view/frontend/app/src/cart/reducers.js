@@ -1,10 +1,11 @@
 // @flow
 import {combineReducers} from 'redux';
-import {handleActions} from 'redux-actions';
+import {handleActions, combineActions} from 'redux-actions';
 import {omit} from 'lodash';
 import {
   fetchCartSuccess,
   updateCartItemsSuccess,
+  deleteCartItem,
   deleteCartItemSuccess,
 } from './actions';
 import {ActionTypes} from './constants';
@@ -30,9 +31,21 @@ const cartData: Reducer<null | Cart> = handleActions(
   null,
 );
 
+const isUpdating = handleActions(
+  {
+    [ActionTypes.UPDATE_ITEMS_REQUEST]: () => true,
+    [combineActions(
+      ActionTypes.UPDATE_ITEMS_SUCCESS,
+      ActionTypes.UPDATE_ITEMS_FAILURE,
+    )]: () => false,
+  },
+  false,
+);
+
 export const cart: Reducer<CartState> = combineReducers({
   data: cartData,
   isFetching: () => false,
+  isUpdating,
 });
 
 export const cartItemsById: Reducer<null | ById<Cart>> = handleActions(
@@ -41,6 +54,16 @@ export const cartItemsById: Reducer<null | ById<Cart>> = handleActions(
       state,
       {payload: {entities}}: ActionType<typeof fetchCartSuccess>,
     ) => entities.cartItems,
+    [ActionTypes.DELETE_ITEM_REQUEST]: (
+      state,
+      {payload: itemId}: ActionType<typeof deleteCartItem>,
+    ) => ({
+      ...state,
+      [itemId]: {
+        ...state[itemId],
+        isDeleting: true,
+      },
+    }),
     [ActionTypes.UPDATE_ITEMS_SUCCESS]: (
       state = {},
       {payload: items = []}: ActionType<typeof updateCartItemsSuccess>,
@@ -63,6 +86,5 @@ export const cartItemsById: Reducer<null | ById<Cart>> = handleActions(
 export const cartItems: Reducer<CartItemState> = combineReducers({
   byId: cartItemsById,
   isFetching: () => false,
-  isUpserting: () => false,
-  isDeleting: () => false,
+  isUpdating,
 });

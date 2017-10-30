@@ -3,7 +3,7 @@ import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {fetchCartRequest, updateCartItems, deleteCartItem} from '../actions';
-import {getAllCartItems, getCart} from '../selectors';
+import {getAllCartItems, getCart, getIsCartUpdating} from '../selectors';
 import CartSummary from './CartSummary';
 import CartForm from './CartForm';
 import CartDiscount from './CartDiscount';
@@ -12,6 +12,7 @@ import type {Cart as CartType, CartItem} from '../types';
 type Props = {
   cart: null | CartType,
   cartItems: CartItem[],
+  isUpdating: boolean,
   fetchCartRequest(): void,
   updateCartItems(CartItem[]): void,
   deleteCartItem(itemId: string): void,
@@ -28,13 +29,20 @@ class Cart extends React.Component<Props> {
   }
 
   render() {
-    const {cart, cartItems, updateCartItems, deleteCartItem} = this.props;
+    const {
+      cart,
+      cartItems,
+      updateCartItems,
+      deleteCartItem,
+      isUpdating,
+    } = this.props;
 
     return cart ? (
       <div className="cart-container">
         <CartSummary />
         <CartForm
           cartItems={cartItems}
+          isUpdating={isUpdating}
           updateCartItems={updateCartItems}
           deleteCartItem={deleteCartItem}
         />
@@ -50,6 +58,7 @@ class Cart extends React.Component<Props> {
 const mapStateToProps = state => ({
   cart: getCart(state),
   cartItems: getAllCartItems(state),
+  isUpdating: getIsCartUpdating(state),
 });
 
 const mapDispatchToProps = dispatch =>

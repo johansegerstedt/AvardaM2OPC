@@ -6,12 +6,13 @@ import type {CartItem} from '../types';
 
 type Props = {
   cartItems: CartItem[],
+  isUpdating: boolean,
   updateCartItems(CartItem[]): void,
   deleteCartItem(itemId: string): void,
 };
 
 const ItemRow = ({
-  item: {name, item_id, price_incl_tax, qty},
+  item: {name, item_id, price_incl_tax, qty, isDeleting},
   deleteItem,
 }: {
   item: CartItem,
@@ -97,14 +98,14 @@ const ItemRow = ({
           title="Edit item parameters">
           <span>Edit </span>
         </a>*/}
-        <a
-          href="#"
+        <button
           title="Remove item"
           className="action action-delete"
           onClick={deleteItem}
-          data-itemid={item_id}>
-          <span>Remove item </span>
-        </a>
+          data-itemid={item_id}
+          disabled={isDeleting}>
+          <span>Remove item</span>
+        </button>
       </div>
     </td>
   </tr>,
@@ -141,7 +142,7 @@ class CartForm extends React.Component<Props> {
   };
 
   render() {
-    const {cartItems} = this.props;
+    const {cartItems, isUpdating} = this.props;
     return (
       <form
         id="form-validate"
@@ -200,8 +201,8 @@ class CartForm extends React.Component<Props> {
           <button
             type="submit"
             name="update_cart_action"
-            data-cart-item-update
             value="update_qty"
+            disabled={!!isUpdating}
             title="Update Shopping Cart"
             className="action update">
             <span>Update Shopping Cart</span>

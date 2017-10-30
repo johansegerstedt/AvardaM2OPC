@@ -5,6 +5,7 @@ export type ById<Entity> = {[string]: Entity};
 export type EntitiesState<Entity> = {
   byId: null | ById<Entity>,
   isFetching: boolean,
+  isUpdating: boolean,
 };
 
 export type Normalized<Entities> = {

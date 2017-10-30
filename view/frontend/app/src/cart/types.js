@@ -117,6 +117,7 @@ export type ExtensionAttributes1 = {
 };
 
 export type CartItem = {
+  isDeleting?: boolean,
   item_id: number,
   sku: string,
   qty: number,
@@ -191,6 +192,7 @@ export type TotalSegments = {
 export type CartState = {
   data: Cart | null,
   isFetching: boolean,
+  isUpdating: boolean,
 };
 
 export type CartItemState = EntitiesState<CartItem>;

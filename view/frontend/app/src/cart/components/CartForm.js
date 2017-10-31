@@ -17,99 +17,101 @@ const ItemRow = ({
 }: {
   item: CartItem,
   deleteItem: EventHandler,
-}) => [
-  <tr key="0" className="item-info">
-    <td data-th="Item" className="col item">
-      <a
-        href="http://avarda.box/fusion-backpack.html" // TODO
-        title={name}
-        tabIndex={-1}
-        className="product-item-photo">
-        <span className="product-image-container" style={{width: 165}}>
-          <span
-            className="product-image-wrapper"
-            style={{paddingBottom: '100%'}}>
-            <img
-              className="product-image-photo"
-              src="http://avarda.box/media/catalog/product/cache/small_image/165x165/beff4985b56e3afdbeabfc89641a4582/m/b/mb02-gray-0.jpg"
-              width={165}
-              height={165}
-              alt={name}
-            />
+}) => (
+  <tbody className="cart item">
+    <tr key="0" className="item-info">
+      <td data-th="Item" className="col item">
+        <a
+          href="http://avarda.box/fusion-backpack.html" // TODO
+          title={name}
+          tabIndex={-1}
+          className="product-item-photo">
+          <span className="product-image-container" style={{width: 165}}>
+            <span
+              className="product-image-wrapper"
+              style={{paddingBottom: '100%'}}>
+              <img
+                className="product-image-photo"
+                src="http://avarda.box/media/catalog/product/cache/small_image/165x165/beff4985b56e3afdbeabfc89641a4582/m/b/mb02-gray-0.jpg"
+                width={165}
+                height={165}
+                alt={name}
+              />
+            </span>
+          </span>
+        </a>
+        <div className="product-item-details">
+          <strong className="product-item-name">
+            <a href="http://avarda.box/fusion-backpack.html">{name}</a>
+          </strong>
+        </div>
+      </td>
+      <td className="col price" data-th="Price">
+        <span className="price-excluding-tax" data-label="Excl. Tax">
+          <span className="cart-price">
+            <span className="price">{formatCurrency(price_incl_tax)}</span>{' '}
           </span>
         </span>
-      </a>
-      <div className="product-item-details">
-        <strong className="product-item-name">
-          <a href="http://avarda.box/fusion-backpack.html">{name}</a>
-        </strong>
-      </div>
-    </td>
-    <td className="col price" data-th="Price">
-      <span className="price-excluding-tax" data-label="Excl. Tax">
-        <span className="cart-price">
-          <span className="price">{formatCurrency(price_incl_tax)}</span>{' '}
-        </span>
-      </span>
-    </td>
-    <td className="col qty" data-th="Qty">
-      <div className="field qty">
-        <label className="label" htmlFor="cart-98-qty">
-          <span>Qty</span>
-        </label>
-        <div className="control qty">
-          <input
-            id="cart-98-qty"
-            name={`cart[${item_id}][qty]`} // Used to get updated quantities!
-            data-cart-item-id="24-MB02"
-            defaultValue={qty}
-            type="number"
-            size={4}
-            title="Qty"
-            className="input-text qty"
-            maxLength={12}
-            data-validate="{required:true,'validate-greater-than-zero':true}"
-            data-role="cart-item-qty"
-          />
+      </td>
+      <td className="col qty" data-th="Qty">
+        <div className="field qty">
+          <label className="label" htmlFor="cart-98-qty">
+            <span>Qty</span>
+          </label>
+          <div className="control qty">
+            <input
+              id="cart-98-qty"
+              name={`cart[${item_id}][qty]`} // Used to get updated quantities!
+              data-cart-item-id="24-MB02"
+              defaultValue={qty}
+              type="number"
+              size={4}
+              title="Qty"
+              className="input-text qty"
+              maxLength={12}
+              data-validate="{required:true,'validate-greater-than-zero':true}"
+              data-role="cart-item-qty"
+            />
+          </div>
         </div>
-      </div>
-    </td>
-    <td className="col subtotal" data-th="Subtotal">
-      <span className="price-excluding-tax" data-label="Excl. Tax">
-        <span className="cart-price">
-          <span className="price">
-            {formatCurrency(price_incl_tax * qty)}
-          </span>{' '}
+      </td>
+      <td className="col subtotal" data-th="Subtotal">
+        <span className="price-excluding-tax" data-label="Excl. Tax">
+          <span className="cart-price">
+            <span className="price">
+              {formatCurrency(price_incl_tax * qty)}
+            </span>{' '}
+          </span>
         </span>
-      </span>
-    </td>
-  </tr>,
-  <tr key="1" className="item-actions">
-    <td colSpan={100}>
-      <div className="actions-toolbar">
-        <div
-          id="gift-options-cart-item-98"
-          data-bind="scope:'giftOptionsCartItem-98'"
-          className="gift-options-cart-item"
-        />
-        {/*<a
+      </td>
+    </tr>
+    <tr key="1" className="item-actions">
+      <td colSpan={100}>
+        <div className="actions-toolbar">
+          <div
+            id="gift-options-cart-item-98"
+            data-bind="scope:'giftOptionsCartItem-98'"
+            className="gift-options-cart-item"
+          />
+          {/*<a
           className="action action-edit"
           href="http://avarda.box/checkout/cart/configure/id/98/product_id/6/"
           title="Edit item parameters">
           <span>Edit </span>
         </a>*/}
-        <button
-          title="Remove item"
-          className="action action-delete"
-          onClick={deleteItem}
-          data-itemid={item_id}
-          disabled={isDeleting}>
-          <span>Remove item</span>
-        </button>
-      </div>
-    </td>
-  </tr>,
-];
+          <button
+            title="Remove item"
+            className="action action-delete"
+            onClick={deleteItem}
+            data-itemid={item_id}
+            disabled={isDeleting}>
+            <span>Remove item</span>
+          </button>
+        </div>
+      </td>
+    </tr>
+  </tbody>
+);
 
 class CartForm extends React.Component<Props> {
   updateCartItems: EventHandler = event => {
@@ -171,15 +173,14 @@ class CartForm extends React.Component<Props> {
                 </th>
               </tr>
             </thead>
-            <tbody className="cart item">
-              {cartItems.map(item => (
-                <ItemRow
-                  key={item.item_id}
-                  item={item}
-                  deleteItem={this.deleteCartItem}
-                />
-              ))}
-            </tbody>
+
+            {cartItems.map(item => (
+              <ItemRow
+                key={item.item_id}
+                item={item}
+                deleteItem={this.deleteCartItem}
+              />
+            ))}
           </table>
         </div>
         <div className="cart main actions">

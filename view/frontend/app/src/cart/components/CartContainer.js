@@ -2,7 +2,13 @@
 import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {fetchCartRequest, updateCartItems, deleteCartItem} from '../actions';
+import {
+  fetchCartRequest,
+  updateCartItems,
+  deleteCartItem,
+  applyCoupon,
+  removeCoupon,
+} from '../actions';
 import {
   getAllCartItems,
   getCart,
@@ -22,6 +28,8 @@ type Props = {
   fetchCartRequest(): void,
   updateCartItems(CartItem[]): void,
   deleteCartItem(itemId: string): void,
+  applyCoupon(code: string): void,
+  removeCoupon(): void,
 };
 
 // TODO
@@ -42,6 +50,8 @@ class Cart extends React.Component<Props> {
       deleteCartItem,
       isUpdating,
       isFetching,
+      applyCoupon,
+      removeCoupon,
     } = this.props;
 
     return cart ? (
@@ -57,7 +67,11 @@ class Cart extends React.Component<Props> {
           deleteCartItem={deleteCartItem}
         />
         <GiftOptionsCart />
-        <CartDiscount />
+        <CartDiscount
+          coupon={cart.coupon_code}
+          applyCoupon={applyCoupon}
+          removeCoupon={removeCoupon}
+        />
       </div>
     ) : (
       <div>loading...</div>
@@ -74,7 +88,13 @@ const mapStateToProps = state => ({
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
-    {fetchCartRequest, updateCartItems, deleteCartItem},
+    {
+      fetchCartRequest,
+      updateCartItems,
+      deleteCartItem,
+      applyCoupon,
+      removeCoupon,
+    },
     dispatch,
   );
 

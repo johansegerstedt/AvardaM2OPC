@@ -20,7 +20,16 @@
     "browser": true
   },
   "rules": {
-    "prettier/prettier": ["error", "fb"],
+    "prettier/prettier": [
+      "error",
+      {
+        "singleQuote": true,
+        "trailingComma": "all",
+        "bracketSpacing": false,
+        "jsxBracketSameLine": false,
+        "parser": "flow"
+      }
+    ],
     "flowtype/require-valid-file-annotation": [
       "error",
       "always",
@@ -28,6 +37,8 @@
     ],
     "react/jsx-uses-vars": "error",
     "react/jsx-uses-react": "error",
-    "react/react-in-jsx-scope": "error"
+    "react/react-in-jsx-scope": "error",
+    "react/jsx-closing-bracket-location": "error",
+    "react/jsx-closing-tag-location": "error"
   }
 }

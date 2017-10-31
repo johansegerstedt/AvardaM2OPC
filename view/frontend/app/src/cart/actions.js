@@ -49,6 +49,36 @@ export const deleteCartItemFailure = createAction(
   (err: Error): string => err.toString(),
 );
 
+export const applyCoupon = createAction(
+  Cart.APPLY_COUPON_REQUEST,
+  (code: string): string => code,
+);
+
+export const applyCouponSuccess = createAction(
+  Cart.APPLY_COUPON_SUCCESS,
+  (code: string): string => code,
+);
+
+export const applyCouponFailure = createAction(
+  Cart.APPLY_COUPON_FAILURE,
+  (err: Error): string => err.toString(),
+);
+
+export const removeCoupon = createAction(
+  Cart.REMOVE_COUPON_REQUEST,
+  (): void => undefined,
+);
+
+export const removeCouponSuccess = createAction(
+  Cart.REMOVE_COUPON_SUCCESS,
+  (): void => undefined,
+);
+
+export const removeCouponFailure = createAction(
+  Cart.REMOVE_COUPON_FAILURE,
+  (err: Error): string => err.toString(),
+);
+
 export type CartActions =
   | ActionType<typeof fetchCartRequest>
   | ActionType<typeof fetchCartSuccess>
@@ -58,4 +88,10 @@ export type CartActions =
   | ActionType<typeof updateCartItemsFailure>
   | ActionType<typeof deleteCartItem>
   | ActionType<typeof deleteCartItemSuccess>
-  | ActionType<typeof deleteCartItemFailure>;
+  | ActionType<typeof deleteCartItemFailure>
+  | ActionType<typeof applyCoupon>
+  | ActionType<typeof applyCouponSuccess>
+  | ActionType<typeof applyCouponFailure>
+  | ActionType<typeof removeCoupon>
+  | ActionType<typeof removeCouponSuccess>
+  | ActionType<typeof removeCouponFailure>;

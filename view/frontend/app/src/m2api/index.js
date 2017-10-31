@@ -20,6 +20,19 @@ const callApi = async (url: string, init?: RequestOptions) => {
   return fetch(apiRequest).then(data => data.json());
 };
 
+const makeCall = (method: string) => (url: string) => callApi(url, {method});
+
+const makePayloadCall = (method: string) => (
+  url: string,
+  data?: Serializeable,
+) => {
+  const init: RequestOptions = {method};
+  if (typeof data !== 'undefined') {
+    init.body = JSON.stringify(data);
+  }
+  return callApi(url, init);
+};
+
 export const getApiUrl = (path: string, query?: Object): string =>
   [
     M2_REST_BASE,
@@ -29,15 +42,10 @@ export const getApiUrl = (path: string, query?: Object): string =>
       : '',
   ].join('');
 
-export const apiGet = (url: string) => callApi(url, {method: 'GET'});
+export const apiGet = makeCall('GET');
 
-export const apiPost = (url: string, data: Serializeable) =>
-  callApi(url, {
-    method: 'POST',
-    body: JSON.stringify(data),
-  });
+export const apiPost = makePayloadCall('POST');
 
-export const apiPut = (url: string, data: Serializeable) =>
-  callApi(url, {method: 'PUT', body: JSON.stringify(data)});
+export const apiPut = makePayloadCall('PUT');
 
-export const apiDelete = (url: string) => callApi(url, {method: 'DELETE'});
+export const apiDelete = makeCall('DELETE');

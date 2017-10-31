@@ -27,6 +27,12 @@ const UPDATE_ITEMS_FAILURE: 'updateCartItemsFailure' = 'updateCartItemsFailure';
 const DELETE_ITEM_REQUEST: 'deleteCartItemRequest' = 'deleteCartItemRequest';
 const DELETE_ITEM_SUCCESS: 'deleteCartItemSuccess' = 'deleteCartItemSuccess';
 const DELETE_ITEM_FAILURE: 'deleteItemFailure' = 'deleteItemFailure';
+const APPLY_COUPON_REQUEST: 'applyCouponCodeRequest' = 'applyCouponCodeRequest';
+const APPLY_COUPON_SUCCESS: 'applyCouponCodeSuccess' = 'applyCouponCodeSuccess';
+const APPLY_COUPON_FAILURE: 'applyCouponCodeFailure' = 'applyCouponCodeFailure';
+const REMOVE_COUPON_REQUEST: 'removeCouponRequest' = 'removeCouponRequest';
+const REMOVE_COUPON_SUCCESS: 'removeCouponSuccess' = 'removeCouponSuccess';
+const REMOVE_COUPON_FAILURE: 'removeCouponFailure' = 'removeCouponFailure';
 
 export const ActionTypes = {
   FETCH_REQUEST,
@@ -38,4 +44,10 @@ export const ActionTypes = {
   DELETE_ITEM_SUCCESS,
   DELETE_ITEM_REQUEST,
   DELETE_ITEM_FAILURE,
+  APPLY_COUPON_SUCCESS,
+  APPLY_COUPON_REQUEST,
+  APPLY_COUPON_FAILURE,
+  REMOVE_COUPON_SUCCESS,
+  REMOVE_COUPON_REQUEST,
+  REMOVE_COUPON_FAILURE,
 };

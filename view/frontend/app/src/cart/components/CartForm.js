@@ -25,11 +25,13 @@ const ItemRow = ({
           href="http://avarda.box/fusion-backpack.html" // TODO
           title={name}
           tabIndex={-1}
-          className="product-item-photo">
+          className="product-item-photo"
+        >
           <span className="product-image-container" style={{width: 165}}>
             <span
               className="product-image-wrapper"
-              style={{paddingBottom: '100%'}}>
+              style={{paddingBottom: '100%'}}
+            >
               <img
                 className="product-image-photo"
                 src="http://avarda.box/media/catalog/product/cache/small_image/165x165/beff4985b56e3afdbeabfc89641a4582/m/b/mb02-gray-0.jpg"
@@ -104,7 +106,8 @@ const ItemRow = ({
             className="action action-delete"
             onClick={deleteItem}
             data-itemid={item_id}
-            disabled={isDeleting}>
+            disabled={isDeleting}
+          >
             <span>Remove item</span>
           </button>
         </div>
@@ -151,7 +154,8 @@ class CartForm extends React.Component<Props> {
         name="cartForm"
         className="form form-cart"
         noValidate="novalidate"
-        onSubmit={this.updateCartItems}>
+        onSubmit={this.updateCartItems}
+      >
         <div className="cart table-wrapper">
           <table id="shopping-cart-table" className="cart items data table">
             <caption role="heading" aria-level={2} className="table-caption">
@@ -187,7 +191,8 @@ class CartForm extends React.Component<Props> {
           <a
             className="action continue"
             href="http://avarda.box/"
-            title="Continue Shopping">
+            title="Continue Shopping"
+          >
             <span>Continue Shopping</span>
           </a>
           <button
@@ -196,7 +201,8 @@ class CartForm extends React.Component<Props> {
             value="empty_cart"
             title="Clear Shopping Cart"
             className="action clear"
-            id="empty_cart_button">
+            id="empty_cart_button"
+          >
             <span>Clear Shopping Cart</span>
           </button>
           <button
@@ -205,7 +211,8 @@ class CartForm extends React.Component<Props> {
             value="update_qty"
             disabled={!!isUpdating}
             title="Update Shopping Cart"
-            className="action update">
+            className="action update"
+          >
             <span>Update Shopping Cart</span>
           </button>
           <input

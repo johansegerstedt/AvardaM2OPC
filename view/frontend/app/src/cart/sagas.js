@@ -13,6 +13,11 @@ import {
   deleteCartItem as deleteCartItemCreator,
   deleteCartItemSuccess,
   deleteCartItemFailure,
+  applyCoupon as applyCouponRequest,
+  applyCouponSuccess,
+  applyCouponFailure,
+  removeCouponSuccess,
+  removeCouponFailure,
 } from './actions';
 import {ActionTypes as Cart, cartSchema} from './constants';
 import {getApiUrl, apiDelete, apiGet, apiPut} from '$src/m2api';
@@ -77,16 +82,52 @@ function* deleteCartItem({
   }
 }
 
+function* applyCoupon({
+  payload: couponCode,
+}: ActionType<typeof applyCouponRequest>) {
+  const url = getApiUrl(`${getCartApiPath()}/coupons/${couponCode}`);
+  try {
+    const success = yield apiPut(url);
+    if (success !== true) {
+      throw new Error(`Couldn't apply coupon "${couponCode}"`);
+    }
+    yield put(applyCouponSuccess(couponCode));
+    yield put(fetchCartRequest());
+  } catch (err) {
+    yield put(applyCouponFailure(err));
+  }
+}
+
+function* removeCoupon() {
+  const url = getApiUrl(`${getCartApiPath()}/coupons`);
+  try {
+    const success = yield apiDelete(url);
+    if (success !== true) {
+      throw new Error(`Couldn't remove coupon.`);
+    }
+    yield put(removeCouponSuccess());
+    yield put(fetchCartRequest());
+  } catch (err) {
+    yield put(removeCouponFailure(err));
+  }
+}
+
 export default function* saga(): Generator<*, *, *> {
   yield all([
-    yield fork(function*() {
+    yield fork(function* watchFetchCart() {
       yield takeLatest(Cart.FETCH_REQUEST, fetchCart);
     }),
-    yield fork(function*() {
+    yield fork(function* watchUpdateItems() {
       yield takeLatest(Cart.UPDATE_ITEMS_REQUEST, updateCartItems);
     }),
-    yield fork(function*() {
+    yield fork(function* watchDeleteItem() {
       yield takeEvery(Cart.DELETE_ITEM_REQUEST, deleteCartItem);
+    }),
+    yield fork(function* watchApplyCoupon() {
+      yield takeEvery(Cart.APPLY_COUPON_REQUEST, applyCoupon);
+    }),
+    yield fork(function* watchRemoveCoupon() {
+      yield takeLatest(Cart.REMOVE_COUPON_REQUEST, removeCoupon);
     }),
   ]);
 }

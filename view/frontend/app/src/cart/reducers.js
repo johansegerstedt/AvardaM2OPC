@@ -7,6 +7,7 @@ import {
   updateCartItemsSuccess,
   deleteCartItem,
   deleteCartItemSuccess,
+  applyCoupon,
 } from './actions';
 import {ActionTypes} from './constants';
 import type {ActionType} from 'redux-actions';
@@ -27,6 +28,14 @@ const cartData: Reducer<null | Cart> = handleActions(
       ...state,
       items: state.items.filter(id => id !== deletedId),
     }),
+    [ActionTypes.APPLY_COUPON_SUCCESS]: (
+      state,
+      {payload: coupon_code}: ActionType<typeof applyCoupon>,
+    ) => ({
+      ...state,
+      coupon_code,
+    }),
+    [ActionTypes.REMOVE_COUPON_SUCCESS]: state => omit(state, 'coupon_code'),
   },
   null,
 );

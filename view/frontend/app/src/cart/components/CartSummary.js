@@ -24,7 +24,8 @@ class CartSummary extends React.Component<Props> {
               <table className="data table totals">
                 <caption
                   className="table-caption"
-                  data-bind="text: $t('Total')">
+                  data-bind="text: $t('Total')"
+                >
                   Total
                 </caption>
                 <tbody>

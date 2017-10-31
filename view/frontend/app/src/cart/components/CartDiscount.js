@@ -1,22 +1,68 @@
 // @flow
 import React from 'react';
+import {get} from 'lodash';
 
-class CartDiscount extends React.Component<*> {
+type Props = {
+  coupon?: string,
+  applyCoupon(code: string): void,
+  removeCoupon(): void,
+};
+
+type State = {
+  isOpen: boolean,
+};
+
+class CartDiscount extends React.Component<Props, State> {
+  state = {
+    isOpen: typeof this.props.coupon === 'string',
+  };
+
+  toggle = () => this.setState(state => ({...state, isOpen: !state.isOpen}));
+
+  applyCoupon = () => {
+    const {coupon, applyCoupon} = this.props;
+    if (typeof coupon === 'string') {
+      applyCoupon(coupon);
+    }
+  };
+
+  handleSubmit: EventHandler = event => {
+    const {coupon, applyCoupon, removeCoupon} = this.props;
+
+    event.preventDefault();
+    const form = event.target;
+    const code = get(form, 'coupon_code.value', '');
+
+    if (typeof coupon === 'string') {
+      removeCoupon();
+    } else {
+      applyCoupon(code);
+    }
+  };
+
   render() {
+    const {isOpen} = this.state;
+    const {coupon} = this.props;
+
+    const isApplying: boolean = typeof coupon !== 'string';
+
     return (
       <div className="cart-discount">
         <div
-          className="block discount"
+          className={`block discount${isOpen ? ' active' : ''}`}
           id="block-discount"
           data-collapsible="true"
-          role="tablist">
+          role="tablist"
+        >
           <div
             className="title"
             data-role="title"
             role="tab"
             aria-selected="false"
-            aria-expanded="false"
-            tabIndex={0}>
+            aria-expanded={JSON.stringify(isOpen)}
+            onClick={this.toggle}
+            tabIndex={0}
+          >
             <strong id="block-discount-heading" role="heading" aria-level={2}>
               Apply Discount Code
             </strong>
@@ -27,11 +73,9 @@ class CartDiscount extends React.Component<*> {
             aria-labelledby="block-discount-heading"
             role="tabpanel"
             aria-hidden="true"
-            style={{display: 'none'}}>
-            <form
-              id="discount-coupon-form"
-              action="http://avarda.box/checkout/cart/couponPost/"
-              method="post">
+            style={{display: isOpen ? 'block' : 'none'}}
+          >
+            <form id="discount-coupon-form" onSubmit={this.handleSubmit}>
               <div className="fieldset coupon">
                 <input
                   type="hidden"
@@ -45,23 +89,30 @@ class CartDiscount extends React.Component<*> {
                   </label>
                   <div className="control">
                     <input
+                      key={coupon}
                       type="text"
                       className="input-text"
                       id="coupon_code"
                       name="coupon_code"
-                      defaultValue
+                      defaultValue={isApplying ? '' : coupon}
+                      disabled={!isApplying}
                       placeholder="Enter discount code"
                     />
                   </div>
                 </div>
                 <div className="actions-toolbar">
                   <div className="primary">
-                    <button
-                      className="action apply primary"
-                      type="button"
-                      value="Apply Discount">
-                      <span>Apply Discount</span>
-                    </button>
+                    {(({label}) => (
+                      <button
+                        className="action apply primary"
+                        type="submit"
+                        value={label}
+                      >
+                        <span>{label}</span>
+                      </button>
+                    ))({
+                      label: isApplying ? 'Apply Discount' : 'Cancel Coupon',
+                    })}
                   </div>
                 </div>
               </div>

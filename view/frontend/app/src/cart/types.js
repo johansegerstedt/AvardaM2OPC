@@ -79,6 +79,7 @@ export type Cart = {
   base_currency_code: string,
   quote_currency_code: string,
   total_segments: TotalSegment[],
+  coupon_code?: string,
 };
 
 export type Currency = {

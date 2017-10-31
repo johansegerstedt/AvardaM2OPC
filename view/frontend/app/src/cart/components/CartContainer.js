@@ -3,7 +3,12 @@ import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import {fetchCartRequest, updateCartItems, deleteCartItem} from '../actions';
-import {getAllCartItems, getCart, getIsCartUpdating} from '../selectors';
+import {
+  getAllCartItems,
+  getCart,
+  getIsCartUpdating,
+  getIsCartFetching,
+} from '../selectors';
 import CartSummary from './CartSummary';
 import CartForm from './CartForm';
 import CartDiscount from './CartDiscount';
@@ -13,6 +18,7 @@ type Props = {
   cart: null | CartType,
   cartItems: CartItem[],
   isUpdating: boolean,
+  isFetching: boolean,
   fetchCartRequest(): void,
   updateCartItems(CartItem[]): void,
   deleteCartItem(itemId: string): void,
@@ -35,11 +41,15 @@ class Cart extends React.Component<Props> {
       updateCartItems,
       deleteCartItem,
       isUpdating,
+      isFetching,
     } = this.props;
 
     return cart ? (
       <div className="cart-container">
-        <CartSummary />
+        <CartSummary
+          totalSegments={cart.total_segments}
+          isLoading={isFetching || isUpdating}
+        />
         <CartForm
           cartItems={cartItems}
           isUpdating={isUpdating}
@@ -59,6 +69,7 @@ const mapStateToProps = state => ({
   cart: getCart(state),
   cartItems: getAllCartItems(state),
   isUpdating: getIsCartUpdating(state),
+  isFetching: getIsCartFetching(state),
 });
 
 const mapDispatchToProps = dispatch =>

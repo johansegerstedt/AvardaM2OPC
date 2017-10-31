@@ -5,6 +5,7 @@ import {normalize} from 'normalizr';
 import {merge} from 'lodash';
 import {getCartApiPath} from './utils';
 import {
+  fetchCartRequest,
   fetchCartSuccess,
   fetchCartFailure,
   updateCartItemsSuccess,
@@ -52,6 +53,7 @@ function* updateCartItems(
     );
 
     yield put(updateCartItemsSuccess(updatedItems));
+    yield put(fetchCartRequest());
   } catch (err) {
     yield put(updateCartItemsFailure(err));
   }
@@ -69,6 +71,7 @@ function* deleteCartItem({
       throw new Error(`Couldn't delete item ${itemId}.`);
     }
     yield put(deleteCartItemSuccess(itemId));
+    yield put(fetchCartRequest());
   } catch (err) {
     yield put(deleteCartItemFailure(err));
   }

@@ -78,7 +78,7 @@ export type Cart = {
   base_shipping_incl_tax: number,
   base_currency_code: string,
   quote_currency_code: string,
-  total_segments: TotalSegments[],
+  total_segments: TotalSegment[],
 };
 
 export type Currency = {
@@ -181,7 +181,7 @@ export type TaxGrandtotalDetails = {
   group_id: number,
 };
 
-export type TotalSegments = {
+export type TotalSegment = {
   code: string,
   title: string,
   value: number,
@@ -192,7 +192,7 @@ export type TotalSegments = {
 export type CartState = {
   data: Cart | null,
   isFetching: boolean,
-  isUpdating: boolean,
+  pendingUpdates: number,
 };
 
 export type CartItemState = EntitiesState<CartItem>;

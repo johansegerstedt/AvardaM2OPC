@@ -28,5 +28,8 @@ export const makeGetCartItemById = () => {
 };
 
 export const getCart: Selector<void, *> = state => state.cart.data;
-export const getIsCartUpdating: Selector<void, *> = state =>
-  state.cart.isUpdating;
+export const getIsCartUpdating: Selector<void, boolean> = state =>
+  state.cart.pendingUpdates !== 0;
+
+export const getIsCartFetching: Selector<void, *> = state =>
+  state.cart.isFetching;

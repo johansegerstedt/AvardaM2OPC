@@ -31,12 +31,28 @@ const cartData: Reducer<null | Cart> = handleActions(
   null,
 );
 
-const isUpdating = handleActions(
+const pendingUpdates: Reducer<number> = handleActions(
   {
-    [ActionTypes.UPDATE_ITEMS_REQUEST]: () => true,
+    [combineActions(
+      ActionTypes.UPDATE_ITEMS_REQUEST,
+      ActionTypes.DELETE_ITEM_REQUEST,
+    )]: state => state + 1,
     [combineActions(
       ActionTypes.UPDATE_ITEMS_SUCCESS,
       ActionTypes.UPDATE_ITEMS_FAILURE,
+      ActionTypes.DELETE_ITEM_SUCCESS,
+      ActionTypes.DELETE_ITEM_FAILURE,
+    )]: state => Math.max(state - 1, 0),
+  },
+  0,
+);
+
+const isFetching = handleActions(
+  {
+    [ActionTypes.FETCH_REQUEST]: () => true,
+    [combineActions(
+      ActionTypes.FETCH_SUCCESS,
+      ActionTypes.FETCH_FAILURE,
     )]: () => false,
   },
   false,
@@ -44,8 +60,8 @@ const isUpdating = handleActions(
 
 export const cart: Reducer<CartState> = combineReducers({
   data: cartData,
-  isFetching: () => false,
-  isUpdating,
+  isFetching,
+  pendingUpdates,
 });
 
 export const cartItemsById: Reducer<null | ById<Cart>> = handleActions(
@@ -86,5 +102,4 @@ export const cartItemsById: Reducer<null | ById<Cart>> = handleActions(
 export const cartItems: Reducer<CartItemState> = combineReducers({
   byId: cartItemsById,
   isFetching: () => false,
-  isUpdating,
 });

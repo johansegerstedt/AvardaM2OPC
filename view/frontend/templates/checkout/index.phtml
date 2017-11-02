@@ -1,10 +1,13 @@
 <?php /** @var Digia\AvardaCheckout\Block\Checkout $block */ ?>
 <?php
   $devMode = $block->getIsDevMode();
+  $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+  $getLocale = $objectManager->get('Magento\Framework\Locale\Resolver');
   $config = [
     "baseUrl" => $block->getBaseUrl(),
     "baseMediaUrl" => $block->getBaseMediaUrl(),
     "maskedQuoteId" => $block->getMaskedQuoteId(),
+    "magentoLocale" => $getLocale->getLocale()
   ];
   //$config->baseUrl = $block->getBaseUrl();
   //$config->baseMediaUrl = $block->getBaseMediaUrl();
@@ -27,7 +30,9 @@ window.__avarda_checkout_config__ = <?php echo json_encode($config); ?>;
   <script type="text/javascript" src="<?php echo $block->getViewFileUrl('Digia_AvardaCheckout::js/bundle.js');?>"></script>
 <?php endif ?>
  <script type="text/javascript">
- avardaCheckout.execute(/*
+ avardaCheckout.execute(
+   <?php echo json_encode($config); ?>,
+   /*
    TODO: Re-enable this!
    require('mage/translate')
  */);

@@ -17,6 +17,7 @@ export type Config = {
   baseMediaUrl: string,
   maskedQuoteId: ?string,
   customerId: ?string,
+  magentoLocale: string,
 };
 
 export type Reference = string | number;

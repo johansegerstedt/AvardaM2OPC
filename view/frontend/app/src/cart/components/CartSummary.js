@@ -7,14 +7,15 @@ import type {TotalSegment} from '../types';
 import type {Translate} from '$i18n';
 
 type Props = {
-  totalSegments: TotalSegment[],
+  currency: string,
   isLoading: boolean,
   t: Translate,
+  totalSegments: TotalSegment[],
 };
 
 class CartSummary extends React.Component<Props> {
   render() {
-    const {totalSegments, isLoading, t} = this.props;
+    const {currency, totalSegments, isLoading, t} = this.props;
     const segments = initial(totalSegments);
     const grandTotal = last(totalSegments);
     return (
@@ -33,7 +34,7 @@ class CartSummary extends React.Component<Props> {
                       </th>
                       <td className="amount">
                         <span className="price" data-th={t('Subtotal')}>
-                          {formatCurrency(value)}
+                          {formatCurrency(value, currency)}
                         </span>
                       </td>
                     </tr>
@@ -45,7 +46,7 @@ class CartSummary extends React.Component<Props> {
                     <td className="amount">
                       <strong>
                         <span className="price">
-                          {formatCurrency(grandTotal.value)}
+                          {formatCurrency(grandTotal.value, currency)}
                         </span>
                       </strong>
                     </td>

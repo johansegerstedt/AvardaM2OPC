@@ -7,19 +7,22 @@ import type {Translate} from '$i18n';
 
 type Props = {
   cartItems: CartItem[],
-  isUpdating: boolean,
-  updateCartItems(CartItem[]): void,
+  currency: string,
   deleteCartItem(itemId: string): void,
+  isUpdating: boolean,
   t: Translate,
+  updateCartItems(CartItem[]): void,
 };
 
 const ItemRow = ({
-  item: {name, item_id, price_incl_tax, qty, isDeleting},
+  currency,
   deleteItem,
+  item: {name, item_id, price_incl_tax, qty, isDeleting},
   t,
 }: {
-  item: CartItem,
+  currency: string,
   deleteItem: EventHandler,
+  item: CartItem,
   t: Translate,
 }) => (
   <tbody className="cart item">
@@ -55,7 +58,9 @@ const ItemRow = ({
       <td className="col price" data-th={t('Price')}>
         <span className="price-excluding-tax" data-label="Excl. Tax">
           <span className="cart-price">
-            <span className="price">{formatCurrency(price_incl_tax)}</span>{' '}
+            <span className="price">
+              {formatCurrency(price_incl_tax, currency)}
+            </span>{' '}
           </span>
         </span>
       </td>
@@ -85,7 +90,7 @@ const ItemRow = ({
         <span className="price-excluding-tax" data-label="Excl. Tax">
           <span className="cart-price">
             <span className="price">
-              {formatCurrency(price_incl_tax * qty)}
+              {formatCurrency(price_incl_tax * qty, currency)}
             </span>{' '}
           </span>
         </span>
@@ -151,7 +156,7 @@ class CartForm extends React.Component<Props> {
   };
 
   render() {
-    const {cartItems, isUpdating, t} = this.props;
+    const {cartItems, currency, isUpdating, t} = this.props;
     return (
       <form
         id="form-validate"
@@ -187,6 +192,7 @@ class CartForm extends React.Component<Props> {
                 key={item.item_id}
                 item={item}
                 deleteItem={this.deleteCartItem}
+                currency={currency}
                 t={t}
               />
             ))}
@@ -195,7 +201,7 @@ class CartForm extends React.Component<Props> {
         <div className="cart main actions">
           <a
             className="action continue"
-            href="http://avarda.box/"
+            href="/"
             title={t('Continue Shopping')}
           >
             <span>{t('Continue Shopping')}</span>

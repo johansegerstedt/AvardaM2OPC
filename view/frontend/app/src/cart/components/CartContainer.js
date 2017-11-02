@@ -17,6 +17,7 @@ import {
   getIsCartUpdating,
   getIsCartFetching,
 } from '../selectors';
+import {getQuoteCurrency} from '../utils';
 import CartSummary from './CartSummary';
 import CartForm from './CartForm';
 import CartDiscount from './CartDiscount';
@@ -68,6 +69,7 @@ class Cart extends React.Component<Props> {
                   key="cartSummary"
                   totalSegments={cart.total_segments}
                   isLoading={isFetching || isUpdating}
+                  currency={getQuoteCurrency(cart)}
                   t={t}
                 />,
                 <CartForm
@@ -76,6 +78,7 @@ class Cart extends React.Component<Props> {
                   isUpdating={isUpdating}
                   updateCartItems={updateCartItems}
                   deleteCartItem={deleteCartItem}
+                  currency={getQuoteCurrency(cart)}
                   t={t}
                 />,
                 <GiftOptionsCart key="giftOptionsCart" />,

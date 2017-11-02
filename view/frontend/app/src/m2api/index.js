@@ -1,11 +1,8 @@
 // @flow
 import 'whatwg-fetch';
 import qs from 'query-string';
-import config from '$src/config';
+import {getConfig} from '$src/config';
 import {CREDENTIALS, HEADERS} from './constants';
-
-const {baseUrl} = config;
-const M2_REST_BASE = `${baseUrl}rest`;
 
 type Serializeable = string | number | Object | Array<any> | boolean | null;
 
@@ -48,7 +45,7 @@ const makePayloadCall = (method: string) => (
 
 export const getApiUrl = (path: string, query?: Object): string =>
   [
-    M2_REST_BASE,
+    `${getConfig().baseUrl}rest`,
     path,
     typeof query !== 'undefined' && query !== null
       ? `?${qs.stringify(query)}`

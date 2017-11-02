@@ -21,7 +21,7 @@ import {
 } from './actions';
 import {ActionTypes as Cart, cartSchema} from './constants';
 import {getApiUrl, apiDelete, apiGet, apiPut} from '$src/m2api';
-import config from '$src/config';
+import {getConfig} from '$src/config';
 import type {ActionType} from 'redux-actions';
 
 function* fetchCart() {
@@ -49,7 +49,7 @@ function* updateCartItems(
         apiPut(`${baseUrl}/items/${item_id}`, {
           cartItem: {
             item_id,
-            quote_id: config.maskedQuoteId || quote_id,
+            quote_id: getConfig().maskedQuoteId || quote_id,
             sku,
             qty,
           },

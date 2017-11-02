@@ -9,6 +9,14 @@ const M2_REST_BASE = `${baseUrl}rest`;
 
 type Serializeable = string | number | Object | Array<any> | boolean | null;
 
+const handleErrors = (response: Response) => {
+  const {statusText, ok} = response;
+  if (!ok) {
+    throw new Error(statusText);
+  }
+  return response;
+};
+
 const callApi = async (url: string, init?: RequestOptions) => {
   const mergedInit: RequestOptions = {
     credentials: CREDENTIALS,
@@ -17,7 +25,12 @@ const callApi = async (url: string, init?: RequestOptions) => {
   };
 
   const apiRequest = new Request(url, mergedInit);
-  return fetch(apiRequest).then(data => data.json());
+  return fetch(apiRequest)
+    .then(handleErrors)
+    .then(data => data.json())
+    .catch(err => {
+      throw err;
+    });
 };
 
 const makeCall = (method: string) => (url: string) => callApi(url, {method});

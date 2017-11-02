@@ -1,23 +1,20 @@
 // @flow
 import {createAction} from 'redux-actions';
 import {ActionTypes as Cart} from './constants';
+import {PayloadCreators} from '$src/utils/redux';
 import type {ActionType} from 'redux-actions';
 import type {CartItem, NormalizedCart} from './types';
 
-export const fetchCartRequest = createAction(
-  Cart.FETCH_REQUEST,
-  () => undefined,
-);
+const {createError, createString, createVoid} = PayloadCreators;
+
+export const fetchCartRequest = createAction(Cart.FETCH_REQUEST, createVoid);
 
 export const fetchCartSuccess = createAction(
   Cart.FETCH_SUCCESS,
   (normalizedCart: NormalizedCart): NormalizedCart => normalizedCart,
 );
 
-export const fetchCartFailure = createAction(
-  Cart.FETCH_FAILURE,
-  (error: Error): string => error.toString(),
-);
+export const fetchCartFailure = createAction(Cart.FETCH_FAILURE, createError);
 
 export const updateCartItems = createAction(
   Cart.UPDATE_ITEMS_REQUEST,
@@ -31,7 +28,7 @@ export const updateCartItemsSuccess = createAction(
 
 export const updateCartItemsFailure = createAction(
   Cart.UPDATE_ITEMS_FAILURE,
-  (error: Error): string => error.toString(),
+  createError,
 );
 
 export const deleteCartItem = createAction(
@@ -46,37 +43,37 @@ export const deleteCartItemSuccess = createAction(
 
 export const deleteCartItemFailure = createAction(
   Cart.DELETE_ITEM_FAILURE,
-  (err: Error): string => err.toString(),
+  createError,
 );
 
 export const applyCoupon = createAction(
   Cart.APPLY_COUPON_REQUEST,
-  (code: string): string => code,
+  createString,
 );
 
 export const applyCouponSuccess = createAction(
   Cart.APPLY_COUPON_SUCCESS,
-  (code: string): string => code,
+  createString,
 );
 
 export const applyCouponFailure = createAction(
   Cart.APPLY_COUPON_FAILURE,
-  (err: Error): string => err.toString(),
+  createError,
 );
 
 export const removeCoupon = createAction(
   Cart.REMOVE_COUPON_REQUEST,
-  (): void => undefined,
+  createVoid,
 );
 
 export const removeCouponSuccess = createAction(
   Cart.REMOVE_COUPON_SUCCESS,
-  (): void => undefined,
+  createVoid,
 );
 
 export const removeCouponFailure = createAction(
   Cart.REMOVE_COUPON_FAILURE,
-  (err: Error): string => err.toString(),
+  createError,
 );
 
 export type CartActions =

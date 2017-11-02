@@ -8,6 +8,8 @@ export default {
     filename: 'bundle.js',
     path: path.resolve(__dirname, '../web/js'),
     publicPath: '/assets/',
+    library: 'avardaCheckout',
+    libraryTarget: 'this',
   },
   devtool: 'inline-source-map',
   module: {
@@ -41,6 +43,7 @@ export default {
   resolve: {
     alias: {
       $src: path.resolve(__dirname, 'src/'),
+      $i18n: path.resolve(__dirname, 'src/i18n'),
     },
   },
 };

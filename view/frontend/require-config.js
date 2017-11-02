@@ -1,2 +1,8 @@
 var config = {
-  deps: [ ] };
+  map: {
+    '*': {
+      mageTranslate: 'mage/translate',
+    },
+  },
+  deps: ['mage/translate'],
+};

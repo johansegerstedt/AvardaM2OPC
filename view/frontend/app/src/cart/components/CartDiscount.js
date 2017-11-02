@@ -1,16 +1,24 @@
 // @flow
 import React from 'react';
 import {get} from 'lodash';
+import type {Translate} from '$i18n';
 
 type Props = {
   coupon?: string,
   applyCoupon(code: string): void,
   removeCoupon(): void,
+  t: Translate,
 };
 
 type State = {
   isOpen: boolean,
 };
+
+const SubmitButton = ({label}: {label: string}) => (
+  <button className="action apply primary" type="submit" value={label}>
+    <span>{label}</span>
+  </button>
+);
 
 class CartDiscount extends React.Component<Props, State> {
   state = {
@@ -42,7 +50,7 @@ class CartDiscount extends React.Component<Props, State> {
 
   render() {
     const {isOpen} = this.state;
-    const {coupon} = this.props;
+    const {coupon, t} = this.props;
 
     const isApplying: boolean = typeof coupon !== 'string';
 
@@ -64,7 +72,7 @@ class CartDiscount extends React.Component<Props, State> {
             tabIndex={0}
           >
             <strong id="block-discount-heading" role="heading" aria-level={2}>
-              Apply Discount Code
+              {t('Apply Discount Code')}
             </strong>
           </div>
           <div
@@ -85,7 +93,7 @@ class CartDiscount extends React.Component<Props, State> {
                 />
                 <div className="field">
                   <label htmlFor="coupon_code" className="label">
-                    <span>Enter discount code</span>
+                    <span>{t('Enter discount code')}</span>
                   </label>
                   <div className="control">
                     <input
@@ -96,23 +104,17 @@ class CartDiscount extends React.Component<Props, State> {
                       name="coupon_code"
                       defaultValue={isApplying ? '' : coupon}
                       disabled={!isApplying}
-                      placeholder="Enter discount code"
+                      placeholder={t('Enter discount code')}
                     />
                   </div>
                 </div>
                 <div className="actions-toolbar">
                   <div className="primary">
-                    {(({label}) => (
-                      <button
-                        className="action apply primary"
-                        type="submit"
-                        value={label}
-                      >
-                        <span>{label}</span>
-                      </button>
-                    ))({
-                      label: isApplying ? 'Apply Discount' : 'Cancel Coupon',
-                    })}
+                    <SubmitButton
+                      label={
+                        isApplying ? t('Apply Discount') : t('Cancel Coupon')
+                      }
+                    />
                   </div>
                 </div>
               </div>

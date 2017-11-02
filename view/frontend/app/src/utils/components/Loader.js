@@ -3,7 +3,7 @@ import * as React from 'react';
 
 type Props = {
   isLoading: boolean,
-  children: React.Node,
+  children: null | React.Node,
 };
 
 const Spinner = () => <span className="avardaCheckout-spinner">...</span>;

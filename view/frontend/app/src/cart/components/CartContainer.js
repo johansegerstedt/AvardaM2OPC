@@ -1,7 +1,9 @@
 // @flow
 import React from 'react';
-import {bindActionCreators} from 'redux';
+import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
+import Loader from '$src/utils/components/Loader';
+import {withTranslate, type Translate} from '$i18n';
 import {
   fetchCartRequest,
   updateCartItems,
@@ -30,6 +32,7 @@ type Props = {
   deleteCartItem(itemId: string): void,
   applyCoupon(code: string): void,
   removeCoupon(): void,
+  t: Translate,
 };
 
 // TODO
@@ -52,29 +55,41 @@ class Cart extends React.Component<Props> {
       isFetching,
       applyCoupon,
       removeCoupon,
+      t,
     } = this.props;
 
-    return cart ? (
+    const loaded = !!cart;
+    return (
       <div className="cart-container">
-        <CartSummary
-          totalSegments={cart.total_segments}
-          isLoading={isFetching || isUpdating}
-        />
-        <CartForm
-          cartItems={cartItems}
-          isUpdating={isUpdating}
-          updateCartItems={updateCartItems}
-          deleteCartItem={deleteCartItem}
-        />
-        <GiftOptionsCart />
-        <CartDiscount
-          coupon={cart.coupon_code}
-          applyCoupon={applyCoupon}
-          removeCoupon={removeCoupon}
-        />
+        <Loader isLoading={!loaded}>
+          {cart
+            ? [
+                <CartSummary
+                  key="cartSummary"
+                  totalSegments={cart.total_segments}
+                  isLoading={isFetching || isUpdating}
+                  t={t}
+                />,
+                <CartForm
+                  key="cartForm"
+                  cartItems={cartItems}
+                  isUpdating={isUpdating}
+                  updateCartItems={updateCartItems}
+                  deleteCartItem={deleteCartItem}
+                  t={t}
+                />,
+                <GiftOptionsCart key="giftOptionsCart" />,
+                <CartDiscount
+                  key="cartDiscount"
+                  coupon={cart.coupon_code}
+                  applyCoupon={applyCoupon}
+                  removeCoupon={removeCoupon}
+                  t={t}
+                />,
+              ]
+            : null}
+        </Loader>
       </div>
-    ) : (
-      <div>loading...</div>
     );
   }
 }
@@ -98,4 +113,7 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cart);
+export default compose(
+  connect(mapStateToProps, mapDispatchToProps),
+  withTranslate,
+)(Cart);

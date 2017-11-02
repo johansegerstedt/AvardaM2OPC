@@ -3,24 +3,28 @@ import React from 'react';
 import {get} from 'lodash';
 import {formatCurrency} from '$src/utils/format';
 import type {CartItem} from '../types';
+import type {Translate} from '$i18n';
 
 type Props = {
   cartItems: CartItem[],
   isUpdating: boolean,
   updateCartItems(CartItem[]): void,
   deleteCartItem(itemId: string): void,
+  t: Translate,
 };
 
 const ItemRow = ({
   item: {name, item_id, price_incl_tax, qty, isDeleting},
   deleteItem,
+  t,
 }: {
   item: CartItem,
   deleteItem: EventHandler,
+  t: Translate,
 }) => (
   <tbody className="cart item">
     <tr key="0" className="item-info">
-      <td data-th="Item" className="col item">
+      <td data-th={t('Item')} className="col item">
         <a
           href="http://avarda.box/fusion-backpack.html" // TODO
           title={name}
@@ -48,17 +52,17 @@ const ItemRow = ({
           </strong>
         </div>
       </td>
-      <td className="col price" data-th="Price">
+      <td className="col price" data-th={t('Price')}>
         <span className="price-excluding-tax" data-label="Excl. Tax">
           <span className="cart-price">
             <span className="price">{formatCurrency(price_incl_tax)}</span>{' '}
           </span>
         </span>
       </td>
-      <td className="col qty" data-th="Qty">
+      <td className="col qty" data-th={t('Qty')}>
         <div className="field qty">
           <label className="label" htmlFor="cart-98-qty">
-            <span>Qty</span>
+            <span>{t('Qty')}</span>
           </label>
           <div className="control qty">
             <input
@@ -77,7 +81,7 @@ const ItemRow = ({
           </div>
         </div>
       </td>
-      <td className="col subtotal" data-th="Subtotal">
+      <td className="col subtotal" data-th={t('Subtotal')}>
         <span className="price-excluding-tax" data-label="Excl. Tax">
           <span className="cart-price">
             <span className="price">
@@ -102,13 +106,13 @@ const ItemRow = ({
           <span>Edit </span>
         </a>*/}
           <button
-            title="Remove item"
+            title={t('Remove item')}
             className="action action-delete"
             onClick={deleteItem}
             data-itemid={item_id}
             disabled={isDeleting}
           >
-            <span>Remove item</span>
+            <span>{t('Remove item')}</span>
           </button>
         </div>
       </td>
@@ -147,7 +151,7 @@ class CartForm extends React.Component<Props> {
   };
 
   render() {
-    const {cartItems, isUpdating} = this.props;
+    const {cartItems, isUpdating, t} = this.props;
     return (
       <form
         id="form-validate"
@@ -159,21 +163,21 @@ class CartForm extends React.Component<Props> {
         <div className="cart table-wrapper">
           <table id="shopping-cart-table" className="cart items data table">
             <caption role="heading" aria-level={2} className="table-caption">
-              Shopping Cart Items
+              {t('Shopping Cart Items')}
             </caption>
             <thead>
               <tr>
                 <th className="col item" scope="col">
-                  <span>Item</span>
+                  <span>{t('Item')}</span>
                 </th>
                 <th className="col price" scope="col">
-                  <span>Price</span>
+                  <span>{t('Price')}</span>
                 </th>
                 <th className="col qty" scope="col">
-                  <span>Qty</span>
+                  <span>{t('Qty')}</span>
                 </th>
                 <th className="col subtotal" scope="col">
-                  <span>Subtotal</span>
+                  <span>{t('Subtotal')}</span>
                 </th>
               </tr>
             </thead>
@@ -183,6 +187,7 @@ class CartForm extends React.Component<Props> {
                 key={item.item_id}
                 item={item}
                 deleteItem={this.deleteCartItem}
+                t={t}
               />
             ))}
           </table>
@@ -191,29 +196,29 @@ class CartForm extends React.Component<Props> {
           <a
             className="action continue"
             href="http://avarda.box/"
-            title="Continue Shopping"
+            title={t('Continue Shopping')}
           >
-            <span>Continue Shopping</span>
+            <span>{t('Continue Shopping')}</span>
           </a>
           <button
             name="update_cart_action"
             data-cart-empty
             value="empty_cart"
-            title="Clear Shopping Cart"
+            title={t('Clear Shopping Cart')}
             className="action clear"
             id="empty_cart_button"
           >
-            <span>Clear Shopping Cart</span>
+            <span>{t('Clear Shopping Cart')}</span>
           </button>
           <button
             type="submit"
             name="update_cart_action"
             value="update_qty"
             disabled={!!isUpdating}
-            title="Update Shopping Cart"
+            title={t('Update Shopping Cart')}
             className="action update"
           >
-            <span>Update Shopping Cart</span>
+            <span>{t('Update Shopping Cart')}</span>
           </button>
           <input
             type="hidden"

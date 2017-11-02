@@ -4,30 +4,27 @@ import {initial, last} from 'lodash';
 import {formatCurrency} from '$src/utils/format';
 import Loader from '$src/utils/components/Loader';
 import type {TotalSegment} from '../types';
+import type {Translate} from '$i18n';
 
 type Props = {
   totalSegments: TotalSegment[],
   isLoading: boolean,
+  t: Translate,
 };
 
 class CartSummary extends React.Component<Props> {
   render() {
-    const {totalSegments, isLoading} = this.props;
+    const {totalSegments, isLoading, t} = this.props;
     const segments = initial(totalSegments);
     const grandTotal = last(totalSegments);
     return (
       <div className="cart-summary" style={{top: 0}}>
-        <strong className="summary title">Summary</strong>
+        <strong className="summary title">{t('Summary')}</strong>
         <div id="cart-totals" className="cart-totals">
           <div className="table-wrapper" data-bind="blockLoader: isLoading">
             <Loader isLoading={isLoading}>
               <table className="data table totals">
-                <caption
-                  className="table-caption"
-                  data-bind="text: $t('Total')"
-                >
-                  Total
-                </caption>
+                <caption className="table-caption">{t('Total')}</caption>
                 <tbody>
                   {segments.map(({code, title, value}) => (
                     <tr key={code} className="totals sub">
@@ -35,13 +32,13 @@ class CartSummary extends React.Component<Props> {
                         {title}
                       </th>
                       <td className="amount">
-                        <span className="price" data-th="Subtotal">
+                        <span className="price" data-th={t('Subtotal')}>
                           {formatCurrency(value)}
                         </span>
                       </td>
                     </tr>
                   ))}
-                  <tr className="grand totals">
+                  <tr key={grandTotal.code} className="grand totals">
                     <th className="mark" scope="row">
                       <strong>{grandTotal.title}</strong>
                     </th>

@@ -1,13 +1,15 @@
 // @flow
 import React from 'react';
 import {Provider} from 'react-redux';
+import {TranslateProvider, type Translate} from '$i18n';
 import {get} from 'lodash';
-import CartContainer from '$src/cart/components/CartContainer';
+import App from '$src/app/components/App';
 import type {Actions, AppState} from '../types';
 import type {Store} from 'redux';
 
 type Props = {
   store: Store<AppState, Actions>,
+  t: Translate,
 };
 type State = {};
 
@@ -23,10 +25,12 @@ class Root extends React.Component<Props, State> {
   }
 
   render() {
-    const {store} = this.props;
+    const {store, t} = this.props;
     return (
       <Provider store={store}>
-        <CartContainer />
+        <TranslateProvider t={t}>
+          <App />
+        </TranslateProvider>
       </Provider>
     );
   }

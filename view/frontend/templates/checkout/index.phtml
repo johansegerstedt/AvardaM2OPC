@@ -31,9 +31,7 @@ window.__avarda_checkout_config__ = <?php echo json_encode($config); ?>;
 <?php endif ?>
  <script type="text/javascript">
  avardaCheckout.execute(
-   <?php echo json_encode($config); ?>,
-   /*
-   TODO: Re-enable this!
+   <?php echo json_encode($config); ?>,   
    require('mage/translate')
- */);
+ );
  </script>

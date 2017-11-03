@@ -4,6 +4,7 @@ import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
 import Loader from '$src/utils/components/Loader';
 import {withTranslate, type Translate} from '$i18n';
+import {getConfig} from '$src/config';
 import {
   fetchCartRequest,
   updateCartItems,
@@ -59,7 +60,14 @@ class Cart extends React.Component<Props> {
       t,
     } = this.props;
 
-    const loaded = !!cart;
+    const {maskedQuoteId, customerId} = getConfig();
+
+    const cartIsEmpty =
+      (typeof maskedQuoteId !== 'string' && typeof customerId !== 'string') ||
+      (cart !== null && cart.items.length === 0);
+
+    const loaded = !!cart && !cartIsEmpty;
+
     return (
       <div className="cart-container">
         <Loader isLoading={!loaded}>

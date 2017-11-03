@@ -1,17 +1,38 @@
 // @flow
 import React from 'react';
+import {connect, type MapStateToProps} from 'react-redux';
+import {compose} from 'redux';
 import CartContainer from '$src/cart/components/CartContainer';
+import CartIsEmpty from '$src/cart/components/CartIsEmpty';
 import {withTranslate, type Translate} from '$i18n';
+import {getCart} from '$src/cart/selectors';
+import {getConfig} from '$src/config';
+import type {AppState} from '$src/root/types';
+import type {Cart} from '$src/cart/types';
 
 type Props = {
   t: Translate,
+  cart: null | Cart,
 };
 
-const App = ({t}: Props) => (
-  <div className="app">
-    <h1>{t('Checkout')}</h1>
-    <CartContainer />
-  </div>
-);
+const CartIsNotEmpty = () => [<CartContainer />];
 
-export default withTranslate(App);
+const App = ({t, cart}: Props) => {
+  const {maskedQuoteId, customerId} = getConfig();
+  const isCartEmpty =
+    (typeof maskedQuoteId !== 'string' && typeof customerId !== 'string') ||
+    (cart && cart.items.length === 0);
+
+  return (
+    <div className="app">
+      <h1>{t('Checkout')}</h1>
+      {isCartEmpty ? <CartIsEmpty /> : <CartIsNotEmpty />}
+    </div>
+  );
+};
+
+const mapStateToProps: MapStateToProps<AppState, *, *> = state => ({
+  cart: getCart(state),
+});
+
+export default compose(withTranslate, connect(mapStateToProps))(App);

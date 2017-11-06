@@ -41,6 +41,7 @@ const ItemRow = ({
             >
               <img
                 className="product-image-photo"
+                // TODO
                 src="http://avarda.box/media/catalog/product/cache/small_image/165x165/beff4985b56e3afdbeabfc89641a4582/m/b/mb02-gray-0.jpg"
                 width={165}
                 height={165}
@@ -133,7 +134,7 @@ class CartForm extends React.Component<Props> {
       (qtyById, {item_id}) => ({
         ...qtyById,
         [item_id]: parseInt(
-          get(document.forms, `cartForm['cart[${item_id}][qty]'].value`),
+          get(event.target, `['cart[${item_id}][qty]'].value`),
         ),
       }),
       {},

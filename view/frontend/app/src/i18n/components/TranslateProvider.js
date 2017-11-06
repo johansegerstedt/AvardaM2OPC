@@ -25,15 +25,17 @@ class TranslateProvider extends Component<Props> {
 
   translate: Translate = (str, ...variables) => {
     const {mageTranslate} = this.props;
-    return variables.reduce(
-      (translated: string, variable, index: number) =>
-        translated.replace(`%${index + 1}`, variable),
-      mageTranslate(str),
+    return sanitizeHtml(
+      variables.reduce(
+        (translated: string, variable, index: number) =>
+          translated.replace(`%${index + 1}`, variable),
+        mageTranslate(str),
+      ),
     );
   };
 
   translateHTML: TranslateHTML = (str, ...variables) => ({
-    __html: sanitizeHtml(this.translate(str, ...variables)),
+    __html: this.translate(str, ...variables),
   });
 
   getChildContext = (): TranslateContext => ({

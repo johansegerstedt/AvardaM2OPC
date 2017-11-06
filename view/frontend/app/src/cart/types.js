@@ -22,18 +22,18 @@ export type Address = {
 
 export type BillingAddress = {
   id: number,
-  region: string,
-  region_id: string,
-  region_code: string,
-  country_id: string,
+  region: null | string,
+  region_id: null | string,
+  region_code: null | string,
+  country_id: null | string,
   street: string[],
-  telephone: string,
-  postcode: string,
-  city: string,
-  firstname: string,
-  lastname: string,
-  customer_id: number,
-  email: string,
+  telephone: null | string,
+  postcode: null | string,
+  city: null | string,
+  firstname: null | string,
+  lastname: null | string,
+  customer_id: null | number,
+  email: null | string,
   same_as_billing: number,
   save_in_address_book: number,
 };
@@ -168,7 +168,7 @@ export type Region = {
 
 export type Shipping = {
   address: BillingAddress,
-  method: string,
+  method: null | string,
 };
 
 export type ShippingAssignments = {

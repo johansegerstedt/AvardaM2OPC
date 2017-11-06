@@ -3,7 +3,8 @@ import React from 'react';
 import {connect, type MapStateToProps} from 'react-redux';
 import {compose} from 'redux';
 import CartContainer from '$src/cart/components/CartContainer';
-import CartIsEmpty from '$src/cart/components/CartIsEmpty';
+import ShippingContainer from '$src/shipping/components/ShippingMethodContainer';
+import CartIsEmpty from './CartIsEmpty';
 import {withTranslate, type Translate} from '$i18n';
 import {getCart} from '$src/cart/selectors';
 import {getConfig} from '$src/config';
@@ -15,7 +16,10 @@ type Props = {
   cart: null | Cart,
 };
 
-const CartIsNotEmpty = () => [<CartContainer />];
+const CartIsNotEmpty = () => [
+  <CartContainer key="cart" />,
+  <ShippingContainer key="shipping" />,
+];
 
 const App = ({t, cart}: Props) => {
   const {maskedQuoteId, customerId} = getConfig();

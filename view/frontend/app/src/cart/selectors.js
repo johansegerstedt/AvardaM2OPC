@@ -1,15 +1,16 @@
 // @flow
 import {createSelector} from 'reselect';
-import {flowRight as compose, values} from 'lodash';
+import {compose} from 'redux';
+import {values} from 'lodash';
 import type {Selector} from '$src/root/types';
 import type {CartItem} from './types';
 
 export const getCartItems: Selector<void, *> = state => state.cartItems.byId;
 
-export const getAllCartItems: Selector<void, CartItem[]> = compose([
+export const getAllCartItems: Selector<void, CartItem[]> = compose(
   values,
   getCartItems,
-]);
+);
 
 export const getCartItemById = (id: string) =>
   createSelector(getCartItems, byId => byId !== null && byId[id]);

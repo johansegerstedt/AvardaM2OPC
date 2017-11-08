@@ -62,6 +62,39 @@
         </arguments>
     </virtualType>
 
+    <!-- Commands infrastructure -->
+    <virtualType name="AvardaCheckoutCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
+        <arguments>
+            <argument name="commands" xsi:type="array">
+                <item name="avarda_initialize_payment" xsi:type="string">AvardaInitializePaymentCommand</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <!-- END Commands infrastructure -->
+
+    <!-- Avarda commands  -->
+    <virtualType name="AvardaCheckoutInitializePaymentCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">AvardaCheckoutInitializePaymentRequest</argument>
+            <argument name="transferFactory" xsi:type="object">AvardaCheckoutInitializePaymentTransferFactory</argument>
+            <argument name="client" xsi:type="object">Magento\Payment\Gateway\Http\Client\Zend</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AvardaCheckoutInitializePaymentRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="customer" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\CustomerDataBuilder</item>
+                <item name="address" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\AddressDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AvardaCheckoutInitializePaymentTransferFactory" type="Digia\AvardaCheckout\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="uri" xsi:type="string">/CheckOut2Api/InitializePayment</argument>
+        </arguments>
+    </virtualType>
+    <!-- END Avarda commands  -->
+
     <!-- Value handlers infrastructure -->
     <virtualType name="AvardaCheckoutValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
         <arguments>

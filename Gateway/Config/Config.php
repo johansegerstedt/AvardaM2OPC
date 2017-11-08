@@ -16,6 +16,9 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_SITE_CODE = 'site_code';
     const KEY_SITE_PASSWORD = 'site_password';
 
+    const APPLICATION_URL_STAGE = 'https://stage.avarda.org/CheckOut2';
+    const APPLICATION_URL_ONLINE = 'https://online.avarda.org/CheckOut2';
+
     /**
      * Get Payment configuration status
      *
@@ -48,5 +51,17 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function getSitePassword()
     {
         return $this->getValue(self::KEY_SITE_PASSWORD);
+    }
+
+    /**
+     * @return string
+     */
+    public function getApplicationUrl()
+    {
+        if ($this->getTestMode()) {
+            return self::APPLICATION_URL_STAGE;
+        }
+
+        return self::APPLICATION_URL_ONLINE;
     }
 }

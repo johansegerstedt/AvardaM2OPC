@@ -42,7 +42,7 @@ const ItemRow = ({
               <img
                 className="product-image-photo"
                 // TODO
-                src="http://avarda.box/media/catalog/product/cache/small_image/165x165/beff4985b56e3afdbeabfc89641a4582/m/b/mb02-gray-0.jpg"
+                src="http://avarda.box/static/version1510299755/frontend/Magento/luma/fi_FI/Magento_Catalog/images/product/placeholder/small_image.jpg"
                 width={165}
                 height={165}
                 alt={name}

@@ -15,23 +15,25 @@
 ?>
 
 <div id="checkout-root"></div>
-<?php echo __('Checkout'); ?>
-
-<script type="text/javascript">
-console.log('Hello from config!');
-window.__avarda_checkout_config__ = <?php echo json_encode($config); ?>;
-</script>
-
 
 <?php if($devMode) : ?>
   <script type="text/javascript" src="http://avarda.box:8080/assets/bundle.js">
   </script>
-<?php else : ?>
-  <script type="text/javascript" src="<?php echo $block->getViewFileUrl('Digia_AvardaCheckout::js/bundle.js');?>"></script>
 <?php endif ?>
  <script type="text/javascript">
+
+ <?php if($devMode) : ?>
+ window.__avarda_checkout_config__ = <?php echo json_encode($config) ?>;
+ window['pub/media'] = <?php echo json_encode($this->getUrl('pub/media'));?>
+ <?php endif ?>
+
+require(['avardaCheckout'], function(avardaCheckout) {
+  avardaCheckout.execute(<?php echo json_encode($config); ?>);
+})
+
+ /*
  avardaCheckout.execute(
-   <?php echo json_encode($config); ?>,   
+   <?php echo json_encode($config); ?>,
    require('mage/translate')
- );
+ );*/
  </script>

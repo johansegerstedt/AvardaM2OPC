@@ -43,10 +43,6 @@ const GiftOptionsCart = () => (
 );
 
 class Cart extends React.Component<Props> {
-  componentWillMount() {
-    this.props.fetchCartRequest();
-  }
-
   render() {
     const {
       cart,

@@ -1,18 +1,13 @@
 // @flow
+import $ from 'jquery';
+import _mageTranslate from 'mage/translate'; // eslint-disable-line no-unused-vars
 import {Component, Children, type ComponentType, type Node} from 'react';
 import sanitizeHtml from 'sanitize-html';
-
 import propTypes from 'prop-types';
-import type {
-  MageTranslate,
-  Translate,
-  TranslateContext,
-  TranslateHTML,
-} from '../types';
+import type {Translate, TranslateContext, TranslateHTML} from '../types';
 
 type Props = {
   children: Node | ComponentType<any>,
-  mageTranslate: MageTranslate,
 };
 
 export const contextTypes = {
@@ -20,11 +15,12 @@ export const contextTypes = {
   tHTML: propTypes.func,
 };
 
+const mageTranslate = $.mage.__;
+
 class TranslateProvider extends Component<Props> {
   static childContextTypes = contextTypes;
 
   translate: Translate = (str, ...variables) => {
-    const {mageTranslate} = this.props;
     return sanitizeHtml(
       variables.reduce(
         (translated: string, variable, index: number) =>

@@ -4,7 +4,7 @@ import {cart, cartItems} from '$src/cart/reducers';
 import shippingMethods from '$src/shipping/reducers';
 import type {AppState, Actions} from './types';
 
-const mainReducer: (AppState, Actions) => AppState = combineReducers({
+const mainReducer: (AppState | void, Actions) => AppState = combineReducers({
   cart,
   cartItems,
   shippingMethods,

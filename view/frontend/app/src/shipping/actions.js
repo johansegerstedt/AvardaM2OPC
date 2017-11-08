@@ -22,7 +22,28 @@ export const estimateShippingMethodsFailure = createAction(
   createError,
 );
 
+export const setShippingInformationRequest = createAction(
+  ActionTypes.SET_SHIPPING_INFORMATION,
+  (payload: {
+    shipping_address: BillingAddress,
+    shipping_method: ShippingMethod,
+  }) => payload,
+);
+
+export const setShippingInformationSuccess = createAction(
+  ActionTypes.SET_SHIPPING_INFORMATION_SUCCESS,
+  (shippingMethod: ShippingMethod): ShippingMethod => shippingMethod,
+);
+
+export const setShippingInformationFailure = createAction(
+  ActionTypes.SET_SHIPPING_INFORMATION_FAILURE,
+  createError,
+);
+
 export type ShippingActions =
   | ActionType<typeof estimateShippingMethodsRequest>
   | ActionType<typeof estimateShippingMethodsSuccess>
-  | ActionType<typeof estimateShippingMethodsFailure>;
+  | ActionType<typeof estimateShippingMethodsFailure>
+  | ActionType<typeof setShippingInformationRequest>
+  | ActionType<typeof setShippingInformationSuccess>
+  | ActionType<typeof setShippingInformationFailure>;

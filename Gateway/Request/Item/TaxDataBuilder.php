@@ -1,0 +1,42 @@
+<?php
+/**
+ * @author      Digia Commerce Oy
+ * @copyright   Copyright © 2017 Digia. All rights reserved.
+ * @package     Digia_AvardaCheckout
+ */
+namespace Digia\AvardaCheckout\Gateway\Request;
+
+use Digia\AvardaCheckout\Gateway\Helper\ItemSubjectReader;
+use Magento\Payment\Gateway\Request\BuilderInterface;
+use Magento\Payment\Helper\Formatter;
+
+/**
+ * Class TaxDataBuilder
+ */
+class TaxDataBuilder implements BuilderInterface
+{
+    use Formatter;
+
+    /**
+     * String
+     */
+    const TAX_CODE = 'TaxCode';
+
+    /**
+     * Decimal
+     */
+    const TAX_AMOUNT = 'TaxAmount';
+
+    /**
+     * @inheritdoc
+     */
+    public function build(array $buildSubject)
+    {
+        $item = ItemSubjectReader::readItem($buildSubject)->getItem();
+
+        return [
+            self::TAX_CODE => $item->getTaxPercent(),
+            self::TAX_AMOUNT => $this->formatPrice($item->getTaxAmount()),
+        ];
+    }
+}

@@ -14,19 +14,27 @@ use Digia\AvardaCheckout\Api\GuestPaymentManagementInterface;
 class GuestPaymentManagement implements GuestPaymentManagementInterface
 {
     /**
-     * @var \Digia\AvardaCheckout\Api\Data\PaymentDetailsInterfaceFactory
+     * @var \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface
      */
-    public $paymentDetailsFactory;
+    protected $quotePaymentManagement;
+
+    /**
+     * @var \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface
+     */
+    protected $quoteIdMaskFactory;
 
     /**
      * GuestPaymentManagement constructor.
      *
-     * @param \Digia\AvardaCheckout\Api\Data\PaymentDetailsInterfaceFactory $paymentDetailsFactory
+     * @param \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface $quotePaymentManagement
+     * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
-        \Digia\AvardaCheckout\Api\Data\PaymentDetailsInterfaceFactory $paymentDetailsFactory
+        \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface $quotePaymentManagement,
+        \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
-        $this->paymentDetailsFactory = $paymentDetailsFactory;
+        $this->quotePaymentManagement = $quotePaymentManagement;
+        $this->quoteIdMaskFactory = $quoteIdMaskFactory;
     }
 
     /**
@@ -34,10 +42,9 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
      */
     public function getPurchaseId($cartId)
     {
-        $paymentDetails = $this->paymentDetailsFactory->create();
+        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
 
-        $paymentDetails->setPurchaseId('Guest Payment Return');
-
-        return $paymentDetails;
+        // getQuoteId() == $cartId == quote::entity_id
+        return $this->quotePaymentManagement->getPurchaseId($quoteIdMask->getQuoteId());
     }
 }

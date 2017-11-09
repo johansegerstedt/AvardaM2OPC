@@ -16,7 +16,7 @@ class PaymentManagement implements PaymentManagementInterface
     /**
      * @var \Digia\AvardaCheckout\Api\Data\PaymentDetailsInterfaceFactory
      */
-    public $paymentDetailsFactory;
+    protected $paymentDetailsFactory;
 
     /**
      * GuestPaymentManagement constructor.
@@ -34,10 +34,6 @@ class PaymentManagement implements PaymentManagementInterface
      */
     public function getPurchaseId($cartId)
     {
-        $paymentDetails = $this->paymentDetailsFactory->create();
-
-        $paymentDetails->setPurchaseId('Payment Return');
-
-        return $paymentDetails;
+        return $this->quotePaymentManagement->getPurchaseId($cartId);
     }
 }

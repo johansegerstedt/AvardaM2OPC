@@ -11,6 +11,7 @@
     <preference for="Digia\AvardaCheckout\Api\Data\PaymentDetailsInterface" type="Digia\AvardaCheckout\Model\PaymentDetails" />
     <preference for="Digia\AvardaCheckout\Api\GuestPaymentManagementInterface" type="Digia\AvardaCheckout\Model\GuestPaymentManagement" />
     <preference for="Digia\AvardaCheckout\Api\PaymentManagementInterface" type="Digia\AvardaCheckout\Model\PaymentManagement" />
+    <preference for="Digia\AvardaCheckout\Api\QuotePaymentManagementInterface" type="Digia\AvardaCheckout\Model\QuotePaymentManagement" />
 
     <!-- Avarda payment methods -->
     <virtualType name="AvardaCheckoutFacade" type="Magento\Payment\Model\Method\Adapter">

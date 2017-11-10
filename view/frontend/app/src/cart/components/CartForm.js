@@ -102,7 +102,6 @@ const ItemRow = ({
         <div className="actions-toolbar">
           <div
             id="gift-options-cart-item-98"
-            data-bind="scope:'giftOptionsCartItem-98'"
             className="gift-options-cart-item"
           />
           {/*<a

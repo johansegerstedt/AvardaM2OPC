@@ -36,6 +36,7 @@
     "eslint-plugin-promise": "^3.6.0",
     "eslint-plugin-react": "^7.4.0",
     "eslint-plugin-standard": "^3.0.1",
+    "file-loader": "^1.1.5",
     "flow-bin": "^0.57.3",
     "flow-typed": "^2.2.0",
     "husky": "^0.14.3",
@@ -43,6 +44,7 @@
     "prettier": "^1.7.4",
     "sass-loader": "^6.0.6",
     "style-loader": "^0.19.0",
+    "url-loader": "^0.6.2",
     "webpack": "^3.8.1",
     "webpack-dev-server": "^2.9.3"
   },

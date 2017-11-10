@@ -22,8 +22,8 @@ class CartSummary extends React.Component<Props> {
       <div className="cart-summary" style={{top: 0}}>
         <strong className="summary title">{t('Summary')}</strong>
         <div id="cart-totals" className="cart-totals">
-          <div className="table-wrapper" data-bind="blockLoader: isLoading">
-            <Loader isLoading={isLoading}>
+          <div className="table-wrapper">
+            <Loader isLoading={isLoading} block>
               <table className="data table totals">
                 <caption className="table-caption">{t('Total')}</caption>
                 <tbody>

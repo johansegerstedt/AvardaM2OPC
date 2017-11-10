@@ -6,6 +6,7 @@ type Props = {
   t: Translate,
 };
 
+// TODO
 class ShippingPolicy extends React.Component<Props> {
   render() {
     const {t} = this.props;

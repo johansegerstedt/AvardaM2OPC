@@ -53,18 +53,10 @@ const ShippingMethodRadio = ({
           </span>
         </span>
       </td>
-      <td
-        className="col col-method"
-        data-bind="text: method.method_title, attr: {'id': 'label_method_' + method.method_code + '_' + method.carrier_code}"
-        id="label_method_bestway_tablerate"
-      >
+      <td className="col col-method" id={`label_method_${value}`}>
         {method.available ? method.method_title : null}
       </td>
-      <td
-        className="col col-carrier"
-        data-bind="text: method.carrier_title, attr: {'id': 'label_carrier_' + method.method_code + '_' + method.carrier_code}"
-        id="label_carrier_bestway_tablerate"
-      >
+      <td className="col col-carrier" id={`label_carrier_${value}`}>
         {method.carrier_title}
       </td>
     </tr>,
@@ -75,11 +67,7 @@ const ShippingMethodRadio = ({
             <div>{method.error_message}</div>
           </div>
           <span className="no-display">
-            <input
-              type="radio"
-              data-bind="attr: {'value' : method.method_code, 'id': 's_method_' + method.method_code}"
-              id="s_method_null"
-            />
+            <input type="radio" id={`s_method_${value}`} />
           </span>
         </td>
       </tr>

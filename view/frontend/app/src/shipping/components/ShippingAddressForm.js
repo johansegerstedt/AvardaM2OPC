@@ -37,15 +37,14 @@ class ShippingAddressForm extends React.Component<Props> {
       >
         <div id="shipping-new-address-form" className="fieldset address">
           <div className="field _required" name="shippingAddress.postcode">
-            <label className="label" htmlFor="PBJUWJR">
-              <span data-bind="text: element.label">
-                {t('Zip/Postal Code')}
-              </span>
+            <label className="label" htmlFor="postcode">
+              <span>{t('Zip/Postal Code')}</span>
             </label>
             <div className="control">
               <input
                 className="input-text"
                 type="text"
+                id="postcode"
                 name="postcode"
                 defaultValue={shippingAddress.postcode}
               />

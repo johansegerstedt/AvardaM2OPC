@@ -38,9 +38,7 @@ type Props = {
 };
 
 // TODO
-const GiftOptionsCart = () => (
-  <div id="gift-options-cart" data-bind="scope:'giftOptionsCart'" />
-);
+const GiftOptionsCart = () => <div id="gift-options-cart" />;
 
 class Cart extends React.Component<Props> {
   render() {

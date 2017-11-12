@@ -41,6 +41,11 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
     public $defaultMethod;
 
     /**
+     * @var
+     */
+    protected $quote;
+
+    /**
      * GuestPaymentManagement constructor.
      *
      * @param \Digia\AvardaCheckout\Api\Data\PaymentDetailsInterfaceFactory $paymentDetailsFactory
@@ -86,7 +91,7 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
             // Get purchase ID from payment additional information
             $additionalInformation = $payment->getAdditionalInformation();
         } else {
-            // TODO: Update Items in Avarda
+            $this->updateItems($quote);
         }
 
         // Create payment details object
@@ -96,6 +101,20 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
         );
 
         return $paymentDetails;
+    }
+
+    /**
+     * @param \Magento\Quote\Api\Data\CartInterface $quote
+     */
+    public function updateItems(\Magento\Quote\Api\Data\CartInterface $quote)
+    {
+        if ($this->commandPool === null) {
+            throw new \DomainException('Command pool is not configured for use.');
+        }
+
+        // Execute InitializePurchase command
+        $arguments = $this->getCommandArguments($quote);
+        $this->commandPool->get('avarda_update_items')->execute($arguments);
     }
 
     /**

@@ -19,4 +19,12 @@ interface QuotePaymentManagementInterface
      * @return \Digia\AvardaCheckout\Api\Data\PaymentDetailsInterface
      */
     public function getPurchaseId($cartId);
+
+    /**
+     * Update items in Avarda
+     *
+     * @param \Magento\Quote\Api\Data\CartInterface $quote
+     * @return void
+     */
+    public function updateItems(\Magento\Quote\Api\Data\CartInterface $quote);
 }

@@ -71,6 +71,7 @@
         <arguments>
             <argument name="commands" xsi:type="array">
                 <item name="avarda_initialize_payment" xsi:type="string">AvardaCheckoutInitializePaymentCommand</item>
+                <item name="avarda_update_items" xsi:type="string">AvardaCheckoutUpdateItemsCommand</item>
             </argument>
         </arguments>
     </virtualType>
@@ -95,6 +96,36 @@
             </argument>
         </arguments>
     </virtualType>
+    <virtualType name="AvardaCheckoutInitializePaymentTransferFactory" type="Digia\AvardaCheckout\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="uri" xsi:type="string">/CheckOut2Api/InitializePayment</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="AvardaCheckoutUpdateItemsCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">AvardaCheckoutUpdateItemsRequest</argument>
+            <argument name="transferFactory" xsi:type="object">AvardaCheckoutUpdateItemsTransferFactory</argument>
+            <argument name="client" xsi:type="object">AvardaCheckoutClient</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AvardaCheckoutUpdateItemsRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="purchase_id" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\PurchaseIdDataBuilder</item>
+                <item name="price" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\PriceDataBuilder</item>
+                <item name="items" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\ItemsDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AvardaCheckoutUpdateItemsTransferFactory" type="Digia\AvardaCheckout\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="uri" xsi:type="string">/CheckOut2Api/UpdateItems</argument>
+        </arguments>
+    </virtualType>
+    <!-- END Avarda commands -->
+
+    <!-- Avarda items builder -->
     <type name="Digia\AvardaCheckout\Gateway\Request\ItemsDataBuilder">
         <arguments>
             <argument name="itemBuilder" xsi:type="object">AvardaCheckoutItemBuilder</argument>
@@ -109,12 +140,7 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="AvardaCheckoutInitializePaymentTransferFactory" type="Digia\AvardaCheckout\Gateway\Http\TransferFactory">
-        <arguments>
-            <argument name="uri" xsi:type="string">/CheckOut2Api/InitializePayment</argument>
-        </arguments>
-    </virtualType>
-    <!-- END Avarda commands  -->
+    <!-- END Avarda items builder -->
 
     <!-- Quote command pool -->
     <type name="Digia\AvardaCheckout\Model\QuotePaymentManagement">

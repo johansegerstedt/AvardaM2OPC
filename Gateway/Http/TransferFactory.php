@@ -10,6 +10,13 @@ use Magento\Payment\Gateway\Http\TransferFactoryInterface;
 
 class TransferFactory implements TransferFactoryInterface
 {
+    const BASIC_AUTHENTICATION_FORMAT = 'Basic %s';
+
+    /**
+     * @var \Magento\Framework\Encryption\EncryptorInterface
+     */
+    protected $encryptor;
+
     /**
      * @var \Magento\Payment\Gateway\Http\TransferBuilder
      */
@@ -33,17 +40,20 @@ class TransferFactory implements TransferFactoryInterface
     /**
      * TransferFactory constructor.
      *
+     * @param \Magento\Framework\Encryption\EncryptorInterface $encryptor
      * @param \Magento\Payment\Gateway\Http\TransferBuilder $transferBuilder
      * @param \Digia\AvardaCheckout\Gateway\Config\Config $config
      * @param string $method
      * @param string $uri
      */
     public function __construct(
+        \Magento\Framework\Encryption\EncryptorInterface $encryptor,
         \Magento\Payment\Gateway\Http\TransferBuilder $transferBuilder,
         \Digia\AvardaCheckout\Gateway\Config\Config $config,
         $method = \Zend_Http_Client::POST,
         $uri = ''
     ) {
+        $this->encryptor = $encryptor;
         $this->transferBuilder = $transferBuilder;
         $this->config = $config;
         $this->method = $method;
@@ -60,7 +70,7 @@ class TransferFactory implements TransferFactoryInterface
     {
         $headers = [
             'Content-Type' => 'application/json',
-            'Authorization' => $this->getAuthorization(),
+            'Authorization' => $this->getBasicAuthorization(),
         ];
 
         return $this->transferBuilder
@@ -78,12 +88,24 @@ class TransferFactory implements TransferFactoryInterface
      */
     protected function getBasicAuthorization()
     {
-        $authString = implode(':', [
-            $this->config->getSiteCode(),
-            $this->config->getSitePassword(),
-        ]);
+        $sitePassword = $this->encryptor->decrypt(
+            $this->config->getSitePassword()
+        );
 
-        return 'Basic ' . base64_encode($authString);
+        // The Site Code and Site Password are concatenated into a single string
+        // delimited by a colon.
+        $authString = implode(
+            ':',
+            [
+                $this->config->getSiteCode(),
+                $sitePassword,
+            ]
+        );
+
+        return sprintf(
+            self::BASIC_AUTHENTICATION_FORMAT,
+            base64_encode($authString)
+        );
     }
 
     /**

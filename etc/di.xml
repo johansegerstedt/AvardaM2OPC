@@ -116,6 +116,15 @@
     </virtualType>
     <!-- END Avarda commands  -->
 
+    <!-- Quote command pool -->
+    <type name="Digia\AvardaCheckout\Model\QuotePaymentManagement">
+        <arguments>
+            <argument name="commandPool" xsi:type="object">AvardaCheckoutCommandPool</argument>
+            <argument name="paymentDataObjectFactory" xsi:type="object">Magento\Payment\Gateway\Data\PaymentDataObjectFactory</argument>
+        </arguments>
+    </type>
+    <!-- END Quote command pool -->
+
     <!-- Avarda HTTP client -->
     <virtualType name="AvardaCheckoutClient" type="Magento\Payment\Gateway\Http\Client\Zend">
         <arguments>

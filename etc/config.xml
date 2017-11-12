@@ -13,6 +13,7 @@
                 <model>AvardaCheckoutFacade</model>
                 <active>0</active>
                 <test_mode>1</test_mode>
+                <debug>1</debug>
             </avarda_checkout>
         </payment>
     </default>

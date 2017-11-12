@@ -81,7 +81,8 @@
         <arguments>
             <argument name="requestBuilder" xsi:type="object">AvardaCheckoutInitializePaymentRequest</argument>
             <argument name="transferFactory" xsi:type="object">AvardaCheckoutInitializePaymentTransferFactory</argument>
-            <argument name="client" xsi:type="object">Magento\Payment\Gateway\Http\Client\Zend</argument>
+            <argument name="client" xsi:type="object">AvardaCheckoutClient</argument>
+            <argument name="handler" xsi:type="object">Digia\AvardaCheckout\Gateway\Response\InitializePaymentHandler</argument>
         </arguments>
     </virtualType>
     <virtualType name="AvardaCheckoutInitializePaymentRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
@@ -115,7 +116,26 @@
     </virtualType>
     <!-- END Avarda commands  -->
 
+    <!-- Avarda HTTP client -->
+    <virtualType name="AvardaCheckoutClient" type="Magento\Payment\Gateway\Http\Client\Zend">
+        <arguments>
+            <argument name="logger" xsi:type="object">AvardaCheckoutLogger</argument>
+            <argument name="converter" xsi:type="object">Digia\AvardaCheckout\Gateway\Http\Converter\JsonConverter</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AvardaCheckoutLogger" type="Magento\Payment\Model\Method\Logger">
+        <arguments>
+            <argument name="config" xsi:type="object">AvardaCheckoutGenericConfig</argument>
+        </arguments>
+    </virtualType>
+    <!-- END Avarda HTTP client -->
+
     <!-- Value handlers infrastructure -->
+    <type name="Digia\AvardaCheckout\Gateway\Config\Config">
+        <arguments>
+            <argument name="methodCode" xsi:type="string">avarda_checkout</argument>
+        </arguments>
+    </type>
     <virtualType name="AvardaCheckoutValueHandlerPool" type="Magento\Payment\Gateway\Config\ValueHandlerPool">
         <arguments>
             <argument name="handlers" xsi:type="array">

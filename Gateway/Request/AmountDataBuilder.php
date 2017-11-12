@@ -6,8 +6,8 @@
  */
 namespace Digia\AvardaCheckout\Gateway\Request;
 
-use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
+use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Helper\Formatter;
 
 /**
@@ -28,7 +28,9 @@ class AmountDataBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         return [
-            self::AMOUNT => $this->formatPrice(SubjectReader::readAmount($buildSubject)),
+            self::AMOUNT => $this->formatPrice(
+                SubjectReader::readAmount($buildSubject)
+            ),
         ];
     }
 }

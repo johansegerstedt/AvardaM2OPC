@@ -6,17 +6,31 @@
  */
 namespace Digia\AvardaCheckout\Gateway\Request;
 
-use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
+use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Helper\Formatter;
 
 /**
- * Class AmountDataBuilder
+ * Class PriceDataBuilder
  */
-class PriceDataBuilder extends AmountDataBuilder
+class PriceDataBuilder implements BuilderInterface
 {
+    use Formatter;
+
     /**
-     * The amount to add to the payment
+     * The price to add to the payment
      */
-    const AMOUNT = 'Price';
+    const PRICE = 'Price';
+
+    /**
+     * @inheritdoc
+     */
+    public function build(array $buildSubject)
+    {
+        return [
+            self::PRICE => (float) $this->formatPrice(
+                SubjectReader::readAmount($buildSubject)
+            ),
+        ];
+    }
 }

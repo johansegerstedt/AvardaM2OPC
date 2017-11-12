@@ -6,8 +6,8 @@
  */
 namespace Digia\AvardaCheckout\Gateway\Request;
 
-use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
+use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
  * Class CustomerDataBuilder

@@ -1,8 +1,6 @@
 // @flow
 import {takeEvery, takeLatest} from 'redux-saga';
-import {all, fork, put} from 'redux-saga/effects';
-import {normalize} from 'normalizr';
-import {merge} from 'lodash';
+import {all, call, fork, put} from 'redux-saga/effects';
 import {getCartApiPath} from './utils';
 import {
   fetchCartRequest,
@@ -19,21 +17,16 @@ import {
   removeCouponSuccess,
   removeCouponFailure,
 } from './actions';
-import {ActionTypes as Cart, cartSchema} from './constants';
-import {getApiUrl, apiDelete, apiGet, apiPut} from '$src/m2api';
+import {fetchCart as apiFetchCart} from './api';
+import {ActionTypes as Cart} from './constants';
+import {getApiUrl, apiDelete, apiPut} from '$src/m2api';
 import {getConfig} from '$src/config';
 import type {ActionType} from 'redux-actions';
 
 function* fetchCart() {
-  const url = getApiUrl(getCartApiPath());
-
   try {
-    const [cart, totals] = yield Promise.all([
-      apiGet(url),
-      apiGet(`${url}/totals`),
-    ]);
-    const data = merge({}, cart, totals);
-    yield put(fetchCartSuccess(normalize(data, cartSchema)));
+    const cart = yield call(apiFetchCart);
+    yield put(fetchCartSuccess(cart));
   } catch (err) {
     yield put(fetchCartFailure(err));
   }
@@ -42,11 +35,11 @@ function* fetchCart() {
 function* updateCartItems(
   {payload = []}: {payload: any[]} = {},
 ): Generator<*, *, *> {
-  const baseUrl = getApiUrl(getCartApiPath());
+  const baseUrl = `${getCartApiPath()}/items`;
   try {
-    const updatedItems = yield Promise.all(
+    const updatedItems = yield all(
       payload.map(({item_id, quote_id, sku, qty}) =>
-        apiPut(`${baseUrl}/items/${item_id}`, {
+        call(apiPut, getApiUrl(`${baseUrl}/${item_id}`), {
           cartItem: {
             item_id,
             quote_id: getConfig().maskedQuoteId || quote_id,
@@ -57,8 +50,10 @@ function* updateCartItems(
       ),
     );
 
+    const cart = yield call(apiFetchCart);
+
     yield put(updateCartItemsSuccess(updatedItems));
-    yield put(fetchCartRequest());
+    yield put(fetchCartSuccess(cart));
   } catch (err) {
     yield put(updateCartItemsFailure(err));
   }
@@ -67,16 +62,17 @@ function* updateCartItems(
 function* deleteCartItem({
   payload: itemId,
 }: ActionType<typeof deleteCartItemCreator>) {
-  const baseUrl = getApiUrl(getCartApiPath());
-  const url = `${baseUrl}/items/${itemId}`;
+  const url = getApiUrl(`${getCartApiPath()}/items/${itemId}`);
   try {
-    const data = yield apiDelete(url);
+    const data = yield call(apiDelete, url);
     const deleteSuccess = data === true;
     if (!deleteSuccess) {
       throw new Error(`Couldn't delete item ${itemId}.`);
     }
+
+    const cart = yield call(apiFetchCart);
     yield put(deleteCartItemSuccess(itemId));
-    yield put(fetchCartRequest());
+    yield put(fetchCartSuccess(cart));
   } catch (err) {
     yield put(deleteCartItemFailure(err));
   }
@@ -87,12 +83,14 @@ function* applyCoupon({
 }: ActionType<typeof applyCouponRequest>) {
   const url = getApiUrl(`${getCartApiPath()}/coupons/${couponCode}`);
   try {
-    const success = yield apiPut(url);
+    const success = yield call(apiPut, url);
     if (success !== true) {
       throw new Error(`Couldn't apply coupon "${couponCode}"`);
     }
+    const cart = yield call(apiFetchCart);
+
     yield put(applyCouponSuccess(couponCode));
-    yield put(fetchCartRequest());
+    yield put(fetchCartSuccess(cart));
   } catch (err) {
     yield put(applyCouponFailure(err));
   }
@@ -101,7 +99,7 @@ function* applyCoupon({
 function* removeCoupon() {
   const url = getApiUrl(`${getCartApiPath()}/coupons`);
   try {
-    const success = yield apiDelete(url);
+    const success = yield call(apiDelete, url);
     if (success !== true) {
       throw new Error(`Couldn't remove coupon.`);
     }

@@ -41,7 +41,8 @@ const ItemRow = ({
             >
               <img
                 className="product-image-photo"
-                src="http://avarda.box/media/catalog/product/cache/small_image/165x165/beff4985b56e3afdbeabfc89641a4582/m/b/mb02-gray-0.jpg"
+                // TODO
+                src="http://avarda.box/static/version1510299755/frontend/Magento/luma/fi_FI/Magento_Catalog/images/product/placeholder/small_image.jpg"
                 width={165}
                 height={165}
                 alt={name}
@@ -101,7 +102,6 @@ const ItemRow = ({
         <div className="actions-toolbar">
           <div
             id="gift-options-cart-item-98"
-            data-bind="scope:'giftOptionsCartItem-98'"
             className="gift-options-cart-item"
           />
           {/*<a
@@ -133,7 +133,7 @@ class CartForm extends React.Component<Props> {
       (qtyById, {item_id}) => ({
         ...qtyById,
         [item_id]: parseInt(
-          get(document.forms, `cartForm['cart[${item_id}][qty]'].value`),
+          get(event.target, `['cart[${item_id}][qty]'].value`),
         ),
       }),
       {},

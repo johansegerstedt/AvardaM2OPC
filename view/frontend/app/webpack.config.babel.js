@@ -9,7 +9,11 @@ export default {
     path: path.resolve(__dirname, '../web/js'),
     publicPath: '/assets/',
     library: 'avardaCheckout',
-    libraryTarget: 'this',
+    libraryTarget: 'amd',
+  },
+  externals: {
+    'mage/translate': 'mage/translate',
+    jquery: 'jquery',
   },
   devtool: 'inline-source-map',
   module: {
@@ -30,6 +34,17 @@ export default {
           },
           {
             loader: 'sass-loader', // compiles Sass to CSS
+          },
+        ],
+      },
+      {
+        test: /\.(png|jpg|gif)$/,
+        use: [
+          {
+            loader: 'url-loader',
+            options: {
+              limit: 8192,
+            },
           },
         ],
       },

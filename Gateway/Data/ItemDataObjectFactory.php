@@ -58,11 +58,11 @@ class ItemDataObjectFactory implements ItemDataObjectFactoryInterface
     {
         if ($item instanceof OrderItemInterface) {
             $data['item'] = $this->orderItemAdapterFactory->create(
-                ['order_item' => $item]
+                ['orderItem' => $item]
             );
         } elseif ($item instanceof CartItemInterface) {
             $data['item'] = $this->quoteItemAdapterFactory->create(
-                ['quote_item' => $item]
+                ['quoteItem' => $item]
             );
         }
 

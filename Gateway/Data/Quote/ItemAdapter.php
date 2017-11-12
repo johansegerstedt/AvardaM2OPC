@@ -17,7 +17,7 @@ class ItemAdapter implements ItemAdapterInterface
     /**
      * @var CartItemInterface
      */
-    private $quoteItem;
+    protected $quoteItem;
 
     /**
      * ItemAdapter constructor.

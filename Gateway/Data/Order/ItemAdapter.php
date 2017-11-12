@@ -17,7 +17,7 @@ class ItemAdapter implements ItemAdapterInterface
     /**
      * @var OrderItemInterface
      */
-    private $orderItem;
+    protected $orderItem;
 
     /**
      * ItemAdapter constructor.

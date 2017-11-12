@@ -4,7 +4,7 @@
  * @copyright   Copyright © 2017 Digia. All rights reserved.
  * @package     Digia_AvardaCheckout
  */
-namespace Digia\AvardaCheckout\Gateway\Request;
+namespace Digia\AvardaCheckout\Gateway\Request\Item;
 
 use Digia\AvardaCheckout\Gateway\Helper\ItemSubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
@@ -28,7 +28,9 @@ class AmountDataBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         return [
-            self::AMOUNT => $this->formatPrice(ItemSubjectReader::readAmount($buildSubject)),
+            self::AMOUNT => (float) $this->formatPrice(
+                ItemSubjectReader::readAmount($buildSubject)
+            ),
         ];
     }
 }

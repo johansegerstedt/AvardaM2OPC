@@ -12,8 +12,8 @@
     <preference for="Digia\AvardaCheckout\Api\GuestPaymentManagementInterface" type="Digia\AvardaCheckout\Model\GuestPaymentManagement" />
     <preference for="Digia\AvardaCheckout\Api\PaymentManagementInterface" type="Digia\AvardaCheckout\Model\PaymentManagement" />
     <preference for="Digia\AvardaCheckout\Api\QuotePaymentManagementInterface" type="Digia\AvardaCheckout\Model\QuotePaymentManagement" />
-    <preference for="Digia\AvardaCheckout\Gateway\Data\ItemObjectFactoryInterface" type="Digia\AvardaCheckout\Gateway\Data\ItemObjectFactory" />
-    <preference for="Digia\AvardaCheckout\Gateway\Data\ItemObjectInterface" type="Digia\AvardaCheckout\Gateway\Data\ItemObject" />
+    <preference for="Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactoryInterface" type="Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactory" />
+    <preference for="Digia\AvardaCheckout\Gateway\Data\ItemDataObjectInterface" type="Digia\AvardaCheckout\Gateway\Data\ItemDataObject" />
 
     <!-- Avarda payment methods -->
     <virtualType name="AvardaCheckoutFacade" type="Magento\Payment\Model\Method\Adapter">
@@ -91,6 +91,20 @@
                 <item name="address" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\AddressDataBuilder</item>
                 <item name="price" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\PriceDataBuilder</item>
                 <item name="items" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\ItemsDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Digia\AvardaCheckout\Gateway\Request\ItemsDataBuilder">
+        <arguments>
+            <argument name="itemBuilder" xsi:type="object">AvardaCheckoutItemBuilder</argument>
+        </arguments>
+    </type>
+    <virtualType name="AvardaCheckoutItemBuilder" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="product" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\Item\ProductDataBuilder</item>
+                <item name="amount" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\Item\AmountDataBuilder</item>
+                <item name="tax" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\Item\TaxDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>

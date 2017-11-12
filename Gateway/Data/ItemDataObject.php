@@ -9,9 +9,9 @@ namespace Digia\AvardaCheckout\Gateway\Data;
 class ItemDataObject implements ItemDataObjectInterface
 {
     /**
-     * @var OrderAdapterInterface
+     * @var ItemAdapterInterface
      */
-    private $item;
+    protected $item;
 
     /**
      * @param ItemAdapterInterface $item

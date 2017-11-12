@@ -4,7 +4,7 @@
  * @copyright   Copyright © 2017 Digia. All rights reserved.
  * @package     Digia_AvardaCheckout
  */
-namespace Digia\AvardaCheckout\Gateway\Request;
+namespace Digia\AvardaCheckout\Gateway\Request\Item;
 
 use Digia\AvardaCheckout\Gateway\Helper\ItemSubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;

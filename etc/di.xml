@@ -70,7 +70,7 @@
     <virtualType name="AvardaCheckoutCommandPool" type="Magento\Payment\Gateway\Command\CommandPool">
         <arguments>
             <argument name="commands" xsi:type="array">
-                <item name="avarda_initialize_payment" xsi:type="string">AvardaInitializePaymentCommand</item>
+                <item name="avarda_initialize_payment" xsi:type="string">AvardaCheckoutInitializePaymentCommand</item>
             </argument>
         </arguments>
     </virtualType>

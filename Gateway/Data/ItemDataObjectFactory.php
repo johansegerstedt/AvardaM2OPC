@@ -7,6 +7,8 @@
 namespace Digia\AvardaCheckout\Gateway\Data;
 
 use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Sales\Api\Data\CreditmemoItemInterface;
+use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 
 /**
@@ -56,13 +58,26 @@ class ItemDataObjectFactory implements ItemDataObjectFactoryInterface
      */
     public function create($item)
     {
-        if ($item instanceof OrderItemInterface) {
+        if ($item instanceof InvoiceItemInterface ||
+            $item instanceof CreditmemoItemInterface
+        ) {
+            $orderItem = $item->getOrderItem();
+            $data['item'] = $this->orderItemAdapterFactory->create(
+                ['orderItem' => $orderItem]
+            );
+        } elseif ($item instanceof OrderItemInterface) {
             $data['item'] = $this->orderItemAdapterFactory->create(
                 ['orderItem' => $item]
             );
         } elseif ($item instanceof CartItemInterface) {
             $data['item'] = $this->quoteItemAdapterFactory->create(
                 ['quoteItem' => $item]
+            );
+        }
+
+        if (!isset($data)) {
+            throw new \Magento\Payment\Gateway\Command\CommandException(
+                __('Failed to build item data.')
             );
         }
 

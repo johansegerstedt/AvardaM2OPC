@@ -10,7 +10,7 @@ use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 
 /**
- * Service for creation transferable payment object from model
+ * Service for creation transferable item object from model
  *
  * @api
  * @since 100.0.2
@@ -20,7 +20,7 @@ interface ItemDataObjectFactoryInterface
     /**
      * Creates Item Data Object
      *
-     * @param CartItemInterface|OrderItemInterface $item of the quote or order
+     * @param mixed $item of the quote, order, invoice or credit memo
      *
      * @return ItemDataObjectInterface
      */

@@ -46,7 +46,16 @@ class ItemsDataBuilder implements BuilderInterface
     {
         $paymentDO = SubjectReader::readPayment($buildSubject);
 
-        $order = $paymentDO->getOrder();
+        // Look for invoice or credit memo. Otherwise load order.
+        $payment = $paymentDO->getPayment();
+        if ($payment->hasCreatedInvoice()) {
+            $order = $payment->getCreatedInvoice();
+        } elseif ($payment->hasCreatedCreditMemo()) {
+            $order = $payment->getCreatedCreditMemo();
+        } else {
+            $order = $paymentDO->getOrder();
+        }
+
         $items[self::ITEMS] = [];
         foreach ($order->getItems() as $item) {
             $items[self::ITEMS][] = $this->prepareItemObject($item);
@@ -56,7 +65,7 @@ class ItemsDataBuilder implements BuilderInterface
     }
 
     /**
-     * @param CartItemInterface|OrderItemInterface $item of the quote or order
+     * @param mixed $item of the quote, order, invoice or credit memo
      * @return \StdClass
      */
     public function prepareItemObject($item)

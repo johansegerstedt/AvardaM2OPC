@@ -29,22 +29,16 @@ const CartIsNotEmpty = () => [
 
 class App extends React.Component<Props> {
   componentDidMount() {
-    const {fetchCartRequest, config: {maskedQuoteId, customerId}} = this.props;
-    if (typeof maskedQuoteId === 'string' || typeof customerId === 'string') {
+    const {fetchCartRequest, config: {hasItems}} = this.props;
+    if (hasItems) {
       fetchCartRequest();
     }
   }
 
   render() {
-    const {
-      t,
-      cart,
-      isFetching,
-      config: {maskedQuoteId, customerId},
-    } = this.props;
-    const isCartEmpty =
-      (typeof maskedQuoteId !== 'string' && typeof customerId !== 'string') ||
-      (cart && cart.items.length === 0);
+    const {t, cart, isFetching, config: {hasItems}} = this.props;
+
+    const isCartEmpty = !hasItems || (cart && cart.items.length === 0);
 
     return (
       <div className="app">

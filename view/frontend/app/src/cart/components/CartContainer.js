@@ -54,11 +54,9 @@ class Cart extends React.Component<Props> {
       t,
     } = this.props;
 
-    const {maskedQuoteId, customerId} = getConfig();
+    const {hasItems} = getConfig();
 
-    const cartIsEmpty =
-      (typeof maskedQuoteId !== 'string' && typeof customerId !== 'string') ||
-      (cart !== null && cart.items.length === 0);
+    const cartIsEmpty = !hasItems || (cart !== null && cart.items.length === 0);
 
     const loaded = !!cart && !cartIsEmpty;
 

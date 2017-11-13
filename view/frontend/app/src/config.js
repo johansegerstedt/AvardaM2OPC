@@ -10,17 +10,23 @@ const configSchema = Joi.object().keys({
   maskedQuoteId: Joi.string()
     .optional()
     .allow(null),
-  customerId: Joi.string()
+  customerId: Joi.number()
     .optional()
     .allow(null),
-  baseUrl: Joi.string().required(),
-  baseMediaUrl: Joi.string().required(),
+  baseUrl: Joi.string()
+    .uri()
+    .required(),
+  baseMediaUrl: Joi.string()
+    .uri()
+    .required(),
   magentoLocale: Joi.string().required(),
+  hasItems: Joi.boolean().required(),
 });
 
 let config: null | Config = null;
 
-export const validate = (foo: Config) => Joi.validate(foo, configSchema);
+export const validate = (foo: Config) =>
+  Joi.validate(foo, configSchema, {stripUnknown: true});
 
 export const setConfig = (foo: Config): void => {
   const {error, value} = validate(foo);

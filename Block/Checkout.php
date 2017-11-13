@@ -25,7 +25,7 @@ class Checkout extends Template {
   ) {
     parent::__construct($context, $data);
     $this->checkoutSession = $checkoutSession;
-    $this->quoteIdMaskFactory = $quoteIdMaskFactory;  
+    $this->quoteIdMaskFactory = $quoteIdMaskFactory;
   }
 
   public function getIsDevMode() {
@@ -41,5 +41,17 @@ class Checkout extends Template {
       $this->checkoutSession->getQuote()->getId(),
       'quote_id'
       )->getMaskedId();
+  }
+
+  public function getCustomerId() {
+    return $this->checkoutSession->getQuote()->getCustomerId();
+  }
+
+  public function getQuoteId() {
+    return $this->checkoutSession->getQuote()->getId();
+  }
+
+  public function hasItems() {
+    return $this->checkoutSession->getQuote()->hasItems();
   }
 }

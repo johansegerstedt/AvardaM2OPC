@@ -23,7 +23,7 @@ export type Address = {
 export type BillingAddress = {
   id: number,
   region: null | string,
-  region_id: null | string,
+  region_id: null | number,
   region_code: null | string,
   country_id: null | string,
   street: string[],

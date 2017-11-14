@@ -140,8 +140,9 @@ class ShippingMethodForm extends React.Component<Props> {
               <tbody>
                 {methods &&
                   methods.map((method, index) => {
-                    const value = `${method.carrier_code}_${method.method_code ||
-                      ''}`;
+                    const value = `${
+                      method.carrier_code
+                    }_${method.method_code || ''}`;
                     return (
                       <ShippingMethodRadio
                         key={value}

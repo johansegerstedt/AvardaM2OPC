@@ -8,7 +8,6 @@ use \Magento\Framework\View\Element\Template\Context;
 
 class Checkout extends Template {
 
-  private $devMode = true;
   private $checkoutSession;
   private $quoteIdMaskFactory;
 
@@ -28,10 +27,6 @@ class Checkout extends Template {
     $this->quoteIdMaskFactory = $quoteIdMaskFactory;
   }
 
-  public function getIsDevMode() {
-    return $this->devMode;
-  }
-
   public function getBaseMediaUrl() {
     return $this->_storeManager->getStore()->getBaseUrl(\Magento\Framework\UrlInterface::URL_TYPE_MEDIA );
   }
@@ -49,6 +44,26 @@ class Checkout extends Template {
 
   public function getQuoteId() {
     return $this->checkoutSession->getQuote()->getId();
+  }
+
+  public function getItems() {
+    $items = $this->checkoutSession->getQuote()->getAllVisibleItems();
+    $data = [];
+
+    foreach($items as $key => $item) {
+      $itemData = [
+        'qty' => $item->getQty(),
+        'name' => $item->getName(),
+        'price' => $item->getPrice(),
+        'sku' => $item->getSku(),
+        'total' => $item->getBaseRowTotalInclTax(),
+        'url' => $item->getRedirectUrl(),
+        'priceInclTax' => $item->getBasePriceInclTax()
+      ];
+      $data[] = $itemData;
+    }
+
+    return $data;
   }
 
   public function hasItems() {

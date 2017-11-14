@@ -1,5 +1,4 @@
 // @flow
-import 'whatwg-fetch';
 import qs from 'query-string';
 import {getConfig} from '$src/config';
 import {CREDENTIALS, HEADERS} from './constants';

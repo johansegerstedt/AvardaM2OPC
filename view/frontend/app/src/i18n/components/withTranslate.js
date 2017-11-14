@@ -1,5 +1,6 @@
 // @flow
 import React, {Component, type ComponentType} from 'react';
+import hoistStatics from 'hoist-non-react-statics';
 import {contextTypes} from './TranslateProvider';
 import type {TranslateContext} from '../types';
 
@@ -12,7 +13,7 @@ const getDisplayName = WrappedComponent =>
   WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
 const withTranslate = (WrappedComponent: ComponentType<Props>) => {
-  return class WithTranslate extends Component<Props> {
+  class WithTranslate extends Component<Props> {
     static contextTypes = contextTypes;
 
     static displayName = `WithTranslate(${getDisplayName(WrappedComponent)})`;
@@ -40,7 +41,10 @@ const withTranslate = (WrappedComponent: ComponentType<Props>) => {
       const {t, tHTML}: TranslateContext = this.context;
       return <WrappedComponent t={t} tHTML={tHTML} {...props} />;
     }
-  };
+  }
+
+  hoistStatics(WithTranslate, WrappedComponent);
+  return WithTranslate;
 };
 
 export default withTranslate;

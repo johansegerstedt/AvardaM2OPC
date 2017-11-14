@@ -1,4 +1,12 @@
 {
   "presets": ["env", "stage-2", "flow", "react"],
-  "plugins": ["flow-react-proptypes"]
+  "plugins": ["lodash"],
+  "env": {
+    "production": {
+      "presets": ["minify"]
+    },
+    "development": {
+      "plugins": ["flow-react-proptypes"]
+    }
+  }
 }

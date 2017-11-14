@@ -1,6 +1,0 @@
-{
-  "devDependencies": {
-    "flow-bin": "^0.57.3",
-    "flow-typed": "^2.2.0"
-  }
-}

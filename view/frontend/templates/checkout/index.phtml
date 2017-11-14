@@ -1,6 +1,5 @@
 <?php /** @var Digia\AvardaCheckout\Block\Checkout $block */ ?>
 <?php
-  $devMode = $block->getIsDevMode();
   $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
   $getLocale = $objectManager->get('Magento\Framework\Locale\Resolver');
   $config = [
@@ -12,31 +11,12 @@
     "quoteId" => $block->getQuoteId(),
     "hasItems" => $block->hasItems()
   ];
-  //$config->baseUrl = $block->getBaseUrl();
-  //$config->baseMediaUrl = $block->getBaseMediaUrl();
-  // echo $block->foobar();
 ?>
 
 <div id="checkout-root"></div>
 
-<?php if($devMode) : ?>
-  <script type="text/javascript" src="http://avarda.box:8080/assets/bundle.js">
-  </script>
-<?php endif ?>
  <script type="text/javascript">
-
- <?php if($devMode) : ?>
- window.__avarda_checkout_config__ = <?php echo json_encode($config) ?>;
- window['pub/media'] = <?php echo json_encode($this->getUrl('pub/media'));?>
- <?php endif ?>
-
-require(['avardaCheckout'], function(avardaCheckout) {
-  avardaCheckout.execute(<?php echo json_encode($config); ?>);
-})
-
- /*
- avardaCheckout.execute(
-   <?php echo json_encode($config); ?>,
-   require('mage/translate')
- );*/
+  require(['avardaCheckout'], function(avardaCheckout) {
+    avardaCheckout.execute(<?php echo json_encode($config); ?>);
+  })
  </script>

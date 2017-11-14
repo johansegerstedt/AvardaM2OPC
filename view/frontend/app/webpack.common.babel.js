@@ -1,11 +1,7 @@
 // @flow
 /* eslint-env node */
 import path from 'path';
-import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer';
-
-const analyze = process.argv.includes('--analyze');
-
-const plugins = analyze ? [new BundleAnalyzerPlugin()] : [];
+import {DefinePlugin} from 'webpack';
 
 export default {
   entry: ['babel-polyfill', 'whatwg-fetch', './src/index.js'],
@@ -20,6 +16,11 @@ export default {
     'mage/translate': 'mage/translate',
     jquery: 'jquery',
   },
+  plugins: [
+    new DefinePlugin({
+      'process.env': {},
+    }),
+  ],
   module: {
     rules: [
       {
@@ -60,5 +61,4 @@ export default {
       $i18n: path.resolve(__dirname, 'src/i18n'),
     },
   },
-  plugins,
 };

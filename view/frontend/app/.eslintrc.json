@@ -19,6 +19,9 @@
     "node": false,
     "browser": true
   },
+  "globals": {
+    "process": false
+  },
   "rules": {
     "prettier/prettier": [
       "error",

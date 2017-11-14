@@ -6,10 +6,8 @@
   "private": true,
   "scripts": {
     "start": "webpack --config webpack.dev.babel.js --watch",
-    "build:analyze":
-      "cross-env BABEL_ENV=production webpack --config webpack.analyze.babel.js -p",
-    "build":
-      "cross-env BABEL_ENV=production webpack --config webpack.prod.babel.js -p",
+    "build:analyze": "cross-env BABEL_ENV=production webpack --config webpack.analyze.babel.js -p",
+    "build": "cross-env BABEL_ENV=production webpack --config webpack.prod.babel.js -p",
     "lint": "eslint src --fix && flow --quiet",
     "flow-typed": "flow-typed install -i dev",
     "precommit": "yarn lint"

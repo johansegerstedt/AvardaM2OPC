@@ -17,6 +17,19 @@ export const execute = (config: Config) => {
       setConfig(config);
       ReactDOM.render(<Root config={config} store={store} />, container);
     }
+
+    if (process.env.NODE_ENV !== 'production') {
+      const mainContent = document.getElementById('maincontent');
+      if (mainContent !== null) {
+        const configContainer = document.createElement('div');
+        configContainer.id = 'avardaCheckoutConfigContainer';
+        mainContent.prepend(configContainer);
+        ReactDOM.render(
+          <pre>{JSON.stringify(config, null, 2)}</pre>,
+          configContainer,
+        );
+      }
+    }
   } catch (err) {
     // eslint-disable-next-line no-console
     console.error(err);

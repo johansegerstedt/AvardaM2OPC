@@ -22,13 +22,20 @@ const selectedMethod: Reducer<null | ShippingMethod> = handleActions(
       state,
       {payload: method},
     ) => method,
+    [ActionTypes.SET_SHIPPING_INFORMATION]: (
+      state,
+      {payload: {shipping_method}},
+    ) => shipping_method,
   },
   null,
 );
 
 const isFetching: Reducer<boolean> = handleActions(
   {
-    [ActionTypes.ESTIMATE_SHIPPING]: () => true,
+    [combineActions(
+      ActionTypes.ESTIMATE_SHIPPING,
+      ActionTypes.UPDATE_ADDRESS,
+    )]: () => true,
     [combineActions(
       ActionTypes.ESTIMATE_SHIPPING_SUCCESS,
       ActionTypes.ESTIMATE_SHIPPING_FAILURE,
@@ -37,7 +44,16 @@ const isFetching: Reducer<boolean> = handleActions(
   false,
 );
 
-const isSelecting: Reducer<boolean> = handleActions({}, false);
+const isSelecting: Reducer<boolean> = handleActions(
+  {
+    [ActionTypes.SET_SHIPPING_INFORMATION]: () => true,
+    [combineActions(
+      ActionTypes.SET_SHIPPING_INFORMATION_SUCCESS,
+      ActionTypes.SET_SHIPPING_INFORMATION_FAILURE,
+    )]: () => false,
+  },
+  false,
+);
 
 export default combineReducers({
   methods,

@@ -5,6 +5,7 @@ import {connect} from 'react-redux';
 import Loader from '$src/utils/components/Loader';
 import {withTranslate, type Translate} from '$i18n';
 import {getConfig} from '$src/config';
+import {getIsUpdatingShippingMethods} from '$src/shipping/selectors';
 import {
   fetchCartRequest,
   updateCartItems,
@@ -27,7 +28,8 @@ import type {Cart as CartType, CartItem} from '../types';
 type Props = {
   cart: null | CartType,
   cartItems: CartItem[],
-  isUpdating: boolean,
+  isUpdatingCart: boolean,
+  isUpdatingShippingMethod: boolean,
   isFetching: boolean,
   fetchCartRequest(): void,
   updateCartItems(CartItem[]): void,
@@ -47,7 +49,8 @@ class Cart extends React.Component<Props> {
       cartItems,
       updateCartItems,
       deleteCartItem,
-      isUpdating,
+      isUpdatingCart,
+      isUpdatingShippingMethod,
       isFetching,
       applyCoupon,
       removeCoupon,
@@ -68,14 +71,16 @@ class Cart extends React.Component<Props> {
                 <CartSummary
                   key="cartSummary"
                   totalSegments={cart.total_segments}
-                  isLoading={isFetching || isUpdating}
+                  isLoading={
+                    isFetching || isUpdatingCart || isUpdatingShippingMethod
+                  }
                   currency={getQuoteCurrency(cart)}
                   t={t}
                 />,
                 <CartForm
                   key="cartForm"
                   cartItems={cartItems}
-                  isUpdating={isUpdating}
+                  isUpdating={isUpdatingCart}
                   updateCartItems={updateCartItems}
                   deleteCartItem={deleteCartItem}
                   currency={getQuoteCurrency(cart)}
@@ -100,7 +105,8 @@ class Cart extends React.Component<Props> {
 const mapStateToProps = state => ({
   cart: getCart(state),
   cartItems: getAllCartItems(state),
-  isUpdating: getIsCartUpdating(state),
+  isUpdatingCart: getIsCartUpdating(state),
+  isUpdatingShippingMethod: getIsUpdatingShippingMethods(state),
   isFetching: getIsCartFetching(state),
 });
 

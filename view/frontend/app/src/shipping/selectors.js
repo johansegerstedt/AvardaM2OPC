@@ -1,11 +1,26 @@
 // @flow
+import {createSelector} from 'reselect';
 import type {Selector} from '$src/root/types';
 
-export const getShippingMethods: Selector<void, *> = state =>
-  state.shippingMethods.methods;
+export const getShippingMethodState: Selector<void, *> = state =>
+  state.shippingMethods;
 
-export const getIsFetchingShippingMethods: Selector<void, boolean> = state =>
-  state.shippingMethods.isFetching;
+export const getShippingMethods: Selector<void, *> = createSelector(
+  [getShippingMethodState],
+  ({methods}) => methods,
+);
 
-export const getSelectedMethod: Selector<void, *> = state =>
-  state.shippingMethods.selectedMethod;
+export const getIsFetchingShippingMethods: Selector<
+  void,
+  boolean,
+> = createSelector([getShippingMethodState], ({isFetching}) => isFetching);
+
+export const getIsUpdatingShippingMethods: Selector<
+  void,
+  boolean,
+> = createSelector([getShippingMethodState], ({isSelecting}) => isSelecting);
+
+export const getSelectedMethod: Selector<void, *> = createSelector(
+  [getShippingMethodState],
+  ({selectedMethod}) => selectedMethod,
+);

@@ -9,21 +9,39 @@ import {fetchCart as apiFetchCart} from '$src/cart/api';
 import {fetchCartSuccess} from '$src/cart/actions';
 import {
   estimateShippingMethodsRequest,
+  updateShippingAddressRequest,
   estimateShippingMethodsSuccess,
   estimateShippingMethodsFailure,
   setShippingInformationRequest,
   setShippingInformationSuccess,
   setShippingInformationFailure,
 } from './actions';
+import {fetchShippingMethods as apiFetchShippingMethods} from './api';
 import {getSelectedMethod} from './selectors';
 import type {ActionType} from 'redux-actions';
 
-function* estimateShippingMethods({
-  payload: address,
+function* fetchShippingMethods({
+  payload: {address, methodValue},
 }: ActionType<typeof estimateShippingMethodsRequest>) {
-  const url = `${getApiUrl(getCartApiPath())}/estimate-shipping-methods`;
+  const [carrier_code, method_code] = methodValue.split('_');
+
   try {
-    const methods = yield call(apiPost, url, {address});
+    const methods = yield call(apiFetchShippingMethods, address);
+    const selectedMethod = find(methods, {carrier_code, method_code});
+    if (selectedMethod) {
+      yield put(setShippingInformationSuccess(selectedMethod));
+    }
+    yield put(estimateShippingMethodsSuccess(methods));
+  } catch (err) {
+    yield put(estimateShippingMethodsFailure(err));
+  }
+}
+
+function* updateShippingAddress({
+  payload: address,
+}: ActionType<typeof updateShippingAddressRequest>) {
+  try {
+    const methods = yield call(apiFetchShippingMethods, address);
     const selectedMethod = yield select(getSelectedMethod);
 
     const selectedMethodIsStillValid = methods.some(method =>
@@ -76,8 +94,11 @@ function* setShippingInformation({
 
 export default function* saga(): Generator<*, *, *> {
   yield all([
+    yield fork(function* watchFetchShippingMethods() {
+      yield takeLatest(Shipping.ESTIMATE_SHIPPING, fetchShippingMethods);
+    }),
     yield fork(function* watchEstimateShipping() {
-      yield takeLatest(Shipping.ESTIMATE_SHIPPING, estimateShippingMethods);
+      yield takeLatest(Shipping.UPDATE_ADDRESS, updateShippingAddress);
     }),
     yield fork(function* watchSetShipping() {
       yield takeLatest(

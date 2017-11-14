@@ -9,6 +9,11 @@ const {createError} = PayloadCreators;
 
 export const estimateShippingMethodsRequest = createAction(
   ActionTypes.ESTIMATE_SHIPPING,
+  (payload: {address: BillingAddress, methodValue: string}) => payload,
+);
+
+export const updateShippingAddressRequest = createAction(
+  ActionTypes.UPDATE_ADDRESS,
   (address: BillingAddress): BillingAddress => address,
 );
 

@@ -6,7 +6,7 @@
       "presets": ["minify"]
     },
     "development": {
-      "plugins": ["flow-react-proptypes"]
+      "plugins": ["react-flow-props-to-prop-types"]
     }
   }
 }

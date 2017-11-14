@@ -11,12 +11,15 @@ const SET_SHIPPING_INFORMATION_SUCCESS: 'setShippingInformationSuccess' =
   'setShippingInformationSuccess';
 const SET_SHIPPING_INFORMATION_FAILURE: 'setShippingInformationFailure' =
   'setShippingInformationFailure';
+const UPDATE_ADDRESS: 'updateShippingAddressRequest' =
+  'updateShippingAddressRequest';
 
 export const ActionTypes = {
-  ESTIMATE_SHIPPING,
-  ESTIMATE_SHIPPING_SUCCESS,
   ESTIMATE_SHIPPING_FAILURE,
-  SET_SHIPPING_INFORMATION,
-  SET_SHIPPING_INFORMATION_SUCCESS,
+  ESTIMATE_SHIPPING_SUCCESS,
+  ESTIMATE_SHIPPING,
   SET_SHIPPING_INFORMATION_FAILURE,
+  SET_SHIPPING_INFORMATION_SUCCESS,
+  SET_SHIPPING_INFORMATION,
+  UPDATE_ADDRESS,
 };

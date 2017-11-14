@@ -57,7 +57,10 @@ export const getShippingAddress: Selector<
   assignment => assignment && assignment.shipping.address,
 );
 
-export const getShippingMethod: Selector<void, null | string> = createSelector(
+export const getSelectedShippingMethodValue: Selector<
+  void,
+  null | string,
+> = createSelector(
   [getShippingAssignment],
   assignment => assignment && assignment.shipping.method,
 );

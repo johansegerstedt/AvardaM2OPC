@@ -78,7 +78,7 @@ const ShippingMethodRadio = ({
 type Props = {
   shippingAddress: BillingAddress,
   selectedShippingMethod: null | ShippingMethod,
-  estimateShippingMethods(BillingAddress): void,
+  fetchShippingMethods(BillingAddress): void,
   selectShippingMethod(ShippingMethod): void,
   currency: string,
   methods: null | ShippingMethod[],
@@ -94,13 +94,12 @@ class ShippingMethodForm extends React.Component<Props> {
   };
 
   componentDidMount() {
-    const {shippingAddress, estimateShippingMethods} = this.props;
-
+    const {shippingAddress, fetchShippingMethods} = this.props;
     if (
       shippingAddress.postcode !== null &&
       shippingAddress.country_id !== null
     ) {
-      estimateShippingMethods({...shippingAddress});
+      fetchShippingMethods({...shippingAddress});
     }
   }
 

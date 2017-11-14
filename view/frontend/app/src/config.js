@@ -1,29 +1,12 @@
 // @flow
 import type {Config} from '$src/types';
+import * as h from '$src/utils/h';
 
 const INVALID_CONFIG = 'Invalid config provided!';
 const MISSING_CONFIG =
   'Config is not initialized. Remember to call `setConfig` before using config parameters.';
 
 let config: null | Config = null;
-
-type Cond = any => boolean;
-
-const h = {
-  isString: x => typeof x === 'string',
-  isVoid: x => typeof x === 'undefined',
-  isNull: x => x === null,
-  isNumber: x => typeof x === 'number',
-  isBoolean: x => typeof x === 'boolean',
-  oneOf: (...checks: Cond[]) => x => {
-    for (let cond of checks) {
-      if (cond(x) === true) {
-        return true;
-      }
-    }
-    return false;
-  },
-};
 
 export const validate = (foo: Object) => {
   const {

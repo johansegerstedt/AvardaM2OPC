@@ -8,7 +8,9 @@ import {
   getQuoteCurrency,
   getIsCartUpdating,
   getIsCartFetching,
+  getSelectedShippingMethodValue,
 } from '$src/cart/selectors';
+import {isString} from '$src/utils/h';
 import {
   getShippingMethods,
   getIsFetchingShippingMethods,
@@ -18,6 +20,7 @@ import ShippingPolicy from './ShippingPolicy';
 import ShippingMethodForm from './ShippingMethodForm';
 import ShippingAddressForm from './ShippingAddressForm';
 import {
+  updateShippingAddressRequest,
   estimateShippingMethodsRequest,
   setShippingInformationRequest,
 } from '../actions';
@@ -30,13 +33,18 @@ type Props = {
   shippingAddress: null | BillingAddress,
   currency: null | string,
   t: Translate,
-  estimateShippingMethods(BillingAddress): void,
+  estimateShippingMethods({
+    address: BillingAddress,
+    methodValue: string,
+  }): void,
+  updateShippingAddress(BillingAddress): void,
   setShippingInformation({
     shipping_address: BillingAddress,
     shipping_method: ShippingMethodType,
   }): void,
   isFetchingMethods: boolean,
   selectedShippingMethod: null | ShippingMethodType,
+  selectedShippingMethodValue: null | string,
 };
 
 class ShippingMethod extends React.Component<Props> {
@@ -50,15 +58,25 @@ class ShippingMethod extends React.Component<Props> {
     }
   };
 
+  fetchShippingMethods = (address: BillingAddress) => {
+    const {estimateShippingMethods, selectedShippingMethodValue} = this.props;
+    if (isString(selectedShippingMethodValue)) {
+      estimateShippingMethods({
+        address,
+        methodValue: selectedShippingMethodValue,
+      });
+    }
+  };
+
   updateShippingAddress = (address: BillingAddress) => {
-    this.props.estimateShippingMethods(address);
+    this.props.updateShippingAddress(address);
   };
 
   render() {
     const {
       shippingAddress,
       currency,
-      estimateShippingMethods,
+      updateShippingAddress,
       methods,
       t,
       isFetchingMethods,
@@ -96,7 +114,8 @@ class ShippingMethod extends React.Component<Props> {
               selectedShippingMethod={selectedShippingMethod}
               methods={methods}
               currency={currency}
-              estimateShippingMethods={estimateShippingMethods}
+              fetchShippingMethods={this.fetchShippingMethods}
+              updateShippingAddress={updateShippingAddress}
               t={t}
               isFetchingMethods={isFetchingMethods}
             />
@@ -115,12 +134,14 @@ const mapStateToProps = state => ({
   isFetchingMethods: getIsFetchingShippingMethods(state),
   methods: getShippingMethods(state),
   selectedShippingMethod: getSelectedMethod(state),
+  selectedShippingMethodValue: getSelectedShippingMethodValue(state),
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       estimateShippingMethods: estimateShippingMethodsRequest,
+      updateShippingAddress: updateShippingAddressRequest,
       setShippingInformation: setShippingInformationRequest,
     },
     dispatch,

@@ -15,8 +15,18 @@
 
 <div id="checkout-root"></div>
 
- <script type="text/javascript">
-  require(['avardaCheckout'], function(avardaCheckout) {
-    avardaCheckout.execute(<?php echo json_encode($config); ?>);
-  })
- </script>
+<script type="text/javascript">
+require.config(({
+  shim: {
+    AvardaCheckOutClient: {
+      exports: 'AvardaCheckOutClient'
+    }
+  },
+  paths: {
+    AvardaCheckOutClient:<?php echo json_encode($block->getCheckOutClientScriptPath()); ?>
+  }
+}));
+require(['avardaCheckout'], function(avardaCheckout) {
+  avardaCheckout.execute(<?php echo json_encode($config); ?>);
+});
+</script>

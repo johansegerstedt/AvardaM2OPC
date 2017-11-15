@@ -5,6 +5,7 @@ import {connect, type MapStateToProps} from 'react-redux';
 import {compose} from 'redux';
 import CartContainer from '$src/cart/components/CartContainer';
 import ShippingContainer from '$src/shipping/components/ShippingMethodContainer';
+import AvardaContainer from '$src/avarda/components/AvardaCheckOutContainer';
 import CartIsEmpty from './CartIsEmpty';
 import {withTranslate, type Translate} from '$i18n';
 import Loader from '$src/utils/components/Loader';
@@ -25,6 +26,7 @@ type Props = {
 const CartIsNotEmpty = () => [
   <CartContainer key="cart" />,
   <ShippingContainer key="shipping" />,
+  <AvardaContainer id="avarda-root" key="avarda" />,
 ];
 
 class App extends React.Component<Props> {
@@ -38,7 +40,7 @@ class App extends React.Component<Props> {
   render() {
     const {t, cart, isFetching, config: {hasItems}} = this.props;
 
-    const isCartEmpty = !hasItems || (cart && cart.items.length === 0);
+    const isCartEmpty = !hasItems || (cart && cart.items.length === 0); // || cart === null;
 
     return (
       <div className="app">

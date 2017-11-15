@@ -15,6 +15,7 @@ export default {
   externals: {
     'mage/translate': 'mage/translate',
     jquery: 'jquery',
+    AvardaCheckOutClient: 'AvardaCheckOutClient',
   },
   plugins: [
     new DefinePlugin({

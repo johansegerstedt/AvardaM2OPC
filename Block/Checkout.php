@@ -4,12 +4,14 @@ namespace Digia\AvardaCheckout\Block;
 
 use \Magento\Framework\View\Element\Template;
 use \Magento\Framework\View\Element\Template\Context;
+use \Digia\AvardaCheckout\Gateway\Config\Config;
 
 
 class Checkout extends Template {
 
   private $checkoutSession;
   private $quoteIdMaskFactory;
+  private $config;
 
   /**
    * @param Context               $context               [description]
@@ -20,11 +22,13 @@ class Checkout extends Template {
     Context $context,
     \Magento\Checkout\Model\Session $checkoutSession,
     \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
+    Config $config,
     array $data = []
   ) {
     parent::__construct($context, $data);
     $this->checkoutSession = $checkoutSession;
     $this->quoteIdMaskFactory = $quoteIdMaskFactory;
+    $this->config = $config;
   }
 
   public function getBaseMediaUrl() {
@@ -68,5 +72,13 @@ class Checkout extends Template {
 
   public function hasItems() {
     return $this->checkoutSession->getQuote()->hasItems();
+  }
+
+  /**
+   * Get AvardaCheckOutClient script path for Require.js.
+   * @return string
+   */
+  public function getCheckOutClientScriptPath() {
+    return $this->config->getApplicationUrl() . '/Scripts/CheckOutClient';
   }
 }

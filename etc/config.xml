@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author      Digia Commerce Oy
+ * @copyright   Copyright © 2017 Digia. All rights reserved.
+ * @package     Digia_AvardaCheckout
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <payment>
+            <avarda_checkout>
+                <model>AvardaCheckoutFacade</model>
+                <active>0</active>
+                <test_mode>1</test_mode>
+                <debug>1</debug>
+            </avarda_checkout>
+        </payment>
+    </default>
+</config>

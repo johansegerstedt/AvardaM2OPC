@@ -1,6 +1,8 @@
 // @flow
 import {takeEvery, takeLatest} from 'redux-saga';
 import {all, call, fork, put} from 'redux-saga/effects';
+import AvardaCheckOutClient from 'AvardaCheckOutClient';
+import AvardaCheckOut from '$src/avarda/components/AvardaCheckOut';
 import {getCartApiPath} from './utils';
 import {
   fetchCartRequest,
@@ -110,10 +112,19 @@ function* removeCoupon() {
   }
 }
 
+function* cartUpdated() {
+  if (document.getElementById(AvardaCheckOut.DIV_ID)) {
+    yield call(AvardaCheckOutClient.updateItems);
+  }
+}
+
 export default function* saga(): Generator<*, *, *> {
   yield all([
     yield fork(function* watchFetchCart() {
       yield takeLatest(Cart.FETCH_REQUEST, fetchCart);
+    }),
+    yield fork(function* watchFetchCartSuccess() {
+      yield takeLatest(Cart.FETCH_SUCCESS, cartUpdated);
     }),
     yield fork(function* watchUpdateItems() {
       yield takeLatest(Cart.UPDATE_ITEMS_REQUEST, updateCartItems);

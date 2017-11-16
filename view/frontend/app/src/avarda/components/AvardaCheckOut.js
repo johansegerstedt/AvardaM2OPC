@@ -7,7 +7,6 @@ import AvardaCheckOutClient, {
 } from 'AvardaCheckOutClient';
 
 export type Props = {
-  id: string,
   purchaseId: string,
   onDone(purchaseId: string): any,
   customCssUrl?: string,
@@ -18,13 +17,14 @@ export type Props = {
 };
 
 export class Avarda extends Component<Props> {
+  static DIV_ID = 'avarda-check-out-container';
+
   componentDidMount() {
     AvardaCheckOutClient.init(this.getInitProperties());
   }
 
   getInitProperties(): InitProperties {
     const {
-      id: divId,
       purchaseId,
       onDone: done,
       customCssUrl,
@@ -34,7 +34,7 @@ export class Avarda extends Component<Props> {
       onUpdateDeliveryAddressHook: updateDeliveryAddressHook,
     } = this.props;
     return {
-      divId,
+      divId: Avarda.DIV_ID,
       purchaseId,
       done,
       customCssUrl,
@@ -50,8 +50,7 @@ export class Avarda extends Component<Props> {
   shouldComponentUpdate = () => false;
 
   render() {
-    const {id} = this.props;
-    return <div id={id} />;
+    return <div id={Avarda.DIV_ID} />;
   }
 }
 

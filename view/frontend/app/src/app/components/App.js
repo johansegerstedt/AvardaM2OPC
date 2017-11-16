@@ -26,7 +26,7 @@ type Props = {
 const CartIsNotEmpty = () => [
   <CartContainer key="cart" />,
   <ShippingContainer key="shipping" />,
-  <AvardaContainer id="avarda-root" key="avarda" />,
+  <AvardaContainer key="avarda" />,
 ];
 
 class App extends React.Component<Props> {

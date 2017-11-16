@@ -7,10 +7,7 @@ import {getPurchaseId} from '../selectors';
 import {fetchPurchaseId} from '../actions';
 import type {AppState} from '$src/root/types';
 
-type OwnProps = {|id: $PropertyType<Props, 'id'>|};
-
 type StateProps = {|
-  ...OwnProps,
   purchaseId: null | $PropertyType<Props, 'purchaseId'>,
 |};
 
@@ -25,10 +22,10 @@ type DispatchProps = {|
   fetchPurchaseId(): any,
 |};
 
-type ConnectedProps = {
+type ConnectedProps = {|
   ...StateProps,
   ...DispatchProps,
-};
+|};
 
 class AvardaCheckOutContainer extends Component<ConnectedProps> {
   componentDidMount() {
@@ -49,8 +46,7 @@ class AvardaCheckOutContainer extends Component<ConnectedProps> {
   }
 }
 
-const mapStateToProps = (state: AppState, {id}: *): StateProps => ({
-  id,
+const mapStateToProps = (state: AppState): StateProps => ({
   purchaseId: getPurchaseId(state),
 });
 

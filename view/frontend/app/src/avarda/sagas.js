@@ -7,9 +7,11 @@ import {receivePurchaseId} from './actions';
 import {ActionTypes} from './constants';
 
 function* fetchPurchaseId() {
-  const url = getApiUrl(`${getCartApiPath()}/avarda-payment`);
   try {
-    const {purchase_id} = yield call(apiGet, url);
+    const {purchase_id} = yield call(
+      apiGet,
+      getApiUrl(`${getCartApiPath()}/avarda-payment`),
+    );
     yield put(receivePurchaseId(purchase_id));
   } catch (err) {
     // TODO

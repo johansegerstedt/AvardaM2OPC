@@ -21,7 +21,7 @@ import {
 } from './actions';
 import {fetchCart as apiFetchCart} from './api';
 import {ActionTypes as Cart} from './constants';
-import {getApiUrl, apiDelete, apiPut} from '$src/m2api';
+import {getApiUrl, apiDelete, apiGet, apiPut} from '$src/m2api';
 import {getConfig} from '$src/config';
 import type {ActionType} from 'redux-actions';
 
@@ -114,6 +114,8 @@ function* removeCoupon() {
 
 function* cartUpdated() {
   if (document.getElementById(AvardaCheckOut.DIV_ID)) {
+    // TODO: Only here until quote update also updates Avarda
+    yield call(apiGet, getApiUrl(`${getCartApiPath()}/avarda-payment`));
     yield call(AvardaCheckOutClient.updateItems);
   }
 }

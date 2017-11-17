@@ -4,11 +4,12 @@ declare module 'AvardaCheckOutClient' {
     divId: string,
     purchaseId: string,
     done: Function,
+    callbackUrl?: string,
     customCssUrl?: string,
     replaceDefaultCss?: boolean,
     beforeSubmit?: Function,
-    beforeCompleteHook?: Function,
-    updateDeliveryAddressHook?: Function,
+    beforeCompleteHook?: CheckOutHook<string>,
+    updateDeliveryAddressHook?: CheckOutHook<CustomerInfo>,
   };
 
   declare type Result = {

@@ -54,11 +54,16 @@ const mapDispatchToProps = (dispatch: Dispatch<*>): DispatchProps =>
   bindActionCreators(
     {
       fetchPurchaseId,
-      onDone: () => ({type: 'onDone', payload: 'hello'}),
+      onDone: () => (
+        alert('Purchase might be done - should check payment status'),
+        {type: 'onDone', payload: 'hello'}
+      ),
     },
     dispatch,
   );
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
-
-export default connector(AvardaCheckOutContainer);
+const Connected = connector(AvardaCheckOutContainer);
+// eslint-disable-next-line no-unused-vars
+const withoutProps = (props: {||}) => <Connected />;
+export default withoutProps;

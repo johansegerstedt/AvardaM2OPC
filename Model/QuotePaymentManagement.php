@@ -75,7 +75,9 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
         $quote = $this->quoteRepository->get($cartId);
         $payment = $quote->getPayment();
         $additionalInformation = $payment->getAdditionalInformation();
-        if (!array_key_exists(PaymentDetailsInterface::PURCHASE_ID, $additionalInformation)) {
+        if (!is_array($additionalInformation) ||
+            !array_key_exists(PaymentDetailsInterface::PURCHASE_ID, $additionalInformation)
+        ) {
             if ($this->commandPool === null) {
                 throw new \DomainException('Command pool is not configured for use.');
             }

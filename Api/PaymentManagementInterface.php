@@ -17,6 +17,7 @@ interface PaymentManagementInterface
      *
      * @param string $cartId
      * @return \Digia\AvardaCheckout\Api\Data\PaymentDetailsInterface
+     * @throws \Magento\Framework\Exception\PaymentException
      */
     public function getPurchaseId($cartId);
 }

@@ -7,12 +7,18 @@
 namespace Digia\AvardaCheckout\Model;
 
 use Digia\AvardaCheckout\Api\GuestPaymentManagementInterface;
+use Magento\Framework\Exception\PaymentException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GuestPaymentManagement implements GuestPaymentManagementInterface
 {
+    /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
     /**
      * @var \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface
      */
@@ -26,13 +32,16 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
     /**
      * GuestPaymentManagement constructor.
      *
+     * @param \Psr\Log\LoggerInterface $logger
      * @param \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface $quotePaymentManagement
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
+        \Psr\Log\LoggerInterface $logger,
         \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface $quotePaymentManagement,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
+        $this->logger = $logger;
         $this->quotePaymentManagement = $quotePaymentManagement;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
     }
@@ -42,9 +51,24 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
      */
     public function getPurchaseId($cartId)
     {
-        $quoteIdMask = $this->quoteIdMaskFactory->create()->load($cartId, 'masked_id');
+        try {
+            $quoteIdMask = $this->quoteIdMaskFactory->create()
+                ->load($cartId, 'masked_id');
 
-        // getQuoteId() == $cartId == quote::entity_id
-        return $this->quotePaymentManagement->getPurchaseId($quoteIdMask->getQuoteId());
+            // getQuoteId() == $cartId == quote::entity_id
+            return $this->quotePaymentManagement->getPurchaseId(
+                $quoteIdMask->getQuoteId()
+            );
+        } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
+            $this->logger->error($e);
+
+            throw new PaymentException(__($e->getMessage()));
+        } catch (\Exception $e) {
+            $this->logger->error($e);
+
+            throw new PaymentException(
+                __('Failed to load Avarda payment. Please try again later.')
+            );
+        }
     }
 }

@@ -27,6 +27,6 @@ class InitializePaymentHandler implements HandlerInterface
         $paymentDO = SubjectReader::readPayment($handlingSubject);
         $payment = $paymentDO->getPayment();
 
-        $payment->setAdditionalInformation(self::PURCHASE_ID, $response['response']);
+        $payment->setAdditionalInformation(self::PURCHASE_ID, reset($response));
     }
 }

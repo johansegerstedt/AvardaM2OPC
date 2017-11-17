@@ -19,21 +19,62 @@ class JsonConverter implements ConverterInterface
     /**
      * Converts gateway response to array structure
      *
-     * @param string $response
+     * @param \Zend_Http_Response $response
      * @return array
      * @throws ConverterException
      */
     public function convert($response)
     {
         try {
-            $convertedResponse = json_decode($response);
+            if ($response->isError()) {
+                return $this->getErrors($response);
+            }
+
+            $convertedResponse = json_decode($response->getBody());
             if (!is_array($convertedResponse)) {
-                return ['response' => $convertedResponse];
+                return [$convertedResponse];
             }
 
             return $convertedResponse;
         } catch(\Exception $e) {
             throw new ConverterException(__('Wrong gateway response format.'));
         }
+    }
+
+    /**
+     * There are multiple types of errors, this function makes them into a general
+     * format that can be used in validator.
+     *
+     * @param \Zend_Http_Response $response
+     * @return array
+     */
+    public function getErrors($response)
+    {
+        $errors['ErrorType'] = 'Avarda Payment';
+        if ($response->getStatus() == 401) {
+            $errors = [
+                'ErrorCode' => 401,
+                'Errors' => [
+                    'Invalid credentials used.'
+                ]
+            ];
+
+            return $errors;
+        }
+
+        $errors['ErrorCode'] = 500;
+        $body = json_decode($response->getBody());
+        if (isset($body->CheckOutErrorCode)) {
+            $errors['ErrorCode'] = $body->CheckOutErrorCode;
+            foreach ($body->Errors as $error) {
+                $errors['Errors'][] = $error;
+            }
+        } elseif (isset($body->Message)) {
+            $errors['Errors'][] = $body->Message;
+        } else {
+            $errors['Errors'][] = 'An unknown error occured.';
+        }
+
+        return $errors;
     }
 }

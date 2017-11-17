@@ -1,5 +1,6 @@
 // @flow
 import React from 'react';
+import queryString from 'query-string';
 import {bindActionCreators} from 'redux';
 import {connect, type MapStateToProps} from 'react-redux';
 import {compose} from 'redux';
@@ -29,6 +30,8 @@ const CartIsNotEmpty = () => [
   <AvardaContainer key="avarda" />,
 ];
 
+const PaymentSuccess = () => <AvardaContainer />;
+
 class App extends React.Component<Props> {
   componentDidMount() {
     const {fetchCartRequest, config: {hasItems}} = this.props;
@@ -41,6 +44,12 @@ class App extends React.Component<Props> {
     const {t, cart, isFetching, config: {hasItems}} = this.props;
 
     const isCartEmpty = !hasItems || (cart && cart.items.length === 0); // || cart === null;
+    const isSuccess =
+      queryString.parse(window.location.search).PaymentStatus === 'Success';
+
+    if (isSuccess) {
+      return <PaymentSuccess />;
+    }
 
     return (
       <div className="app">

@@ -14,14 +14,14 @@ interface ItemAdapterInterface
     /**
      * Get product ID
      *
-     * @return integer
+     * @return integer|null
      */
     public function getProductId();
 
     /**
      * Get parent item ID
      *
-     * @return integer
+     * @return integer|null
      */
     public function getParentItemId();
 

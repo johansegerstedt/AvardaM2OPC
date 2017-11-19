@@ -4,30 +4,29 @@
  * @copyright   Copyright © 2017 Digia. All rights reserved.
  * @package     Digia_AvardaCheckout
  */
-namespace Digia\AvardaCheckout\Gateway\Data\Quote;
+namespace Digia\AvardaCheckout\Gateway\Data;
 
-use Digia\AvardaCheckout\Gateway\Data\ItemAdapterInterface;
-use Magento\Quote\Api\Data\CartItemInterface;
+use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 
 /**
- * Class ItemAdapter
+ * Class ShippingItemAdapter
  */
-class ItemAdapter implements ItemAdapterInterface
+class ShippingItemAdapter implements ItemAdapterInterface
 {
     /**
-     * @var CartItemInterface
+     * @var OrderAdapterInterface
      */
-    protected $quoteItem;
+    protected $order;
 
     /**
      * ItemAdapter constructor.
      *
-     * @param CartItemInterface $quoteItem
+     * @param OrderAdapterInterface $order
      */
     public function __construct(
-        CartItemInterface $quoteItem
+        OrderAdapterInterface $order
     ) {
-        $this->quoteItem = $quoteItem;
+        $this->order = $order;
     }
 
     /**
@@ -37,7 +36,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getProductId()
     {
-        return $this->quoteItem->getProductId();
+        return null;
     }
 
     /**
@@ -47,7 +46,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getParentItemId()
     {
-        return $this->quoteItem->getParentItemId();
+        return null;
     }
 
     /**
@@ -57,7 +56,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getName()
     {
-        return $this->quoteItem->getName();
+        // TODO: shipping stuff
     }
 
     /**
@@ -67,17 +66,17 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getSku()
     {
-        return $this->quoteItem->getSku();
+        // TODO: shipping stuff
     }
 
     /**
      * Get additional data
      *
-     * @return array
+     * @return string
      */
     public function getAdditionalData()
     {
-        return $this->quoteItem->getAdditionalData();
+        // TODO: shipping stuff
     }
 
     /**
@@ -87,7 +86,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getProductType()
     {
-        return $this->quoteItem->getProductType();
+        // TODO: shipping stuff
     }
 
     /**
@@ -97,7 +96,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getTaxPercent()
     {
-        return $this->quoteItem->getTaxPercent();
+        // TODO: shipping stuff
     }
 
     /**
@@ -107,7 +106,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getRowTotal()
     {
-        return $this->quoteItem->getRowTotal();
+        // TODO: shipping stuff
     }
 
     /**
@@ -117,6 +116,18 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getRowTotalInclTax()
     {
-        return $this->quoteItem->getRowTotalInclTax();
+        // TODO: shipping stuff
+    }
+
+    /**
+     * @return \Magento\Payment\Gateway\Data\AddressAdapterInterface|null
+     */
+    protected function getShippingAddress()
+    {
+        if (!isset($this->shippingAddress)) {
+            $this->shippingAddress = $this->order->getShippingAddress();
+        }
+
+        return $this->shippingAddress;
     }
 }

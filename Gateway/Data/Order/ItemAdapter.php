@@ -73,7 +73,7 @@ class ItemAdapter implements ItemAdapterInterface
     /**
      * Get additional data
      *
-     * @return array
+     * @return string
      */
     public function getAdditionalData()
     {

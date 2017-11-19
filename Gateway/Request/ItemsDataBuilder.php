@@ -31,6 +31,12 @@ class ItemsDataBuilder implements BuilderInterface
      */
     protected $itemBuilder;
 
+    /**
+     * ItemsDataBuilder constructor.
+     *
+     * @param ItemDataObjectFactoryInterface $itemDataObjectFactory
+     * @param BuilderInterface $itemBuilder
+     */
     public function __construct(
         ItemDataObjectFactoryInterface $itemDataObjectFactory,
         BuilderInterface $itemBuilder

@@ -74,15 +74,12 @@ const ItemRow = ({
             <input
               id="cart-98-qty"
               name={`cart[${item_id}][qty]`} // Used to get updated quantities!
-              data-cart-item-id="24-MB02"
               defaultValue={qty}
               type="number"
               size={4}
               title="Qty"
+              min="0"
               className="input-text qty"
-              maxLength={12}
-              data-validate="{required:true,'validate-greater-than-zero':true}"
-              data-role="cart-item-qty"
             />
           </div>
         </div>
@@ -116,6 +113,7 @@ const ItemRow = ({
             onClick={deleteItem}
             data-itemid={item_id}
             disabled={isDeleting}
+            type="button"
           >
             <span>{t('Remove item')}</span>
           </button>
@@ -130,10 +128,10 @@ class CartForm extends React.Component<Props> {
     event.preventDefault();
     const {cartItems, updateCartItems} = this.props;
     const quantities = cartItems.reduce(
-      (qtyById, {item_id}) => ({
+      (qtyById, {item_id, qty}) => ({
         ...qtyById,
         [item_id]: parseInt(
-          get(event.target, `['cart[${item_id}][qty]'].value`),
+          get(event.target, `cart[${item_id}][qty]`, {value: qty}).value,
         ),
       }),
       {},

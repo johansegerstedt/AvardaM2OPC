@@ -39,12 +39,23 @@ class CartDiscount extends React.Component<Props, State> {
 
     event.preventDefault();
     const form = event.target;
-    const code = get(form, 'coupon_code.value', '');
+    const input = get(form, 'coupon_code', {value: ''});
+    const code = input.value;
 
     if (typeof coupon === 'string') {
       removeCoupon();
     } else {
       applyCoupon(code);
+    }
+  };
+
+  handleSpaceAndEnter = (callback: Function) => (
+    event: SyntheticKeyboardEvent<*>,
+  ) => {
+    const key = event.key;
+    if (key === 'Enter' || ' ') {
+      event.preventDefault();
+      callback();
     }
   };
 
@@ -69,6 +80,7 @@ class CartDiscount extends React.Component<Props, State> {
             aria-selected="false"
             aria-expanded={JSON.stringify(isOpen)}
             onClick={this.toggle}
+            onKeyPress={this.handleSpaceAndEnter(this.toggle)}
             tabIndex={0}
           >
             <strong id="block-discount-heading" role="heading" aria-level={2}>

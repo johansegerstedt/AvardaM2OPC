@@ -18,7 +18,7 @@ class ShippingPolicy extends React.Component<Props> {
       >
         <span
           className="field-tooltip-action"
-          tabIndex={0}
+          //tabIndex={0}
           data-toggle="dropdown"
           data-bind="mageInit: {'dropdown':{'activeClass': '_active'}}"
           aria-haspopup="true"

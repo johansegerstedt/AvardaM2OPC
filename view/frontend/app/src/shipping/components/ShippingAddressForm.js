@@ -16,7 +16,8 @@ class ShippingAddressForm extends React.Component<Props> {
     const {shippingAddress, handleSubmit} = this.props;
 
     const form = event.target;
-    const postcode = get(form, 'postcode.value', shippingAddress.postcode);
+    const postcode = get(form, 'postcode', {value: shippingAddress.postcode})
+      .value;
     const country_id = 'FI'; // TODO: prolly needs own input for this
 
     handleSubmit({

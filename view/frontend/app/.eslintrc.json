@@ -2,12 +2,14 @@
   "extends": [
     "eslint:recommended",
     "plugin:flowtype/recommended",
+    "plugin:react/recommended",
+    "plugin:jsx-a11y/recommended",
     "prettier",
     "prettier/flowtype",
     "prettier/react",
     "prettier/standard"
   ],
-  "plugins": ["flowtype", "react", "prettier", "standard"],
+  "plugins": ["flowtype", "react", "prettier", "standard", "jsx-a11y"],
   "parserOptions": {
     "sourceType": "module",
     "ecmaFeatures": {

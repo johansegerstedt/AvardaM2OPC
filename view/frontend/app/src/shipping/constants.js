@@ -1,25 +1,19 @@
 // @flow
 
-const ESTIMATE_SHIPPING: 'estimateShippingMethods' = 'estimateShippingMethods';
-const ESTIMATE_SHIPPING_SUCCESS: 'estimateShippingMethodsSuccess' =
-  'estimateShippingMethodsSuccess';
-const ESTIMATE_SHIPPING_FAILURE: 'estimateShippingMethodsFailure' =
-  'estimateShippingMethodsFailure';
-const SET_SHIPPING_INFORMATION: 'setShippingInformationRequest' =
-  'setShippingInformationRequest';
-const SET_SHIPPING_INFORMATION_SUCCESS: 'setShippingInformationSuccess' =
-  'setShippingInformationSuccess';
-const SET_SHIPPING_INFORMATION_FAILURE: 'setShippingInformationFailure' =
-  'setShippingInformationFailure';
-const UPDATE_ADDRESS: 'updateShippingAddressRequest' =
-  'updateShippingAddressRequest';
-
 export const ActionTypes = {
-  ESTIMATE_SHIPPING_FAILURE,
-  ESTIMATE_SHIPPING_SUCCESS,
-  ESTIMATE_SHIPPING,
-  SET_SHIPPING_INFORMATION_FAILURE,
-  SET_SHIPPING_INFORMATION_SUCCESS,
-  SET_SHIPPING_INFORMATION,
-  UPDATE_ADDRESS,
+  ADD_MESSAGE: 'shipping/addMessage',
+  CLEAR_MESSAGES: 'shipping/clearMessages',
+  GET_METHODS: 'shipping/getMethods',
+  GET_METHODS_FAILURE: 'shipping/getMethodsFailure',
+  RECEIVE_ASSIGNMENT: 'shipping/receiveShippingAssignment',
+  RECEIVE_METHODS: 'shipping/receiveMethods',
+  RECEIVE_SELECTED_METHOD: 'shipping/receiveSelectedMethod',
+  SAVE_SHIPPING_INFORMATION: 'shipping/saveInformation',
+  SAVE_SHIPPING_INFORMATION_SUCCESS: 'shipping/saveInformationSuccess',
+  SAVE_SHIPPING_INFORMATION_FAILURE: 'shipping/saveInformationFailure',
+  SCROLL_TO_FORM: 'shipping/scrollToForm',
+  UPDATE_ADDRESS: 'shipping/updateAddress',
+  SELECT_METHOD: 'shipping/selectMethod',
 };
+
+export const SHIPPING_ANCHOR_ID = 'avarda-check-out_shipping-method-form';

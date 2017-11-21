@@ -81,7 +81,7 @@ class AddressDataBuilder implements BuilderInterface
             $result[self::DELIVERY_ADDRESS_PREFIX . self::ZIP] = $billingAddress->getPostcode();
             $result[self::DELIVERY_ADDRESS_PREFIX . self::CITY] = $billingAddress->getCity();
         }
-
+        $result['IsDeliveryEditable'] = 'true';
         return $result;
     }
 }

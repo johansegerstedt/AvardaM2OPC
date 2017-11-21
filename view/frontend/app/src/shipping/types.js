@@ -1,4 +1,6 @@
 // @flow
+import type {BillingAddress} from '$src/cart/types';
+import type {MessageState} from '$src/utils/types';
 
 export type ShippingMethodAvailable = {
   carrier_code: string,
@@ -30,8 +32,10 @@ export type ShippingMethod =
   | ShippingMethodUnavailable;
 
 export type ShippingMethodState = {
+  address: null | BillingAddress, // address draft
   methods: ShippingMethod[] | null,
   selectedMethod: null | ShippingMethod,
   isFetching: boolean,
   isSelecting: boolean,
+  messages: null | MessageState[],
 };

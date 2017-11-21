@@ -1,8 +1,6 @@
 // @flow
 import {takeEvery, takeLatest} from 'redux-saga';
 import {all, call, fork, put} from 'redux-saga/effects';
-import AvardaCheckOutClient from 'AvardaCheckOutClient';
-import AvardaCheckOut from '$src/avarda/components/AvardaCheckOut';
 import {getCartApiPath} from './utils';
 import {
   fetchCartRequest,
@@ -16,19 +14,29 @@ import {
   applyCoupon as applyCouponRequest,
   applyCouponSuccess,
   applyCouponFailure,
+  refreshCart as refreshCartAction,
   removeCouponSuccess,
   removeCouponFailure,
 } from './actions';
 import {fetchCart as apiFetchCart} from './api';
 import {ActionTypes as Cart} from './constants';
-import {getApiUrl, apiDelete, apiGet, apiPut} from '$src/m2api';
+import {getApiUrl, apiDelete, apiPut} from '$src/m2api';
 import {getConfig} from '$src/config';
 import type {ActionType} from 'redux-actions';
 
-function* fetchCart() {
+function* fetchCart(): Generator<*, *, *> {
   try {
     const cart = yield call(apiFetchCart);
     yield put(fetchCartSuccess(cart));
+  } catch (err) {
+    yield put(fetchCartFailure(err));
+  }
+}
+
+export function* refreshCart(): Generator<*, *, *> {
+  try {
+    const cart = yield call(apiFetchCart);
+    yield put(refreshCartAction(cart));
   } catch (err) {
     yield put(fetchCartFailure(err));
   }
@@ -112,21 +120,10 @@ function* removeCoupon() {
   }
 }
 
-function* cartUpdated() {
-  if (document.getElementById(AvardaCheckOut.DIV_ID)) {
-    // TODO: Only here until quote update also updates Avarda
-    yield call(apiGet, getApiUrl(`${getCartApiPath()}/avarda-payment`));
-    yield call(AvardaCheckOutClient.updateItems);
-  }
-}
-
 export default function* saga(): Generator<*, *, *> {
   yield all([
     yield fork(function* watchFetchCart() {
       yield takeLatest(Cart.FETCH_REQUEST, fetchCart);
-    }),
-    yield fork(function* watchFetchCartSuccess() {
-      yield takeLatest(Cart.FETCH_SUCCESS, cartUpdated);
     }),
     yield fork(function* watchUpdateItems() {
       yield takeLatest(Cart.UPDATE_ITEMS_REQUEST, updateCartItems);

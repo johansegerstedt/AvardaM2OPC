@@ -2,15 +2,20 @@
 import {combineReducers} from 'redux';
 import {combineActions, handleActions, type ActionType} from 'redux-actions';
 import {ActionTypes} from './constants';
-import {estimateShippingMethodsSuccess} from './actions';
+import {
+  receiveMethods,
+  receiveSelectedMethod,
+  selectMethod,
+  updateAddress,
+} from './actions';
 import type {Reducer} from '$src/root/types';
-import type {ShippingMethod} from './types';
+import type {ShippingMethod, ShippingMethodState} from './types';
 
 const methods: Reducer<null | ShippingMethod[]> = handleActions(
   {
-    [ActionTypes.ESTIMATE_SHIPPING_SUCCESS]: (
+    [ActionTypes.RECEIVE_METHODS]: (
       state,
-      {payload: methods}: ActionType<typeof estimateShippingMethodsSuccess>,
+      {payload: methods}: ActionType<typeof receiveMethods>,
     ) => methods,
   },
   null,
@@ -18,27 +23,27 @@ const methods: Reducer<null | ShippingMethod[]> = handleActions(
 
 const selectedMethod: Reducer<null | ShippingMethod> = handleActions(
   {
-    [ActionTypes.SET_SHIPPING_INFORMATION_SUCCESS]: (
+    [combineActions(
+      ActionTypes.SELECT_METHOD,
+      ActionTypes.RECEIVE_SELECTED_METHOD,
+    )]: (
       state,
-      {payload: method},
+      {
+        payload: method,
+      }:
+        | ActionType<typeof selectMethod>
+        | ActionType<typeof receiveSelectedMethod>,
     ) => method,
-    [ActionTypes.SET_SHIPPING_INFORMATION]: (
-      state,
-      {payload: {shipping_method}},
-    ) => shipping_method,
   },
   null,
 );
 
 const isFetching: Reducer<boolean> = handleActions(
   {
+    [ActionTypes.GET_METHODS]: () => true,
     [combineActions(
-      ActionTypes.ESTIMATE_SHIPPING,
-      ActionTypes.UPDATE_ADDRESS,
-    )]: () => true,
-    [combineActions(
-      ActionTypes.ESTIMATE_SHIPPING_SUCCESS,
-      ActionTypes.ESTIMATE_SHIPPING_FAILURE,
+      ActionTypes.RECEIVE_METHODS,
+      ActionTypes.GET_METHODS_FAILURE,
     )]: () => false,
   },
   false,
@@ -46,18 +51,43 @@ const isFetching: Reducer<boolean> = handleActions(
 
 const isSelecting: Reducer<boolean> = handleActions(
   {
-    [ActionTypes.SET_SHIPPING_INFORMATION]: () => true,
+    [ActionTypes.SAVE_SHIPPING_INFORMATION]: () => true,
     [combineActions(
-      ActionTypes.SET_SHIPPING_INFORMATION_SUCCESS,
-      ActionTypes.SET_SHIPPING_INFORMATION_FAILURE,
+      ActionTypes.SAVE_SHIPPING_INFORMATION_SUCCESS,
+      ActionTypes.SAVE_SHIPPING_INFORMATION_FAILURE,
     )]: () => false,
   },
   false,
 );
 
+const messages: Reducer<
+  $PropertyType<ShippingMethodState, 'messages'>,
+> = handleActions(
+  {
+    [ActionTypes.ADD_MESSAGE]: (state, {payload: message}) =>
+      state ? [...state, message] : [message],
+    [ActionTypes.SAVE_SHIPPING_INFORMATION_SUCCESS]: () => null,
+  },
+  null,
+);
+
+const address: Reducer<
+  $PropertyType<ShippingMethodState, 'address'>,
+> = handleActions(
+  {
+    [ActionTypes.UPDATE_ADDRESS]: (
+      state,
+      {payload: address}: ActionType<typeof updateAddress>,
+    ) => address,
+  },
+  null,
+);
+
 export default combineReducers({
+  address,
   methods,
   selectedMethod,
   isFetching,
   isSelecting,
+  messages,
 });

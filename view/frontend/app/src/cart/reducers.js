@@ -17,7 +17,7 @@ import type {Cart, CartState, CartItemState} from './types';
 
 const cartData: Reducer<null | Cart> = handleActions(
   {
-    [ActionTypes.FETCH_SUCCESS]: (
+    [combineActions(ActionTypes.FETCH_SUCCESS, ActionTypes.REFRESH_CART)]: (
       state,
       {payload: {entities, result}}: ActionType<typeof fetchCartSuccess>,
     ) => entities.cart[result.toString()],

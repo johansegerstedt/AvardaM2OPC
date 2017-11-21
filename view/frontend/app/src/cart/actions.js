@@ -6,12 +6,19 @@ import type {ActionType} from 'redux-actions';
 import type {CartItem, NormalizedCart} from './types';
 
 const {createError, createString, createVoid} = PayloadCreators;
+const createNormalizedCart = (normalizedCart: NormalizedCart): NormalizedCart =>
+  normalizedCart;
 
 export const fetchCartRequest = createAction(Cart.FETCH_REQUEST, createVoid);
 
 export const fetchCartSuccess = createAction(
   Cart.FETCH_SUCCESS,
-  (normalizedCart: NormalizedCart): NormalizedCart => normalizedCart,
+  createNormalizedCart,
+);
+
+export const refreshCart = createAction(
+  Cart.REFRESH_CART,
+  createNormalizedCart,
 );
 
 export const fetchCartFailure = createAction(Cart.FETCH_FAILURE, createError);

@@ -29,6 +29,7 @@ class ShippingAddressForm extends React.Component<Props> {
 
   render() {
     const {t, shippingAddress} = this.props;
+    const {postcode} = shippingAddress;
     return (
       <form
         className="form form-shipping-address"
@@ -43,11 +44,13 @@ class ShippingAddressForm extends React.Component<Props> {
             </label>
             <div className="control">
               <input
+                key={JSON.stringify(postcode)}
                 className="input-text"
                 type="text"
                 id="postcode"
                 name="postcode"
-                defaultValue={shippingAddress.postcode}
+                value={postcode === null ? undefined : postcode}
+                disabled={!!postcode}
               />
             </div>
           </div>

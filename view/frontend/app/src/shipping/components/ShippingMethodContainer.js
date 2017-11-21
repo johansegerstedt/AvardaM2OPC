@@ -4,27 +4,25 @@ import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
 import {withTranslate, type Translate} from '$i18n';
 import {
-  getShippingAddress,
   getQuoteCurrency,
   getIsCartUpdating,
   getIsCartFetching,
-  getSelectedShippingMethodValue,
 } from '$src/cart/selectors';
-import {isString} from '$src/utils/h';
 import {
+  getAddress as getShippingAddress,
   getShippingMethods,
   getIsFetchingShippingMethods,
   getSelectedMethod,
+  getMessages,
 } from '../selectors';
+import {Message, Messages} from '$src/utils/components/Message';
 import ShippingPolicy from './ShippingPolicy';
 import ShippingMethodForm from './ShippingMethodForm';
 import ShippingAddressForm from './ShippingAddressForm';
-import {
-  updateShippingAddressRequest,
-  estimateShippingMethodsRequest,
-  setShippingInformationRequest,
-} from '../actions';
+import {updateAddress, getMethods, selectMethod} from '../actions';
+import {SHIPPING_ANCHOR_ID} from '../constants';
 import type {BillingAddress} from '$src/cart/types';
+import type {MessageState} from '$src/utils/types';
 import type {ShippingMethod as ShippingMethodType} from '../types';
 
 // TODO: How to play nice with HOC and props?
@@ -32,40 +30,23 @@ type Props = {
   methods: null | ShippingMethodType[],
   shippingAddress: null | BillingAddress,
   currency: null | string,
+  messages: null | MessageState[],
   t: Translate,
   estimateShippingMethods({
     address: BillingAddress,
-    methodValue: string,
   }): void,
   updateShippingAddress(BillingAddress): void,
-  setShippingInformation({
-    shipping_address: BillingAddress,
-    shipping_method: ShippingMethodType,
-  }): void,
+  selectShippingMethod(ShippingMethodType): void,
   isFetchingMethods: boolean,
   selectedShippingMethod: null | ShippingMethodType,
-  selectedShippingMethodValue: null | string,
 };
 
 class ShippingMethod extends React.Component<Props> {
-  selectShippingMethod = (shipping_method: ShippingMethodType) => {
-    const {shippingAddress: shipping_address} = this.props;
-    if (shipping_address !== null) {
-      this.props.setShippingInformation({
-        shipping_address,
-        shipping_method,
-      });
-    }
-  };
-
   fetchShippingMethods = (address: BillingAddress) => {
-    const {estimateShippingMethods, selectedShippingMethodValue} = this.props;
-    if (isString(selectedShippingMethodValue)) {
-      estimateShippingMethods({
-        address,
-        methodValue: selectedShippingMethodValue,
-      });
-    }
+    const {estimateShippingMethods} = this.props;
+    estimateShippingMethods({
+      address,
+    });
   };
 
   updateShippingAddress = (address: BillingAddress) => {
@@ -77,14 +58,25 @@ class ShippingMethod extends React.Component<Props> {
       shippingAddress,
       currency,
       updateShippingAddress,
+      messages,
       methods,
       t,
       isFetchingMethods,
+      selectShippingMethod,
       selectedShippingMethod,
     } = this.props;
     return (
       <div className="checkout-shipping-method opc-wrapper">
-        <h2 className="step-title">{t('Shipping Methods')}</h2>
+        <h2 id={SHIPPING_ANCHOR_ID} className="step-title">
+          {t('Shipping Methods')}
+        </h2>
+        {messages && (
+          <Messages>
+            {messages.map(({id, type, message}) => (
+              <Message key={id} type={type} msg={message} />
+            ))}
+          </Messages>
+        )}
         <ShippingPolicy t={t} />
         <div
           id="checkout-step-shipping"
@@ -110,7 +102,7 @@ class ShippingMethod extends React.Component<Props> {
           {shippingAddress && currency ? (
             <ShippingMethodForm // Submit this to select shipping method
               shippingAddress={shippingAddress}
-              selectShippingMethod={this.selectShippingMethod}
+              selectShippingMethod={selectShippingMethod}
               selectedShippingMethod={selectedShippingMethod}
               methods={methods}
               currency={currency}
@@ -134,15 +126,15 @@ const mapStateToProps = state => ({
   isFetchingMethods: getIsFetchingShippingMethods(state),
   methods: getShippingMethods(state),
   selectedShippingMethod: getSelectedMethod(state),
-  selectedShippingMethodValue: getSelectedShippingMethodValue(state),
+  messages: getMessages(state),
 });
 
 const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
-      estimateShippingMethods: estimateShippingMethodsRequest,
-      updateShippingAddress: updateShippingAddressRequest,
-      setShippingInformation: setShippingInformationRequest,
+      estimateShippingMethods: getMethods,
+      updateShippingAddress: updateAddress,
+      selectShippingMethod: selectMethod,
     },
     dispatch,
   );

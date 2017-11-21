@@ -3,6 +3,7 @@ import React from 'react';
 import {isEqual} from 'lodash';
 import {formatCurrency} from '$src/utils/format';
 import Loader from '$src/utils/components/Loader';
+
 import type {Translate} from '$i18n';
 import type {BillingAddress} from '$src/cart/types';
 import type {ShippingMethod} from '../types';
@@ -92,16 +93,6 @@ class ShippingMethodForm extends React.Component<Props> {
     selectShippingMethod: () => {},
     isFetchingMethods: false,
   };
-
-  componentDidMount() {
-    const {shippingAddress, fetchShippingMethods} = this.props;
-    if (
-      shippingAddress.postcode !== null &&
-      shippingAddress.country_id !== null
-    ) {
-      fetchShippingMethods({...shippingAddress});
-    }
-  }
 
   render() {
     const {

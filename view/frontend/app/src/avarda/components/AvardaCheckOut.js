@@ -17,8 +17,10 @@ export type Props = {
   onUpdateDeliveryAddressHook?: CheckOutHook<CustomerInfo>,
 };
 
-export class Avarda extends Component<Props> {
-  static DIV_ID = 'avarda-check-out-container';
+export const DIV_ID = 'avarda-check-out-container';
+
+class Avarda extends Component<Props> {
+  static DIV_ID = DIV_ID;
 
   static defaultProps = {
     callbackUrl: window.location.href,

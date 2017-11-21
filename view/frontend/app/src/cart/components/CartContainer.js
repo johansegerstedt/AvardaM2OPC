@@ -5,7 +5,6 @@ import {connect} from 'react-redux';
 import Loader from '$src/utils/components/Loader';
 import {withTranslate, type Translate} from '$i18n';
 import {getConfig} from '$src/config';
-import {getIsUpdatingShippingMethods} from '$src/shipping/selectors';
 import {
   fetchCartRequest,
   updateCartItems,
@@ -29,7 +28,6 @@ type Props = {
   cart: null | CartType,
   cartItems: CartItem[],
   isUpdatingCart: boolean,
-  isUpdatingShippingMethod: boolean,
   isFetching: boolean,
   fetchCartRequest(): void,
   updateCartItems(CartItem[]): void,
@@ -50,7 +48,6 @@ class Cart extends React.Component<Props> {
       updateCartItems,
       deleteCartItem,
       isUpdatingCart,
-      isUpdatingShippingMethod,
       isFetching,
       applyCoupon,
       removeCoupon,
@@ -71,9 +68,7 @@ class Cart extends React.Component<Props> {
                 <CartSummary
                   key="cartSummary"
                   totalSegments={cart.total_segments}
-                  isLoading={
-                    isFetching || isUpdatingCart || isUpdatingShippingMethod
-                  }
+                  isLoading={isFetching || isUpdatingCart}
                   currency={getQuoteCurrency(cart)}
                   t={t}
                 />,
@@ -106,7 +101,6 @@ const mapStateToProps = state => ({
   cart: getCart(state),
   cartItems: getAllCartItems(state),
   isUpdatingCart: getIsCartUpdating(state),
-  isUpdatingShippingMethod: getIsUpdatingShippingMethods(state),
   isFetching: getIsCartFetching(state),
 });
 

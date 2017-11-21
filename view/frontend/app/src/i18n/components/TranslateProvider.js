@@ -2,7 +2,7 @@
 import $ from 'jquery';
 import _mageTranslate from 'mage/translate'; // eslint-disable-line no-unused-vars
 import {Component, Children, type ComponentType, type Node} from 'react';
-import sanitizeHtml from 'sanitize-html';
+import sanitizeHtml from 'sanitize-caja';
 import propTypes from 'prop-types';
 import type {Translate, TranslateContext, TranslateHTML} from '../types';
 

@@ -33,6 +33,7 @@ const APPLY_COUPON_FAILURE: 'applyCouponCodeFailure' = 'applyCouponCodeFailure';
 const REMOVE_COUPON_REQUEST: 'removeCouponRequest' = 'removeCouponRequest';
 const REMOVE_COUPON_SUCCESS: 'removeCouponSuccess' = 'removeCouponSuccess';
 const REMOVE_COUPON_FAILURE: 'removeCouponFailure' = 'removeCouponFailure';
+const REFRESH_CART: 'refreshCart' = 'refreshCart';
 
 export const ActionTypes = {
   FETCH_REQUEST,
@@ -50,4 +51,5 @@ export const ActionTypes = {
   REMOVE_COUPON_SUCCESS,
   REMOVE_COUPON_REQUEST,
   REMOVE_COUPON_FAILURE,
+  REFRESH_CART,
 };

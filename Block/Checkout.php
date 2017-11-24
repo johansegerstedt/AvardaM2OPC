@@ -75,6 +75,14 @@ class Checkout extends Template {
   }
 
   /**
+   * @return string
+   */
+  public function getCountryId() {
+    // TODO;
+    return 'FI';
+  }
+
+  /**
    * Get AvardaCheckOutClient script path for Require.js.
    * @return string
    */

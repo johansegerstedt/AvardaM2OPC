@@ -3,13 +3,14 @@
   $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
   $getLocale = $objectManager->get('Magento\Framework\Locale\Resolver');
   $config = [
-    "baseUrl" => $block->getBaseUrl(),
     "baseMediaUrl" => $block->getBaseMediaUrl(),
-    "maskedQuoteId" => $block->getMaskedQuoteId(),
-    "magentoLocale" => $getLocale->getLocale(),
+    "baseUrl" => $block->getBaseUrl(),
+    "countryId" => $block->getCountryId(),
     "customerId" => $block->getCustomerId(),
+    "hasItems" => $block->hasItems(),
+    "magentoLocale" => $getLocale->getLocale(),
+    "maskedQuoteId" => $block->getMaskedQuoteId(),
     "quoteId" => $block->getQuoteId(),
-    "hasItems" => $block->hasItems()
   ];
 ?>
 

@@ -13,12 +13,13 @@ export type Normalized<Entities> = {
 };
 
 export type Config = {
-  baseUrl: string,
-  baseMediaUrl: string,
-  maskedQuoteId: ?string,
-  customerId: ?number,
-  magentoLocale: string,
-  hasItems: boolean,
+  +baseMediaUrl: string,
+  +baseUrl: string,
+  +countryId: string,
+  +customerId: ?number,
+  +hasItems: boolean,
+  +magentoLocale: string,
+  +maskedQuoteId: ?string,
 };
 
 export type Reference = string | number;

@@ -3,6 +3,7 @@ import AvardaCheckOutClient from 'AvardaCheckOutClient';
 import {isEqual} from 'lodash';
 import {takeLatest} from 'redux-saga';
 import {all, call, fork, put, select, take} from 'redux-saga/effects';
+import {getConfig} from '$src/config';
 import {apiGet, getApiUrl} from '$src/m2api';
 import {ActionTypes as Cart} from '$src/cart/constants';
 import {getCartApiPath} from '$src/cart/utils';
@@ -44,7 +45,7 @@ const infoToAddress = (info: CustomerInfo): * => ({
   street: [info.Address],
   postcode: info.ZipCode,
   city: info.City,
-  // TODO: Country stuffs?
+  country_id: getConfig().countryId, // TODO
 });
 
 const mergeAddress = (address: BillingAddress, info: CustomerInfo) => ({

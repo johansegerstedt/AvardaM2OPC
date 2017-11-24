@@ -1,6 +1,7 @@
 // @flow
 import React from 'react';
 import {get} from 'lodash';
+import {getConfig} from '$src/config';
 import type {Translate} from '$i18n';
 import type {BillingAddress} from '$src/cart/types';
 
@@ -18,7 +19,7 @@ class ShippingAddressForm extends React.Component<Props> {
     const form = event.target;
     const postcode = get(form, 'postcode', {value: shippingAddress.postcode})
       .value;
-    const country_id = 'FI'; // TODO: prolly needs own input for this
+    const country_id = getConfig().countryId; // TODO: prolly needs own input for this
 
     handleSubmit({
       ...shippingAddress,

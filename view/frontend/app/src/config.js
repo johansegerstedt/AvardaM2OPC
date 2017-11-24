@@ -8,37 +8,53 @@ const MISSING_CONFIG =
 
 let config: null | Config = null;
 
-export const validate = (foo: Object) => {
+export const validate = (
+  foo: Object,
+): {error: false, value: Config} | {error: true, value: null} => {
   const {
-    maskedQuoteId,
-    customerId,
-    baseUrl,
     baseMediaUrl,
-    magentoLocale,
+    baseUrl,
+    countryId,
+    customerId,
     hasItems,
+    magentoLocale,
+    maskedQuoteId,
   } = foo;
 
   if (
     !(
-      h.oneOf(h.isString, h.isVoid, h.isNull)(maskedQuoteId) &&
+      h.isString(baseMediaUrl) &&
+      h.isString(baseUrl) &&
+      h.isString(countryId) &&
       h.oneOf(h.isNumber, h.isVoid, h.isNull)(customerId) &&
-      h.oneOf(h.isString)(baseUrl) &&
-      h.oneOf(h.isString)(baseMediaUrl) &&
-      h.oneOf(h.isString)(magentoLocale) &&
-      h.oneOf(h.isBoolean)(hasItems)
+      h.isBoolean(hasItems) &&
+      h.isString(magentoLocale) &&
+      h.oneOf(h.isString, h.isVoid, h.isNull)(maskedQuoteId)
     )
   ) {
     return {error: true, value: null};
   }
-  return {error: false, value: foo};
+
+  return {
+    error: false,
+    value: {
+      baseMediaUrl,
+      baseUrl,
+      countryId,
+      customerId,
+      hasItems,
+      magentoLocale,
+      maskedQuoteId,
+    },
+  };
 };
 
 export const setConfig = (foo: Config): void => {
-  const {error, value} = validate(foo);
-  if (error) {
+  const validated = validate(foo);
+  if (validated.error) {
     throw new Error(`${INVALID_CONFIG}\n${JSON.stringify(foo)}`);
   }
-  config = value;
+  config = validated.value;
 };
 
 export const getConfig = () => {

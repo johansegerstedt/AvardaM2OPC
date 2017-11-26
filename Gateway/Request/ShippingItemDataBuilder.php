@@ -7,7 +7,6 @@
 namespace Digia\AvardaCheckout\Gateway\Request;
 
 use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactoryInterface;
-use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
@@ -31,6 +30,12 @@ class ShippingItemDataBuilder implements BuilderInterface
      */
     protected $itemBuilder;
 
+    /**
+     * ShippingItemDataBuilder constructor.
+     *
+     * @param ItemDataObjectFactoryInterface $itemDataObjectFactory
+     * @param BuilderInterface $itemBuilder
+     */
     public function __construct(
         ItemDataObjectFactoryInterface $itemDataObjectFactory,
         BuilderInterface $itemBuilder
@@ -47,16 +52,20 @@ class ShippingItemDataBuilder implements BuilderInterface
         $paymentDO = SubjectReader::readPayment($buildSubject);
 
         $order = $paymentDO->getOrder();
-        $itemDO = $this->itemDataObjectFactory->create($order);
+        $result = [];
 
-        $itemSubject['item'] = $itemDO;
-        $itemSubject['amount'] = $order->getShippingAmount();
-        $itemSubject['tax_amount'] = $order->getShippingTaxAmount();
+        $shippingAddress = $order->getShippingAddress();
+        if ($shippingAddress) {
+            $itemDO = $this->itemDataObjectFactory->create($order);
+            $item = $itemDO->getItem();
 
-        return [
-            self::ITEMS => [
-                (object) $this->itemBuilder->build($itemSubject)
-            ]
-        ];
+            $itemSubject['item'] = $itemDO;
+            $itemSubject['amount'] = $item->getRowTotalInclTax();
+            $itemSubject['tax_amount'] = $item->getTaxAmount();
+
+            $result[self::ITEMS][10000] = (object) $this->itemBuilder->build($itemSubject);
+        }
+
+        return $result;
     }
 }

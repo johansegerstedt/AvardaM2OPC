@@ -4,8 +4,9 @@
  * @copyright   Copyright © 2017 Digia. All rights reserved.
  * @package     Digia_AvardaCheckout
  */
-namespace Digia\AvardaCheckout\Gateway\Data;
+namespace Digia\AvardaCheckout\Gateway\Data\Shipping;
 
+use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactoryInterface;
 use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 
 /**
@@ -14,7 +15,7 @@ use Magento\Payment\Gateway\Data\OrderAdapterInterface;
  * @api
  * @since 100.0.2
  */
-class ShippingItemDataObjectFactory implements ItemDataObjectFactoryInterface
+class ItemDataObjectFactory implements ItemDataObjectFactoryInterface
 {
     /**
      * Object Manager instance
@@ -24,22 +25,22 @@ class ShippingItemDataObjectFactory implements ItemDataObjectFactoryInterface
     private $objectManager;
 
     /**
-     * @var ShippingItemAdapter
+     * @var Quote\ItemAdapterFactory
      */
-    private $shippingItemAdapterFactory;
+    private $quoteItemAdapterFactory;
 
     /**
      * Factory constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param ShippingItemAdapter $shippingItemAdapterFactory
+     * @param Quote\ItemAdapterFactory $itemAdapterFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
-        ShippingItemAdapter $shippingItemAdapterFactory
+        Quote\ItemAdapterFactory $quoteItemAdapterFactory
     ) {
         $this->objectManager = $objectManager;
-        $this->shippingItemAdapterFactory = $shippingItemAdapterFactory;
+        $this->quoteItemAdapterFactory = $quoteItemAdapterFactory;
     }
 
     /**
@@ -48,8 +49,8 @@ class ShippingItemDataObjectFactory implements ItemDataObjectFactoryInterface
     public function create($order)
     {
         if ($order instanceof OrderAdapterInterface) {
-            $data['item'] = $this->shippingItemAdapterFactory->create(
-                ['order' => $order]
+            $data['item'] = $this->quoteItemAdapterFactory->create(
+                ['quote' => $order]
             );
         }
 

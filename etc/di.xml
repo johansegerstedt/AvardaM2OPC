@@ -98,6 +98,7 @@
                 <item name="address" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\AddressDataBuilder</item>
                 <item name="price" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\PriceDataBuilder</item>
                 <item name="items" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\ItemsDataBuilder</item>
+                <item name="shipping_item" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\ShippingItemDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -119,6 +120,7 @@
                 <item name="purchase_id" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\PurchaseIdDataBuilder</item>
                 <item name="price" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\PriceDataBuilder</item>
                 <item name="items" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\ItemsDataBuilder</item>
+                <item name="shipping_item" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\ShippingItemDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -129,9 +131,15 @@
     </virtualType>
     <!-- END Avarda commands -->
 
-    <!-- Avarda items builder -->
+    <!-- Avarda items builders -->
     <type name="Digia\AvardaCheckout\Gateway\Request\ItemsDataBuilder">
         <arguments>
+            <argument name="itemBuilder" xsi:type="object">AvardaCheckoutItemBuilder</argument>
+        </arguments>
+    </type>
+    <type name="Digia\AvardaCheckout\Gateway\Request\ShippingItemDataBuilder">
+        <arguments>
+            <argument name="itemDataObjectFactory" xsi:type="object">Digia\AvardaCheckout\Gateway\Data\Shipping\ItemDataObjectFactory</argument>
             <argument name="itemBuilder" xsi:type="object">AvardaCheckoutItemBuilder</argument>
         </arguments>
     </type>

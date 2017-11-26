@@ -91,6 +91,16 @@ class ItemAdapter implements ItemAdapterInterface
     }
 
     /**
+     * Get tax amount
+     *
+     * @return float
+     */
+    public function getTaxAmount()
+    {
+        return $this->orderItem->getTaxAmount();
+    }
+
+    /**
      * Get tax percent/code
      *
      * @return float

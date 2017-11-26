@@ -54,6 +54,13 @@ interface ItemAdapterInterface
     public function getProductType();
 
     /**
+     * Get tax amount
+     *
+     * @return float
+     */
+    public function getTaxAmount();
+
+    /**
      * Get tax percent/code
      *
      * @return float

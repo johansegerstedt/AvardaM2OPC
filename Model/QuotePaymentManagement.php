@@ -8,6 +8,7 @@ namespace Digia\AvardaCheckout\Model;
 
 use Digia\AvardaCheckout\Api\QuotePaymentManagementInterface;
 use Digia\AvardaCheckout\Api\Data\PaymentDetailsInterface;
+use Magento\Framework\Exception\PaymentException;
 use Magento\Payment\Model\InfoInterface;
 
 /**
@@ -131,6 +132,26 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
      */
     public function updateAndPlaceOrder($cartId)
     {
+        $quote = $this->quoteRepository->get($cartId);
+        $payment = $quote->getPayment();
+        $additionalInformation = $payment->getAdditionalInformation();
+        if (!is_array($additionalInformation) ||
+            !array_key_exists(PaymentDetailsInterface::PURCHASE_ID, $additionalInformation)
+        ) {
+            throw new PaymentException(__('No purchase ID on quote %s.', $cartId));
+        }
+        if ($this->commandPool === null) {
+            throw new \DomainException('Command pool is not configured for use.');
+        }
+
+        // Execute InitializePurchase command
+        $arguments = $this->getCommandArguments($quote);
+        $this->commandPool->get('avarda_get_payment_status')->execute($arguments);
+
+        // Save updated quote
+        $quote->save();
+
+        // Place order from updated quote
         $this->cartManagement->placeOrder($cartId);
     }
 

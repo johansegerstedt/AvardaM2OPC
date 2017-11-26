@@ -14,14 +14,14 @@ interface ItemAdapterInterface
     /**
      * Get product ID
      *
-     * @return integer
+     * @return integer|null
      */
     public function getProductId();
 
     /**
      * Get parent item ID
      *
-     * @return integer
+     * @return integer|null
      */
     public function getParentItemId();
 
@@ -52,6 +52,13 @@ interface ItemAdapterInterface
      * @return string
      */
     public function getProductType();
+
+    /**
+     * Get tax amount
+     *
+     * @return float
+     */
+    public function getTaxAmount();
 
     /**
      * Get tax percent/code

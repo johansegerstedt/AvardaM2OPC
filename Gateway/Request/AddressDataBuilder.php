@@ -15,6 +15,17 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 class AddressDataBuilder implements BuilderInterface
 {
     /**
+     * Whether the customer can edit the attributes related to invoicing address
+     * manually.
+     */
+    const IS_INVOICING_EDITABLE = 'IsInvoicingEditable';
+
+    /**
+     * 	Enabling/disabling checkbox visibility for delivery address.
+     */
+    const IS_DELIVERY_EDITABLE = 'IsDeliveryEditable';
+
+    /**
      * Delivery address fields prefix
      */
     const DELIVERY_ADDRESS_PREFIX = 'Delivery';
@@ -63,6 +74,10 @@ class AddressDataBuilder implements BuilderInterface
 
         $order = $paymentDO->getOrder();
         $result = [];
+
+        // Enable editing inside the Avarda iframe
+        $result[self::IS_INVOICING_EDITABLE] = 'true';
+        $result[self::IS_DELIVERY_EDITABLE] = 'true';
 
         $billingAddress = $order->getBillingAddress();
         if ($billingAddress) {

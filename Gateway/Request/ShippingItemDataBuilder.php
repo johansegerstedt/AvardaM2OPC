@@ -7,14 +7,13 @@
 namespace Digia\AvardaCheckout\Gateway\Request;
 
 use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactoryInterface;
-use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
  * Class AmountDataBuilder
  */
-class ItemsDataBuilder implements BuilderInterface
+class ShippingItemDataBuilder implements BuilderInterface
 {
     /**
      * The amount to add to the payment
@@ -32,7 +31,7 @@ class ItemsDataBuilder implements BuilderInterface
     protected $itemBuilder;
 
     /**
-     * ItemsDataBuilder constructor.
+     * ShippingItemDataBuilder constructor.
      *
      * @param ItemDataObjectFactoryInterface $itemDataObjectFactory
      * @param BuilderInterface $itemBuilder
@@ -52,36 +51,21 @@ class ItemsDataBuilder implements BuilderInterface
     {
         $paymentDO = SubjectReader::readPayment($buildSubject);
 
-        // Look for invoice or credit memo. Otherwise load order.
-        $payment = $paymentDO->getPayment();
-        if ($payment->hasCreatedInvoice()) {
-            $order = $payment->getCreatedInvoice();
-        } elseif ($payment->hasCreatedCreditMemo()) {
-            $order = $payment->getCreatedCreditMemo();
-        } else {
-            $order = $paymentDO->getOrder();
+        $order = $paymentDO->getOrder();
+        $result = [];
+
+        $shippingAddress = $order->getShippingAddress();
+        if ($shippingAddress) {
+            $itemDO = $this->itemDataObjectFactory->create($order);
+            $item = $itemDO->getItem();
+
+            $itemSubject['item'] = $itemDO;
+            $itemSubject['amount'] = $item->getRowTotalInclTax();
+            $itemSubject['tax_amount'] = $item->getTaxAmount();
+
+            $result[self::ITEMS][10000] = (object) $this->itemBuilder->build($itemSubject);
         }
 
-        $items[self::ITEMS] = [];
-        foreach ($order->getItems() as $item) {
-            $items[self::ITEMS][] = $this->prepareItemObject($item);
-        }
-
-        return $items;
-    }
-
-    /**
-     * @param mixed $item of the quote, order, invoice or credit memo
-     * @return \StdClass
-     */
-    public function prepareItemObject($item)
-    {
-        $itemDO = $this->itemDataObjectFactory->create($item);
-
-        $itemSubject['item'] = $itemDO;
-        $itemSubject['amount'] = $item->getRowTotalInclTax();
-        $itemSubject['tax_amount'] = $item->getTaxAmount();
-
-        return (object) $this->itemBuilder->build($itemSubject);
+        return $result;
     }
 }

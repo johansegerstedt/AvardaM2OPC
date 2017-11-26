@@ -52,12 +52,8 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
     public function getPurchaseId($cartId)
     {
         try {
-            $quoteIdMask = $this->quoteIdMaskFactory->create()
-                ->load($cartId, 'masked_id');
-
-            // getQuoteId() == $cartId == quote::entity_id
             return $this->quotePaymentManagement->getPurchaseId(
-                $quoteIdMask->getQuoteId()
+                $this->getQuoteId($cartId)
             );
         } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
             $this->logger->error($e);
@@ -75,10 +71,37 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function updateAndSaveOrder($cartId)
+    public function updateAndPlaceOrder($cartId)
     {
-        throw new PaymentException(
-            __('Not implemented yet.')
-        );
+        try {
+            $this->quotePaymentManagement->updateAndPlaceOrder(
+                $this->getQuoteId($cartId)
+            );
+        } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
+            $this->logger->error($e);
+
+            throw new PaymentException(__($e->getMessage()));
+        } catch (\Exception $e) {
+            $this->logger->error($e);
+
+            throw new PaymentException(
+                __('Failed to save Avarda order. Please try again later.')
+            );
+        }
+    }
+
+    /**
+     * Get the quote ID from masked cart ID
+     *
+     * @param int $cartId
+     * @return int
+     */
+    protected function getQuoteId($cartId)
+    {
+        // getQuoteId() == $cartId == quote::entity_id
+        $quoteIdMask = $this->quoteIdMaskFactory->create()
+            ->load($cartId, 'masked_id');
+
+        return $quoteIdMask->getQuoteId();
     }
 }

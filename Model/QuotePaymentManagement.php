@@ -31,6 +31,11 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
     public $paymentDataObjectFactory;
 
     /**
+     * @var \Magento\Quote\Api\CartManagementInterface
+     */
+    public $cartManagement;
+
+    /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     public $quoteRepository;
@@ -57,12 +62,14 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
         \Digia\AvardaCheckout\Api\Data\PaymentDetailsInterfaceFactory $paymentDetailsFactory,
         \Magento\Payment\Gateway\Command\CommandPoolInterface $commandPool,
         \Magento\Payment\Gateway\Data\PaymentDataObjectFactoryInterface $paymentDataObjectFactory,
+        \Magento\Quote\Api\CartManagementInterface $cartManagement,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         $defaultMethod = 'avarda_checkout'
     ) {
         $this->paymentDetailsFactory = $paymentDetailsFactory;
         $this->commandPool = $commandPool;
         $this->paymentDataObjectFactory = $paymentDataObjectFactory;
+        $this->cartManagement = $cartManagement;
         $this->quoteRepository = $quoteRepository;
         $this->defaultMethod = $defaultMethod;
     }
@@ -117,6 +124,14 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
         // Execute InitializePurchase command
         $arguments = $this->getCommandArguments($quote);
         $this->commandPool->get('avarda_update_items')->execute($arguments);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateAndPlaceOrder($cartId)
+    {
+        $this->cartManagement->placeOrder($cartId);
     }
 
     /**

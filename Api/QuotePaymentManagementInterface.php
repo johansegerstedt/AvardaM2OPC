@@ -27,4 +27,12 @@ interface QuotePaymentManagementInterface
      * @return void
      */
     public function updateItems(\Magento\Quote\Api\Data\CartInterface $quote);
+
+    /**
+     * Update order (quote) from Avarda and save order to Magento.
+     *
+     * @param string $cartId
+     * @return void
+     */
+    public function updateAndPlaceOrder($cartId);
 }

@@ -27,6 +27,7 @@ interface PaymentManagementInterface
      *
      * @param string $cartId
      * @throws \Magento\Framework\Exception\PaymentException
+     * @return void
      */
-    public function updateAndSaveOrder($cartId);
+    public function updateAndPlaceOrder($cartId);
 }

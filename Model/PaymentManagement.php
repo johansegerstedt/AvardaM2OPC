@@ -36,4 +36,14 @@ class PaymentManagement implements PaymentManagementInterface
     {
         return $this->quotePaymentManagement->getPurchaseId($cartId);
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateAndSaveOrder($cartId)
+    {
+        throw new PaymentException(
+            __('Not implemented yet.')
+        );
+    }
 }

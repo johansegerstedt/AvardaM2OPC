@@ -27,4 +27,23 @@
             <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
+
+    <!-- Guest Avarda place order -->
+    <route url="/V1/guest-carts/:cartId/avarda-payment" method="POST">
+        <service class="Digia\AvardaCheckout\Api\GuestPaymentManagementInterface" method="updateAndPlaceOrder"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <!-- Avarda place order -->
+    <route url="/V1/carts/mine/avarda-payment" method="POST">
+        <service class="Digia\AvardaCheckout\Api\PaymentManagementInterface" method="updateAndPlaceOrder"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
 </routes>

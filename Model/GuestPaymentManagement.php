@@ -71,4 +71,14 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
             );
         }
     }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateAndSaveOrder($cartId)
+    {
+        throw new PaymentException(
+            __('Not implemented yet.')
+        );
+    }
 }

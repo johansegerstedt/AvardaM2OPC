@@ -33,7 +33,7 @@ class ItemAdapter implements ItemAdapterInterface
     /**
      * Get product ID
      *
-     * @return integer
+     * @return integer|null
      */
     public function getProductId()
     {
@@ -43,7 +43,7 @@ class ItemAdapter implements ItemAdapterInterface
     /**
      * Get parent item ID
      *
-     * @return integer
+     * @return integer|null
      */
     public function getParentItemId()
     {
@@ -73,7 +73,7 @@ class ItemAdapter implements ItemAdapterInterface
     /**
      * Get additional data
      *
-     * @return array
+     * @return string
      */
     public function getAdditionalData()
     {
@@ -88,6 +88,16 @@ class ItemAdapter implements ItemAdapterInterface
     public function getProductType()
     {
         return $this->orderItem->getProductType();
+    }
+
+    /**
+     * Get tax amount
+     *
+     * @return float
+     */
+    public function getTaxAmount()
+    {
+        return $this->orderItem->getTaxAmount();
     }
 
     /**

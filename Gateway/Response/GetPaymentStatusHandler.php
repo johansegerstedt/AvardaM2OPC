@@ -75,20 +75,24 @@ class GetPaymentStatusHandler implements HandlerInterface
         $quote->setBillingAddress($billingAddress);
 
         // Save shipping (delivery) address
-        /** @var \Magento\Quote\Api\Data\AddressInterface $shippingAddress */
-        $shippingAddress = $this->addressFactory->create();
-        $shippingAddress->setTelephone($telephone);
-        $shippingAddress->setEmail($email);
-        $shippingAddress->setFirstname($response->DeliveryFirstName);
-        $shippingAddress->setLastname($response->DeliveryLastName);
-        $shippingAddress->setStreet([
-            $response->DeliveryAddressLine1,
-            $response->DeliveryAddressLine2 !== null ? $response->DeliveryAddressLine2 : "",
-        ]);
-        $shippingAddress->setPostcode($response->DeliveryCity);
-        $shippingAddress->setCity($response->DeliveryCity);
-        $shippingAddress->setCountryId('FI');
-        $shippingAddress->setRegionId(336);
-        $quote->setShippingAddress($shippingAddress);
+        if ($response->InvoicingFirstName === null) {
+            /** @var \Magento\Quote\Api\Data\AddressInterface $shippingAddress */
+            $shippingAddress = $this->addressFactory->create();
+            $shippingAddress->setTelephone($telephone);
+            $shippingAddress->setEmail($email);
+            $shippingAddress->setFirstname($response->DeliveryFirstName);
+            $shippingAddress->setLastname($response->DeliveryLastName);
+            $shippingAddress->setStreet([
+                $response->DeliveryAddressLine1,
+                $response->DeliveryAddressLine2 !== null ? $response->DeliveryAddressLine2 : "",
+            ]);
+            $shippingAddress->setPostcode($response->DeliveryCity);
+            $shippingAddress->setCity($response->DeliveryCity);
+            $shippingAddress->setCountryId('FI');
+            $shippingAddress->setRegionId(336);
+            $quote->setShippingAddress($shippingAddress);
+        } else {
+            $quote->setShippingAddress($billingAddress);
+        }
     }
 }

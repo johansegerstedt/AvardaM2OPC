@@ -22,8 +22,17 @@ interface GuestPaymentManagementInterface
     public function getPurchaseId($cartId);
 
     /**
-     * Update order (quote) from Avarda and save order to Magento. Return 200 status
-     * code if everything is OK.
+     * Freeze the cart before redirected to payment. Return 200 status code if
+     * everything is OK.
+     *
+     * @param string $cartId
+     * @throws \Magento\Framework\Exception\PaymentException
+     * @return void
+     */
+    public function freezeCart($cartId);
+
+    /**
+     * Update order (quote) from Avarda and save order to Magento.
      *
      * @param string $cartId
      * @throws \Magento\Framework\Exception\PaymentException

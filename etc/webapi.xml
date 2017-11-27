@@ -28,17 +28,17 @@
         </data>
     </route>
 
-    <!-- Guest Avarda place order -->
+    <!-- Guest Avarda freeze cart before payment -->
     <route url="/V1/guest-carts/:cartId/avarda-payment" method="POST">
-        <service class="Digia\AvardaCheckout\Api\GuestPaymentManagementInterface" method="updateAndPlaceOrder"/>
+        <service class="Digia\AvardaCheckout\Api\GuestPaymentManagementInterface" method="freezeCart"/>
         <resources>
             <resource ref="anonymous" />
         </resources>
     </route>
 
-    <!-- Avarda place order -->
+    <!-- Avarda freeze cart before payment -->
     <route url="/V1/carts/mine/avarda-payment" method="POST">
-        <service class="Digia\AvardaCheckout\Api\PaymentManagementInterface" method="updateAndPlaceOrder"/>
+        <service class="Digia\AvardaCheckout\Api\PaymentManagementInterface" method="freezeCart"/>
         <resources>
             <resource ref="self" />
         </resources>

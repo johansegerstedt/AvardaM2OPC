@@ -25,17 +25,25 @@ class PaymentManagement implements PaymentManagementInterface
     protected $quotePaymentManagement;
 
     /**
+     * @var \Magento\Quote\Api\CartManagementInterface
+     */
+    protected $cartManagement;
+
+    /**
      * GuestPaymentManagement constructor.
      *
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface $quotePaymentManagement
+     * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
-        \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface $quotePaymentManagement
+        \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface $quotePaymentManagement,
+        \Magento\Quote\Api\CartManagementInterface $cartManagement
     ) {
         $this->logger = $logger;
         $this->quotePaymentManagement = $quotePaymentManagement;
+        $this->quotePaymentManagement = $cartManagement;
     }
 
     /**
@@ -61,15 +69,37 @@ class PaymentManagement implements PaymentManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function updateAndPlaceOrder($cartId)
+    public function freezeCart($cartId)
     {
         try {
-            $this->quotePaymentManagement->updateAndPlaceOrder($cartId);
+            $this->quotePaymentManagement->freezeCart($cartId);
         } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
             $this->logger->error($e);
 
             throw new PaymentException(__($e->getMessage()));
         } catch (\Exception $e) {
+            $this->logger->error($e);
+
+            throw new PaymentException(
+                __('Failed to save Avarda order. Please try again later.')
+            );
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateAndPlaceOrder($cartId)
+    {
+        try {
+            $this->quotePaymentManagement->updatePaymentStatus($cartId);
+
+            // Place order from updated quote
+            $this->cartManagement->placeOrder($cartId);
+        } catch (\Exception $e) {
+
+            // Freeze cart again if place order failed
+            $this->freezeCart($cartId);
             $this->logger->error($e);
 
             throw new PaymentException(

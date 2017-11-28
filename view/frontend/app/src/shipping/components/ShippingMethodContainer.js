@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
-import {bindActionCreators, compose} from 'redux';
+import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {withTranslate, type Translate} from '$i18n';
+import $ from '$i18n';
 import {
   getShippingAddress,
   getQuoteCurrency,
@@ -32,7 +32,6 @@ type Props = {
   methods: null | ShippingMethodType[],
   shippingAddress: null | BillingAddress,
   currency: null | string,
-  t: Translate,
   estimateShippingMethods({
     address: BillingAddress,
     methodValue: string,
@@ -78,14 +77,13 @@ class ShippingMethod extends React.Component<Props> {
       currency,
       updateShippingAddress,
       methods,
-      t,
       isFetchingMethods,
       selectedShippingMethod,
     } = this.props;
     return (
       <div className="checkout-shipping-method opc-wrapper">
-        <h2 className="step-title">{t('Shipping Methods')}</h2>
-        <ShippingPolicy t={t} />
+        <h2 className="step-title">{$.mage.__('Shipping Methods')}</h2>
+        <ShippingPolicy />
         <div
           id="checkout-step-shipping"
           className="step-content"
@@ -93,7 +91,6 @@ class ShippingMethod extends React.Component<Props> {
         >
           {shippingAddress && (
             <ShippingAddressForm
-              t={t}
               handleSubmit={this.updateShippingAddress}
               shippingAddress={shippingAddress}
             />
@@ -116,7 +113,6 @@ class ShippingMethod extends React.Component<Props> {
               currency={currency}
               fetchShippingMethods={this.fetchShippingMethods}
               updateShippingAddress={updateShippingAddress}
-              t={t}
               isFetchingMethods={isFetchingMethods}
             />
           ) : null}
@@ -148,4 +144,4 @@ const mapDispatchToProps = dispatch =>
   );
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
-export default compose(connector, withTranslate)(ShippingMethod);
+export default connector(ShippingMethod);

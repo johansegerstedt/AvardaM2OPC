@@ -3,7 +3,7 @@ import React from 'react';
 import {isEqual} from 'lodash';
 import {formatCurrency} from '$src/utils/format';
 import Loader from '$src/utils/components/Loader';
-import type {Translate} from '$i18n';
+import $ from '$i18n';
 import type {BillingAddress} from '$src/cart/types';
 import type {ShippingMethod} from '../types';
 
@@ -83,7 +83,6 @@ type Props = {
   currency: string,
   methods: null | ShippingMethod[],
   isFetchingMethods: boolean,
-  t: Translate,
 };
 
 class ShippingMethodForm extends React.Component<Props> {
@@ -107,7 +106,6 @@ class ShippingMethodForm extends React.Component<Props> {
     const {
       currency,
       methods,
-      t,
       isFetchingMethods,
       selectShippingMethod,
       selectedShippingMethod,
@@ -130,10 +128,16 @@ class ShippingMethodForm extends React.Component<Props> {
             <table className="table-checkout-shipping-method">
               <thead>
                 <tr className="row">
-                  <th className="col col-method">{t('Select Method')}</th>
-                  <th className="col col-price">{t('Price')}</th>
-                  <th className="col col-method">{t('Method Title')}</th>
-                  <th className="col col-carrier">{t('Carrier Title')}</th>
+                  <th className="col col-method">
+                    {$.mage.__('Select Method')}
+                  </th>
+                  <th className="col col-price">{$.mage.__('Price')}</th>
+                  <th className="col col-method">
+                    {$.mage.__('Method Title')}
+                  </th>
+                  <th className="col col-carrier">
+                    {$.mage.__('Carrier Title')}
+                  </th>
                 </tr>
               </thead>
               <tbody>

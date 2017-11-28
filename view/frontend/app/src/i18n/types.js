@@ -1,8 +1,11 @@
 // @flow
+import jQuery from 'jquery';
 
-export type MageTranslate = string => string;
-export type Translate = (string, ...args: Array<any>) => string;
-export type TranslateHTML = (
+export type Translate = string => string;
+
+export type Interpolate = (string, ...args: Array<any>) => string;
+
+export type InterpolateHTML = (
   string,
   ...args: Array<any>
 ) => {
@@ -10,6 +13,7 @@ export type TranslateHTML = (
 };
 
 export type TranslateContext = {
-  t: Translate,
-  tHTML: TranslateHTML,
+  $: typeof jQuery,
+  interpolate: Interpolate,
+  interpolateHTML: InterpolateHTML,
 };

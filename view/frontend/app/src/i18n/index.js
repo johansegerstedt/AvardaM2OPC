@@ -6,12 +6,17 @@ import sanitize from 'sanitize-caja';
 import {compose} from 'redux';
 import type {Interpolate, InterpolateHTML} from './types';
 
-export const fobar: typeof jQuery = {
+const translator: {mage: {__: string => string}} = {
   mage: {
-    __: compose(sanitize, jQuery.mage.__),
+    __: jQuery.mage.__,
   },
 };
 
+/**
+ * Function to interpolate Magento's variable placeholders
+ * AFTER translation.
+ * Usage: interpolate($.mage.__('Hello %1!'), 'John Doe');
+ */
 export const interpolate: Interpolate = (str, ...variables) =>
   variables.reduce(
     (interpolated, variable, index) =>
@@ -19,10 +24,20 @@ export const interpolate: Interpolate = (str, ...variables) =>
     str,
   );
 
+/**
+ * Convenience function to sanitize phrases that must
+ * be set with innerHTML, e.g. phrases that include links.
+ */
 export const interpolateHTML: InterpolateHTML = (...args) => ({
-  __html: interpolate(...args),
+  __html: compose(sanitize, interpolate)(...args),
 });
 
 export * from './types';
 
-export default fobar;
+/**
+ * Usage to get phrases collected:
+ *
+ * import $ from '$i18n';
+ * const Foobar = () => <div>{$.mage.__('Translate this')}/>;
+ */
+export default translator;

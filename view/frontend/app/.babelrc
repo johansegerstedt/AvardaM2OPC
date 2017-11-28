@@ -3,7 +3,7 @@
   "plugins": ["lodash"],
   "env": {
     "production": {
-      "presets": ["minify"]
+      "presets": [["minify", { "mangle": false }]]
     },
     "development": {
       "plugins": ["react-flow-props-to-prop-types"]

@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import {Provider} from 'react-redux';
-import {TranslateProvider} from '$i18n';
 import {get} from 'lodash';
 import App from '$src/app/components/App';
 import type {Config} from '$src/types';
@@ -29,9 +28,7 @@ class Root extends React.Component<Props, State> {
     const {config, store} = this.props;
     return (
       <Provider store={store}>
-        <TranslateProvider>
-          <App config={config} />
-        </TranslateProvider>
+        <App config={config} />
       </Provider>
     );
   }

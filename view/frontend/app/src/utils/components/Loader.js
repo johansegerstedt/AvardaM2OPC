@@ -1,13 +1,12 @@
 // @flow
 import * as React from 'react';
+import $ from '$i18n';
 import spinner from './spinner.gif';
-import {withTranslate, type Translate} from '$i18n';
 
 type Props = {
   isLoading: boolean,
   children: null | React.Node,
   block: boolean,
-  t: Translate,
 };
 
 const Spinner = ({alt, block}: {alt: string, block: boolean}) => (
@@ -25,13 +24,13 @@ class Loader extends React.Component<Props> {
   };
 
   render() {
-    const {isLoading, children, t, block} = this.props;
+    const {isLoading, children, block} = this.props;
     return isLoading ? (
-      <Spinner alt={t('Loading...')} block={block} />
+      <Spinner alt={$.mage.__('Loading...')} block={block} />
     ) : (
       children
     );
   }
 }
 
-export default withTranslate(Loader);
+export default Loader;

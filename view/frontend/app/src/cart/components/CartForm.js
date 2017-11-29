@@ -1,16 +1,15 @@
 // @flow
 import React from 'react';
 import {get} from 'lodash';
+import $ from '$i18n';
 import {formatCurrency} from '$src/utils/format';
 import type {CartItem} from '../types';
-import type {Translate} from '$i18n';
 
 type Props = {
   cartItems: CartItem[],
   currency: string,
   deleteCartItem(itemId: string): void,
   isUpdating: boolean,
-  t: Translate,
   updateCartItems(CartItem[]): void,
 };
 
@@ -18,16 +17,14 @@ const ItemRow = ({
   currency,
   deleteItem,
   item: {name, item_id, price_incl_tax, qty, isDeleting},
-  t,
 }: {
   currency: string,
   deleteItem: EventHandler,
   item: CartItem,
-  t: Translate,
 }) => (
   <tbody className="cart item">
     <tr key="0" className="item-info">
-      <td data-th={t('Item')} className="col item">
+      <td data-th={$.mage.__('Item')} className="col item">
         <a
           href="http://avarda.box/fusion-backpack.html" // TODO
           title={name}
@@ -56,7 +53,7 @@ const ItemRow = ({
           </strong>
         </div>
       </td>
-      <td className="col price" data-th={t('Price')}>
+      <td className="col price" data-th={$.mage.__('Price')}>
         <span className="price-excluding-tax" data-label="Excl. Tax">
           <span className="cart-price">
             <span className="price">
@@ -65,10 +62,10 @@ const ItemRow = ({
           </span>
         </span>
       </td>
-      <td className="col qty" data-th={t('Qty')}>
+      <td className="col qty" data-th={$.mage.__('Qty')}>
         <div className="field qty">
           <label className="label" htmlFor="cart-98-qty">
-            <span>{t('Qty')}</span>
+            <span>{$.mage.__('Qty')}</span>
           </label>
           <div className="control qty">
             <input
@@ -87,7 +84,7 @@ const ItemRow = ({
           </div>
         </div>
       </td>
-      <td className="col subtotal" data-th={t('Subtotal')}>
+      <td className="col subtotal" data-th={$.mage.__('Subtotal')}>
         <span className="price-excluding-tax" data-label="Excl. Tax">
           <span className="cart-price">
             <span className="price">
@@ -111,13 +108,13 @@ const ItemRow = ({
           <span>Edit </span>
         </a>*/}
           <button
-            title={t('Remove item')}
+            title={$.mage.__('Remove item')}
             className="action action-delete"
             onClick={deleteItem}
             data-itemid={item_id}
             disabled={isDeleting}
           >
-            <span>{t('Remove item')}</span>
+            <span>{$.mage.__('Remove item')}</span>
           </button>
         </div>
       </td>
@@ -156,7 +153,7 @@ class CartForm extends React.Component<Props> {
   };
 
   render() {
-    const {cartItems, currency, isUpdating, t} = this.props;
+    const {cartItems, currency, isUpdating} = this.props;
     return (
       <form
         id="form-validate"
@@ -168,21 +165,21 @@ class CartForm extends React.Component<Props> {
         <div className="cart table-wrapper">
           <table id="shopping-cart-table" className="cart items data table">
             <caption role="heading" aria-level={2} className="table-caption">
-              {t('Shopping Cart Items')}
+              {$.mage.__('Shopping Cart Items')}
             </caption>
             <thead>
               <tr>
                 <th className="col item" scope="col">
-                  <span>{t('Item')}</span>
+                  <span>{$.mage.__('Item')}</span>
                 </th>
                 <th className="col price" scope="col">
-                  <span>{t('Price')}</span>
+                  <span>{$.mage.__('Price')}</span>
                 </th>
                 <th className="col qty" scope="col">
-                  <span>{t('Qty')}</span>
+                  <span>{$.mage.__('Qty')}</span>
                 </th>
                 <th className="col subtotal" scope="col">
-                  <span>{t('Subtotal')}</span>
+                  <span>{$.mage.__('Subtotal')}</span>
                 </th>
               </tr>
             </thead>
@@ -193,7 +190,6 @@ class CartForm extends React.Component<Props> {
                 item={item}
                 deleteItem={this.deleteCartItem}
                 currency={currency}
-                t={t}
               />
             ))}
           </table>
@@ -202,29 +198,29 @@ class CartForm extends React.Component<Props> {
           <a
             className="action continue"
             href="/"
-            title={t('Continue Shopping')}
+            title={$.mage.__('Continue Shopping')}
           >
-            <span>{t('Continue Shopping')}</span>
+            <span>{$.mage.__('Continue Shopping')}</span>
           </a>
           <button
             name="update_cart_action"
             data-cart-empty
             value="empty_cart"
-            title={t('Clear Shopping Cart')}
+            title={$.mage.__('Clear Shopping Cart')}
             className="action clear"
             id="empty_cart_button"
           >
-            <span>{t('Clear Shopping Cart')}</span>
+            <span>{$.mage.__('Clear Shopping Cart')}</span>
           </button>
           <button
             type="submit"
             name="update_cart_action"
             value="update_qty"
             disabled={!!isUpdating}
-            title={t('Update Shopping Cart')}
+            title={$.mage.__('Update Shopping Cart')}
             className="action update"
           >
-            <span>{t('Update Shopping Cart')}</span>
+            <span>{$.mage.__('Update Shopping Cart')}</span>
           </button>
           <input
             type="hidden"

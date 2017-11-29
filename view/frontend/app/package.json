@@ -71,7 +71,7 @@
     "redux-actions": "^2.2.1",
     "redux-saga": "^0.16.0",
     "reselect": "^3.0.1",
-    "sanitize-html": "^1.15.0",
+    "sanitize-caja": "^0.1.4",
     "whatwg-fetch": "^2.0.3"
   }
 }

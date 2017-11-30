@@ -25,6 +25,11 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
     protected $quotePaymentManagement;
 
     /**
+     * @var \Magento\Checkout\Model\Session
+     */
+    protected $checkoutSession;
+
+    /**
      * @var \Magento\Quote\Api\GuestCartManagementInterface
      */
     protected $cartManagement;
@@ -39,17 +44,20 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
      *
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface $quotePaymentManagement
+     * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Quote\Api\GuestCartManagementInterface $guestCartManagement
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface $quotePaymentManagement,
+        \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Quote\Api\GuestCartManagementInterface $cartManagement,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->logger = $logger;
         $this->quotePaymentManagement = $quotePaymentManagement;
+        $this->checkoutSession = $checkoutSession;
         $this->cartManagement = $cartManagement;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
     }
@@ -85,6 +93,7 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
             $this->quotePaymentManagement->freezeCart(
                 $this->getQuoteId($cartId)
             );
+            $this->checkoutSession->setAvardaCartId($cartId);
         } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
             $this->logger->error($e);
 

@@ -25,6 +25,11 @@ class PaymentManagement implements PaymentManagementInterface
     protected $quotePaymentManagement;
 
     /**
+     * @var \Magento\Checkout\Model\Session
+     */
+    protected $checkoutSession;
+
+    /**
      * @var \Magento\Quote\Api\CartManagementInterface
      */
     protected $cartManagement;
@@ -34,15 +39,18 @@ class PaymentManagement implements PaymentManagementInterface
      *
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface $quotePaymentManagement
+     * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface $quotePaymentManagement,
+        \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Quote\Api\CartManagementInterface $cartManagement
     ) {
         $this->logger = $logger;
         $this->quotePaymentManagement = $quotePaymentManagement;
+        $this->checkoutSession = $checkoutSession;
         $this->quotePaymentManagement = $cartManagement;
     }
 
@@ -73,6 +81,7 @@ class PaymentManagement implements PaymentManagementInterface
     {
         try {
             $this->quotePaymentManagement->freezeCart($cartId);
+            $this->checkoutSession->setAvardaCartId($cartId);
         } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
             $this->logger->error($e);
 

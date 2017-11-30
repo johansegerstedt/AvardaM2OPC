@@ -66,6 +66,12 @@ class Index extends Action
      */
     public function execute()
     {
+        if ($this->_request->getParam('callback', 0) == 1) {
+            return $this->resultRedirectFactory->create()->setPath(
+                'avarda/checkout/saveOrder'
+            );
+        }
+
         if (!$this->config->isActive()) {
             $this->messageManager->addErrorMessage(
                 __('Avarda checkout is turned off.')

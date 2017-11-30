@@ -67,6 +67,6 @@ class SaveOrder extends Action
             $this->paymentManagement->updateAndPlaceOrder($cartId);
         }
 
-        return $this->resultRedirectFactory->create()->setPath('checkout/success');
+        return $this->resultRedirectFactory->create()->setPath('checkout/onepage/success');
     }
 }

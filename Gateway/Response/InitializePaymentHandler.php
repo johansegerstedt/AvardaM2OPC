@@ -6,6 +6,7 @@
  */
 namespace Digia\AvardaCheckout\Gateway\Response;
 
+use Magento\Framework\Exception\PaymentException;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 
@@ -24,9 +25,14 @@ class InitializePaymentHandler implements HandlerInterface
      */
     public function handle(array $handlingSubject, array $response)
     {
+        $purchaseId = reset($response);
+        if (empty($purchaseId)) {
+            throw new PaymentException(__('No purchase ID returned from Avarda'));
+        }
+
         $paymentDO = SubjectReader::readPayment($handlingSubject);
         $payment = $paymentDO->getPayment();
 
-        $payment->setAdditionalInformation(self::PURCHASE_ID, reset($response));
+        $payment->setAdditionalInformation(self::PURCHASE_ID, $purchaseId);
     }
 }

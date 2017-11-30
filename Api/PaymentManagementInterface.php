@@ -15,7 +15,7 @@ interface PaymentManagementInterface
     /**
      * Get purchase ID for Avarda payment
      *
-     * @param string $cartId
+     * @param int $cartId
      * @return \Digia\AvardaCheckout\Api\Data\PaymentDetailsInterface
      * @throws \Magento\Framework\Exception\PaymentException
      */
@@ -25,7 +25,7 @@ interface PaymentManagementInterface
      * Freeze the cart before redirected to payment. Return 200 status code if
      * everything is OK.
      *
-     * @param string $cartId
+     * @param int $cartId
      * @throws \Magento\Framework\Exception\PaymentException
      * @return void
      */
@@ -34,7 +34,7 @@ interface PaymentManagementInterface
     /**
      * Update order (quote) from Avarda and save order to Magento.
      *
-     * @param string $cartId
+     * @param int $cartId
      * @throws \Magento\Framework\Exception\PaymentException
      * @return void
      */

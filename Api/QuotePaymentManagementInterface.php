@@ -6,6 +6,8 @@
  */
 namespace Digia\AvardaCheckout\Api;
 
+use Magento\Quote\Api\Data\CartInterface;
+
 /**
  * Interface for managing Avarda payment information
  * @api
@@ -13,20 +15,28 @@ namespace Digia\AvardaCheckout\Api;
 interface QuotePaymentManagementInterface
 {
     /**
-     * Get purchase ID for Avarda payment
+     * Get purchase ID for quote
      *
      * @param string $cartId
-     * @return \Digia\AvardaCheckout\Api\Data\PaymentDetailsInterface
+     * @return string
      */
     public function getPurchaseId($cartId);
 
     /**
-     * Update items in Avarda
+     * Make Avarda InitializePurchase call and return purchase ID
      *
-     * @param \Magento\Quote\Api\Data\CartInterface $quote
+     * @param CartInterface $quote
+     * @return string
+     */
+    public function initializePurchase(CartInterface $quote);
+
+    /**
+     * Make Avarda UpdateItems call and return purchase ID
+     *
+     * @param CartInterface $quote
      * @return void
      */
-    public function updateItems(\Magento\Quote\Api\Data\CartInterface $quote);
+    public function updateItems(CartInterface $quote);
 
     /**
      * Freeze the cart before redirected to payment.
@@ -35,6 +45,14 @@ interface QuotePaymentManagementInterface
      * @return void
      */
     public function freezeCart($cartId);
+
+    /**
+     * Unfreeze the cart before placing order in Magento.
+     *
+     * @param string $cartId
+     * @return void
+     */
+    public function unfreezeCart($cartId);
 
     /**
      * Update order (quote) from Avarda payment status.

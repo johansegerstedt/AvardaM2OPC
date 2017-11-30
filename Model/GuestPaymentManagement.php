@@ -6,7 +6,10 @@
  */
 namespace Digia\AvardaCheckout\Model;
 
+use Digia\AvardaCheckout\Api\Data\PaymentDetailsInterface;
+use Digia\AvardaCheckout\Api\Data\PaymentDetailsInterfaceFactory;
 use Digia\AvardaCheckout\Api\GuestPaymentManagementInterface;
+use Digia\AvardaCheckout\Api\QuotePaymentManagementInterface;
 use Magento\Framework\Exception\PaymentException;
 
 /**
@@ -18,6 +21,11 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
      * @var \Psr\Log\LoggerInterface
      */
     protected $logger;
+
+    /**
+     * @var PaymentDetailsInterfaceFactory
+     */
+    protected $paymentDetailsFactory;
 
     /**
      * @var \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface
@@ -43,19 +51,22 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
      * GuestPaymentManagement constructor.
      *
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface $quotePaymentManagement
+     * @param PaymentDetailsInterfaceFactory $paymentDetailsFactory
+     * @param QuotePaymentManagementInterface $quotePaymentManagement
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Quote\Api\GuestCartManagementInterface $guestCartManagement
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
-        \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface $quotePaymentManagement,
+        PaymentDetailsInterfaceFactory $paymentDetailsFactory,
+        QuotePaymentManagementInterface $quotePaymentManagement,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Quote\Api\GuestCartManagementInterface $cartManagement,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->logger = $logger;
+        $this->paymentDetailsFactory = $paymentDetailsFactory;
         $this->quotePaymentManagement = $quotePaymentManagement;
         $this->checkoutSession = $checkoutSession;
         $this->cartManagement = $cartManagement;
@@ -68,9 +79,14 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
     public function getPurchaseId($cartId)
     {
         try {
-            return $this->quotePaymentManagement->getPurchaseId(
+            $purchaseId = $this->quotePaymentManagement->getPurchaseId(
                 $this->getQuoteId($cartId)
             );
+
+            /** @var PaymentDetailsInterface $paymentDetails */
+            $paymentDetails = $this->paymentDetailsFactory->create();
+            $paymentDetails->setPurchaseId($purchaseId);
+            return $paymentDetails;
         } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
             $this->logger->error($e);
 
@@ -113,9 +129,11 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
     public function updateAndPlaceOrder($cartId)
     {
         try {
-            $this->quotePaymentManagement->updatePaymentStatus(
-                $this->getQuoteId($cartId)
-            );
+            $quoteId = $this->getQuoteId($cartId);
+            $this->quotePaymentManagement->updatePaymentStatus($quoteId);
+
+            // Unfreeze cart before placing the order
+            $this->quotePaymentManagement->unfreezeCart($quoteId);
 
             // Place order from updated quote
             $this->cartManagement->placeOrder($cartId);
@@ -132,14 +150,16 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
     }
 
     /**
-     * Get the quote ID from masked cart ID
+     * Get the quote ID from masked cart ID.
      *
-     * @param int $cartId
+     * Note: getQuoteId() == $cartId == quote::entity_id
+     *
+     * @param string $cartId
      * @return int
      */
     protected function getQuoteId($cartId)
     {
-        // getQuoteId() == $cartId == quote::entity_id
+        /** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
         $quoteIdMask = $this->quoteIdMaskFactory->create()
             ->load($cartId, 'masked_id');
 

@@ -1,15 +1,12 @@
 // @flow
 import React from 'react';
-import {type Translate} from '$i18n';
+import $ from '$i18n';
 
-type Props = {
-  t: Translate,
-};
+type Props = {};
 
 // TODO
 class ShippingPolicy extends React.Component<Props> {
   render() {
-    const {t} = this.props;
     return (
       <div
         className="shipping-policy-block field-tooltip"
@@ -24,7 +21,7 @@ class ShippingPolicy extends React.Component<Props> {
           aria-haspopup="true"
           aria-expanded="false"
         >
-          {t('See our Shipping Policy')}
+          {$.mage.__('See our Shipping Policy')}
         </span>
         <div
           className="field-tooltip-content"

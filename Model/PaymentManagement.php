@@ -7,6 +7,7 @@
 namespace Digia\AvardaCheckout\Model;
 
 use Digia\AvardaCheckout\Api\PaymentManagementInterface;
+use Magento\Framework\Exception\PaymentException;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -14,19 +15,43 @@ use Digia\AvardaCheckout\Api\PaymentManagementInterface;
 class PaymentManagement implements PaymentManagementInterface
 {
     /**
-     * @var \Digia\AvardaCheckout\Api\Data\PaymentDetailsInterfaceFactory
+     * @var \Psr\Log\LoggerInterface
      */
-    protected $paymentDetailsFactory;
+    protected $logger;
+
+    /**
+     * @var \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface
+     */
+    protected $quotePaymentManagement;
+
+    /**
+     * @var \Magento\Checkout\Model\Session
+     */
+    protected $checkoutSession;
+
+    /**
+     * @var \Magento\Quote\Api\CartManagementInterface
+     */
+    protected $cartManagement;
 
     /**
      * GuestPaymentManagement constructor.
      *
-     * @param \Digia\AvardaCheckout\Api\Data\PaymentDetailsInterfaceFactory $paymentDetailsFactory
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface $quotePaymentManagement
+     * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
      */
     public function __construct(
-        \Digia\AvardaCheckout\Api\Data\PaymentDetailsInterfaceFactory $paymentDetailsFactory
+        \Psr\Log\LoggerInterface $logger,
+        \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface $quotePaymentManagement,
+        \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Quote\Api\CartManagementInterface $cartManagement
     ) {
-        $this->paymentDetailsFactory = $paymentDetailsFactory;
+        $this->logger = $logger;
+        $this->quotePaymentManagement = $quotePaymentManagement;
+        $this->checkoutSession = $checkoutSession;
+        $this->quotePaymentManagement = $cartManagement;
     }
 
     /**
@@ -34,6 +59,61 @@ class PaymentManagement implements PaymentManagementInterface
      */
     public function getPurchaseId($cartId)
     {
-        return $this->quotePaymentManagement->getPurchaseId($cartId);
+        try {
+            return $this->quotePaymentManagement->getPurchaseId($cartId);
+        } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
+            $this->logger->error($e);
+
+            throw new PaymentException(__($e->getMessage()));
+        } catch (\Exception $e) {
+            $this->logger->error($e);
+
+            throw new PaymentException(
+                __('Failed to load Avarda payment. Please try again later.')
+            );
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function freezeCart($cartId)
+    {
+        try {
+            $this->quotePaymentManagement->freezeCart($cartId);
+            $this->checkoutSession->setAvardaCartId($cartId);
+        } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
+            $this->logger->error($e);
+
+            throw new PaymentException(__($e->getMessage()));
+        } catch (\Exception $e) {
+            $this->logger->error($e);
+
+            throw new PaymentException(
+                __('Failed to save Avarda order. Please try again later.')
+            );
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updateAndPlaceOrder($cartId)
+    {
+        try {
+            $this->quotePaymentManagement->updatePaymentStatus($cartId);
+
+            // Place order from updated quote
+            $this->cartManagement->placeOrder($cartId);
+        } catch (\Exception $e) {
+
+            // Freeze cart again if place order failed
+            $this->freezeCart($cartId);
+            $this->logger->error($e);
+
+            throw new PaymentException(
+                __('Failed to save Avarda order. Please try again later.')
+            );
+        }
     }
 }

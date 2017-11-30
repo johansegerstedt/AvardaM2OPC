@@ -1,8 +1,8 @@
 // @flow
 import React from 'react';
-import {bindActionCreators, compose} from 'redux';
+import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
-import {withTranslate, type Translate} from '$i18n';
+import $ from '$i18n';
 import {
   getQuoteCurrency,
   getIsCartUpdating,
@@ -31,7 +31,6 @@ type Props = {
   shippingAddress: null | BillingAddress,
   currency: null | string,
   messages: null | MessageState[],
-  t: Translate,
   estimateShippingMethods({
     address: BillingAddress,
   }): void,
@@ -60,7 +59,6 @@ class ShippingMethod extends React.Component<Props> {
       updateShippingAddress,
       messages,
       methods,
-      t,
       isFetchingMethods,
       selectShippingMethod,
       selectedShippingMethod,
@@ -68,7 +66,7 @@ class ShippingMethod extends React.Component<Props> {
     return (
       <div className="checkout-shipping-method opc-wrapper">
         <h2 id={SHIPPING_ANCHOR_ID} className="step-title">
-          {t('Shipping Methods')}
+          {$.mage.__('Shipping Methods')}
         </h2>
         {messages && (
           <Messages>
@@ -77,7 +75,7 @@ class ShippingMethod extends React.Component<Props> {
             ))}
           </Messages>
         )}
-        <ShippingPolicy t={t} />
+        <ShippingPolicy />
         <div
           id="checkout-step-shipping"
           className="step-content"
@@ -85,7 +83,6 @@ class ShippingMethod extends React.Component<Props> {
         >
           {shippingAddress && (
             <ShippingAddressForm
-              t={t}
               handleSubmit={this.updateShippingAddress}
               shippingAddress={shippingAddress}
             />
@@ -108,7 +105,6 @@ class ShippingMethod extends React.Component<Props> {
               currency={currency}
               fetchShippingMethods={this.fetchShippingMethods}
               updateShippingAddress={updateShippingAddress}
-              t={t}
               isFetchingMethods={isFetchingMethods}
             />
           ) : null}
@@ -140,4 +136,4 @@ const mapDispatchToProps = dispatch =>
   );
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
-export default compose(connector, withTranslate)(ShippingMethod);
+export default connector(ShippingMethod);

@@ -1,9 +1,8 @@
 // @flow
 import React from 'react';
-import {bindActionCreators, compose} from 'redux';
+import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import Loader from '$src/utils/components/Loader';
-import {withTranslate, type Translate} from '$i18n';
 import {getConfig} from '$src/config';
 import {
   fetchCartRequest,
@@ -34,7 +33,6 @@ type Props = {
   deleteCartItem(itemId: string): void,
   applyCoupon(code: string): void,
   removeCoupon(): void,
-  t: Translate,
 };
 
 // TODO
@@ -51,7 +49,6 @@ class Cart extends React.Component<Props> {
       isFetching,
       applyCoupon,
       removeCoupon,
-      t,
     } = this.props;
 
     const {hasItems} = getConfig();
@@ -70,7 +67,6 @@ class Cart extends React.Component<Props> {
                   totalSegments={cart.total_segments}
                   isLoading={isFetching || isUpdatingCart}
                   currency={getQuoteCurrency(cart)}
-                  t={t}
                 />,
                 <CartForm
                   key="cartForm"
@@ -79,7 +75,6 @@ class Cart extends React.Component<Props> {
                   updateCartItems={updateCartItems}
                   deleteCartItem={deleteCartItem}
                   currency={getQuoteCurrency(cart)}
-                  t={t}
                 />,
                 <GiftOptionsCart key="giftOptionsCart" />,
                 <CartDiscount
@@ -87,7 +82,6 @@ class Cart extends React.Component<Props> {
                   coupon={cart.coupon_code}
                   applyCoupon={applyCoupon}
                   removeCoupon={removeCoupon}
-                  t={t}
                 />,
               ]
             : null}
@@ -116,7 +110,4 @@ const mapDispatchToProps = dispatch =>
     dispatch,
   );
 
-export default compose(
-  connect(mapStateToProps, mapDispatchToProps),
-  withTranslate,
-)(Cart);
+export default connect(mapStateToProps, mapDispatchToProps)(Cart);

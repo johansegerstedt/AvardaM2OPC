@@ -8,6 +8,7 @@ namespace Digia\AvardaCheckout\Model;
 
 use Digia\AvardaCheckout\Api\QuotePaymentManagementInterface;
 use Digia\AvardaCheckout\Api\Data\PaymentDetailsInterface;
+use Magento\Framework\Exception\PaymentException;
 use Magento\Payment\Model\InfoInterface;
 
 /**
@@ -18,27 +19,27 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
     /**
      * @var \Digia\AvardaCheckout\Api\Data\PaymentDetailsInterfaceFactory
      */
-    public $paymentDetailsFactory;
+    protected $paymentDetailsFactory;
 
     /**
      * @var \Magento\Payment\Gateway\Command\CommandPoolInterface
      */
-    public $commandPool;
+    protected $commandPool;
 
     /**
      * @var \Magento\Payment\Gateway\Data\PaymentDataObjectInterfaceFactory
      */
-    public $paymentDataObjectFactory;
+    protected $paymentDataObjectFactory;
 
     /**
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
-    public $quoteRepository;
+    protected $quoteRepository;
 
     /**
      * @var string
      */
-    public $defaultMethod;
+    protected $defaultMethod;
 
     /**
      * @var
@@ -50,8 +51,10 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
      *
      * @param \Digia\AvardaCheckout\Api\Data\PaymentDetailsInterfaceFactory $paymentDetailsFactory
      * @param \Magento\Payment\Gateway\Command\CommandPoolInterface $commandPool
+     * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Payment\Gateway\Data\PaymentDataObjectInterfaceFactory $paymentDataObjectFactory
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @param string $defaultMethod
      */
     public function __construct(
         \Digia\AvardaCheckout\Api\Data\PaymentDetailsInterfaceFactory $paymentDetailsFactory,
@@ -117,6 +120,52 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
         // Execute InitializePurchase command
         $arguments = $this->getCommandArguments($quote);
         $this->commandPool->get('avarda_update_items')->execute($arguments);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function freezeCart($cartId)
+    {
+        $quote = $this->quoteRepository->get($cartId);
+        $payment = $quote->getPayment();
+        $additionalInformation = $payment->getAdditionalInformation();
+        if (!is_array($additionalInformation) ||
+            !array_key_exists(PaymentDetailsInterface::PURCHASE_ID, $additionalInformation)
+        ) {
+            throw new PaymentException(__('No purchase ID on quote %s.', $cartId));
+        }
+
+        $quote->setIsActive(false);
+        $quote->save();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function updatePaymentStatus($cartId)
+    {
+        $quote = $this->quoteRepository->get($cartId);
+        $payment = $quote->getPayment();
+        $additionalInformation = $payment->getAdditionalInformation();
+        if (!is_array($additionalInformation) ||
+            !array_key_exists(PaymentDetailsInterface::PURCHASE_ID, $additionalInformation)
+        ) {
+            throw new PaymentException(__('No purchase ID on quote %s.', $cartId));
+        }
+        if ($this->commandPool === null) {
+            throw new \DomainException('Command pool is not configured for use.');
+        }
+
+        // Execute InitializePurchase command
+        $arguments = $this->getCommandArguments($quote);
+        $this->commandPool->get('avarda_get_payment_status')->execute($arguments);
+
+        // Unfreeze cart before placing order
+        $quote->setIsActive(true);
+
+        // Save updated quote
+        $quote->save();
     }
 
     /**

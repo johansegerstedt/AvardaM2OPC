@@ -2,13 +2,12 @@
 import React from 'react';
 import {get} from 'lodash';
 import {getConfig} from '$src/config';
-import type {Translate} from '$i18n';
+import $ from '$i18n';
 import type {BillingAddress} from '$src/cart/types';
 
 type Props = {
   shippingAddress: BillingAddress,
   handleSubmit(BillingAddress): void,
-  t: Translate,
 };
 
 class ShippingAddressForm extends React.Component<Props> {
@@ -29,7 +28,7 @@ class ShippingAddressForm extends React.Component<Props> {
   };
 
   render() {
-    const {t, shippingAddress} = this.props;
+    const {shippingAddress} = this.props;
     const {postcode} = shippingAddress;
     return (
       <form
@@ -41,7 +40,7 @@ class ShippingAddressForm extends React.Component<Props> {
         <div id="shipping-new-address-form" className="fieldset address">
           <div className="field _required" name="shippingAddress.postcode">
             <label className="label" htmlFor="postcode">
-              <span>{t('Zip/Postal Code')}</span>
+              <span>{$.mage.__('Zip/Postal Code')}</span>
             </label>
             <div className="control">
               <input
@@ -58,7 +57,7 @@ class ShippingAddressForm extends React.Component<Props> {
           <div className="fieldset">
             <div className="control">
               <button type="submit">
-                {t('Update')} {t('Zip/Postal Code')}
+                {$.mage.__('Update')} {$.mage.__('Zip/Postal Code')}
               </button>
             </div>
           </div>

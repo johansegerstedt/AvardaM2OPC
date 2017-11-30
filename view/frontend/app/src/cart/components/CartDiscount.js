@@ -1,13 +1,12 @@
 // @flow
 import React from 'react';
 import {get} from 'lodash';
-import type {Translate} from '$i18n';
+import $ from '$i18n';
 
 type Props = {
   coupon?: string,
   applyCoupon(code: string): void,
   removeCoupon(): void,
-  t: Translate,
 };
 
 type State = {
@@ -61,7 +60,7 @@ class CartDiscount extends React.Component<Props, State> {
 
   render() {
     const {isOpen} = this.state;
-    const {coupon, t} = this.props;
+    const {coupon} = this.props;
 
     const isApplying: boolean = typeof coupon !== 'string';
 
@@ -84,7 +83,7 @@ class CartDiscount extends React.Component<Props, State> {
             tabIndex={0}
           >
             <strong id="block-discount-heading" role="heading" aria-level={2}>
-              {t('Apply Discount Code')}
+              {$.mage.__('Apply Discount Code')}
             </strong>
           </div>
           <div
@@ -105,7 +104,7 @@ class CartDiscount extends React.Component<Props, State> {
                 />
                 <div className="field">
                   <label htmlFor="coupon_code" className="label">
-                    <span>{t('Enter discount code')}</span>
+                    <span>{$.mage.__('Enter discount code')}</span>
                   </label>
                   <div className="control">
                     <input
@@ -116,7 +115,7 @@ class CartDiscount extends React.Component<Props, State> {
                       name="coupon_code"
                       defaultValue={isApplying ? '' : coupon}
                       disabled={!isApplying}
-                      placeholder={t('Enter discount code')}
+                      placeholder={$.mage.__('Enter discount code')}
                     />
                   </div>
                 </div>
@@ -124,7 +123,9 @@ class CartDiscount extends React.Component<Props, State> {
                   <div className="primary">
                     <SubmitButton
                       label={
-                        isApplying ? t('Apply Discount') : t('Cancel Coupon')
+                        isApplying
+                          ? $.mage.__('Apply Discount')
+                          : $.mage.__('Cancel Coupon')
                       }
                     />
                   </div>

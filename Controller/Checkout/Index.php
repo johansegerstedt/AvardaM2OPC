@@ -10,6 +10,9 @@ use \Magento\Framework\App\Action\Action;
 
 class Index extends Action
 {
+    const CALLBACK_FAILURE = 'Failure';
+    const CALLBACK_SUCCESS = 'Success';
+
     /**
      * @var \Magento\Framework\View\Result\PageFactory
      */
@@ -66,7 +69,7 @@ class Index extends Action
      */
     public function execute()
     {
-        if ($this->_request->getParam('callback', 0) == 1) {
+        if ($this->isCallback()) {
             return $this->resultRedirectFactory->create()->setPath(
                 'avarda/checkout/saveOrder'
             );
@@ -101,6 +104,23 @@ class Index extends Action
         $this->checkoutSession->setCartWasUpdated(false);
 
         $resultPage = $this->resultPageFactory->create();
+        $resultPage->getConfig()->getTitle()->set(__('Checkout'));
         return $resultPage;
+    }
+
+    /**
+     * Check if the URL is a callback.
+     *
+     * @return bool
+     */
+    public function isCallback()
+    {
+        return (
+            (bool) $this->_request->getParam('callback', false) == true ||
+            $this->_request->getParam(
+                'PaymentStatus',
+                self::CALLBACK_FAILURE
+            ) == self::CALLBACK_SUCCESS
+        );
     }
 }

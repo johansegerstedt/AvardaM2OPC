@@ -52,7 +52,6 @@ class App extends React.Component<Props> {
 
     return (
       <div className="app">
-        <h1>{$.mage.__('Checkout')}</h1>
         <Loader isLoading={cart === null && isFetching}>
           {isCartEmpty ? <CartIsEmpty /> : <CartIsNotEmpty />}
         </Loader>

@@ -20,4 +20,23 @@ interface PaymentManagementInterface
      * @throws \Magento\Framework\Exception\PaymentException
      */
     public function getPurchaseId($cartId);
+
+    /**
+     * Freeze the cart before redirected to payment. Return 200 status code if
+     * everything is OK.
+     *
+     * @param string $cartId
+     * @throws \Magento\Framework\Exception\PaymentException
+     * @return void
+     */
+    public function freezeCart($cartId);
+
+    /**
+     * Update order (quote) from Avarda and save order to Magento.
+     *
+     * @param string $cartId
+     * @throws \Magento\Framework\Exception\PaymentException
+     * @return void
+     */
+    public function updateAndPlaceOrder($cartId);
 }

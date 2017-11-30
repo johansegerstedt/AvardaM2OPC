@@ -27,4 +27,20 @@ interface QuotePaymentManagementInterface
      * @return void
      */
     public function updateItems(\Magento\Quote\Api\Data\CartInterface $quote);
+
+    /**
+     * Freeze the cart before redirected to payment.
+     *
+     * @param string $cartId
+     * @return void
+     */
+    public function freezeCart($cartId);
+
+    /**
+     * Update order (quote) from Avarda payment status.
+     *
+     * @param string $cartId
+     * @return void
+     */
+    public function updatePaymentStatus($cartId);
 }

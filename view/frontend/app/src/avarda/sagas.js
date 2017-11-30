@@ -4,7 +4,7 @@ import {isEqual} from 'lodash';
 import {takeLatest} from 'redux-saga';
 import {all, call, fork, put, select, take} from 'redux-saga/effects';
 import {getConfig} from '$src/config';
-import {apiGet, getApiUrl} from '$src/m2api';
+import {apiGet, apiPost, getApiUrl} from '$src/m2api';
 import {ActionTypes as Cart} from '$src/cart/constants';
 import {getCartApiPath} from '$src/cart/utils';
 import {getShippingAddress} from '$src/cart/selectors';
@@ -17,6 +17,7 @@ import {
   receivePurchaseId,
   addressChanged as addressChangedAction,
   updatedItems,
+  completePaymentPressed as completePaymentPressedAction,
 } from './actions';
 import * as ShippingMessages from './messages';
 import {ActionTypes} from './constants';
@@ -89,6 +90,13 @@ function* cartUpdated() {
   yield put(updatedItems());
 }
 
+function* completePayment({
+  payload: {result},
+}: ActionType<typeof completePaymentPressedAction>) {
+  yield call(apiPost, getApiUrl(`${getCartApiPath()}/avarda-payment`));
+  yield call([result, result.continue]);
+}
+
 export default function*(): Generator<*, *, *> {
   yield all([
     yield fork(function* watchFetchPurchaseId() {
@@ -101,4 +109,5 @@ export default function*(): Generator<*, *, *> {
       yield takeLatest(ActionTypes.ADDRESS_CHANGED, addressChanged);
     }),
   ]);
+  yield takeLatest(ActionTypes.COMPLETE_PAYMENT_PRESSED, completePayment);
 }

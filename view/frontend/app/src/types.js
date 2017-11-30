@@ -12,7 +12,7 @@ export type Normalized<Entities> = {
   result: Reference,
 };
 
-export type Config = {
+export type Config = {|
   +baseMediaUrl: string,
   +baseUrl: string,
   +countryId: string,
@@ -20,6 +20,7 @@ export type Config = {
   +hasItems: boolean,
   +magentoLocale: string,
   +maskedQuoteId: ?string,
-};
+  +saveOrderUrl: string,
+|};
 
 export type Reference = string | number;

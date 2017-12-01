@@ -7,7 +7,6 @@
 namespace Digia\AvardaCheckout\Model;
 
 use Digia\AvardaCheckout\Api\QuotePaymentManagementInterface;
-use Digia\AvardaCheckout\Api\Data\PaymentDetailsInterface;
 use Magento\Framework\Exception\PaymentException;
 use Magento\Payment\Gateway\Data\PaymentDataObjectFactoryInterface;
 use Magento\Payment\Model\InfoInterface;
@@ -87,7 +86,7 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
             ->execute($arguments);
 
         /**
-         * Save the additional data to quote
+         * Save the additional data to quote payment
          * @see \Digia\AvardaCheckout\Gateway\Response\InitializePaymentHandler
          */
         $quote->save();
@@ -156,7 +155,7 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
     }
 
     /**
-     * Prepare arguments for InitializePayment command
+     * Prepare arguments for gateway commands
      *
      * @param $cartId
      * @return array

@@ -64,6 +64,10 @@ class ItemsDataBuilder implements BuilderInterface
 
         $items[self::ITEMS] = [];
         foreach ($order->getItems() as $item) {
+            if (!$item->getProductId()) {
+                continue;
+            }
+
             $items[self::ITEMS][] = $this->prepareItemObject($item);
         }
 

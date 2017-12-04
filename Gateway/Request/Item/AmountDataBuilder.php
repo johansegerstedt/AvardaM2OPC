@@ -28,7 +28,7 @@ class AmountDataBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         return [
-            self::AMOUNT => (float) $this->formatPrice(
+            self::AMOUNT => $this->formatPrice(
                 ItemSubjectReader::readAmount($buildSubject)
             ),
         ];

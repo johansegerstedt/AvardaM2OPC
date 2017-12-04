@@ -83,8 +83,11 @@ class ItemsDataBuilder implements BuilderInterface
         $itemDO = $this->itemDataObjectFactory->create($item);
 
         $itemSubject['item'] = $itemDO;
-        $itemSubject['amount'] = $item->getRowTotalInclTax();
-        $itemSubject['tax_amount'] = $item->getTaxAmount();
+        $itemSubject['amount'] = $item->getRowTotalInclTax()
+            - $item->getDiscountAmount();
+        $itemSubject['tax_amount'] = $item->getTaxAmount()
+            + $item->getHiddenTaxAmount()
+            + $item->getWeeeTaxAppliedAmount();
 
         return (object) $this->itemBuilder->build($itemSubject);
     }

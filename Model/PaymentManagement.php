@@ -59,6 +59,7 @@ class PaymentManagement implements PaymentManagementInterface
         \Magento\Quote\Api\CartManagementInterface $cartManagement
     ) {
         $this->logger = $logger;
+        $this->paymentDetailsFactory = $paymentDetailsFactory;
         $this->quotePaymentManagement = $quotePaymentManagement;
         $this->checkoutSession = $checkoutSession;
         $this->quotePaymentManagement = $cartManagement;

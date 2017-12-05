@@ -85,6 +85,7 @@ class ShippingMethod extends React.Component<Props> {
             <ShippingAddressForm
               handleSubmit={this.updateShippingAddress}
               shippingAddress={shippingAddress}
+              controlled={selectedShippingMethod !== null}
             />
           )}
           {/* Submit this to estimate shipping methods */}

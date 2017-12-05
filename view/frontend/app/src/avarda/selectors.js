@@ -10,3 +10,8 @@ export const getPurchaseId: Selector<void, *> = createSelector(
   [getAvardaState],
   ({purchaseId}) => purchaseId,
 );
+
+export const getIsFetching: Selector<void, boolean> = createSelector(
+  [getAvardaState],
+  ({isFetching}) => isFetching,
+);

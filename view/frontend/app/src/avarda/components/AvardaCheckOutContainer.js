@@ -3,13 +3,15 @@ import React, {Component} from 'react';
 import {bindActionCreators, type Dispatch} from 'redux';
 import {connect /*, type Connector */} from 'react-redux';
 import {getConfig} from '$src/config';
+import Loader from '$src/utils/components/Loader';
 import AvardaCheckOut, {type Props} from './AvardaCheckOut';
-import {getPurchaseId} from '../selectors';
+import {getPurchaseId, getIsFetching} from '../selectors';
 import {addressChanged, completePaymentPressed} from '../actions';
 import type {AppState} from '$src/root/types';
 
 type StateProps = {|
   purchaseId: null | $PropertyType<Props, 'purchaseId'>,
+  isFetching: boolean,
 |};
 
 type DispatchProps = {|
@@ -34,15 +36,18 @@ class AvardaCheckOutContainer extends Component<ConnectedProps> {
   };
 
   render() {
-    const {purchaseId, ...props} = this.props;
+    const {purchaseId, isFetching, ...props} = this.props;
     return purchaseId ? (
       <AvardaCheckOut purchaseId={purchaseId} onDone={this.onDone} {...props} />
-    ) : null;
+    ) : (
+      <Loader isLoading={isFetching}>{null}</Loader>
+    );
   }
 }
 
 const mapStateToProps = (state: AppState): StateProps => ({
   purchaseId: getPurchaseId(state),
+  isFetching: getIsFetching(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<*>): DispatchProps =>

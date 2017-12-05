@@ -13,7 +13,6 @@ import {getSelectedMethod} from '$src/shipping/selectors';
 import {fetchShippingMethods} from '$src/shipping/api';
 import {addMessage, updateAddress, scrollToForm} from '$src/shipping/actions';
 import {
-  fetchPurchaseId as fetchPurchaseIdAction,
   receivePurchaseId,
   addressChanged as addressChangedAction,
   updatedItems,
@@ -75,19 +74,16 @@ function* addressChanged({
 }
 
 function* cartUpdated() {
-  yield put({type: 'avarda/updateItems'});
   if (yield select(getPurchaseId)) {
+    yield put({type: 'avarda/updateItems'});
     yield call(apiGet, getApiUrl(`${getCartApiPath()}/avarda-payment`));
-  } else {
-    yield put(fetchPurchaseIdAction());
-    yield take(ActionTypes.RECEIVE_PURCHASE_ID);
-  }
 
-  if (document.getElementById(DIV_ID)) {
-    // TODO: Only here until quote update also updates Avarda
-    yield call(AvardaCheckOutClient.updateItems);
+    if (document.getElementById(DIV_ID)) {
+      // TODO: Only here until quote update also updates Avarda
+      yield call(AvardaCheckOutClient.updateItems);
+    }
+    yield put(updatedItems());
   }
-  yield put(updatedItems());
 }
 
 function* completePayment({

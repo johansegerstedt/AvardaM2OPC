@@ -6,7 +6,10 @@
  */
 namespace Digia\AvardaCheckout\Model;
 
+use Digia\AvardaCheckout\Api\Data\PaymentDetailsInterface;
+use Digia\AvardaCheckout\Api\Data\PaymentDetailsInterfaceFactory;
 use Digia\AvardaCheckout\Api\PaymentManagementInterface;
+use Digia\AvardaCheckout\Api\QuotePaymentManagementInterface;
 use Magento\Framework\Exception\PaymentException;
 
 /**
@@ -20,7 +23,12 @@ class PaymentManagement implements PaymentManagementInterface
     protected $logger;
 
     /**
-     * @var \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface
+     * @var PaymentDetailsInterfaceFactory
+     */
+    protected $paymentDetailsFactory;
+
+    /**
+     * @var QuotePaymentManagementInterface
      */
     protected $quotePaymentManagement;
 
@@ -38,17 +46,20 @@ class PaymentManagement implements PaymentManagementInterface
      * GuestPaymentManagement constructor.
      *
      * @param \Psr\Log\LoggerInterface $logger
-     * @param \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface $quotePaymentManagement
+     * @param PaymentDetailsInterfaceFactory $paymentDetailsFactory
+     * @param QuotePaymentManagementInterface $quotePaymentManagement
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
-        \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface $quotePaymentManagement,
+        PaymentDetailsInterfaceFactory $paymentDetailsFactory,
+        QuotePaymentManagementInterface $quotePaymentManagement,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Quote\Api\CartManagementInterface $cartManagement
     ) {
         $this->logger = $logger;
+        $this->paymentDetailsFactory = $paymentDetailsFactory;
         $this->quotePaymentManagement = $quotePaymentManagement;
         $this->checkoutSession = $checkoutSession;
         $this->quotePaymentManagement = $cartManagement;
@@ -60,7 +71,12 @@ class PaymentManagement implements PaymentManagementInterface
     public function getPurchaseId($cartId)
     {
         try {
-            return $this->quotePaymentManagement->getPurchaseId($cartId);
+            $purchaseId = $this->quotePaymentManagement->getPurchaseId($cartId);
+
+            /** @var PaymentDetailsInterface $paymentDetails */
+            $paymentDetails = $this->paymentDetailsFactory->create();
+            $paymentDetails->setPurchaseId($purchaseId);
+            return $paymentDetails;
         } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
             $this->logger->error($e);
 
@@ -102,6 +118,9 @@ class PaymentManagement implements PaymentManagementInterface
     {
         try {
             $this->quotePaymentManagement->updatePaymentStatus($cartId);
+
+            // Unfreeze cart before placing the order
+            $this->quotePaymentManagement->unfreezeCart($cartId);
 
             // Place order from updated quote
             $this->cartManagement->placeOrder($cartId);

@@ -15,6 +15,10 @@
     <preference for="Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactoryInterface" type="Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactory" />
     <preference for="Digia\AvardaCheckout\Gateway\Data\ItemDataObjectInterface" type="Digia\AvardaCheckout\Gateway\Data\ItemDataObject" />
 
+    <type name="Magento\Quote\Model\Quote">
+        <plugin name="avardaCollectTotals" type="Digia\AvardaCheckout\Plugin\Model\Quote\CollectTotals" />
+    </type>
+
     <!-- Avarda payment methods -->
     <virtualType name="AvardaCheckoutFacade" type="Magento\Payment\Model\Method\Adapter">
         <arguments>

@@ -11,14 +11,14 @@ use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
- * Class PurchaseIdDataBuilder
+ * Class ExternalIdDataBuilder
  */
-class PurchaseIdDataBuilder implements BuilderInterface
+class ExternalIdDataBuilder implements BuilderInterface
 {
     /**
-     * The purchase ID of request
+     * The purchase ID (external ID) of request
      */
-    const PURCHASE_ID = 'PurchaseId';
+    const EXTERNAL_ID = 'ExternalId';
 
     /**
      * @inheritdoc
@@ -31,6 +31,6 @@ class PurchaseIdDataBuilder implements BuilderInterface
         $additionalInformation = $payment->getAdditionalInformation();
         $purchaseId = $additionalInformation[PaymentDetailsInterface::PURCHASE_ID];
 
-        return [self::PURCHASE_ID => $purchaseId];
+        return [self::EXTERNAL_ID => $purchaseId];
     }
 }

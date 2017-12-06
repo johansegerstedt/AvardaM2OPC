@@ -6,7 +6,10 @@
  */
 namespace Digia\AvardaCheckout\Controller\Checkout;
 
+use \Digia\AvardaCheckout\Api\GuestPaymentManagementInterface;
+use \Digia\AvardaCheckout\Api\PaymentManagementInterface;
 use \Magento\Framework\App\Action\Action;
+use \Magento\Framework\Exception\PaymentException;
 
 class SaveOrder extends Action
 {
@@ -36,15 +39,15 @@ class SaveOrder extends Action
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param \Digia\AvardaCheckout\Api\GuestPaymentManagementInterface $guestPaymentManagement
-     * @param \Digia\AvardaCheckout\Api\PaymentManagementInterface $paymentManagement
+     * @param GuestPaymentManagementInterface $guestPaymentManagement
+     * @param PaymentManagementInterface $paymentManagement
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
-        \Digia\AvardaCheckout\Api\GuestPaymentManagementInterface $guestPaymentManagement,
-        \Digia\AvardaCheckout\Api\PaymentManagementInterface $paymentManagement
+        GuestPaymentManagementInterface $guestPaymentManagement,
+        PaymentManagementInterface $paymentManagement
     ) {
         parent::__construct($context);
         $this->checkoutSession = $checkoutSession;
@@ -60,15 +63,26 @@ class SaveOrder extends Action
      */
     public function execute()
     {
-        $cartId = $this->checkoutSession->getAvardaCartId();
-        if (!$this->customerSession->isLoggedIn()) {
-            $this->guestPaymentManagement->updateAndPlaceOrder($cartId);
-        } else {
-            $this->paymentManagement->updateAndPlaceOrder($cartId);
+        try {
+            $cartId = $this->checkoutSession->getAvardaCartId();
+            if (!$this->customerSession->isLoggedIn()) {
+                $this->guestPaymentManagement->updateAndPlaceOrder($cartId);
+            } else {
+                $this->paymentManagement->updateAndPlaceOrder($cartId);
+            }
+
+            return $this->resultRedirectFactory->create()->setPath(
+                'checkout/onepage/success'
+            );
+        } catch (PaymentException $e) {
+            $message = $e->getMessage();
+        } catch (\Exception $e) {
+            $message = __('Failed to save Avarda order. Please try again later.');
         }
 
+        $this->messageManager->addErrorMessage($message);
         return $this->resultRedirectFactory->create()->setPath(
-            'checkout/onepage/success'
+            'checkout/cart'
         );
     }
 }

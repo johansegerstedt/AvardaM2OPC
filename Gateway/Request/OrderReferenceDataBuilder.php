@@ -11,14 +11,14 @@ use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
- * Class PurchaseIdDataBuilder
+ * Class OrderReferenceDataBuilder
  */
-class PurchaseIdDataBuilder implements BuilderInterface
+class OrderReferenceDataBuilder implements BuilderInterface
 {
     /**
-     * The purchase ID of request
+     * A unique identifier for Avarda to find the order
      */
-    const PURCHASE_ID = 'PurchaseId';
+    const ORDER_REFERENCE = 'OrderReference';
 
     /**
      * @inheritdoc
@@ -26,11 +26,8 @@ class PurchaseIdDataBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         $paymentDO = SubjectReader::readPayment($buildSubject);
-        $payment = $paymentDO->getPayment();
+        $order = $paymentDO->getOrder();
 
-        $additionalInformation = $payment->getAdditionalInformation();
-        $purchaseId = $additionalInformation[PaymentDetailsInterface::PURCHASE_ID];
-
-        return [self::PURCHASE_ID => $purchaseId];
+        return [self::ORDER_REFERENCE => $order->getOrderIncrementId()];
     }
 }

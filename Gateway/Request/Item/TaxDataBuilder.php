@@ -37,7 +37,7 @@ class TaxDataBuilder implements BuilderInterface
 
         return [
             self::TAX_CODE => $item->getTaxPercent(),
-            self::TAX_AMOUNT => (float) $this->formatPrice($taxAmount),
+            self::TAX_AMOUNT => $this->formatPrice($taxAmount),
         ];
     }
 }

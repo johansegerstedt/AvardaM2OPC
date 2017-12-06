@@ -10,12 +10,15 @@ use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactoryInterface;
 use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
+use Magento\Payment\Helper\Formatter;
 
 /**
  * Class AmountDataBuilder
  */
 class ItemsDataBuilder implements BuilderInterface
 {
+    use Formatter;
+
     /**
      * The amount to add to the payment
      */
@@ -51,20 +54,11 @@ class ItemsDataBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         $paymentDO = SubjectReader::readPayment($buildSubject);
-
-        // Look for invoice or credit memo. Otherwise load order.
-        $payment = $paymentDO->getPayment();
-        if ($payment->hasCreatedInvoice()) {
-            $order = $payment->getCreatedInvoice();
-        } elseif ($payment->hasCreatedCreditMemo()) {
-            $order = $payment->getCreatedCreditMemo();
-        } else {
-            $order = $paymentDO->getOrder();
-        }
+        $order = $paymentDO->getOrder();
 
         $items[self::ITEMS] = [];
         foreach ($order->getItems() as $item) {
-            if (!$item->getProductId()) {
+            if (!$item->getProductId() || $item->hasParentItemId()) {
                 continue;
             }
 
@@ -83,11 +77,14 @@ class ItemsDataBuilder implements BuilderInterface
         $itemDO = $this->itemDataObjectFactory->create($item);
 
         $itemSubject['item'] = $itemDO;
-        $itemSubject['amount'] = $item->getRowTotalInclTax()
-            - $item->getDiscountAmount();
-        $itemSubject['tax_amount'] = $item->getTaxAmount()
+        $itemSubject['amount'] = $this->formatPrice(
+            $item->getRowTotalInclTax() - $item->getDiscountAmount()
+        );
+        $itemSubject['tax_amount'] = $this->formatPrice(
+            $item->getTaxAmount()
             + $item->getHiddenTaxAmount()
-            + $item->getWeeeTaxAppliedAmount();
+            + $item->getWeeeTaxAppliedAmount()
+        );
 
         return (object) $this->itemBuilder->build($itemSubject);
     }

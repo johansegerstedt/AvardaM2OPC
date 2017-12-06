@@ -9,12 +9,14 @@ namespace Digia\AvardaCheckout\Gateway\Request;
 use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactoryInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
+use Magento\Payment\Helper\Formatter;
 
 /**
- * Class AmountDataBuilder
+ * Class ShippingItemDataBuilder
  */
 class ShippingItemDataBuilder implements BuilderInterface
 {
+    use Formatter;
     /**
      * The amount to add to the payment
      */
@@ -60,10 +62,11 @@ class ShippingItemDataBuilder implements BuilderInterface
             $item = $itemDO->getItem();
 
             $itemSubject['item'] = $itemDO;
-            $itemSubject['amount'] = $item->getRowTotalInclTax();
-            $itemSubject['tax_amount'] = $item->getTaxAmount();
+            $itemSubject['amount'] = $this->formatPrice($item->getRowTotalInclTax());
+            $itemSubject['tax_amount'] = $this->formatPrice($item->getTaxAmount());
 
-            $result[self::ITEMS][10000] = (object) $this->itemBuilder->build($itemSubject);
+            $result[self::ITEMS][10000] =
+                (object) $this->itemBuilder->build($itemSubject);
         }
 
         return $result;

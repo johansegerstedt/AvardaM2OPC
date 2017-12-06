@@ -11,7 +11,7 @@ use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
- * Class PriceDataBuilder
+ * Class PurchaseIdDataBuilder
  */
 class PurchaseIdDataBuilder implements BuilderInterface
 {

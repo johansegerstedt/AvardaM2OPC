@@ -21,7 +21,28 @@ const callApi = async (url: string, init?: RequestOptions) => {
   };
 
   const apiRequest = new Request(url, mergedInit);
+
+  let logger = x => x;
+
+  if (process.env.NODE_ENV === 'development') {
+    logger = (response: Response): Response => {
+      const {url, ok, type, statusText, status} = response;
+      // eslint-disable-next-line no-console
+      console.log({
+        url,
+        ok,
+        type,
+        statusText,
+        status,
+        method: mergedInit.method,
+      });
+
+      return response;
+    };
+  }
+
   return fetch(apiRequest)
+    .then(logger)
     .then(handleErrors)
     .then(data => data.json())
     .catch(err => {

@@ -4,7 +4,7 @@ import {isEqual} from 'lodash';
 import {takeLatest} from 'redux-saga';
 import {all, call, fork, put, select, take} from 'redux-saga/effects';
 import {getConfig} from '$src/config';
-import {apiGet, getApiUrl} from '$src/m2api';
+import {apiGet, apiPost, getApiUrl} from '$src/m2api';
 import {ActionTypes as Cart} from '$src/cart/constants';
 import {getCartApiPath} from '$src/cart/utils';
 import {getShippingAddress} from '$src/cart/selectors';
@@ -13,10 +13,10 @@ import {getSelectedMethod} from '$src/shipping/selectors';
 import {fetchShippingMethods} from '$src/shipping/api';
 import {addMessage, updateAddress, scrollToForm} from '$src/shipping/actions';
 import {
-  fetchPurchaseId as fetchPurchaseIdAction,
   receivePurchaseId,
   addressChanged as addressChangedAction,
   updatedItems,
+  completePaymentPressed as completePaymentPressedAction,
 } from './actions';
 import * as ShippingMessages from './messages';
 import {ActionTypes} from './constants';
@@ -74,19 +74,23 @@ function* addressChanged({
 }
 
 function* cartUpdated() {
-  yield put({type: 'avarda/updateItems'});
   if (yield select(getPurchaseId)) {
+    yield put({type: 'avarda/updateItems'});
     yield call(apiGet, getApiUrl(`${getCartApiPath()}/avarda-payment`));
-  } else {
-    yield put(fetchPurchaseIdAction());
-    yield take(ActionTypes.RECEIVE_PURCHASE_ID);
-  }
 
-  if (document.getElementById(DIV_ID)) {
-    // TODO: Only here until quote update also updates Avarda
-    yield call(AvardaCheckOutClient.updateItems);
+    if (document.getElementById(DIV_ID)) {
+      // TODO: Only here until quote update also updates Avarda
+      yield call(AvardaCheckOutClient.updateItems);
+    }
+    yield put(updatedItems());
   }
-  yield put(updatedItems());
+}
+
+function* completePayment({
+  payload: {result},
+}: ActionType<typeof completePaymentPressedAction>) {
+  yield call(apiPost, getApiUrl(`${getCartApiPath()}/avarda-payment`));
+  yield call([result, result.continue]);
 }
 
 export default function*(): Generator<*, *, *> {
@@ -101,4 +105,5 @@ export default function*(): Generator<*, *, *> {
       yield takeLatest(ActionTypes.ADDRESS_CHANGED, addressChanged);
     }),
   ]);
+  yield takeLatest(ActionTypes.COMPLETE_PAYMENT_PRESSED, completePayment);
 }

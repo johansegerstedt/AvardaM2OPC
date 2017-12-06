@@ -24,10 +24,19 @@ export const addressChanged = createAction(
   }),
 );
 
+export const completePaymentPressed = createAction(
+  ActionTypes.COMPLETE_PAYMENT_PRESSED,
+  (result: Result, purchaseId: string) => ({
+    result,
+    purchaseId,
+  }),
+);
+
 export const updatedItems = createAction(ActionTypes.UPDATED_ITEMS, createVoid);
 
 export type AvardaActions =
   | ActionType<typeof fetchPurchaseId>
   | ActionType<typeof receivePurchaseId>
   | ActionType<typeof addressChanged>
+  | ActionType<typeof completePaymentPressed>
   | ActionType<typeof updatedItems>;

@@ -7,6 +7,7 @@ import type {BillingAddress} from '$src/cart/types';
 
 type Props = {
   shippingAddress: BillingAddress,
+  controlled: boolean,
   handleSubmit(BillingAddress): void,
 };
 
@@ -28,7 +29,7 @@ class ShippingAddressForm extends React.Component<Props> {
   };
 
   render() {
-    const {shippingAddress} = this.props;
+    const {shippingAddress, controlled} = this.props;
     const {postcode} = shippingAddress;
     return (
       <form
@@ -44,13 +45,14 @@ class ShippingAddressForm extends React.Component<Props> {
             </label>
             <div className="control">
               <input
-                key={JSON.stringify(postcode)}
+                key={JSON.stringify(controlled) + JSON.stringify(postcode)}
                 className="input-text"
                 type="text"
                 id="postcode"
                 name="postcode"
-                value={postcode === null ? undefined : postcode}
-                disabled={!!postcode}
+                defaultValue={!controlled && !!postcode ? postcode : undefined}
+                value={!!controlled && postcode !== null ? postcode : undefined}
+                disabled={controlled && !!postcode}
               />
             </div>
           </div>

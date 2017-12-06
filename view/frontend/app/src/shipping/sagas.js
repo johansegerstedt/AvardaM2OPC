@@ -97,62 +97,7 @@ function* saveInformation({
   });
   yield put(saveShippingInformationSuccess());
 }
-/*
-function* updateShippingAddress({
-  payload: address,
-}: ActionType<typeof updateShippingAddressRequest>) {
-  try {
-    const methods = yield call(apiFetchShippingMethods, address);
-    const selectedMethod = yield select(getSelectedMethod);
 
-    const selectedMethodIsStillValid = methods.some(method =>
-      isEqual(method, selectedMethod),
-    );
-    const firstAvailableMethod = find(methods, {available: true});
-    const methodToUpdateAddress = selectedMethodIsStillValid
-      ? selectedMethod
-      : firstAvailableMethod;
-
-    if (typeof methodToUpdateAddress !== 'undefined') {
-      yield setShippingInformation(
-        setShippingInformationRequest({
-          shipping_address: address,
-          shipping_method: methodToUpdateAddress,
-        }),
-      );
-    }
-
-    yield put(estimateShippingMethodsSuccess(methods));
-  } catch (err) {
-    yield put(estimateShippingMethodsFailure(err));
-  }
-}
-
-function* setShippingInformation({
-  payload: {shipping_address, shipping_method},
-}: ActionType<typeof setShippingInformationRequest>) {
-  if (!shipping_method.available) {
-    throw new Error(
-      'Shipping method is not available.\n' + JSON.stringify(shipping_method),
-    );
-  }
-
-  const url = `${getApiUrl(`${getCartApiPath()}/shipping-information`)}`;
-  const addressInformation = {
-    shipping_address,
-    shipping_carrier_code: shipping_method.carrier_code,
-    shipping_method_code: shipping_method.method_code,
-  };
-  try {
-    yield call(apiPost, url, {addressInformation});
-    const cart = yield call(apiFetchCart);
-    yield put(setShippingInformationSuccess(shipping_method));
-    yield put(fetchCartSuccessAction(cart));
-  } catch (err) {
-    yield put(setShippingInformationFailure(err));
-  }
-}
-*/
 function* scrollToShippingContainer() {
   const element = document.getElementById(SHIPPING_ANCHOR_ID);
   if (element) {

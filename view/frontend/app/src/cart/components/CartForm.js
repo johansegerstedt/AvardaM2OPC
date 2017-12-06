@@ -13,6 +13,8 @@ type Props = {
   updateCartItems(CartItem[]): void,
 };
 
+const TODO_HREF = "javascript: alert('TODO')";
+
 const ItemRow = ({
   currency,
   deleteItem,
@@ -26,7 +28,7 @@ const ItemRow = ({
     <tr key="0" className="item-info">
       <td data-th={$.mage.__('Item')} className="col item">
         <a
-          href="http://avarda.box/fusion-backpack.html" // TODO
+          href={TODO_HREF}
           title={name}
           tabIndex={-1}
           className="product-item-photo"
@@ -39,7 +41,7 @@ const ItemRow = ({
               <img
                 className="product-image-photo"
                 // TODO
-                src="http://avarda.box/static/version1510299755/frontend/Magento/luma/fi_FI/Magento_Catalog/images/product/placeholder/small_image.jpg"
+                src="/static/version1510299755/frontend/Magento/luma/fi_FI/Magento_Catalog/images/product/placeholder/small_image.jpg"
                 width={165}
                 height={165}
                 alt={name}
@@ -49,7 +51,7 @@ const ItemRow = ({
         </a>
         <div className="product-item-details">
           <strong className="product-item-name">
-            <a href="http://avarda.box/fusion-backpack.html">{name}</a>
+            <a href={TODO_HREF}>{name}</a>
           </strong>
         </div>
       </td>

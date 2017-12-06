@@ -2,17 +2,19 @@
 import React, {Component} from 'react';
 import {bindActionCreators, type Dispatch} from 'redux';
 import {connect /*, type Connector */} from 'react-redux';
+import {getConfig} from '$src/config';
+import Loader from '$src/utils/components/Loader';
 import AvardaCheckOut, {type Props} from './AvardaCheckOut';
-import {getPurchaseId} from '../selectors';
-import {addressChanged} from '../actions';
+import {getPurchaseId, getIsFetching} from '../selectors';
+import {addressChanged, completePaymentPressed} from '../actions';
 import type {AppState} from '$src/root/types';
 
 type StateProps = {|
   purchaseId: null | $PropertyType<Props, 'purchaseId'>,
+  isFetching: boolean,
 |};
 
 type DispatchProps = {|
-  onDone: $PropertyType<Props, 'onDone'>,
   onBeforeSubmit?: $PropertyType<Props, 'onBeforeSubmit'>,
   onBeforeCompleteHook?: $PropertyType<Props, 'onBeforeCompleteHook'>,
   onUpdateDeliveryAddressHook?: $PropertyType<
@@ -27,39 +29,32 @@ type ConnectedProps = {|
 |};
 
 class AvardaCheckOutContainer extends Component<ConnectedProps> {
+  // All the checks are handled in backend.
+  // eslint-disable-next-line no-unused-vars
+  onDone = (purchaseId: string) => {
+    window.location.href = getConfig().saveOrderUrl;
+  };
+
   render() {
-    /* eslint-disable no-unused-vars */
-    const {purchaseId, ...props} = this.props;
-    /* eslint-enable no-unused-vars */
+    const {purchaseId, isFetching, ...props} = this.props;
     return purchaseId ? (
-      <AvardaCheckOut
-        purchaseId={purchaseId}
-        {...props}
-        onBeforeSubmit={pid => {
-          const ans = window.prompt(pid);
-          return ans === 'true';
-        }}
-        onBeforeCompleteHook={(result, pid) => {
-          const ans = window.prompt('Should complete?' + pid);
-          return ans === 'true' ? result.continue() : result.cancel();
-        }}
-      />
-    ) : null;
+      <AvardaCheckOut purchaseId={purchaseId} onDone={this.onDone} {...props} />
+    ) : (
+      <Loader isLoading={isFetching}>{null}</Loader>
+    );
   }
 }
 
 const mapStateToProps = (state: AppState): StateProps => ({
   purchaseId: getPurchaseId(state),
+  isFetching: getIsFetching(state),
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<*>): DispatchProps =>
   bindActionCreators(
     {
-      onDone: () => (
-        alert('Purchase might be done - should check payment status'),
-        {type: 'onDone', payload: 'hello'}
-      ),
       onUpdateDeliveryAddressHook: addressChanged,
+      onBeforeCompleteHook: completePaymentPressed,
     },
     dispatch,
   );

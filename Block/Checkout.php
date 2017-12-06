@@ -92,30 +92,6 @@ class Checkout extends Template
     }
 
     /**
-     * @return array
-     */
-    public function getItems()
-    {
-        $items = $this->getQuote()->getItems();
-        $data = [];
-
-        foreach ($items as $key => $item) {
-            $itemData = [
-                'qty' => $item->getQty(),
-                'name' => $item->getName(),
-                'price' => $item->getPrice(),
-                'sku' => $item->getSku(),
-                'total' => $item->getBaseRowTotalInclTax(),
-                'url' => $item->getRedirectUrl(),
-                'priceInclTax' => $item->getBasePriceInclTax()
-            ];
-            $data[] = $itemData;
-        }
-
-        return $data;
-    }
-
-    /**
      * @return bool
      */
     public function hasItems()
@@ -151,5 +127,13 @@ class Checkout extends Template
     public function getCheckOutClientScriptPath()
     {
         return $this->config->getApplicationUrl() . '/Scripts/CheckOutClient';
+    }
+
+    /**
+     * [getSaveOrderUrl description]
+     * @return string
+     */
+    public function getSaveOrderUrl() {
+      return $this->getUrl('avarda/checkout/saveOrder', ['_secure' => true]);
     }
 }

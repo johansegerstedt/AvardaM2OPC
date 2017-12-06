@@ -12,6 +12,15 @@ export const purchaseId: Reducer<null | string> = handleActions(
   null,
 );
 
+const isFetching: Reducer<boolean> = handleActions(
+  {
+    [ActionTypes.GET_PURCHASE_ID]: () => true,
+    [ActionTypes.RECEIVE_PURCHASE_ID]: () => false,
+  },
+  false,
+);
+
 export default combineReducers({
   purchaseId,
+  isFetching,
 });

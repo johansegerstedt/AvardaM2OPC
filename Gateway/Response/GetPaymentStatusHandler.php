@@ -6,6 +6,8 @@
  */
 namespace Digia\AvardaCheckout\Gateway\Response;
 
+use Digia\AvardaCheckout\Helper\PaymentMethod;
+use Digia\AvardaCheckout\Helper\PurchaseState;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -27,17 +29,33 @@ class GetPaymentStatusHandler implements HandlerInterface
     protected $addressFactory;
 
     /**
+     * @var PaymentMethod
+     */
+    protected $methodHelper;
+
+    /**
+     * @var PurchaseState
+     */
+    protected $stateHelper;
+
+    /**
      * GetPaymentStatusHandler constructor.
      *
      * @param CartRepositoryInterface $quoteRepository
      * @param AddressInterfaceFactory $addressFactory
+     * @param PaymentMethod $methodHelper
+     * @param PurchaseState $stateHelper
      */
     public function __construct(
         CartRepositoryInterface $quoteRepository,
-        AddressInterfaceFactory $addressFactory
+        AddressInterfaceFactory $addressFactory,
+        PaymentMethod $methodHelper,
+        PurchaseState $stateHelper
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->addressFactory = $addressFactory;
+        $this->methodHelper = $methodHelper;
+        $this->stateHelper = $stateHelper;
     }
 
     /**
@@ -94,5 +112,10 @@ class GetPaymentStatusHandler implements HandlerInterface
         } else {
             $quote->setShippingAddress($billingAddress);
         }
+
+        // Set payment method
+        $paymentMethod = $this->methodHelper
+            ->getPaymentMethod($response->PaymentMethod);
+        $quote->getPayment()->setMethod($paymentMethod);
     }
 }

@@ -14,6 +14,7 @@
     <preference for="Digia\AvardaCheckout\Api\QuotePaymentManagementInterface" type="Digia\AvardaCheckout\Model\QuotePaymentManagement" />
     <preference for="Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactoryInterface" type="Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactory" />
     <preference for="Digia\AvardaCheckout\Gateway\Data\ItemDataObjectInterface" type="Digia\AvardaCheckout\Gateway\Data\ItemDataObject" />
+    <preference for="Magento\Checkout\Controller\Index\Index" type="Digia\AvardaCheckout\Preference\Magento\Checkout\Controller\Index\Index" />
 
     <type name="Magento\Quote\Model\Quote">
         <plugin name="avardaCollectTotals" type="Digia\AvardaCheckout\Plugin\Model\Quote\CollectTotals" />

@@ -14,6 +14,7 @@
                 <active>0</active>
                 <test_mode>1</test_mode>
                 <debug>1</debug>
+                <onepage_redirect_active>0</onepage_redirect_active>
                 <can_capture>1</can_capture>
                 <can_capture_partial>0</can_capture_partial>
                 <can_refund>1</can_refund>

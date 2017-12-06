@@ -22,24 +22,32 @@ class ItemDataObjectFactory implements ItemDataObjectFactoryInterface
      *
      * @var \Magento\Framework\ObjectManagerInterface
      */
-    private $objectManager;
+    protected $objectManager;
+
+    /**
+     * @var Order\ItemAdapterFactory
+     */
+    protected $orderItemAdapterFactory;
 
     /**
      * @var Quote\ItemAdapterFactory
      */
-    private $quoteItemAdapterFactory;
+    protected $quoteItemAdapterFactory;
 
     /**
      * Factory constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param Order\ItemAdapterFactory $itemAdapterFactory
      * @param Quote\ItemAdapterFactory $itemAdapterFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
+        Order\ItemAdapterFactory $orderItemAdapterFactory,
         Quote\ItemAdapterFactory $quoteItemAdapterFactory
     ) {
         $this->objectManager = $objectManager;
+        $this->orderItemAdapterFactory = $orderItemAdapterFactory;
         $this->quoteItemAdapterFactory = $quoteItemAdapterFactory;
     }
 
@@ -49,9 +57,15 @@ class ItemDataObjectFactory implements ItemDataObjectFactoryInterface
     public function create($order)
     {
         if ($order instanceof OrderAdapterInterface) {
-            $data['item'] = $this->quoteItemAdapterFactory->create(
-                ['quote' => $order]
-            );
+            if ($order->getOrderIncrementId()) {
+                $data['item'] = $this->orderItemAdapterFactory->create(
+                    ['order' => $order]
+                );
+            } else {
+                $data['item'] = $this->quoteItemAdapterFactory->create(
+                    ['quote' => $order]
+                );
+            }
         }
 
         if (!isset($data)) {

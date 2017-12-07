@@ -21,35 +21,35 @@
             </avarda_checkout>
             <avarda_invoice>
                 <model>AvardaCheckoutInvoiceFacade</model>
-                <active>0</active>
+                <active>1</active>
                 <can_capture>1</can_capture>
                 <can_capture_partial>0</can_capture_partial>
                 <can_refund>1</can_refund>
             </avarda_invoice>
             <avarda_loan>
                 <model>AvardaCheckoutLoanFacade</model>
-                <active>0</active>
+                <active>1</active>
                 <can_capture>1</can_capture>
                 <can_capture_partial>0</can_capture_partial>
                 <can_refund>1</can_refund>
             </avarda_loan>
             <avarda_card>
                 <model>AvardaCheckoutCardFacade</model>
-                <active>0</active>
+                <active>1</active>
                 <can_capture>1</can_capture>
                 <can_capture_partial>0</can_capture_partial>
                 <can_refund>1</can_refund>
             </avarda_card>
             <avarda_directpayment>
                 <model>AvardaCheckoutDirectPaymentFacade</model>
-                <active>0</active>
+                <active>1</active>
                 <can_capture>1</can_capture>
                 <can_capture_partial>0</can_capture_partial>
                 <can_refund>1</can_refund>
             </avarda_directpayment>
             <avarda_partpayment>
                 <model>AvardaCheckoutPartPaymentFacade</model>
-                <active>0</active>
+                <active>1</active>
                 <can_capture>1</can_capture>
                 <can_capture_partial>0</can_capture_partial>
                 <can_refund>1</can_refund>

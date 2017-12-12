@@ -1,7 +1,6 @@
 // @flow
 import React from 'react';
 import queryString from 'query-string';
-import $ from '$i18n';
 import {bindActionCreators} from 'redux';
 import {connect, type MapStateToProps} from 'react-redux';
 import {compose} from 'redux';

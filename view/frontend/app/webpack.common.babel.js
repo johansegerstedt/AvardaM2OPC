@@ -2,6 +2,7 @@
 /* eslint-env node */
 import path from 'path';
 import {DefinePlugin} from 'webpack';
+import LodashPlugin from 'lodash-webpack-plugin';
 
 export default {
   entry: ['babel-polyfill', 'whatwg-fetch', './src/index.js'],
@@ -17,9 +18,15 @@ export default {
     jquery: 'jquery',
     AvardaCheckOutClient: 'AvardaCheckOutClient',
   },
+  devtool: 'source-map',
   plugins: [
     new DefinePlugin({
       'process.env': {},
+    }),
+    new LodashPlugin({
+      shorthands: true,
+      collections: true,
+      paths: true,
     }),
   ],
   module: {

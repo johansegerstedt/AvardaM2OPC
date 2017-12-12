@@ -5,7 +5,6 @@ import {DefinePlugin} from 'webpack';
 import common from './webpack.common.babel.js';
 
 export default merge(common, {
-  devtool: 'inline-source-map',
   plugins: [
     new DefinePlugin({
       'process.env': {

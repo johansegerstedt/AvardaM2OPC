@@ -69,3 +69,8 @@ export const getQuoteCurrency: Selector<void, *> = createSelector(
   [getCart],
   cart => cart && cart.currency.quote_currency_code,
 );
+
+export const getIsVirtual: Selector<void, boolean> = createSelector(
+  [getCart],
+  cart => Boolean(cart && cart.is_virtual),
+);

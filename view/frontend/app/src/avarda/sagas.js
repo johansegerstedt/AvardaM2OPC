@@ -7,12 +7,13 @@ import {getConfig} from '$src/config';
 import {apiGet, apiPost, getApiUrl} from '$src/m2api';
 import {ActionTypes as Cart} from '$src/cart/constants';
 import {getCartApiPath} from '$src/cart/utils';
-import {getShippingAddress} from '$src/cart/selectors';
+import {getShippingAddress, getIsVirtual} from '$src/cart/selectors';
 import {ActionTypes as ShippingActions} from '$src/shipping/constants';
 import {getSelectedMethod} from '$src/shipping/selectors';
 import {fetchShippingMethods} from '$src/shipping/api';
 import {addMessage, updateAddress, scrollToForm} from '$src/shipping/actions';
 import {
+  fetchPurchaseId as fetchPurchaseIdAction,
   receivePurchaseId,
   addressChanged as addressChangedAction,
   updatedItems,
@@ -20,7 +21,7 @@ import {
 } from './actions';
 import * as ShippingMessages from './messages';
 import {ActionTypes} from './constants';
-import {getPurchaseId} from './selectors';
+import {getPurchaseId, getIsFetching} from './selectors';
 import {DIV_ID} from './components/AvardaCheckOut';
 import type {ActionType} from 'redux-actions';
 import type {CustomerInfo} from 'AvardaCheckOutClient';
@@ -56,6 +57,9 @@ const mergeAddress = (address: BillingAddress, info: CustomerInfo) => ({
 function* addressChanged({
   payload: {result, info},
 }: ActionType<typeof addressChangedAction>) {
+  if (yield select(getIsVirtual)) {
+    return result.continue();
+  }
   const shippingAddress = yield select(getShippingAddress);
   const selectedMethod = yield select(getSelectedMethod);
   const newAddress = mergeAddress(shippingAddress, info);
@@ -82,7 +86,10 @@ function* cartUpdated() {
       // TODO: Only here until quote update also updates Avarda
       yield call(AvardaCheckOutClient.updateItems);
     }
+
     yield put(updatedItems());
+  } else if (!(yield select(getIsFetching)) && (yield select(getIsVirtual))) {
+    yield put(fetchPurchaseIdAction());
   }
 }
 

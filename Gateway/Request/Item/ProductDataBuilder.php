@@ -32,8 +32,8 @@ class ProductDataBuilder implements BuilderInterface
         $item = ItemSubjectReader::readItem($buildSubject)->getItem();
 
         return [
-            self::DESCRIPTION => $item->getName(),
-            self::NOTES => $item->getSku(),
+            self::DESCRIPTION => mb_substr($item->getName(), 0, 35),
+            self::NOTES => mb_substr($item->getSku(), 0, 35),
         ];
     }
 }

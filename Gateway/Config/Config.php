@@ -15,6 +15,7 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_TEST_MODE = 'test_mode';
     const KEY_SITE_CODE = 'site_code';
     const KEY_SITE_PASSWORD = 'site_password';
+    const KEY_ONEPAGE_REDIRECT_ACTIVE = 'onepage_redirect_active';
 
     const APPLICATION_URL_STAGE = 'https://stage.avarda.org/CheckOut2';
     const APPLICATION_URL_ONLINE = 'https://online.avarda.org/CheckOut2';
@@ -63,5 +64,13 @@ class Config extends \Magento\Payment\Gateway\Config\Config
         }
 
         return self::APPLICATION_URL_ONLINE;
+    }
+
+    /**
+     * @return bool
+     */
+    public function isOnepageRedirectActive()
+    {
+        return (bool) $this->getValue(self::KEY_ONEPAGE_REDIRECT_ACTIVE);
     }
 }

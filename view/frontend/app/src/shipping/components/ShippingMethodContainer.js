@@ -7,6 +7,7 @@ import {
   getQuoteCurrency,
   getIsCartUpdating,
   getIsCartFetching,
+  getIsVirtual,
 } from '$src/cart/selectors';
 import {
   getAddress as getShippingAddress,
@@ -37,6 +38,7 @@ type Props = {
   updateShippingAddress(BillingAddress): void,
   selectShippingMethod(ShippingMethodType): void,
   isFetchingMethods: boolean,
+  isVirtual: boolean,
   selectedShippingMethod: null | ShippingMethodType,
 };
 
@@ -62,7 +64,13 @@ class ShippingMethod extends React.Component<Props> {
       isFetchingMethods,
       selectShippingMethod,
       selectedShippingMethod,
+      isVirtual,
     } = this.props;
+
+    if (isVirtual) {
+      return null;
+    }
+
     return (
       <div className="checkout-shipping-method opc-wrapper">
         <h2 id={SHIPPING_ANCHOR_ID} className="step-title">
@@ -124,6 +132,7 @@ const mapStateToProps = state => ({
   methods: getShippingMethods(state),
   selectedShippingMethod: getSelectedMethod(state),
   messages: getMessages(state),
+  isVirtual: getIsVirtual(state),
 });
 
 const mapDispatchToProps = dispatch =>

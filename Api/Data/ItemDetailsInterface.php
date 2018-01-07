@@ -15,8 +15,24 @@ interface ItemDetailsInterface
     /**
      * Constants defined for keys of array, makes typos less likely
      */
+    const ITEM_ID = 'item_id';
     const PRODUCT_URL = 'product_url';
     const IMAGE_URL = 'image_url';
+
+    /**
+     * Get item ID
+     *
+     * @return int
+     */
+    public function getItemId();
+
+    /**
+     * Set item ID
+     *
+     * @return int $itemId
+     * @return $this
+     */
+    public function setItemId($itemId);
 
     /**
      * Get product URL

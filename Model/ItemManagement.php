@@ -75,6 +75,7 @@ class ItemManagement implements ItemManagementInterface
              * @var ItemDetailsInterface $itemDetails
              */
             $itemDetails = $this->itemDetailsFactory->create();
+            $itemDetails->setItemId($item->getItemId());
             $itemDetails->setProductUrl($this->getProductUrl($item));
 
             /**

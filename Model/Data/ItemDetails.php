@@ -18,6 +18,22 @@ class ItemDetails extends AbstractExtensibleModel implements
     /**
      * {@inheritdoc}
      */
+    public function getItemId()
+    {
+        return $this->getData(self::ITEM_ID);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function setItemId($itemId)
+    {
+        return $this->setData(self::ITEM_ID, $itemId);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getProductUrl()
     {
         return $this->getData(self::PRODUCT_URL);

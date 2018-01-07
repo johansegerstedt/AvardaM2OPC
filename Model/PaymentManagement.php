@@ -99,6 +99,16 @@ class PaymentManagement implements PaymentManagementInterface
             $this->quotePaymentManagement->freezeCart($cartId);
             $this->checkoutSession->setAvardaCartId($cartId);
         } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getItemDetailsList($cartId)
+    {
+        try {
+            return $this->quotePaymentManagement->getItemDetailsList($cartId);
+        } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
             $this->logger->error($e);
 
             throw new PaymentException(__($e->getMessage()));
@@ -106,7 +116,7 @@ class PaymentManagement implements PaymentManagementInterface
             $this->logger->error($e);
 
             throw new PaymentException(
-                __('Failed to save Avarda order. Please try again later.')
+                __('Something went wrong with Avarda checkout. Please try again later.')
             );
         }
     }

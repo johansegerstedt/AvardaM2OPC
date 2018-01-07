@@ -46,4 +46,23 @@
             <parameter name="cartId" force="true">%cart_id%</parameter>
         </data>
     </route>
+
+    <!-- Guest Avarda cart items info -->
+    <route url="/V1/guest-carts/:cartId/avarda-items" method="GET">
+        <service class="Digia\AvardaCheckout\Api\GuestPaymentManagementInterface" method="getItemDetailsList"/>
+        <resources>
+            <resource ref="anonymous" />
+        </resources>
+    </route>
+
+    <!-- Avarda cart items info -->
+    <route url="/V1/carts/mine/avarda-items" method="GET">
+        <service class="Digia\AvardaCheckout\Api\PaymentManagementInterface" method="getItemDetailsList"/>
+        <resources>
+            <resource ref="self" />
+        </resources>
+        <data>
+            <parameter name="cartId" force="true">%cart_id%</parameter>
+        </data>
+    </route>
 </routes>

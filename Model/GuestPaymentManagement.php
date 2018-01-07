@@ -111,6 +111,17 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
             );
             $this->checkoutSession->setAvardaCartId($cartId);
         } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getItemDetailsList($cartId)
+    {
+        try {
+            $quoteId = $this->getQuoteId($cartId);
+            return $this->quotePaymentManagement->getItemDetailsList($quoteId);
+        } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
             $this->logger->error($e);
 
             throw new PaymentException(__($e->getMessage()));
@@ -118,7 +129,7 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
             $this->logger->error($e);
 
             throw new PaymentException(
-                __('Failed to save Avarda order. Please try again later.')
+                __('Something went wrong with Avarda checkout. Please try again later.')
             );
         }
     }

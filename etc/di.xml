@@ -10,6 +10,7 @@
 
     <preference for="Digia\AvardaCheckout\Api\Data\PaymentDetailsInterface" type="Digia\AvardaCheckout\Model\Data\PaymentDetails" />
     <preference for="Digia\AvardaCheckout\Api\GuestPaymentManagementInterface" type="Digia\AvardaCheckout\Model\GuestPaymentManagement" />
+    <preference for="Digia\AvardaCheckout\Api\ItemStorageInterface" type="Digia\AvardaCheckout\Model\ItemStorage" />
     <preference for="Digia\AvardaCheckout\Api\PaymentManagementInterface" type="Digia\AvardaCheckout\Model\PaymentManagement" />
     <preference for="Digia\AvardaCheckout\Api\QuotePaymentManagementInterface" type="Digia\AvardaCheckout\Model\QuotePaymentManagement" />
     <preference for="Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactoryInterface" type="Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactory" />

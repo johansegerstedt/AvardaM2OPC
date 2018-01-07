@@ -58,7 +58,10 @@ class ItemsDataBuilder implements BuilderInterface
 
         $items[self::ITEMS] = [];
         foreach ($order->getItems() as $item) {
-            if (!$item->getProductId() || $item->hasParentItemId()) {
+            if (!$item->getProductId() ||
+                $item->hasParentItemId() ||
+                $item->isDeleted()
+            ) {
                 continue;
             }
 

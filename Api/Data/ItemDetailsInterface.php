@@ -1,0 +1,50 @@
+<?php
+/**
+ * @author      Digia Commerce Oy
+ * @copyright   Copyright © 2017 Digia. All rights reserved.
+ * @package     Digia_AvardaCheckout
+ */
+namespace Digia\AvardaCheckout\Api\Data;
+
+/**
+ * Interface ItemDetailsInterface
+ * @api
+ */
+interface ItemDetailsInterface
+{
+    /**
+     * Constants defined for keys of array, makes typos less likely
+     */
+    const PRODUCT_URL = 'product_url';
+    const IMAGE_URL = 'image_url';
+
+    /**
+     * Get product URL
+     *
+     * @return string
+     */
+    public function getProductUrl();
+
+    /**
+     * Set product URL
+     *
+     * @return string $productUrl
+     * @return $this
+     */
+    public function setProductUrl($productUrl);
+
+    /**
+     * Get product image URL
+     *
+     * @return string
+     */
+    public function getImageUrl();
+
+    /**
+     * Set product image URL
+     *
+     * @return string $imageUrl
+     * @return $this
+     */
+    public function setImageUrl($imageUrl);
+}

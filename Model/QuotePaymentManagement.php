@@ -157,7 +157,7 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
     /**
      * Prepare arguments for gateway commands
      *
-     * @param $cartId
+     * @param CartInterface $quote
      * @return array
      */
     protected function getCommandArguments($quote)

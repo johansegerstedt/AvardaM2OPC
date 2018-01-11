@@ -93,7 +93,7 @@ class GetPaymentStatusHandler implements HandlerInterface
         $quote->setBillingAddress($billingAddress);
 
         // Save shipping (delivery) address
-        if ($response->InvoicingFirstName === null) {
+        if ($response->DeliveryFirstName !== null) {
             /** @var \Magento\Quote\Api\Data\AddressInterface $shippingAddress */
             $shippingAddress = $this->addressFactory->create();
             $shippingAddress->setTelephone($telephone);
@@ -104,7 +104,7 @@ class GetPaymentStatusHandler implements HandlerInterface
                 $response->DeliveryAddressLine1,
                 $response->DeliveryAddressLine2 !== null ? $response->DeliveryAddressLine2 : "",
             ]);
-            $shippingAddress->setPostcode($response->DeliveryCity);
+            $shippingAddress->setPostcode($response->DeliveryZip);
             $shippingAddress->setCity($response->DeliveryCity);
             $shippingAddress->setCountryId('FI');
             $shippingAddress->setRegionId(336);

@@ -126,6 +126,27 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
     /**
      * {@inheritdoc}
      */
+    public function getItemDetailsList($cartId)
+    {
+        try {
+            $quoteId = $this->getQuoteId($cartId);
+            return $this->quotePaymentManagement->getItemDetailsList($quoteId);
+        } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
+            $this->logger->error($e);
+
+            throw new PaymentException(__($e->getMessage()));
+        } catch (\Exception $e) {
+            $this->logger->error($e);
+
+            throw new PaymentException(
+                __('Something went wrong with Avarda checkout. Please try again later.')
+            );
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function updateAndPlaceOrder($cartId)
     {
         try {

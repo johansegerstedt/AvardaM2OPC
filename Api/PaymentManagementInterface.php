@@ -16,8 +16,8 @@ interface PaymentManagementInterface
      * Get purchase ID for Avarda payment
      *
      * @param int $cartId
-     * @return \Digia\AvardaCheckout\Api\Data\PaymentDetailsInterface
      * @throws \Magento\Framework\Exception\PaymentException
+     * @return \Digia\AvardaCheckout\Api\Data\PaymentDetailsInterface
      */
     public function getPurchaseId($cartId);
 
@@ -30,6 +30,15 @@ interface PaymentManagementInterface
      * @return void
      */
     public function freezeCart($cartId);
+
+    /**
+     * Get quote items additional information not provided by Magento Webapi
+     *
+     * @param string $cartId
+     * @throws \Magento\Framework\Exception\PaymentException
+     * @return \Digia\AvardaCheckout\Api\Data\ItemDetailsListInterface
+     */
+    public function getItemDetailsList($cartId);
 
     /**
      * Update order (quote) from Avarda and save order to Magento.

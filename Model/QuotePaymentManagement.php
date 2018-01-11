@@ -18,6 +18,16 @@ use Magento\Quote\Api\Data\CartInterface;
 class QuotePaymentManagement implements QuotePaymentManagementInterface
 {
     /**
+     * @var \Digia\AvardaCheckout\Api\ItemManagementInterface $itemManagement
+     */
+    protected $itemManagement;
+
+    /**
+     * @var \Digia\AvardaCheckout\Api\ItemStorageInterface $itemStorage
+     */
+    protected $itemStorage;
+
+    /**
      * @var \Digia\AvardaCheckout\Helper\Quote
      */
     protected $quoteHelper;
@@ -45,17 +55,23 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
     /**
      * QuotePaymentManagement constructor.
      *
+     * @param \Digia\AvardaCheckout\Api\ItemManagementInterface $itemManagement
+     * @param \Digia\AvardaCheckout\Api\ItemStorageInterface $itemStorage
      * @param \Digia\AvardaCheckout\Helper\Quote $quoteHelper
      * @param \Magento\Payment\Gateway\Command\CommandPoolInterface $commandPool
      * @param PaymentDataObjectFactoryInterface $paymentDataObjectFactory
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      */
     public function __construct(
+        \Digia\AvardaCheckout\Api\ItemManagementInterface $itemManagement,
+        \Digia\AvardaCheckout\Api\ItemStorageInterface $itemStorage,
         \Digia\AvardaCheckout\Helper\Quote $quoteHelper,
         \Magento\Payment\Gateway\Command\CommandPoolInterface $commandPool,
         PaymentDataObjectFactoryInterface $paymentDataObjectFactory,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
     ) {
+        $this->itemManagement = $itemManagement;
+        $this->itemStorage = $itemStorage;
         $this->quoteHelper = $quoteHelper;
         $this->commandPool = $commandPool;
         $this->paymentDataObjectFactory = $paymentDataObjectFactory;
@@ -93,6 +109,16 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
 
         // Get purchase ID from payment additional information
         return $this->quoteHelper->getPurchaseId($quote);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getItemDetailsList($cartId)
+    {
+        $quote = $this->getQuote($cartId);
+        $this->itemStorage->setItems($quote->getItems());
+        return $this->itemManagement->getItemDetailsList();
     }
 
     /**

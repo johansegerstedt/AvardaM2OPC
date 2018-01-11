@@ -31,6 +31,14 @@ interface QuotePaymentManagementInterface
     public function initializePurchase(CartInterface $quote);
 
     /**
+     * Get quote items additional information not provided by Magento
+     *
+     * @param string $cartId
+     * @return \Digia\AvardaCheckout\Api\Data\ItemDetailsListInterface
+     */
+    public function getItemDetailsList($cartId);
+
+    /**
      * Make Avarda UpdateItems call and return purchase ID
      *
      * @param CartInterface $quote

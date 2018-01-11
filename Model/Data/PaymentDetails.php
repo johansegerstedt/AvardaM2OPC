@@ -4,7 +4,7 @@
  * @copyright   Copyright © 2017 Digia. All rights reserved.
  * @package     Digia_AvardaCheckout
  */
-namespace Digia\AvardaCheckout\Model;
+namespace Digia\AvardaCheckout\Model\Data;
 
 use Digia\AvardaCheckout\Api\Data\PaymentDetailsInterface;
 use Magento\Framework\Model\AbstractExtensibleModel;

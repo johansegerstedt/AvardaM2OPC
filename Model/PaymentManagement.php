@@ -114,6 +114,26 @@ class PaymentManagement implements PaymentManagementInterface
     /**
      * {@inheritdoc}
      */
+    public function getItemDetailsList($cartId)
+    {
+        try {
+            return $this->quotePaymentManagement->getItemDetailsList($cartId);
+        } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
+            $this->logger->error($e);
+
+            throw new PaymentException(__($e->getMessage()));
+        } catch (\Exception $e) {
+            $this->logger->error($e);
+
+            throw new PaymentException(
+                __('Something went wrong with Avarda checkout. Please try again later.')
+            );
+        }
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function updateAndPlaceOrder($cartId)
     {
         try {

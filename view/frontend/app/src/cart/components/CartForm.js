@@ -13,12 +13,18 @@ type Props = {
   updateCartItems(CartItem[]): void,
 };
 
-const TODO_HREF = "javascript: alert('TODO')";
-
 const ItemRow = ({
   currency,
   deleteItem,
-  item: {name, item_id, price_incl_tax, qty, isDeleting},
+  item: {
+    name,
+    item_id,
+    price_incl_tax,
+    qty,
+    isDeleting,
+    product_url,
+    image_url,
+  },
 }: {
   currency: string,
   deleteItem: EventHandler,
@@ -28,7 +34,7 @@ const ItemRow = ({
     <tr key="0" className="item-info">
       <td data-th={$.mage.__('Item')} className="col item">
         <a
-          href={TODO_HREF}
+          href={product_url}
           title={name}
           tabIndex={-1}
           className="product-item-photo"
@@ -40,8 +46,7 @@ const ItemRow = ({
             >
               <img
                 className="product-image-photo"
-                // TODO
-                src="/static/version1510299755/frontend/Magento/luma/fi_FI/Magento_Catalog/images/product/placeholder/small_image.jpg"
+                src={image_url}
                 width={165}
                 height={165}
                 alt={name}
@@ -51,7 +56,7 @@ const ItemRow = ({
         </a>
         <div className="product-item-details">
           <strong className="product-item-name">
-            <a href={TODO_HREF}>{name}</a>
+            <a href={product_url}>{name}</a>
           </strong>
         </div>
       </td>

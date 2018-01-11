@@ -143,6 +143,8 @@ export type CartItem = {
   options: string,
   weee_tax_applied_amount: null | number,
   weee_tax_applied: null | number,
+  product_url: string,
+  image_url: string,
 };
 
 export type Items1 = {

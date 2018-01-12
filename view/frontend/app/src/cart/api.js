@@ -9,10 +9,11 @@ import type {NormalizedCart} from './types';
 export const fetchCart = async (): Promise<NormalizedCart> => {
   const url = getApiUrl(getCartApiPath());
 
-  const [cart, totals] = await Promise.all([
+  const [cart, totals, items] = await Promise.all([
     apiGet(url),
     apiGet(`${url}/totals`),
+    apiGet(`${url}/avarda-items`),
   ]);
-  const data = merge({}, cart, totals);
+  const data = merge({}, cart, totals, items);
   return normalize(data, cartSchema);
 };

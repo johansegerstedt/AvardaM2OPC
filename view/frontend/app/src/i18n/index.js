@@ -2,7 +2,7 @@
 import jQuery from 'jquery';
 // eslint-disable-next-line no-unused-vars
 import _mageTranslate from 'mage/translate';
-import sanitize from 'sanitize-caja';
+import sanitize from '@mapbox/sanitize-caja';
 import {compose} from 'redux';
 import type {Interpolate, InterpolateHTML} from './types';
 

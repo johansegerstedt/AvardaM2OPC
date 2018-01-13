@@ -15,7 +15,9 @@ export default {
   },
   externals: {
     'mage/translate': 'mage/translate',
+    'mage/url': 'mage/url',
     jquery: 'jquery',
+    knockout: 'knockout',
     AvardaCheckOutClient: 'AvardaCheckOutClient',
   },
   devtool: 'source-map',

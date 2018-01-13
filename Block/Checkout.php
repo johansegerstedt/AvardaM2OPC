@@ -10,8 +10,9 @@ use Digia\AvardaCheckout\Gateway\Config\Config;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Checkout\Block\Onepage;
 
-class Checkout extends Template
+class Checkout extends Onepage
 {
     /**
      * @var \Magento\Checkout\Model\Session
@@ -43,13 +44,16 @@ class Checkout extends Template
      * @param array $data
      */
     public function __construct(
-        Context $context,
+        \Magento\Framework\View\Element\Template\Context $context,
+        \Magento\Framework\Data\Form\FormKey $formKey,
+        \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
+        array $layoutProcessors = [],
+        array $data = [],
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
-        Config $config,
-        array $data = []
+        Config $config
     ) {
-        parent::__construct($context, $data);
+        parent::__construct($context,$formKey, $configProvider, $layoutProcessors, $data);
         $this->checkoutSession = $checkoutSession;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->config = $config;

@@ -3,6 +3,8 @@ import React from 'react';
 import {isEqual} from 'lodash';
 import {formatCurrency} from '$src/utils/format';
 import Loader from '$src/utils/components/Loader';
+import AdditionalContent from '$src/utils/components/AdditionalContent';
+import {REGION_KEYS} from '$src/additionalContent';
 import $ from '$i18n';
 import type {BillingAddress} from '$src/cart/types';
 import type {ShippingMethod} from '../types';
@@ -151,7 +153,10 @@ class ShippingMethodForm extends React.Component<Props> {
               </tbody>
             </table>
           </div>
-          <div id="onepage-checkout-shipping-method-additional-load" />
+          <AdditionalContent
+            id="onepage-checkout-shipping-method-additional-load"
+            region={REGION_KEYS.SHIPPING}
+          />
         </form>
       </Loader>
     );

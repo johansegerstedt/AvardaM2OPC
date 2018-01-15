@@ -25,6 +25,11 @@ class ItemDataObjectFactory implements ItemDataObjectFactoryInterface
     protected $objectManager;
 
     /**
+     * @var Data\ItemAdapterFactory
+     */
+    protected $dataItemAdapterFactory;
+
+    /**
      * @var Order\ItemAdapterFactory
      */
     protected $orderItemAdapterFactory;
@@ -38,15 +43,18 @@ class ItemDataObjectFactory implements ItemDataObjectFactoryInterface
      * Factory constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param Order\ItemAdapterFactory $itemAdapterFactory
-     * @param Quote\ItemAdapterFactory $itemAdapterFactory
+     * @param Data\ItemAdapterFactory $dataItemAdapterFactory
+     * @param Order\ItemAdapterFactory $orderItemAdapterFactory
+     * @param Quote\ItemAdapterFactory $quoteItemAdapterFactory
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
+        Data\ItemAdapterFactory $dataItemAdapterFactory,
         Order\ItemAdapterFactory $orderItemAdapterFactory,
         Quote\ItemAdapterFactory $quoteItemAdapterFactory
     ) {
         $this->objectManager = $objectManager;
+        $this->dataItemAdapterFactory = $dataItemAdapterFactory;
         $this->orderItemAdapterFactory = $orderItemAdapterFactory;
         $this->quoteItemAdapterFactory = $quoteItemAdapterFactory;
     }
@@ -56,7 +64,11 @@ class ItemDataObjectFactory implements ItemDataObjectFactoryInterface
      */
     public function create($order)
     {
-        if ($order instanceof OrderAdapterInterface) {
+        if (is_array($order)) {
+            $data['item'] = $this->dataItemAdapterFactory->create(
+                ['data' => $order]
+            );
+        } elseif ($order instanceof OrderAdapterInterface) {
             if ($order->getOrderIncrementId()) {
                 $data['item'] = $this->orderItemAdapterFactory->create(
                     ['order' => $order]

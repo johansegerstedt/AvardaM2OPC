@@ -6,6 +6,7 @@
  */
 namespace Digia\AvardaCheckout\Gateway\Request;
 
+use Digia\AvardaCheckout\Api\ItemStorageInterface;
 use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactoryInterface;
 use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
@@ -25,6 +26,11 @@ class ItemsDataBuilder implements BuilderInterface
     const ITEMS = 'Items';
 
     /**
+     * @var ItemStorageInterface
+     */
+    protected $itemStorage;
+
+    /**
      * @var ItemDataObjectFactoryInterface
      */
     protected $itemDataObjectFactory;
@@ -41,9 +47,11 @@ class ItemsDataBuilder implements BuilderInterface
      * @param BuilderInterface $itemBuilder
      */
     public function __construct(
+        ItemStorageInterface $itemStorage,
         ItemDataObjectFactoryInterface $itemDataObjectFactory,
         BuilderInterface $itemBuilder
     ) {
+        $this->itemStorage = $itemStorage;
         $this->itemDataObjectFactory = $itemDataObjectFactory;
         $this->itemBuilder = $itemBuilder;
     }
@@ -56,10 +64,19 @@ class ItemsDataBuilder implements BuilderInterface
         $paymentDO = SubjectReader::readPayment($buildSubject);
         $order = $paymentDO->getOrder();
 
+        $preparedItems = $this->itemStorage->getItems();
+        if (count($preparedItems) == 0) {
+            $preparedItems = $order->getItems();
+        }
+
         $items[self::ITEMS] = [];
-        foreach ($order->getItems() as $item) {
-            if (!$item->getProductId() ||
+        foreach ($preparedItems as $item) {
+            if ($item instanceof ItemDataObjectInterface) {
+                $items[self::ITEMS][] = $item;
+                continue;
+            } elseif (!$item->getProductId() ||
                 $item->hasParentItemId() ||
+                $item->getBaseRowTotal() === null ||
                 $item->isDeleted()
             ) {
                 continue;

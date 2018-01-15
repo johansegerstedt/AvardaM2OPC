@@ -20,9 +20,14 @@
     <preference for="Digia\AvardaCheckout\Gateway\Data\ItemDataObjectInterface" type="Digia\AvardaCheckout\Gateway\Data\ItemDataObject" />
     <preference for="Magento\Checkout\Controller\Index\Index" type="Digia\AvardaCheckout\Preference\Magento\Checkout\Controller\Index\Index" />
 
-    <type name="Magento\Quote\Model\Quote">
-        <plugin name="avardaCollectTotals" type="Digia\AvardaCheckout\Plugin\Model\Quote\CollectTotals" />
+    <!-- Avarda plugins -->
+    <type name="Magento\Quote\Api\Data\CartInterface">
+        <plugin name="avardaCollectTotals" type="Digia\AvardaCheckout\Plugin\Model\Quote\QuoteCollectTotals" />
     </type>
+    <type name="Magento\Sales\Api\Data\InvoiceInterface">
+        <plugin name="avardaCaptureInvoice" type="Digia\AvardaCheckout\Plugin\Model\Sales\Order\InvoiceCapture" />
+    </type>
+    <!-- END Avarda plugins -->
 
     <!-- Avarda payment methods -->
     <virtualType name="AvardaCheckoutFacade" type="Magento\Payment\Model\Method\Adapter">
@@ -179,7 +184,6 @@
             <argument name="builders" xsi:type="array">
                 <item name="external_id" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\ExternalIdDataBuilder</item>
                 <item name="items" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\ItemsDataBuilder</item>
-                <item name="shipping_item" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\ShippingItemDataBuilder</item>
                 <item name="order_reference" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\OrderReferenceDataBuilder</item>
             </argument>
         </arguments>

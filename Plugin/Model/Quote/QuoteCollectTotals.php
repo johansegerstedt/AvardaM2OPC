@@ -6,10 +6,10 @@
  */
 namespace Digia\AvardaCheckout\Plugin\Model\Quote;
 
-use \Magento\Quote\Api\Data\CartInterface;
-use \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface;
+use Magento\Quote\Api\Data\CartInterface;
+use Digia\AvardaCheckout\Api\QuotePaymentManagementInterface;
 
-class CollectTotals
+class QuoteCollectTotals
 {
     /**
      * @var \Psr\Log\LoggerInterface $logger

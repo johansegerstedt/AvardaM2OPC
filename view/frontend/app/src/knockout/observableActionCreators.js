@@ -12,7 +12,7 @@ const subscriptions: * = [
     observable: quote.shippingAddress,
     actionCreator: (address: ?Object) => {
       const formattedAddress: BillingAddress = AddressConverter.quoteAddressToFormAddressData(
-        address,
+        {...address}, // converter mutates the parameter...
       );
       return updateAddress(formattedAddress);
     },

@@ -3,7 +3,11 @@ import $ from 'jquery';
 import _mageTranslate from 'mage/translate'; // eslint-disable-line no-unused-vars
 import {takeLatest} from 'redux-saga';
 import {call, put, select} from 'redux-saga/effects';
-import {find, head} from 'lodash';
+import {find, head, isEqual} from 'lodash';
+import newCustomerAddress from 'Magento_Checkout/js/model/new-customer-address';
+import selectShippingAddress from 'Magento_Checkout/js/action/select-shipping-address';
+import selectShippingMethod from 'Magento_Checkout/js/action/select-shipping-method';
+import setShippingInformation from 'Magento_Checkout/js/action/set-shipping-information';
 import {MessageTypes} from '$src/utils/components/Message';
 import {apiPost, getApiUrl} from '$src/m2api';
 import {getCartApiPath} from '$src/cart/utils';
@@ -53,7 +57,18 @@ function* receiveShipping({
   }
 }
 
-function* updateAddress() {
+function* updateAddress({payload: address}) {
+  const emptyStreetFix = (obj: {street?: ?(string[])} = {}) => {
+    const result = {...obj};
+    if (
+      result.street &&
+      (result.street.length === 0 || isEqual([''], result.street))
+    ) {
+      result.street = undefined;
+    }
+    return result;
+  };
+  selectShippingAddress(newCustomerAddress(emptyStreetFix(address)));
   yield put(getMethodsAction());
 }
 
@@ -79,7 +94,8 @@ function* selectMethod({
     carrier_code: shipping_carrier_code,
     method_code: shipping_method_code,
   } = method;
-
+  selectShippingMethod(method);
+  setShippingInformation();
   yield put(
     saveShippingInformation({
       shipping_address,

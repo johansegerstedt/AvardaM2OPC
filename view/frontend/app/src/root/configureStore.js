@@ -2,17 +2,22 @@
 import {applyMiddleware, createStore, compose} from 'redux';
 import createSagaMiddleware from 'redux-saga';
 import avardaMiddleware from '$src/avarda/middleware';
+import {koSubscriptions} from '$src/utils/redux-knockout';
+import observableActionCreators from '$src/knockout/observableActionCreators';
 import rootSaga from './rootSaga';
 import rootReducer from './rootReducer';
 
 const configureStore = () => {
   const sagaMiddleware = createSagaMiddleware();
-  const composeEnhancers =
+  const composeEnhancers: Function =
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
   const store = createStore(
     rootReducer,
-    composeEnhancers(applyMiddleware(sagaMiddleware, avardaMiddleware)),
+    composeEnhancers(
+      applyMiddleware(sagaMiddleware, avardaMiddleware),
+      koSubscriptions(observableActionCreators),
+    ),
   );
 
   sagaMiddleware.run(rootSaga);

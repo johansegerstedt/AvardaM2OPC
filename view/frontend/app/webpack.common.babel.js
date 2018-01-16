@@ -14,11 +14,22 @@ export default {
     libraryTarget: 'amd',
   },
   externals: {
-    'mage/translate': 'mage/translate',
-    'mage/url': 'mage/url',
+    AvardaCheckOutClient: 'AvardaCheckOutClient',
     jquery: 'jquery',
     knockout: 'knockout',
-    AvardaCheckOutClient: 'AvardaCheckOutClient',
+    'mage/translate': 'mage/translate',
+    'mage/url': 'mage/url',
+    'Magento_Checkout/js/action/select-shipping-address':
+      'Magento_Checkout/js/action/select-shipping-address',
+    'Magento_Checkout/js/action/select-shipping-method':
+      'Magento_Checkout/js/action/select-shipping-method',
+    'Magento_Checkout/js/action/set-shipping-information':
+      'Magento_Checkout/js/action/set-shipping-information',
+    'Magento_Checkout/js/model/address-converter':
+      'Magento_Checkout/js/model/address-converter',
+    'Magento_Checkout/js/model/new-customer-address':
+      'Magento_Checkout/js/model/new-customer-address',
+    'Magento_Checkout/js/model/quote': 'Magento_Checkout/js/model/quote',
   },
   devtool: 'source-map',
   plugins: [

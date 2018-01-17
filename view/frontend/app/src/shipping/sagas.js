@@ -10,8 +10,6 @@ import selectShippingAddress from 'Magento_Checkout/js/action/select-shipping-ad
 import selectShippingMethod from 'Magento_Checkout/js/action/select-shipping-method';
 import setShippingInformation from 'Magento_Checkout/js/action/set-shipping-information';
 import {MessageTypes} from '$src/utils/components/Message';
-import {apiPost, getApiUrl} from '$src/m2api';
-import {getCartApiPath} from '$src/cart/utils';
 import {ActionTypes as Shipping} from './constants';
 import {ActionTypes as Cart} from '$src/cart/constants';
 import {fetchCartSuccess as fetchCartSuccessAction} from '$src/cart/actions';
@@ -22,7 +20,6 @@ import {
   receiveSelectedMethod,
   receiveShippingAssignment,
   receiveMethods,
-  saveShippingInformation,
   saveShippingInformationSuccess,
   selectMethod as selectMethodAction,
   updateAddress as updateAddressAction,
@@ -81,7 +78,6 @@ function* getMethods() {
 function* selectMethod({
   payload: method,
 }: ActionType<typeof selectMethodAction>) {
-  const shipping_address = yield call([quote, quote.shippingAddress]);
   if (!method.available) {
     return yield put(
       addMessage({
@@ -90,27 +86,19 @@ function* selectMethod({
       }),
     );
   }
-  const {
-    carrier_code: shipping_carrier_code,
-    method_code: shipping_method_code,
-  } = method;
+
   selectShippingMethod(method);
-  setShippingInformation();
-  yield put(
-    saveShippingInformation({
-      shipping_address,
-      shipping_carrier_code,
-      shipping_method_code,
-    }),
-  );
+  // yield put(
+  //   saveShippingInformation({
+  //     shipping_address,
+  //     shipping_carrier_code,
+  //     shipping_method_code,
+  //   }),
+  // );
 }
 
-function* saveInformation({
-  payload: addressInformation,
-}: ActionType<typeof saveShippingInformation>) {
-  yield call(apiPost, getApiUrl(`${getCartApiPath()}/shipping-information`), {
-    addressInformation,
-  });
+function* saveInformation() {
+  setShippingInformation();
   yield put(saveShippingInformationSuccess());
 }
 

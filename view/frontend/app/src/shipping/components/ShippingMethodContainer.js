@@ -23,6 +23,7 @@ import ShippingMethodForm from './ShippingMethodForm';
 import ShippingAddressForm from './ShippingAddressForm';
 import {updateAddress, getMethods, selectMethod} from '../actions';
 import {SHIPPING_ANCHOR_ID} from '../constants';
+import {saveShippingInformation} from '../actions';
 import type {BillingAddress} from '$src/cart/types';
 import type {MessageState} from '$src/utils/types';
 import type {ShippingMethod as ShippingMethodType} from '../types';
@@ -37,6 +38,7 @@ type Props = {
     address: BillingAddress,
   }): void,
   updateShippingAddress(BillingAddress): void,
+  saveShippingInformation(): void,
   selectShippingMethod(ShippingMethodType): void,
   isFetchingMethods: boolean,
   isVirtual: boolean,
@@ -63,6 +65,7 @@ class ShippingMethod extends React.Component<Props> {
       messages,
       methods,
       isFetchingMethods,
+      saveShippingInformation,
       selectShippingMethod,
       selectedShippingMethod,
       isVirtual,
@@ -116,6 +119,7 @@ class ShippingMethod extends React.Component<Props> {
               fetchShippingMethods={this.fetchShippingMethods}
               updateShippingAddress={updateShippingAddress}
               isFetchingMethods={isFetchingMethods}
+              saveShippingInformation={saveShippingInformation}
             />
           ) : null}
         </div>
@@ -141,6 +145,7 @@ const mapDispatchToProps = dispatch =>
       estimateShippingMethods: getMethods,
       updateShippingAddress: updateAddress,
       selectShippingMethod: selectMethod,
+      saveShippingInformation,
     },
     dispatch,
   );

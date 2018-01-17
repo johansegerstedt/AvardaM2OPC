@@ -82,6 +82,7 @@ type Props = {
   selectedShippingMethod: null | ShippingMethod,
   fetchShippingMethods(BillingAddress): void,
   selectShippingMethod(ShippingMethod): void,
+  saveShippingInformation(): void,
   currency: string,
   methods: null | ShippingMethod[],
   isFetchingMethods: boolean,
@@ -92,6 +93,13 @@ class ShippingMethodForm extends React.Component<Props> {
     estimateShippingMethods: () => {},
     selectShippingMethod: () => {},
     isFetchingMethods: false,
+  };
+
+  handleSubmit = (submitEvent: Event) => {
+    const {saveShippingInformation} = this.props;
+    submitEvent.preventDefault();
+
+    saveShippingInformation();
   };
 
   render() {
@@ -115,6 +123,7 @@ class ShippingMethodForm extends React.Component<Props> {
           className="form methods-shipping"
           id="co-shipping-method-form"
           noValidate="novalidate"
+          onSubmit={this.handleSubmit}
         >
           <div id="checkout-shipping-method-load">
             <table className="table-checkout-shipping-method">
@@ -157,6 +166,7 @@ class ShippingMethodForm extends React.Component<Props> {
             id="onepage-checkout-shipping-method-additional-load"
             region={REGION_KEYS.SHIPPING}
           />
+          <button type="submit">{$.mage.__('Save shipping method')}</button>
         </form>
       </Loader>
     );

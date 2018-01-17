@@ -32,7 +32,6 @@ export type ShippingMethod =
 
 export type ShippingMethodState = {
   methods: ShippingMethod[] | null,
-  selectedMethod: null | ShippingMethod,
   isFetching: boolean,
   isSelecting: boolean,
   messages: null | MessageState[],

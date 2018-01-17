@@ -14,7 +14,6 @@ import {
 import {
   getShippingMethods,
   getIsFetchingShippingMethods,
-  getSelectedMethod,
   getMessages,
 } from '../selectors';
 import {Message, Messages} from '$src/utils/components/Message';
@@ -134,7 +133,6 @@ const mapStateToProps = state => ({
   isFetching: getIsCartFetching(state),
   isFetchingMethods: getIsFetchingShippingMethods(state),
   methods: getShippingMethods(state),
-  selectedShippingMethod: getSelectedMethod(state),
   messages: getMessages(state),
   isVirtual: getIsVirtual(state),
 });
@@ -155,5 +153,6 @@ export default compose(
   connector,
   subscribe({
     shippingAddress: quote.shippingAddress,
+    selectedShippingMethod: quote.shippingMethod,
   }),
 )(ShippingMethod);

@@ -10,7 +10,6 @@ import {ActionTypes as Cart} from '$src/cart/constants';
 import {getCartApiPath} from '$src/cart/utils';
 import {getIsVirtual} from '$src/cart/selectors';
 import {ActionTypes as ShippingActions} from '$src/shipping/constants';
-import {getSelectedMethod} from '$src/shipping/selectors';
 import {fetchShippingMethods} from '$src/shipping/api';
 import {addMessage, updateAddress, scrollToForm} from '$src/shipping/actions';
 import {
@@ -62,7 +61,7 @@ function* addressChanged({
     return result.continue();
   }
   const shippingAddress = yield call([quote, quote.shippingAddress]);
-  const selectedMethod = yield select(getSelectedMethod);
+  const selectedMethod = yield call([quote, quote.shippingMethod]);
   const newAddress = mergeAddress(shippingAddress, info);
   const methods = yield call(fetchShippingMethods, newAddress);
 

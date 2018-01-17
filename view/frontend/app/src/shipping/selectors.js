@@ -20,11 +20,6 @@ export const getIsUpdatingShippingMethods: Selector<
   boolean,
 > = createSelector([getShippingMethodState], ({isSelecting}) => isSelecting);
 
-export const getSelectedMethod: Selector<void, *> = createSelector(
-  [getShippingMethodState],
-  ({selectedMethod}) => selectedMethod,
-);
-
 export const getMessages: Selector<void, *> = createSelector(
   [getShippingMethodState],
   ({messages}) => messages,

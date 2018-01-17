@@ -2,8 +2,9 @@
 import $ from 'jquery';
 import _mageTranslate from 'mage/translate'; // eslint-disable-line no-unused-vars
 import {takeLatest} from 'redux-saga';
-import {call, put, select} from 'redux-saga/effects';
+import {call, put} from 'redux-saga/effects';
 import {find, head, isEqual} from 'lodash';
+import quote from 'Magento_Checkout/js/model/quote';
 import newCustomerAddress from 'Magento_Checkout/js/model/new-customer-address';
 import selectShippingAddress from 'Magento_Checkout/js/action/select-shipping-address';
 import selectShippingMethod from 'Magento_Checkout/js/action/select-shipping-method';
@@ -26,7 +27,6 @@ import {
   selectMethod as selectMethodAction,
   updateAddress as updateAddressAction,
 } from './actions';
-import {getAddress} from './selectors';
 import {fetchShippingMethods as apiFetchShippingMethods} from './api';
 import {SHIPPING_ANCHOR_ID} from './constants';
 import type {ActionType} from 'redux-actions';
@@ -73,7 +73,7 @@ function* updateAddress({payload: address}) {
 }
 
 function* getMethods() {
-  const address = yield select(getAddress);
+  const address = yield call([quote, quote.shippingAddress]);
   const methods = yield call(apiFetchShippingMethods, address);
   yield put(receiveMethods(methods));
 }
@@ -81,7 +81,7 @@ function* getMethods() {
 function* selectMethod({
   payload: method,
 }: ActionType<typeof selectMethodAction>) {
-  const shipping_address = yield select(getAddress);
+  const shipping_address = yield call([quote, quote.shippingAddress]);
   if (!method.available) {
     return yield put(
       addMessage({

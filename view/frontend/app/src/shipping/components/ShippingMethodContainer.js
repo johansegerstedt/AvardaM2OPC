@@ -1,8 +1,10 @@
 // @flow
 import React from 'react';
-import {bindActionCreators} from 'redux';
+import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
 import $ from '$i18n';
+import quote from 'Magento_Checkout/js/model/quote';
+import subscribe from '$src/knockout/components/subscribe';
 import {
   getQuoteCurrency,
   getIsCartUpdating,
@@ -10,7 +12,6 @@ import {
   getIsVirtual,
 } from '$src/cart/selectors';
 import {
-  getAddress as getShippingAddress,
   getShippingMethods,
   getIsFetchingShippingMethods,
   getSelectedMethod,
@@ -125,7 +126,6 @@ class ShippingMethod extends React.Component<Props> {
 
 const mapStateToProps = state => ({
   currency: getQuoteCurrency(state),
-  shippingAddress: getShippingAddress(state),
   isUpdating: getIsCartUpdating(state),
   isFetching: getIsCartFetching(state),
   isFetchingMethods: getIsFetchingShippingMethods(state),
@@ -146,4 +146,9 @@ const mapDispatchToProps = dispatch =>
   );
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
-export default connector(ShippingMethod);
+export default compose(
+  connector,
+  subscribe({
+    shippingAddress: quote.shippingAddress,
+  }),
+)(ShippingMethod);

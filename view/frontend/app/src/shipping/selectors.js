@@ -5,11 +5,6 @@ import type {Selector} from '$src/root/types';
 export const getShippingMethodState: Selector<void, *> = state =>
   state.shippingMethods;
 
-export const getAddress: Selector<void, *> = createSelector(
-  [getShippingMethodState],
-  ({address}) => address,
-);
-
 export const getShippingMethods: Selector<void, *> = createSelector(
   [getShippingMethodState],
   ({methods}) => methods,

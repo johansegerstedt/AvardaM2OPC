@@ -6,17 +6,15 @@
  */
 namespace Digia\AvardaCheckout\Gateway\Request;
 
-use Digia\AvardaCheckout\Api\ItemStorageInterface;
 use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactoryInterface;
-use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectInterface;
-use Magento\Framework\Exception\PaymentException;
+use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Helper\Formatter;
 
 /**
- * Class AmountDataBuilder
+ * Class GiftCardsDataBuilder
  */
-class ItemsDataBuilder implements BuilderInterface
+class GiftCardsDataBuilder implements BuilderInterface
 {
     use Formatter;
 
@@ -24,11 +22,6 @@ class ItemsDataBuilder implements BuilderInterface
      * The amount to add to the payment
      */
     const ITEMS = 'Items';
-
-    /**
-     * @var ItemStorageInterface
-     */
-    protected $itemStorage;
 
     /**
      * @var ItemDataObjectFactoryInterface
@@ -41,17 +34,15 @@ class ItemsDataBuilder implements BuilderInterface
     protected $itemBuilder;
 
     /**
-     * ItemsDataBuilder constructor.
+     * ShippingItemDataBuilder constructor.
      *
      * @param ItemDataObjectFactoryInterface $itemDataObjectFactory
      * @param BuilderInterface $itemBuilder
      */
     public function __construct(
-        ItemStorageInterface $itemStorage,
         ItemDataObjectFactoryInterface $itemDataObjectFactory,
         BuilderInterface $itemBuilder
     ) {
-        $this->itemStorage = $itemStorage;
         $this->itemDataObjectFactory = $itemDataObjectFactory;
         $this->itemBuilder = $itemBuilder;
     }
@@ -61,26 +52,24 @@ class ItemsDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject)
     {
-        $preparedItems = $this->itemStorage->getItems();
-        if (count($preparedItems) == 0) {
-            throw new PaymentException(
-                __('Could not generate items for Avarda checkout.')
-            );
+        $paymentDO = SubjectReader::readPayment($buildSubject);
+
+        $order = $paymentDO->getOrder();
+        $result = [];
+
+        $shippingAddress = $order->getShippingAddress();
+        if ($shippingAddress) {
+            $itemDO = $this->itemDataObjectFactory->create($order);
+            $item = $itemDO->getItem();
+
+            $itemSubject['item'] = $itemDO;
+            $itemSubject['amount'] = $this->formatPrice($item->getRowTotalInclTax());
+            $itemSubject['tax_amount'] = $this->formatPrice($item->getTaxAmount());
+
+            $result[self::ITEMS][20000] =
+                (object) $this->itemBuilder->build($itemSubject);
         }
 
-        $items[self::ITEMS] = [];
-        foreach ($preparedItems as $preparedItem) {
-            if (!$preparedItem instanceof ItemDataObjectInterface) {
-                throw new PaymentException(
-                    __('Could not generate items for Avarda checkout.')
-                );
-            }
-
-            $items[self::ITEMS][] = (object) $this->itemBuilder->build(
-                $preparedItem->getSubject()
-            );
-        }
-
-        return $items;
+        return $result;
     }
 }

@@ -18,6 +18,7 @@ class Quote
      * Get purchase ID from quote payment
      *
      * @param CartInterface $payment
+     * @deprecated 0.2.0
      * @return string|bool
      */
     public function getPurchaseId(CartInterface $quote)

@@ -22,9 +22,14 @@ class QuoteCollectTotals
     protected $quotePaymentManagement;
 
     /**
-     * @var \Digia\AvardaCheckout\Helper\Quote
+     * @var \Digia\AvardaCheckout\Helper\PaymentData
      */
-    protected $quoteHelper;
+    protected $paymentDataHelper;
+
+    /**
+     * @var array
+     */
+    protected $builder;
 
     /**
      * @var bool
@@ -32,20 +37,22 @@ class QuoteCollectTotals
     protected $collectTotalsFlag = false;
 
     /**
-     * CollectTotals constructor.
+     * QuoteCollectTotals constructor.
      *
      * @param \Psr\Log\LoggerInterface $logger
      * @param QuotePaymentManagementInterface $quotePaymentManagement
-     * @param \Digia\AvardaCheckout\Helper\Quote $quoteHelper
+     * @param \Digia\AvardaCheckout\Helper\PaymentData $paymentDataHelper
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         QuotePaymentManagementInterface $quotePaymentManagement,
-        \Digia\AvardaCheckout\Helper\Quote $quoteHelper
+        \Digia\AvardaCheckout\Helper\PaymentData $paymentDataHelper,
+        $builder = null
     ) {
         $this->logger = $logger;
         $this->quotePaymentManagement = $quotePaymentManagement;
-        $this->quoteHelper = $quoteHelper;
+        $this->paymentDataHelper = $paymentDataHelper;
+        $this->builder = $builder;
     }
 
     /**
@@ -58,9 +65,11 @@ class QuoteCollectTotals
     public function afterCollectTotals(CartInterface $subject, CartInterface $result)
     {
         try {
+            $payment = $subject->getPayment();
             if (!$this->collectTotalsFlag &&
-                $this->quoteHelper->getPurchaseId($subject)
+                $this->paymentDataHelper->isAvardaPayment($payment)
             ) {
+                $this->buildItemStorage($subject);
                 $this->quotePaymentManagement->updateItems($subject);
                 $this->collectTotalsFlag = true;
             }
@@ -69,5 +78,43 @@ class QuoteCollectTotals
         }
 
         return $result;
+    }
+
+    /**
+     * Populate the item storage with Avarda items needed for request building
+     *
+     * @param CartInterface $subject
+     */
+    protected function buildItemStorage(CartInterface $subject)
+    {
+        $this->buildItems($subject);
+    }
+
+    /**
+     * Populate the item storage with Avarda items needed for request building
+     *
+     * @param CartInterface $subject
+     */
+    protected function buildItems(CartInterface $subject)
+    {
+        foreach ($subject->getItems() as $item) {
+            if (!$item->getProductId() ||
+                $item->hasParentItemId() ||
+                $item->isDeleted()
+            ) {
+                continue;
+            }
+
+
+            /*$itemSubject['item'] = $itemDO;
+            $itemSubject['amount'] = $this->formatPrice(
+                $item->getRowTotalInclTax() - $item->getDiscountAmount()
+            );
+            $itemSubject['tax_amount'] = $this->formatPrice(
+                $item->getTaxAmount()
+                + $item->getHiddenTaxAmount()
+                + $item->getWeeeTaxAppliedAmount()
+            );*/
+        }
     }
 }

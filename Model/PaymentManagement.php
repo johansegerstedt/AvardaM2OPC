@@ -62,7 +62,7 @@ class PaymentManagement implements PaymentManagementInterface
         $this->paymentDetailsFactory = $paymentDetailsFactory;
         $this->quotePaymentManagement = $quotePaymentManagement;
         $this->checkoutSession = $checkoutSession;
-        $this->quotePaymentManagement = $cartManagement;
+        $this->cartManagement = $cartManagement;
     }
 
     /**

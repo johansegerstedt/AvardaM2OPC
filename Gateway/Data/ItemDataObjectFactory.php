@@ -56,26 +56,13 @@ class ItemDataObjectFactory implements ItemDataObjectFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create($item)
+    public function create($data)
     {
-        if ($item instanceof InvoiceItemInterface ||
-            $item instanceof CreditmemoItemInterface
+        if (array_key_exists('item', $data) &&
+            array_key_exists('qty', $data) &&
+            array_key_exists('amount', $data) &&
+            array_key_exists('tax_amount', $data)
         ) {
-            $orderItem = $item->getOrderItem();
-            $data['item'] = $this->orderItemAdapterFactory->create(
-                ['orderItem' => $orderItem]
-            );
-        } elseif ($item instanceof OrderItemInterface) {
-            $data['item'] = $this->orderItemAdapterFactory->create(
-                ['orderItem' => $item]
-            );
-        } elseif ($item instanceof CartItemInterface) {
-            $data['item'] = $this->quoteItemAdapterFactory->create(
-                ['quoteItem' => $item]
-            );
-        }
-
-        if (!isset($data)) {
             throw new \Magento\Payment\Gateway\Command\CommandException(
                 __('Failed to build item data.')
             );

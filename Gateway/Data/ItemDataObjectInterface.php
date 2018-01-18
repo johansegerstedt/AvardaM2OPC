@@ -14,9 +14,16 @@ namespace Digia\AvardaCheckout\Gateway\Data;
 interface ItemDataObjectInterface
 {
     /**
-     * Returns order
+     * Returns order item
      *
      * @return ItemAdapterInterface
      */
     public function getItem();
+
+    /**
+     * Returns subject data for builders
+     *
+     * @return array
+     */
+    public function getSubject();
 }

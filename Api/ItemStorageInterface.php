@@ -6,6 +6,8 @@
  */
 namespace Digia\AvardaCheckout\Api;
 
+use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectInterface;
+
 /**
  * Interface for storing Avarda item information
  * @api
@@ -13,13 +15,19 @@ namespace Digia\AvardaCheckout\Api;
 interface ItemStorageInterface
 {
     /**
-     * @param \Magento\Quote\Api\Data\CartItemInterface[]|null $items
+     * @param ItemDataObjectInterface[] $items
      * @return $this
      */
     public function setItems($items);
 
     /**
-     * @return \Magento\Quote\Api\Data\CartItemInterface[]
+     * @param ItemDataObjectInterface $item
+     * @return $this
+     */
+    public function addItem(ItemDataObjectInterface $item);
+
+    /**
+     * @return ItemDataObjectInterface[]
      */
     public function getItems();
 }

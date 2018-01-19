@@ -6,10 +6,10 @@
  */
 namespace Digia\AvardaCheckout\Plugin\Model\Quote;
 
-use Magento\Quote\Api\Data\CartInterface;
 use Digia\AvardaCheckout\Api\QuotePaymentManagementInterface;
+use Magento\Quote\Api\Data\CartInterface;
 
-class QuoteCollectTotals
+class QuoteCollectTotalsUpdateItems
 {
     /**
      * @var \Psr\Log\LoggerInterface $logger
@@ -27,11 +27,6 @@ class QuoteCollectTotals
     protected $paymentDataHelper;
 
     /**
-     * @var array
-     */
-    protected $builder;
-
-    /**
      * @var bool
      */
     protected $collectTotalsFlag = false;
@@ -46,13 +41,11 @@ class QuoteCollectTotals
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         QuotePaymentManagementInterface $quotePaymentManagement,
-        \Digia\AvardaCheckout\Helper\PaymentData $paymentDataHelper,
-        $builder = null
+        \Digia\AvardaCheckout\Helper\PaymentData $paymentDataHelper
     ) {
         $this->logger = $logger;
         $this->quotePaymentManagement = $quotePaymentManagement;
         $this->paymentDataHelper = $paymentDataHelper;
-        $this->builder = $builder;
     }
 
     /**
@@ -69,7 +62,6 @@ class QuoteCollectTotals
             if (!$this->collectTotalsFlag &&
                 $this->paymentDataHelper->isAvardaPayment($payment)
             ) {
-                $this->buildItemStorage($subject);
                 $this->quotePaymentManagement->updateItems($subject);
                 $this->collectTotalsFlag = true;
             }
@@ -78,43 +70,5 @@ class QuoteCollectTotals
         }
 
         return $result;
-    }
-
-    /**
-     * Populate the item storage with Avarda items needed for request building
-     *
-     * @param CartInterface $subject
-     */
-    protected function buildItemStorage(CartInterface $subject)
-    {
-        $this->buildItems($subject);
-    }
-
-    /**
-     * Populate the item storage with Avarda items needed for request building
-     *
-     * @param CartInterface $subject
-     */
-    protected function buildItems(CartInterface $subject)
-    {
-        foreach ($subject->getItems() as $item) {
-            if (!$item->getProductId() ||
-                $item->hasParentItemId() ||
-                $item->isDeleted()
-            ) {
-                continue;
-            }
-
-
-            /*$itemSubject['item'] = $itemDO;
-            $itemSubject['amount'] = $this->formatPrice(
-                $item->getRowTotalInclTax() - $item->getDiscountAmount()
-            );
-            $itemSubject['tax_amount'] = $this->formatPrice(
-                $item->getTaxAmount()
-                + $item->getHiddenTaxAmount()
-                + $item->getWeeeTaxAppliedAmount()
-            );*/
-        }
     }
 }

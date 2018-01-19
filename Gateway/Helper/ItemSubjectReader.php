@@ -5,7 +5,7 @@
  */
 namespace Digia\AvardaCheckout\Gateway\Helper;
 
-use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectInterface;
+use Digia\AvardaCheckout\Gateway\Data\ItemAdapterInterface;
 
 /**
  * This class encapsulates implicit interfaces (array structures) used in
@@ -22,12 +22,12 @@ class ItemSubjectReader
      *
      * @param array $subject Subject passed from items builder
      *
-     * @return ItemDataObjectInterface
+     * @return ItemAdapterInterface
      */
     public static function readItem(array $subject)
     {
         if (!isset($subject['item'])
-            || !$subject['item'] instanceof ItemDataObjectInterface
+            || !$subject['item'] instanceof ItemAdapterInterface
         ) {
             throw new \InvalidArgumentException(
                 'Item data object should be provided'

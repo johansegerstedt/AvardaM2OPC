@@ -6,6 +6,7 @@
  */
 namespace Digia\AvardaCheckout\Gateway\Data;
 
+use Digia\AvardaCheckout\Gateway\Data\ItemAdapterInterface;
 use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectInterface;
 
 /**
@@ -37,21 +38,20 @@ class ItemDataObjectFactory implements ItemDataObjectFactoryInterface
     /**
      * {@inheritdoc}
      */
-    public function create($data)
-    {
-        if (array_key_exists('item', $data) &&
-            array_key_exists('qty', $data) &&
-            array_key_exists('amount', $data) &&
-            array_key_exists('tax_amount', $data)
-        ) {
-            throw new \Magento\Payment\Gateway\Command\CommandException(
-                __('Failed to build item data.')
-            );
-        }
-
+    public function create(
+        ItemAdapterInterface $item,
+        $qty,
+        $amount,
+        $taxAmount
+    ) {
         return $this->objectManager->create(
             ItemDataObjectInterface::class,
-            $data
+            [
+                'item' => $item,
+                'qty' => $qty,
+                'amount' => $amount,
+                'taxAmount' => $taxAmount,
+            ]
         );
     }
 }

@@ -7,14 +7,12 @@
 namespace Digia\AvardaCheckout\Model;
 
 use Digia\AvardaCheckout\Api\ItemStorageInterface;
+use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectInterface;
 
-/**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- */
 class ItemStorage implements ItemStorageInterface
 {
     /**
-     * @var \Magento\Quote\Api\Data\CartItemInterface[]
+     * @var ItemDataObjectInterface[]
      */
     protected $items;
 
@@ -31,12 +29,24 @@ class ItemStorage implements ItemStorageInterface
     /**
      * {@inheritdoc}
      */
+    public function addItem(ItemDataObjectInterface $item)
+    {
+        $this->items = array_merge(
+            $this->getItems(),
+            [$item]
+        );
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function getItems()
     {
-        if (!isset($this->items)) {
-            return [];
+        if (isset($this->items)) {
+            return $this->items;
         }
 
-        return $this->items;
+        return [];
+
     }
 }

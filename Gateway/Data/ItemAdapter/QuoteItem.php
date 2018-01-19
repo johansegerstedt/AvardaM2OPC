@@ -20,7 +20,7 @@ class QuoteItem implements ItemAdapterInterface
     protected $quoteItem;
 
     /**
-     * ItemAdapter constructor.
+     * QuoteItem constructor.
      *
      * @param CartItemInterface $quoteItem
      */

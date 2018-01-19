@@ -11,8 +11,23 @@ use Digia\AvardaCheckout\Gateway\Data\ItemAdapterInterface;
 /**
  * Class ItemAdapter\ShipmentItem
  */
-class ShipmentItem implements ItemAdapterInterface
+class ArrayDataItem implements ItemAdapterInterface
 {
+    /**
+     * @var array
+     */
+    protected $data = [];
+
+    /**
+     * ArrayDataItem constructor.
+     *
+     * @param array $data
+     */
+    public function __construct(
+        array $data
+    ) {
+        $this->data = $data;
+    }
 
     /**
      * Get product ID
@@ -21,7 +36,7 @@ class ShipmentItem implements ItemAdapterInterface
      */
     public function getProductId()
     {
-        // TODO: Implement getProductId() method.
+        return null;
     }
 
     /**
@@ -31,7 +46,7 @@ class ShipmentItem implements ItemAdapterInterface
      */
     public function getParentItemId()
     {
-        // TODO: Implement getParentItemId() method.
+        return null;
     }
 
     /**
@@ -41,7 +56,11 @@ class ShipmentItem implements ItemAdapterInterface
      */
     public function getName()
     {
-        // TODO: Implement getName() method.
+        if (array_key_exists('name', $this->data)) {
+            return $this->data['name'];
+        }
+
+        return '';
     }
 
     /**
@@ -51,7 +70,11 @@ class ShipmentItem implements ItemAdapterInterface
      */
     public function getSku()
     {
-        // TODO: Implement getSku() method.
+        if (array_key_exists('sku', $this->data)) {
+            return $this->data['sku'];
+        }
+
+        return '';
     }
 
     /**
@@ -61,7 +84,7 @@ class ShipmentItem implements ItemAdapterInterface
      */
     public function getAdditionalData()
     {
-        // TODO: Implement getAdditionalData() method.
+        return [];
     }
 
     /**
@@ -71,7 +94,11 @@ class ShipmentItem implements ItemAdapterInterface
      */
     public function getProductType()
     {
-        // TODO: Implement getProductType() method.
+        if (array_key_exists('product_type', $this->data)) {
+            return $this->data['product_type'];
+        }
+
+        return 'undefined';
     }
 
     /**
@@ -81,7 +108,11 @@ class ShipmentItem implements ItemAdapterInterface
      */
     public function getTaxAmount()
     {
-        // TODO: Implement getTaxAmount() method.
+        if (array_key_exists('tax_amount', $this->data)) {
+            return $this->data['tax_amount'];
+        }
+
+        return 0.0;
     }
 
     /**
@@ -91,7 +122,11 @@ class ShipmentItem implements ItemAdapterInterface
      */
     public function getTaxPercent()
     {
-        // TODO: Implement getTaxPercent() method.
+        if (array_key_exists('tax_percent', $this->data)) {
+            return $this->data['tax_percent'];
+        }
+
+        return 0.0;
     }
 
     /**
@@ -101,7 +136,11 @@ class ShipmentItem implements ItemAdapterInterface
      */
     public function getRowTotal()
     {
-        // TODO: Implement getRowTotal() method.
+        if (array_key_exists('row_total', $this->data)) {
+            return $this->data['row_total'];
+        }
+
+        return 0.0;
     }
 
     /**
@@ -111,6 +150,10 @@ class ShipmentItem implements ItemAdapterInterface
      */
     public function getRowTotalInclTax()
     {
-        // TODO: Implement getRowTotalInclTax() method.
+        if (array_key_exists('row_total_incl_tax', $this->data)) {
+            return $this->data['row_total_incl_tax'];
+        }
+
+        return 0.0;
     }
 }

@@ -20,7 +20,7 @@ class OrderItem implements ItemAdapterInterface
     protected $orderItem;
 
     /**
-     * ItemAdapter constructor.
+     * OrderItem constructor.
      *
      * @param OrderItemInterface $orderItem
      */

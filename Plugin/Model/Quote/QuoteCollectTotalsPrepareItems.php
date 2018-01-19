@@ -54,6 +54,7 @@ class QuoteCollectTotalsPrepareItems
      *
      * @param \Psr\Log\LoggerInterface $logger
      * @param ItemStorageInterface $itemStorage
+     * @param ItemDataObjectFactory $itemDataObjectFactory,
      * @param QuoteItemFactory $quoteItemAdapterFactory
      * @param ArrayDataItemFactory $arrayDataItemAdapterFactory
      * @param \Digia\AvardaCheckout\Helper\PaymentData $paymentDataHelper
@@ -85,7 +86,7 @@ class QuoteCollectTotalsPrepareItems
     {
         try {
             if (!$this->collectTotalsFlag &&
-                $subject->hasItems()
+                count($subject->getItems()) > 0
             ) {
                 $this->prepareItemStorage($subject);
                 $this->collectTotalsFlag = true;

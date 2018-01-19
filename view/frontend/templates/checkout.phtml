@@ -35,12 +35,12 @@ require.config(({
 }));
 require([
   'avardaCheckout',
-  'Markup_Smartship/js/view/checkout/shipping/additional-block'
-], function(avardaCheckout, Smartship) {
+  //'Markup_Smartship/js/view/checkout/shipping/additional-block'
+], function(avardaCheckout, /*Smartship*/) {
   avardaCheckout.execute(
     <?php echo json_encode($config); ?>,
     {
-      shippingAdditional: Smartship
+      //shippingAdditional: Smartship
     }
   );
 });

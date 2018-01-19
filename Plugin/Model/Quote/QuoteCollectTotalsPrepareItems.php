@@ -6,7 +6,10 @@
  */
 namespace Digia\AvardaCheckout\Plugin\Model\Quote;
 
-use Digia\AvardaCheckout\Api\QuotePaymentManagementInterface;
+use Digia\AvardaCheckout\Api\ItemStorageInterface;
+use Digia\AvardaCheckout\Gateway\Data\ItemAdapter\ArrayDataItemFactory;
+use Digia\AvardaCheckout\Gateway\Data\ItemAdapter\QuoteItemFactory;
+use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactory;
 use Magento\Quote\Api\Data\CartInterface;
 
 class QuoteCollectTotalsPrepareItems
@@ -17,9 +20,24 @@ class QuoteCollectTotalsPrepareItems
     protected $logger;
 
     /**
-     * @var QuotePaymentManagementInterface
+     * @var ItemStorageInterface $itemStorage
      */
-    protected $quotePaymentManagement;
+    protected $itemStorage;
+
+    /**
+     * @var ItemDataObjectFactory $itemDataObjectFactory
+     */
+    protected $itemDataObjectFactory;
+
+    /**
+     * @var QuoteItemFactory $quoteItemAdapterFactory
+     */
+    protected $quoteItemAdapterFactory;
+
+    /**
+     * @var ArrayDataItemFactory $arrayDataItemAdapterFactory
+     */
+    protected $arrayDataItemAdapterFactory;
 
     /**
      * @var \Digia\AvardaCheckout\Helper\PaymentData
@@ -35,17 +53,24 @@ class QuoteCollectTotalsPrepareItems
      * QuoteCollectTotals constructor.
      *
      * @param \Psr\Log\LoggerInterface $logger
-     * @param QuotePaymentManagementInterface $quotePaymentManagement
+     * @param ItemStorageInterface $itemStorage
+     * @param QuoteItemFactory $quoteItemAdapterFactory
+     * @param ArrayDataItemFactory $arrayDataItemAdapterFactory
      * @param \Digia\AvardaCheckout\Helper\PaymentData $paymentDataHelper
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
-        QuotePaymentManagementInterface $quotePaymentManagement,
+        ItemStorageInterface $itemStorage,
+        ItemDataObjectFactory $itemDataObjectFactory,
+        QuoteItemFactory $quoteItemAdapterFactory,
+        ArrayDataItemFactory $arrayDataItemAdapterFactory,
         \Digia\AvardaCheckout\Helper\PaymentData $paymentDataHelper
-
     ) {
         $this->logger = $logger;
-        $this->quotePaymentManagement = $quotePaymentManagement;
+        $this->itemStorage = $itemStorage;
+        $this->itemDataObjectFactory = $itemDataObjectFactory;
+        $this->quoteItemAdapterFactory = $quoteItemAdapterFactory;
+        $this->arrayDataItemAdapterFactory = $arrayDataItemAdapterFactory;
         $this->paymentDataHelper = $paymentDataHelper;
     }
 
@@ -59,11 +84,10 @@ class QuoteCollectTotalsPrepareItems
     public function afterCollectTotals(CartInterface $subject, CartInterface $result)
     {
         try {
-            $payment = $subject->getPayment();
             if (!$this->collectTotalsFlag &&
-                $this->paymentDataHelper->isAvardaPayment($payment)
+                $subject->hasItems()
             ) {
-                $this->quotePaymentManagement->prepareItemStorage($subject);
+                $this->prepareItemStorage($subject);
                 $this->collectTotalsFlag = true;
             }
         } catch (\Exception $e) {
@@ -71,5 +95,102 @@ class QuoteCollectTotalsPrepareItems
         }
 
         return $result;
+    }
+
+    /**
+     * Populate the item storage with Avarda items needed for request building
+     *
+     * @param CartInterface $subject
+     */
+    protected function prepareItemStorage(CartInterface $subject)
+    {
+        $this->prepareItems($subject);
+        $this->prepareShipment($subject);
+        $this->prepareGiftCards($subject);
+    }
+
+    /**
+     * Create item data objects from quote items
+     *
+     * @param CartInterface $subject
+     */
+    protected function prepareItems(CartInterface $subject)
+    {
+        foreach ($subject->getItems() as $item) {
+            if (!$item->getProductId() ||
+                $item->hasParentItemId() ||
+                $item->isDeleted()
+            ) {
+                continue;
+            }
+
+            $itemAdapter = $this->quoteItemAdapterFactory->create([
+                'quoteItem' => $item
+            ]);
+            $itemDataObject = $this->itemDataObjectFactory->create(
+                $itemAdapter,
+                $item->getQty(),
+                ($item->getRowTotalInclTax() - $item->getDiscountAmount()),
+                (
+                    $item->getTaxAmount() +
+                    $item->getHiddenTaxAmount() +
+                    $item->getWeeeTaxAppliedAmount()
+                )
+            );
+
+            $this->itemStorage->addItem($itemDataObject);
+        }
+    }
+
+    /**
+     * Create item data object from shipment information
+     *
+     * @param CartInterface $subject
+     */
+    protected function prepareShipment(CartInterface $subject)
+    {
+        $shippingAddress = $subject->getShippingAddress();
+        if ($shippingAddress) {
+            $itemAdapter = $this->arrayDataItemAdapterFactory->create([
+                'data' => [
+                    'name' => $shippingAddress->getShippingDescription(),
+                    'sku' => $shippingAddress->getShippingMethod(),
+                ],
+            ]);
+            $itemDataObject = $this->itemDataObjectFactory->create(
+                $itemAdapter,
+                1,
+                $shippingAddress->getShippingInclTax(),
+                $shippingAddress->getShippingTaxAmount()
+            );
+
+            $this->itemStorage->addItem($itemDataObject);
+        }
+    }
+
+    /**
+     * Create item data object from gift card information
+     *
+     * @param CartInterface $subject
+     */
+    protected function prepareGiftCards(CartInterface $subject)
+    {
+        $giftCardsAmountUsed = $subject->getGiftCardsAmountUsed();
+        if ($giftCardsAmountUsed > 0) {
+            $itemAdapter = $this->arrayDataItemAdapterFactory->create([
+                'data' => [
+                    'name' => __('Gift Card'),
+                    'sku' => __('giftcard'),
+                ],
+            ]);
+            $itemDataObject = $this->itemDataObjectFactory->create(
+                $itemAdapter,
+                1,
+                ($giftCardsAmountUsed * -1),
+                0
+            );
+
+            $this->itemStorage->addItem($itemDataObject);
+        }
     }
 }

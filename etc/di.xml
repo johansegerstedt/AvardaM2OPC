@@ -22,11 +22,11 @@
 
     <!-- Avarda plugins -->
     <type name="Magento\Quote\Api\Data\CartInterface">
-        <plugin name="avardaQuoteCollectTotalsPrepareItems" type="Digia\AvardaCheckout\Plugin\Model\Quote\QuoteCollectTotalsPrepareItems" sortOrder="100" />
-        <plugin name="avardaQuoteCollectTotalsUpdateItems" type="Digia\AvardaCheckout\Plugin\Model\Quote\QuoteCollectTotalsUpdateItems" sortOrder="999999" />
+        <plugin name="avardaQuoteCollectTotalsPrepareItems" type="Digia\AvardaCheckout\Plugin\Model\Quote\QuoteCollectTotalsPrepareItems" sortOrder="900" />
+        <plugin name="avardaQuoteCollectTotalsUpdateItems" type="Digia\AvardaCheckout\Plugin\Model\Quote\QuoteCollectTotalsUpdateItems" sortOrder="1000" />
     </type>
     <type name="Magento\Sales\Api\Data\InvoiceInterface">
-        <plugin name="avardaInvoiceCollectTotalsPrepareItems" type="Digia\AvardaCheckout\Plugin\Model\Sales\Order\InvoiceCollectTotalsPrepareItems" sortOrder="100" />
+        <plugin name="avardaInvoiceCollectTotalsPrepareItems" type="Digia\AvardaCheckout\Plugin\Model\Sales\Order\InvoiceCollectTotalsPrepareItems" sortOrder="900" />
     </type>
     <!-- END Avarda plugins -->
 

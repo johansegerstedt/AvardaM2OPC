@@ -108,7 +108,7 @@ class InvoiceCollectTotalsPrepareItems
     {
         $this->prepareItems($subject);
         $this->prepareShipment($subject);
-        //$this->buildGiftCard($subject);
+        $this->prepareGiftCards($subject);
     }
 
     /**
@@ -166,6 +166,32 @@ class InvoiceCollectTotalsPrepareItems
                 1,
                 $shippingAmount,
                 $subject->getShippingTaxAmount()
+            );
+
+            $this->itemStorage->addItem($itemDataObject);
+        }
+    }
+
+    /**
+     * Create item data object from gift card information
+     *
+     * @param InvoiceInterface $subject
+     */
+    protected function prepareGiftCards(InvoiceInterface $subject)
+    {
+        $giftCardsAmount = $subject->getGiftCardsAmount();
+        if ($giftCardsAmount > 0) {
+            $itemAdapter = $this->arrayDataItemAdapterFactory->create([
+                'data' => [
+                    'name' => __('Gift Card'),
+                    'sku' => __('giftcard'),
+                ],
+            ]);
+            $itemDataObject = $this->itemDataObjectFactory->create(
+                $itemAdapter,
+                1,
+                ($giftCardsAmount * -1),
+                0
             );
 
             $this->itemStorage->addItem($itemDataObject);

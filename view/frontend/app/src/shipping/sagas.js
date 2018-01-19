@@ -17,7 +17,6 @@ import {refreshCart} from '$src/cart/sagas';
 import {
   addMessage,
   getMethods as getMethodsAction,
-  receiveSelectedMethod,
   receiveShippingAssignment,
   receiveMethods,
   saveShippingInformationSuccess,
@@ -49,7 +48,7 @@ function* receiveShipping({
     const [carrier_code, method_code] = method.split('_');
     const selectedMethod = find(methods, {carrier_code, method_code});
     if (selectedMethod) {
-      yield put(receiveSelectedMethod(selectedMethod));
+      yield call([quote, quote.shippingMethod], selectedMethod);
     }
   }
 }
@@ -65,7 +64,8 @@ function* updateAddress({payload: address}) {
     }
     return result;
   };
-  selectShippingAddress(newCustomerAddress(emptyStreetFix(address)));
+  quote.shippingAddress(newCustomerAddress(emptyStreetFix(address)));
+  selectShippingAddress(quote.shippingAddress());
   yield put(getMethodsAction());
 }
 

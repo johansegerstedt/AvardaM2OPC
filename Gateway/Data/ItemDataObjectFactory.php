@@ -6,16 +6,13 @@
  */
 namespace Digia\AvardaCheckout\Gateway\Data;
 
-use Magento\Quote\Api\Data\CartItemInterface;
-use Magento\Sales\Api\Data\CreditmemoItemInterface;
-use Magento\Sales\Api\Data\InvoiceItemInterface;
-use Magento\Sales\Api\Data\OrderItemInterface;
+use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectInterface;
 
 /**
  * Service for creation transferable item object from model
  *
  * @api
- * @since 100.0.2
+ * @since 0.2.0
  */
 class ItemDataObjectFactory implements ItemDataObjectFactoryInterface
 {
@@ -27,30 +24,14 @@ class ItemDataObjectFactory implements ItemDataObjectFactoryInterface
     private $objectManager;
 
     /**
-     * @var Order\ItemAdapterFactory
-     */
-    private $orderAdapterFactory;
-
-    /**
-     * @var Quote\ItemAdapterFactory
-     */
-    private $quoteAdapterFactory;
-
-    /**
      * Factory constructor
      *
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
-     * @param Order\ItemAdapterFactory $orderAdapterFactory
-     * @param Quote\ItemAdapterFactory $quoteAdapterFactory
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        Order\ItemAdapterFactory $orderItemAdapterFactory,
-        Quote\ItemAdapterFactory $quoteItemAdapterFactory
+        \Magento\Framework\ObjectManagerInterface $objectManager
     ) {
         $this->objectManager = $objectManager;
-        $this->orderItemAdapterFactory = $orderItemAdapterFactory;
-        $this->quoteItemAdapterFactory = $quoteItemAdapterFactory;
     }
 
     /**
@@ -69,7 +50,7 @@ class ItemDataObjectFactory implements ItemDataObjectFactoryInterface
         }
 
         return $this->objectManager->create(
-            \Digia\AvardaCheckout\Gateway\Data\ItemDataObjectInterface::class,
+            ItemDataObjectInterface::class,
             $data
         );
     }

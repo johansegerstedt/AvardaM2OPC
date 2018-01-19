@@ -8,8 +8,9 @@ namespace Digia\AvardaCheckout\Gateway\Data;
 
 /**
  * Interface ItemDataObjectInterface
+ *
  * @api
- * @since 100.0.2
+ * @since 0.2.0
  */
 interface ItemDataObjectInterface
 {

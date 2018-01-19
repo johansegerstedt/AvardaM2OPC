@@ -13,7 +13,7 @@ use Magento\Sales\Api\Data\OrderItemInterface;
  * Service for creation transferable item object from model
  *
  * @api
- * @since 100.0.2
+ * @since 0.2.0
  */
 interface ItemDataObjectFactoryInterface
 {

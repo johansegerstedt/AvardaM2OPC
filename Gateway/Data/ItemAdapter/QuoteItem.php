@@ -4,31 +4,30 @@
  * @copyright   Copyright © 2017 Digia. All rights reserved.
  * @package     Digia_AvardaCheckout
  */
-namespace Digia\AvardaCheckout\Gateway\Data\Shipping\Data;
+namespace Digia\AvardaCheckout\Gateway\Data\ItemAdapter;
 
 use Digia\AvardaCheckout\Gateway\Data\ItemAdapterInterface;
-use Magento\Payment\Gateway\Data\OrderAdapterInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Quote\Api\Data\CartItemInterface;
 
 /**
- * Class ItemAdapter
+ * Class ItemAdapter\QuoteItem
  */
-class ItemAdapter implements ItemAdapterInterface
+class QuoteItem implements ItemAdapterInterface
 {
     /**
-     * @var array
+     * @var CartItemInterface
      */
-    protected $data;
+    protected $quoteItem;
 
     /**
      * ItemAdapter constructor.
      *
-     * @param array $data
+     * @param CartItemInterface $quoteItem
      */
     public function __construct(
-        array $data
+        CartItemInterface $quoteItem
     ) {
-        $this->data = $data;
+        $this->quoteItem = $quoteItem;
     }
 
     /**
@@ -38,7 +37,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getProductId()
     {
-        return null;
+        return $this->quoteItem->getProductId();
     }
 
     /**
@@ -48,7 +47,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getParentItemId()
     {
-        return null;
+        return $this->quoteItem->getParentItemId();
     }
 
     /**
@@ -58,11 +57,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getName()
     {
-        if (array_key_exists('name', $this->data)) {
-            return $this->data['name'];
-        }
-
-        return '';
+        return $this->quoteItem->getName();
     }
 
     /**
@@ -72,21 +67,17 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getSku()
     {
-        if (array_key_exists('sku', $this->data)) {
-            return $this->data['sku'];
-        }
-
-        return '';
+        return $this->quoteItem->getSku();
     }
 
     /**
      * Get additional data
      *
-     * @return string
+     * @return array
      */
     public function getAdditionalData()
     {
-        // TODO: shipping stuff
+        return $this->quoteItem->getAdditionalData();
     }
 
     /**
@@ -96,7 +87,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getProductType()
     {
-        return 'shipping';
+        return $this->quoteItem->getProductType();
     }
 
     /**
@@ -106,11 +97,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getTaxAmount()
     {
-        if (array_key_exists('tax_amount', $this->data)) {
-            return $this->data['tax_amount'];
-        }
-
-        return 0.0;
+        return $this->quoteItem->getTaxAmount();
     }
 
     /**
@@ -120,8 +107,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getTaxPercent()
     {
-        // TODO: Load tax percent from admin
-        return 0.0;
+        return $this->quoteItem->getTaxPercent();
     }
 
     /**
@@ -131,11 +117,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getRowTotal()
     {
-        if (array_key_exists('row_total', $this->data)) {
-            return $this->data['row_total'];
-        }
-
-        return 0.0;
+        return $this->quoteItem->getRowTotal();
     }
 
     /**
@@ -145,10 +127,6 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getRowTotalInclTax()
     {
-        if (array_key_exists('row_total_incl_tax', $this->data)) {
-            return $this->data['row_total_incl_tax'];
-        }
-
-        return 0.0;
+        return $this->quoteItem->getRowTotalInclTax();
     }
 }

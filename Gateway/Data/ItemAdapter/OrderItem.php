@@ -4,15 +4,15 @@
  * @copyright   Copyright © 2017 Digia. All rights reserved.
  * @package     Digia_AvardaCheckout
  */
-namespace Digia\AvardaCheckout\Gateway\Data\Order;
+namespace Digia\AvardaCheckout\Gateway\Data\ItemAdapter;
 
 use Digia\AvardaCheckout\Gateway\Data\ItemAdapterInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 
 /**
- * Class ItemAdapter
+ * Class ItemAdapter\OrderItem
  */
-class ItemAdapter implements ItemAdapterInterface
+class OrderItem implements ItemAdapterInterface
 {
     /**
      * @var OrderItemInterface

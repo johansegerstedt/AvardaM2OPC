@@ -4,31 +4,15 @@
  * @copyright   Copyright © 2017 Digia. All rights reserved.
  * @package     Digia_AvardaCheckout
  */
-namespace Digia\AvardaCheckout\Gateway\Data\Quote;
+namespace Digia\AvardaCheckout\Gateway\Data\ItemAdapter;
 
 use Digia\AvardaCheckout\Gateway\Data\ItemAdapterInterface;
-use Magento\Quote\Api\Data\CartItemInterface;
 
 /**
- * Class ItemAdapter
+ * Class ItemAdapter\ShipmentItem
  */
-class ItemAdapter implements ItemAdapterInterface
+class ShipmentItem implements ItemAdapterInterface
 {
-    /**
-     * @var CartItemInterface
-     */
-    protected $quoteItem;
-
-    /**
-     * ItemAdapter constructor.
-     *
-     * @param CartItemInterface $quoteItem
-     */
-    public function __construct(
-        CartItemInterface $quoteItem
-    ) {
-        $this->quoteItem = $quoteItem;
-    }
 
     /**
      * Get product ID
@@ -37,7 +21,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getProductId()
     {
-        return $this->quoteItem->getProductId();
+        // TODO: Implement getProductId() method.
     }
 
     /**
@@ -47,7 +31,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getParentItemId()
     {
-        return $this->quoteItem->getParentItemId();
+        // TODO: Implement getParentItemId() method.
     }
 
     /**
@@ -57,7 +41,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getName()
     {
-        return $this->quoteItem->getName();
+        // TODO: Implement getName() method.
     }
 
     /**
@@ -67,7 +51,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getSku()
     {
-        return $this->quoteItem->getSku();
+        // TODO: Implement getSku() method.
     }
 
     /**
@@ -77,7 +61,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getAdditionalData()
     {
-        return $this->quoteItem->getAdditionalData();
+        // TODO: Implement getAdditionalData() method.
     }
 
     /**
@@ -87,7 +71,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getProductType()
     {
-        return $this->quoteItem->getProductType();
+        // TODO: Implement getProductType() method.
     }
 
     /**
@@ -97,7 +81,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getTaxAmount()
     {
-        return $this->quoteItem->getTaxAmount();
+        // TODO: Implement getTaxAmount() method.
     }
 
     /**
@@ -107,7 +91,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getTaxPercent()
     {
-        return $this->quoteItem->getTaxPercent();
+        // TODO: Implement getTaxPercent() method.
     }
 
     /**
@@ -117,7 +101,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getRowTotal()
     {
-        return $this->quoteItem->getRowTotal();
+        // TODO: Implement getRowTotal() method.
     }
 
     /**
@@ -127,6 +111,6 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getRowTotalInclTax()
     {
-        return $this->quoteItem->getRowTotalInclTax();
+        // TODO: Implement getRowTotalInclTax() method.
     }
 }

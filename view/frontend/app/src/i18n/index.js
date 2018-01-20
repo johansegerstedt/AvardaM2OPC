@@ -37,7 +37,7 @@ export * from './types';
 /**
  * Usage to get phrases collected:
  *
- * import $ from '$i18n';
+ * import {$} from '$i18n';
  * const Foobar = () => <div>{$.mage.__('Translate this')}/>;
  */
-export default translator;
+export const $ = translator;

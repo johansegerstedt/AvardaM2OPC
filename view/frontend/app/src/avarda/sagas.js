@@ -80,10 +80,8 @@ function* addressChanged({
 function* cartUpdated() {
   if (yield select(getPurchaseId)) {
     yield put({type: 'avarda/updateItems'});
-    yield call(apiGet, getApiUrl(`${getCartApiPath()}/avarda-payment`));
 
     if (document.getElementById(DIV_ID)) {
-      // TODO: Only here until quote update also updates Avarda
       yield call(AvardaCheckOutClient.updateItems);
     }
 

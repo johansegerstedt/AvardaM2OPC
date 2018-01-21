@@ -1,6 +1,5 @@
 // @flow
-import $ from 'jquery';
-import _mageTranslate from 'mage/translate'; // eslint-disable-line no-unused-vars
+import $ from '$i18n';
 import {MessageTypes} from '$src/utils/components/Message';
 import type {Message} from '$src/utils/types';
 

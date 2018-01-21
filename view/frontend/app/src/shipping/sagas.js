@@ -1,6 +1,5 @@
 // @flow
-import $ from 'jquery';
-import _mageTranslate from 'mage/translate'; // eslint-disable-line no-unused-vars
+import $ from '$i18n';
 import {takeLatest} from 'redux-saga';
 import {call, put, select} from 'redux-saga/effects';
 import {find, head} from 'lodash';

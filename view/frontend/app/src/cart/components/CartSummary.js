@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import {initial, last} from 'lodash';
-import $ from '$i18n';
+import {$} from '$i18n';
 import {formatCurrency} from '$src/utils/format';
 import Loader from '$src/utils/components/Loader';
 import type {TotalSegment} from '../types';

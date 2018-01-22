@@ -1,5 +1,5 @@
 // @flow
-import $ from '$i18n';
+import {$} from '$i18n';
 import {takeLatest} from 'redux-saga';
 import {call, put, select} from 'redux-saga/effects';
 import {find, head} from 'lodash';

@@ -1,6 +1,6 @@
 // @flow
 import * as React from 'react';
-import $ from '$i18n';
+import {$} from '$i18n';
 import spinner from './spinner.gif';
 
 type Props = {

@@ -1,5 +1,5 @@
 // @flow
-import $ from '$i18n';
+import {$} from '$i18n';
 import {MessageTypes} from '$src/utils/components/Message';
 import type {Message} from '$src/utils/types';
 

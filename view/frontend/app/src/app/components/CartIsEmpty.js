@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import $, {interpolateHTML} from '$i18n';
+import {$, interpolateHTML} from '$i18n';
 import {getConfig} from '$src/config';
 
 const CartIsEmpty = () => (

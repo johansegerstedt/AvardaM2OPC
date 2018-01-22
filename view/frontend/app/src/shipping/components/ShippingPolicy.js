@@ -1,6 +1,6 @@
 // @flow
 import React from 'react';
-import $ from '$i18n';
+import {$} from '$i18n';
 
 type Props = {};
 

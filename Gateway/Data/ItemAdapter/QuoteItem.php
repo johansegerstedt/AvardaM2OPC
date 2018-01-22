@@ -4,30 +4,30 @@
  * @copyright   Copyright © 2017 Digia. All rights reserved.
  * @package     Digia_AvardaCheckout
  */
-namespace Digia\AvardaCheckout\Gateway\Data\Order;
+namespace Digia\AvardaCheckout\Gateway\Data\ItemAdapter;
 
 use Digia\AvardaCheckout\Gateway\Data\ItemAdapterInterface;
-use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Quote\Api\Data\CartItemInterface;
 
 /**
- * Class ItemAdapter
+ * Class ItemAdapter\QuoteItem
  */
-class ItemAdapter implements ItemAdapterInterface
+class QuoteItem implements ItemAdapterInterface
 {
     /**
-     * @var OrderItemInterface
+     * @var CartItemInterface
      */
-    protected $orderItem;
+    protected $quoteItem;
 
     /**
-     * ItemAdapter constructor.
+     * QuoteItem constructor.
      *
-     * @param OrderItemInterface $orderItem
+     * @param CartItemInterface $quoteItem
      */
     public function __construct(
-        OrderItemInterface $orderItem
+        CartItemInterface $quoteItem
     ) {
-        $this->orderItem = $orderItem;
+        $this->quoteItem = $quoteItem;
     }
 
     /**
@@ -37,7 +37,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getProductId()
     {
-        return $this->orderItem->getProductId();
+        return $this->quoteItem->getProductId();
     }
 
     /**
@@ -47,7 +47,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getParentItemId()
     {
-        return $this->orderItem->getParentItemId();
+        return $this->quoteItem->getParentItemId();
     }
 
     /**
@@ -57,7 +57,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getName()
     {
-        return $this->orderItem->getName();
+        return $this->quoteItem->getName();
     }
 
     /**
@@ -67,17 +67,17 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getSku()
     {
-        return $this->orderItem->getSku();
+        return $this->quoteItem->getSku();
     }
 
     /**
      * Get additional data
      *
-     * @return string
+     * @return array
      */
     public function getAdditionalData()
     {
-        return $this->orderItem->getAdditionalData();
+        return $this->quoteItem->getAdditionalData();
     }
 
     /**
@@ -87,7 +87,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getProductType()
     {
-        return $this->orderItem->getProductType();
+        return $this->quoteItem->getProductType();
     }
 
     /**
@@ -97,7 +97,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getTaxAmount()
     {
-        return $this->orderItem->getTaxAmount();
+        return $this->quoteItem->getTaxAmount();
     }
 
     /**
@@ -107,7 +107,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getTaxPercent()
     {
-        return $this->orderItem->getTaxPercent();
+        return $this->quoteItem->getTaxPercent();
     }
 
     /**
@@ -117,7 +117,7 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getRowTotal()
     {
-        return $this->orderItem->getRowTotal();
+        return $this->quoteItem->getRowTotal();
     }
 
     /**
@@ -127,6 +127,6 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getRowTotalInclTax()
     {
-        return $this->orderItem->getRowTotalInclTax();
+        return $this->quoteItem->getRowTotalInclTax();
     }
 }

@@ -13,6 +13,7 @@ use Magento\Payment\Helper\Formatter;
 
 /**
  * Class ShippingItemDataBuilder
+ * @deprecated 0.2.0
  */
 class ShippingItemDataBuilder implements BuilderInterface
 {

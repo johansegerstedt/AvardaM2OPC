@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * @author      Digia Commerce Oy
+ * @copyright   Copyright © 2017 Digia. All rights reserved.
+ * @package     Digia_AvardaCheckout
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
+    <event name="checkout_submit_all_after">
+        <observer name="automatic_invoicing" instance="Digia\AvardaCheckout\Observer\AutomaticInvoicing" />
+    </event>
+</config>

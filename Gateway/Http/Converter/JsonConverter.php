@@ -69,6 +69,10 @@ class JsonConverter implements ConverterInterface
             foreach ($body->Errors as $error) {
                 $errors['Errors'][] = $error;
             }
+        } elseif (is_array($body)) {
+            foreach ($body as $error) {
+                $errors['Errors'][$error->ErrorCode] = $error->ErrorMessage;
+            }
         } elseif (isset($body->Message)) {
             $errors['Errors'][] = $body->Message;
         } else {

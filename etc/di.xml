@@ -28,22 +28,10 @@
     <type name="Magento\Sales\Api\Data\InvoiceInterface">
         <plugin name="avardaInvoiceCollectTotalsPrepareItems" type="Digia\AvardaCheckout\Plugin\Model\Sales\Order\InvoiceCollectTotalsPrepareItems" sortOrder="900" />
     </type>
+    <type name="Magento\Sales\Api\Data\CreditmemoInterface">
+        <plugin name="avardaCreditmemoCollectTotalsPrepareItems" type="Digia\AvardaCheckout\Plugin\Model\Sales\Order\CreditmemoCollectTotalsPrepareItems" sortOrder="900" />
+    </type>
     <!-- END Avarda plugins -->
-
-    <!-- Avarda item storage preparations -->
-    <type name="Digia\AvardaCheckout\Plugin\Model\Quote\QuoteCollectTotalsPrepareItems">
-        <arguments>
-            <argument name="quoteItemAdapterFactory" xsi:type="object">Digia\AvardaCheckout\Gateway\Data\ItemAdapter\QuoteItemFactory</argument>
-            <argument name="arrayDataItemAdapterFactory" xsi:type="object">Digia\AvardaCheckout\Gateway\Data\ItemAdapter\ArrayDataItemFactory</argument>
-        </arguments>
-    </type>
-    <type name="Digia\AvardaCheckout\Plugin\Model\Sales\Order\InvoiceCollectTotalsPrepareItems">
-        <arguments>
-            <argument name="orderItemAdapterFactory" xsi:type="object">Digia\AvardaCheckout\Gateway\Data\ItemAdapter\OrderItemFactory</argument>
-            <argument name="arrayDataItemAdapterFactory" xsi:type="object">Digia\AvardaCheckout\Gateway\Data\ItemAdapter\ArrayDataItemFactory</argument>
-        </arguments>
-    </type>
-    <!-- END Avarda item storage preparations -->
 
     <!-- Avarda payment methods -->
     <virtualType name="AvardaCheckoutFacade" type="Magento\Payment\Model\Method\Adapter">
@@ -199,6 +187,7 @@
                 <item name="external_id" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\ExternalIdDataBuilder</item>
                 <item name="items" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\ItemsDataBuilder</item>
                 <item name="order_reference" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\OrderReferenceDataBuilder</item>
+                <item name="tran_id" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\TranIdDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
@@ -218,14 +207,37 @@
         <arguments>
             <argument name="builders" xsi:type="array">
                 <item name="external_id" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\ExternalIdDataBuilder</item>
-                <item name="items" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\ItemsDataBuilder</item>
+                <item name="amount" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\AmountDataBuilder</item>
                 <item name="order_reference" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\OrderReferenceDataBuilder</item>
+                <item name="tran_id" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\TranIdDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>
     <virtualType name="AvardaCheckoutRefundTransferFactory" type="Digia\AvardaCheckout\Gateway\Http\TransferFactory">
         <arguments>
             <argument name="uri" xsi:type="string">/CheckOut2Api/Commerce/Refund</argument>
+        </arguments>
+    </virtualType>
+
+    <virtualType name="AvardaCheckoutReturnCommand" type="AvardaCheckoutCommand">
+        <arguments>
+            <argument name="requestBuilder" xsi:type="object">AvardaCheckoutReturnRequest</argument>
+            <argument name="transferFactory" xsi:type="object">AvardaCheckoutReturnTransferFactory</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AvardaCheckoutReturnRequest" type="Magento\Payment\Gateway\Request\BuilderComposite">
+        <arguments>
+            <argument name="builders" xsi:type="array">
+                <item name="external_id" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\ExternalIdDataBuilder</item>
+                <item name="items" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\ItemsDataBuilder</item>
+                <item name="order_reference" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\OrderReferenceDataBuilder</item>
+                <item name="tran_id" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\TranIdDataBuilder</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="AvardaCheckoutReturnTransferFactory" type="Digia\AvardaCheckout\Gateway\Http\TransferFactory">
+        <arguments>
+            <argument name="uri" xsi:type="string">/CheckOut2Api/Commerce/ReturnOrder</argument>
         </arguments>
     </virtualType>
     <!-- END Avarda commands -->

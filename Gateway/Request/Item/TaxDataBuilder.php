@@ -32,7 +32,7 @@ class TaxDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject)
     {
-        $item = ItemSubjectReader::readItem($buildSubject)->getItem();
+        $item = ItemSubjectReader::readItem($buildSubject);
         $taxAmount = ItemSubjectReader::readTaxAmount($buildSubject);
 
         return [

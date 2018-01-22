@@ -6,10 +6,10 @@
  */
 namespace Digia\AvardaCheckout\Plugin\Model\Quote;
 
-use \Magento\Quote\Api\Data\CartInterface;
-use \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface;
+use Digia\AvardaCheckout\Api\QuotePaymentManagementInterface;
+use Magento\Quote\Api\Data\CartInterface;
 
-class CollectTotals
+class QuoteCollectTotalsUpdateItems
 {
     /**
      * @var \Psr\Log\LoggerInterface $logger
@@ -22,9 +22,9 @@ class CollectTotals
     protected $quotePaymentManagement;
 
     /**
-     * @var \Digia\AvardaCheckout\Helper\Quote
+     * @var \Digia\AvardaCheckout\Helper\PaymentData
      */
-    protected $quoteHelper;
+    protected $paymentDataHelper;
 
     /**
      * @var bool
@@ -32,20 +32,20 @@ class CollectTotals
     protected $collectTotalsFlag = false;
 
     /**
-     * CollectTotals constructor.
+     * QuoteCollectTotals constructor.
      *
      * @param \Psr\Log\LoggerInterface $logger
      * @param QuotePaymentManagementInterface $quotePaymentManagement
-     * @param \Digia\AvardaCheckout\Helper\Quote $quoteHelper
+     * @param \Digia\AvardaCheckout\Helper\PaymentData $paymentDataHelper
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         QuotePaymentManagementInterface $quotePaymentManagement,
-        \Digia\AvardaCheckout\Helper\Quote $quoteHelper
+        \Digia\AvardaCheckout\Helper\PaymentData $paymentDataHelper
     ) {
         $this->logger = $logger;
         $this->quotePaymentManagement = $quotePaymentManagement;
-        $this->quoteHelper = $quoteHelper;
+        $this->paymentDataHelper = $paymentDataHelper;
     }
 
     /**
@@ -58,8 +58,9 @@ class CollectTotals
     public function afterCollectTotals(CartInterface $subject, CartInterface $result)
     {
         try {
+            $payment = $subject->getPayment();
             if (!$this->collectTotalsFlag &&
-                $this->quoteHelper->getPurchaseId($subject)
+                $this->paymentDataHelper->isAvardaPayment($payment)
             ) {
                 $this->quotePaymentManagement->updateItems($subject);
                 $this->collectTotalsFlag = true;

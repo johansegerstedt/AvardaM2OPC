@@ -6,23 +6,28 @@
  */
 namespace Digia\AvardaCheckout\Gateway\Data;
 
-use Magento\Quote\Api\Data\CartItemInterface;
-use Magento\Sales\Api\Data\OrderItemInterface;
-
 /**
  * Service for creation transferable item object from model
  *
  * @api
- * @since 100.0.2
+ * @since 0.2.0
  */
 interface ItemDataObjectFactoryInterface
 {
     /**
      * Creates Item Data Object
      *
-     * @param mixed $item of the quote, order, invoice or credit memo
+     * @param ItemAdapterInterface
+     * @param float $qty
+     * @param float $amount
+     * @param float $taxAmount
      *
      * @return ItemDataObjectInterface
      */
-    public function create($item);
+    public function create(
+        ItemAdapterInterface $item,
+        $qty,
+        $amount,
+        $taxAmount
+    );
 }

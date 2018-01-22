@@ -5,7 +5,7 @@ import {formatCurrency} from '$src/utils/format';
 import Loader from '$src/utils/components/Loader';
 import AdditionalContent from '$src/utils/components/AdditionalContent';
 import {REGION_KEYS} from '$src/additionalContent';
-import $ from '$i18n';
+import {$} from '$i18n';
 import type {BillingAddress} from '$src/cart/types';
 import type {ShippingMethod} from '../types';
 

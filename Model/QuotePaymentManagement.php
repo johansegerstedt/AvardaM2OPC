@@ -6,6 +6,7 @@
  */
 namespace Digia\AvardaCheckout\Model;
 
+use Digia\AvardaCheckout\Api\ItemStorageInterface;
 use Digia\AvardaCheckout\Api\QuotePaymentManagementInterface;
 use Magento\Framework\Exception\PaymentException;
 use Magento\Payment\Gateway\Data\PaymentDataObjectFactoryInterface;
@@ -23,7 +24,7 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
     protected $itemManagement;
 
     /**
-     * @var \Digia\AvardaCheckout\Api\ItemStorageInterface $itemStorage
+     * @var ItemStorageInterface $itemStorage
      */
     protected $itemStorage;
 
@@ -56,7 +57,7 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
      * QuotePaymentManagement constructor.
      *
      * @param \Digia\AvardaCheckout\Api\ItemManagementInterface $itemManagement
-     * @param \Digia\AvardaCheckout\Api\ItemStorageInterface $itemStorage
+     * @param ItemStorageInterface $itemStorage
      * @param \Digia\AvardaCheckout\Helper\Quote $quoteHelper
      * @param \Magento\Payment\Gateway\Command\CommandPoolInterface $commandPool
      * @param PaymentDataObjectFactoryInterface $paymentDataObjectFactory
@@ -64,7 +65,7 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
      */
     public function __construct(
         \Digia\AvardaCheckout\Api\ItemManagementInterface $itemManagement,
-        \Digia\AvardaCheckout\Api\ItemStorageInterface $itemStorage,
+        ItemStorageInterface $itemStorage,
         \Digia\AvardaCheckout\Helper\Quote $quoteHelper,
         \Magento\Payment\Gateway\Command\CommandPoolInterface $commandPool,
         PaymentDataObjectFactoryInterface $paymentDataObjectFactory,
@@ -96,6 +97,8 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
      */
     public function initializePurchase(CartInterface $quote)
     {
+        $quote->collectTotals();
+
         // Execute InitializePurchase command
         $arguments = $this->getCommandArguments($quote);
         $this->commandPool->get('avarda_initialize_payment')

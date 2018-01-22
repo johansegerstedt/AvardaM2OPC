@@ -6,9 +6,10 @@
  */
 namespace Digia\AvardaCheckout\Gateway\Request;
 
+use Digia\AvardaCheckout\Api\ItemStorageInterface;
 use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactoryInterface;
 use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectInterface;
-use Magento\Payment\Gateway\Helper\SubjectReader;
+use Magento\Framework\Exception\PaymentException;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 use Magento\Payment\Helper\Formatter;
 
@@ -23,6 +24,11 @@ class ItemsDataBuilder implements BuilderInterface
      * The amount to add to the payment
      */
     const ITEMS = 'Items';
+
+    /**
+     * @var ItemStorageInterface
+     */
+    protected $itemStorage;
 
     /**
      * @var ItemDataObjectFactoryInterface
@@ -41,9 +47,11 @@ class ItemsDataBuilder implements BuilderInterface
      * @param BuilderInterface $itemBuilder
      */
     public function __construct(
+        ItemStorageInterface $itemStorage,
         ItemDataObjectFactoryInterface $itemDataObjectFactory,
         BuilderInterface $itemBuilder
     ) {
+        $this->itemStorage = $itemStorage;
         $this->itemDataObjectFactory = $itemDataObjectFactory;
         $this->itemBuilder = $itemBuilder;
     }
@@ -53,42 +61,26 @@ class ItemsDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject)
     {
-        $paymentDO = SubjectReader::readPayment($buildSubject);
-        $order = $paymentDO->getOrder();
+        $preparedItems = $this->itemStorage->getItems();
+        if (count($preparedItems) == 0) {
+            throw new PaymentException(
+                __('Could not generate items for Avarda checkout.')
+            );
+        }
 
         $items[self::ITEMS] = [];
-        foreach ($order->getItems() as $item) {
-            if (!$item->getProductId() ||
-                $item->hasParentItemId() ||
-                $item->isDeleted()
-            ) {
-                continue;
+        foreach ($preparedItems as $preparedItem) {
+            if (!$preparedItem instanceof ItemDataObjectInterface) {
+                throw new PaymentException(
+                    __('Could not generate items for Avarda checkout.')
+                );
             }
 
-            $items[self::ITEMS][] = $this->prepareItemObject($item);
+            $items[self::ITEMS][] = (object) $this->itemBuilder->build(
+                $preparedItem->getSubject()
+            );
         }
 
         return $items;
-    }
-
-    /**
-     * @param mixed $item of the quote, order, invoice or credit memo
-     * @return \StdClass
-     */
-    public function prepareItemObject($item)
-    {
-        $itemDO = $this->itemDataObjectFactory->create($item);
-
-        $itemSubject['item'] = $itemDO;
-        $itemSubject['amount'] = $this->formatPrice(
-            $item->getRowTotalInclTax() - $item->getDiscountAmount()
-        );
-        $itemSubject['tax_amount'] = $this->formatPrice(
-            $item->getTaxAmount()
-            + $item->getHiddenTaxAmount()
-            + $item->getWeeeTaxAppliedAmount()
-        );
-
-        return (object) $this->itemBuilder->build($itemSubject);
     }
 }

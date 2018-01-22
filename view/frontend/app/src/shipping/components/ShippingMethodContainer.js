@@ -2,7 +2,7 @@
 import React from 'react';
 import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
-import $ from '$i18n';
+import {$} from '$i18n';
 import quote from 'Magento_Checkout/js/model/quote';
 import subscribe from '$src/knockout/components/subscribe';
 import {

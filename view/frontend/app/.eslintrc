@@ -25,16 +25,9 @@
     "process": false
   },
   "rules": {
-    "prettier/prettier": [
-      "error",
-      {
-        "singleQuote": true,
-        "trailingComma": "all",
-        "bracketSpacing": false,
-        "jsxBracketSameLine": false,
-        "parser": "flow"
-      }
-    ],
+    "prettier/prettier":
+      "error"
+    ,
     "flowtype/require-valid-file-annotation": [
       "error",
       "always",

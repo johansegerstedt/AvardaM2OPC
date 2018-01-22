@@ -29,7 +29,7 @@ class ProductDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject)
     {
-        $item = ItemSubjectReader::readItem($buildSubject)->getItem();
+        $item = ItemSubjectReader::readItem($buildSubject);
 
         return [
             self::DESCRIPTION => mb_substr($item->getName(), 0, 35),

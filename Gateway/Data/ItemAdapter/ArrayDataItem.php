@@ -4,45 +4,29 @@
  * @copyright   Copyright © 2017 Digia. All rights reserved.
  * @package     Digia_AvardaCheckout
  */
-namespace Digia\AvardaCheckout\Gateway\Data\Shipping\Order;
+namespace Digia\AvardaCheckout\Gateway\Data\ItemAdapter;
 
 use Digia\AvardaCheckout\Gateway\Data\ItemAdapterInterface;
-use Magento\Payment\Gateway\Data\OrderAdapterInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
 
 /**
- * Class ItemAdapter
+ * Class ItemAdapter\ShipmentItem
  */
-class ItemAdapter implements ItemAdapterInterface
+class ArrayDataItem implements ItemAdapterInterface
 {
     /**
-     * @var OrderAdapterInterface
+     * @var array
      */
-    protected $order;
+    protected $data = [];
 
     /**
-     * @var OrderRepositoryInterface
-     */
-    protected $orderRepository;
-
-    /**
-     * @var \Magento\Sales\Api\Data\OrderInterface
-     */
-    protected $realOrder;
-
-    /**
-     * ItemAdapter constructor.
+     * ArrayDataItem constructor.
      *
-     * @param OrderAdapterInterface $order
-     * @param OrderRepositoryInterface $orderRepository
+     * @param array $data
      */
     public function __construct(
-        OrderAdapterInterface $order,
-        OrderRepositoryInterface $orderRepository
-
+        array $data
     ) {
-        $this->order = $order;
-        $this->orderRepository = $orderRepository;
+        $this->data = $data;
     }
 
     /**
@@ -72,7 +56,11 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getName()
     {
-        return $this->getRealOrder()->getShippingDescription();
+        if (array_key_exists('name', $this->data)) {
+            return $this->data['name'];
+        }
+
+        return '';
     }
 
     /**
@@ -82,17 +70,21 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getSku()
     {
-        return $this->getRealOrder()->getShippingMethod();
+        if (array_key_exists('sku', $this->data)) {
+            return $this->data['sku'];
+        }
+
+        return '';
     }
 
     /**
      * Get additional data
      *
-     * @return string
+     * @return array
      */
     public function getAdditionalData()
     {
-        // TODO: shipping stuff
+        return [];
     }
 
     /**
@@ -102,7 +94,11 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getProductType()
     {
-        return 'shipping';
+        if (array_key_exists('product_type', $this->data)) {
+            return $this->data['product_type'];
+        }
+
+        return 'undefined';
     }
 
     /**
@@ -112,7 +108,11 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getTaxAmount()
     {
-        return $this->getRealOrder()->getShippingTaxAmount();
+        if (array_key_exists('tax_amount', $this->data)) {
+            return $this->data['tax_amount'];
+        }
+
+        return 0.0;
     }
 
     /**
@@ -122,7 +122,10 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getTaxPercent()
     {
-        // TODO: Load tax percent from admin
+        if (array_key_exists('tax_percent', $this->data)) {
+            return $this->data['tax_percent'];
+        }
+
         return 0.0;
     }
 
@@ -133,7 +136,11 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getRowTotal()
     {
-        return $this->getRealOrder()->getShippingAmount();
+        if (array_key_exists('row_total', $this->data)) {
+            return $this->data['row_total'];
+        }
+
+        return 0.0;
     }
 
     /**
@@ -143,19 +150,10 @@ class ItemAdapter implements ItemAdapterInterface
      */
     public function getRowTotalInclTax()
     {
-        return $this->getRealOrder()->getShippingInclTax();
-    }
-
-    /**
-     * @return \Magento\Sales\Api\Data\OrderInterface
-     */
-    protected function getRealOrder()
-    {
-        if (!isset($this->realOrder)) {
-            $entityId = $this->order->getId();
-            $this->realOrder = $this->orderRepository->get($entityId);
+        if (array_key_exists('row_total_incl_tax', $this->data)) {
+            return $this->data['row_total_incl_tax'];
         }
 
-        return $this->realOrder;
+        return 0.0;
     }
 }

@@ -2,7 +2,7 @@
 import React from 'react';
 import {get} from 'lodash';
 import {getConfig} from '$src/config';
-import $ from '$i18n';
+import {$} from '$i18n';
 import type {BillingAddress} from '$src/cart/types';
 
 type Props = {

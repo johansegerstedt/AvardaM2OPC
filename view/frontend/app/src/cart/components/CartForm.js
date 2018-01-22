@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import {get} from 'lodash';
-import $ from '$i18n';
+import {$} from '$i18n';
 import {formatCurrency} from '$src/utils/format';
 import type {CartItem} from '../types';
 

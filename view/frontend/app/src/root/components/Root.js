@@ -1,7 +1,8 @@
 // @flow
-import React from 'react';
+import React, {Fragment} from 'react';
 import {Provider} from 'react-redux';
 import {get} from 'lodash';
+import {ToastContainer} from 'react-toastify';
 import App from '$src/app/components/App';
 import type {Config} from '$src/types';
 import type {Actions, AppState} from '../types';
@@ -28,7 +29,10 @@ class Root extends React.Component<Props, State> {
     const {config, store} = this.props;
     return (
       <Provider store={store}>
-        <App config={config} />
+        <Fragment>
+          <App config={config} />
+          <ToastContainer autoClose={10000} closeButton={false} />
+        </Fragment>
       </Provider>
     );
   }

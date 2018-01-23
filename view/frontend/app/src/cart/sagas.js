@@ -1,6 +1,7 @@
 // @flow
 import {takeEvery, takeLatest} from 'redux-saga';
 import {all, call, fork, put} from 'redux-saga/effects';
+import toast, {TYPES} from '$src/utils/toast';
 import {getCartApiPath} from './utils';
 import {
   fetchCartRequest,
@@ -30,6 +31,10 @@ function* fetchCart(): Generator<*, *, *> {
     yield put(fetchCartSuccess(cart));
   } catch (err) {
     yield put(fetchCartFailure(err));
+    toast(
+      `There was a problem loading the cart. Please reload the page.`,
+      TYPES.ERROR,
+    );
   }
 }
 
@@ -39,14 +44,16 @@ export function* refreshCart(): Generator<*, *, *> {
     yield put(refreshCartAction(cart));
   } catch (err) {
     yield put(fetchCartFailure(err));
+    toast(
+      `There was a problem loading the cart. Please reload the page.`,
+      TYPES.ERROR,
+    );
   }
 }
 
-function* updateCartItems({payload = []}: {payload: any[]} = {}): Generator<
-  *,
-  *,
-  *,
-> {
+function* updateCartItems(
+  {payload = []}: {payload: any[]} = {},
+): Generator<*, *, *> {
   const baseUrl = `${getCartApiPath()}/items`;
   try {
     const updatedItems = yield all(
@@ -68,6 +75,7 @@ function* updateCartItems({payload = []}: {payload: any[]} = {}): Generator<
     yield put(fetchCartSuccess(cart));
   } catch (err) {
     yield put(updateCartItemsFailure(err));
+    toast(`Couldn't update the cart.`, TYPES.ERROR);
   }
 }
 
@@ -87,6 +95,7 @@ function* deleteCartItem({
     yield put(fetchCartSuccess(cart));
   } catch (err) {
     yield put(deleteCartItemFailure(err));
+    toast(`There was a problem removing an item from the cart.`, TYPES.ERROR);
   }
 }
 
@@ -105,6 +114,7 @@ function* applyCoupon({
     yield put(fetchCartSuccess(cart));
   } catch (err) {
     yield put(applyCouponFailure(err));
+    toast(`The coupon code "${couponCode}" is not valid.`, TYPES.ERROR);
   }
 }
 
@@ -119,6 +129,7 @@ function* removeCoupon() {
     yield put(fetchCartRequest());
   } catch (err) {
     yield put(removeCouponFailure(err));
+    toast(`There was a problem with the coupon code.`, TYPES.ERROR);
   }
 }
 

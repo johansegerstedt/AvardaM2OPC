@@ -1,11 +1,14 @@
 // @flow
 import {$} from '$i18n';
 import {takeLatest} from 'redux-saga';
-import {call, put, select} from 'redux-saga/effects';
-import {find, head} from 'lodash';
+import {call, put} from 'redux-saga/effects';
+import {find, head, isEqual} from 'lodash';
+import quote from 'Magento_Checkout/js/model/quote';
+import newCustomerAddress from 'Magento_Checkout/js/model/new-customer-address';
+import selectShippingAddress from 'Magento_Checkout/js/action/select-shipping-address';
+import selectShippingMethod from 'Magento_Checkout/js/action/select-shipping-method';
+import setShippingInformation from 'Magento_Checkout/js/action/set-shipping-information';
 import {MessageTypes} from '$src/utils/components/Message';
-import {apiPost, getApiUrl} from '$src/m2api';
-import {getCartApiPath} from '$src/cart/utils';
 import {ActionTypes as Shipping} from './constants';
 import {ActionTypes as Cart} from '$src/cart/constants';
 import {fetchCartSuccess as fetchCartSuccessAction} from '$src/cart/actions';
@@ -13,15 +16,12 @@ import {refreshCart} from '$src/cart/sagas';
 import {
   addMessage,
   getMethods as getMethodsAction,
-  receiveSelectedMethod,
   receiveShippingAssignment,
   receiveMethods,
-  saveShippingInformation,
   saveShippingInformationSuccess,
   selectMethod as selectMethodAction,
   updateAddress as updateAddressAction,
 } from './actions';
-import {getAddress} from './selectors';
 import {fetchShippingMethods as apiFetchShippingMethods} from './api';
 import {SHIPPING_ANCHOR_ID} from './constants';
 import type {ActionType} from 'redux-actions';
@@ -47,17 +47,29 @@ function* receiveShipping({
     const [carrier_code, method_code] = method.split('_');
     const selectedMethod = find(methods, {carrier_code, method_code});
     if (selectedMethod) {
-      yield put(receiveSelectedMethod(selectedMethod));
+      yield call([quote, quote.shippingMethod], selectedMethod);
     }
   }
 }
 
-function* updateAddress() {
+function* updateAddress({payload: address}) {
+  const emptyStreetFix = (obj: {street?: ?(string[])} = {}) => {
+    const result = {...obj};
+    if (
+      result.street &&
+      (result.street.length === 0 || isEqual([''], result.street))
+    ) {
+      result.street = undefined;
+    }
+    return result;
+  };
+  quote.shippingAddress(newCustomerAddress(emptyStreetFix(address)));
+  selectShippingAddress(quote.shippingAddress());
   yield put(getMethodsAction());
 }
 
 function* getMethods() {
-  const address = yield select(getAddress);
+  const address = yield call([quote, quote.shippingAddress]);
   const methods = yield call(apiFetchShippingMethods, address);
   yield put(receiveMethods(methods));
 }
@@ -65,7 +77,6 @@ function* getMethods() {
 function* selectMethod({
   payload: method,
 }: ActionType<typeof selectMethodAction>) {
-  const shipping_address = yield select(getAddress);
   if (!method.available) {
     return yield put(
       addMessage({
@@ -74,26 +85,19 @@ function* selectMethod({
       }),
     );
   }
-  const {
-    carrier_code: shipping_carrier_code,
-    method_code: shipping_method_code,
-  } = method;
 
-  yield put(
-    saveShippingInformation({
-      shipping_address,
-      shipping_carrier_code,
-      shipping_method_code,
-    }),
-  );
+  selectShippingMethod(method);
+  // yield put(
+  //   saveShippingInformation({
+  //     shipping_address,
+  //     shipping_carrier_code,
+  //     shipping_method_code,
+  //   }),
+  // );
 }
 
-function* saveInformation({
-  payload: addressInformation,
-}: ActionType<typeof saveShippingInformation>) {
-  yield call(apiPost, getApiUrl(`${getCartApiPath()}/shipping-information`), {
-    addressInformation,
-  });
+function* saveInformation() {
+  setShippingInformation();
   yield put(saveShippingInformationSuccess());
 }
 

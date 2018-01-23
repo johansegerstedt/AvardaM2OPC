@@ -7,7 +7,7 @@ import rootReducer from './rootReducer';
 
 const configureStore = () => {
   const sagaMiddleware = createSagaMiddleware();
-  const composeEnhancers =
+  const composeEnhancers: Function =
     window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;
 
   const store = createStore(

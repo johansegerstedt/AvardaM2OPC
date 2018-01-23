@@ -2,12 +2,7 @@
 import {combineReducers} from 'redux';
 import {combineActions, handleActions, type ActionType} from 'redux-actions';
 import {ActionTypes} from './constants';
-import {
-  receiveMethods,
-  receiveSelectedMethod,
-  selectMethod,
-  updateAddress,
-} from './actions';
+import {receiveMethods} from './actions';
 import type {Reducer} from '$src/root/types';
 import type {ShippingMethod, ShippingMethodState} from './types';
 
@@ -17,23 +12,6 @@ const methods: Reducer<null | ShippingMethod[]> = handleActions(
       state,
       {payload: methods}: ActionType<typeof receiveMethods>,
     ) => methods,
-  },
-  null,
-);
-
-const selectedMethod: Reducer<null | ShippingMethod> = handleActions(
-  {
-    [combineActions(
-      ActionTypes.SELECT_METHOD,
-      ActionTypes.RECEIVE_SELECTED_METHOD,
-    )]: (
-      state,
-      {
-        payload: method,
-      }:
-        | ActionType<typeof selectMethod>
-        | ActionType<typeof receiveSelectedMethod>,
-    ) => method,
   },
   null,
 );
@@ -71,22 +49,8 @@ const messages: Reducer<
   null,
 );
 
-const address: Reducer<
-  $PropertyType<ShippingMethodState, 'address'>,
-> = handleActions(
-  {
-    [ActionTypes.UPDATE_ADDRESS]: (
-      state,
-      {payload: address}: ActionType<typeof updateAddress>,
-    ) => address,
-  },
-  null,
-);
-
 export default combineReducers({
-  address,
   methods,
-  selectedMethod,
   isFetching,
   isSelecting,
   messages,

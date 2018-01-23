@@ -16,7 +16,12 @@
 ?>
 
 <div id="checkout-root"></div>
-
+<script>
+window.checkoutConfig = <?php /* @escapeNotVerified */ echo \Zend_Json::encode($block->getCheckoutConfig()); ?>;
+// Create aliases for customer.js model from customer module
+window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
+window.customerData = window.checkoutConfig.customerData;
+</script>
 <script type="text/javascript">
 require.config(({
   shim: {
@@ -28,7 +33,15 @@ require.config(({
     AvardaCheckOutClient:<?php echo json_encode($block->getCheckOutClientScriptPath()); ?>
   }
 }));
-require(['avardaCheckout'], function(avardaCheckout) {
-  avardaCheckout.execute(<?php echo json_encode($config); ?>);
+require([
+  'avardaCheckout',
+  //'Markup_Smartship/js/view/checkout/shipping/additional-block'
+], function(avardaCheckout, /*Smartship*/) {
+  avardaCheckout.execute(
+    <?php echo json_encode($config); ?>,
+    {
+      //shippingAdditional: Smartship
+    }
+  );
 });
 </script>

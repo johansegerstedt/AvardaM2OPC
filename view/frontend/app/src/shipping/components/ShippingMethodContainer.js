@@ -1,8 +1,10 @@
 // @flow
 import React from 'react';
-import {bindActionCreators} from 'redux';
+import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
 import {$} from '$i18n';
+import quote from 'Magento_Checkout/js/model/quote';
+import subscribe from '$src/knockout/components/subscribe';
 import {
   getQuoteCurrency,
   getIsCartUpdating,
@@ -10,10 +12,8 @@ import {
   getIsVirtual,
 } from '$src/cart/selectors';
 import {
-  getAddress as getShippingAddress,
   getShippingMethods,
   getIsFetchingShippingMethods,
-  getSelectedMethod,
   getMessages,
 } from '../selectors';
 import {Message, Messages} from '$src/utils/components/Message';
@@ -22,6 +22,7 @@ import ShippingMethodForm from './ShippingMethodForm';
 import ShippingAddressForm from './ShippingAddressForm';
 import {updateAddress, getMethods, selectMethod} from '../actions';
 import {SHIPPING_ANCHOR_ID} from '../constants';
+import {saveShippingInformation} from '../actions';
 import type {BillingAddress} from '$src/cart/types';
 import type {MessageState} from '$src/utils/types';
 import type {ShippingMethod as ShippingMethodType} from '../types';
@@ -36,6 +37,7 @@ type Props = {
     address: BillingAddress,
   }): void,
   updateShippingAddress(BillingAddress): void,
+  saveShippingInformation(): void,
   selectShippingMethod(ShippingMethodType): void,
   isFetchingMethods: boolean,
   isVirtual: boolean,
@@ -62,6 +64,7 @@ class ShippingMethod extends React.Component<Props> {
       messages,
       methods,
       isFetchingMethods,
+      saveShippingInformation,
       selectShippingMethod,
       selectedShippingMethod,
       isVirtual,
@@ -115,6 +118,7 @@ class ShippingMethod extends React.Component<Props> {
               fetchShippingMethods={this.fetchShippingMethods}
               updateShippingAddress={updateShippingAddress}
               isFetchingMethods={isFetchingMethods}
+              saveShippingInformation={saveShippingInformation}
             />
           ) : null}
         </div>
@@ -125,12 +129,10 @@ class ShippingMethod extends React.Component<Props> {
 
 const mapStateToProps = state => ({
   currency: getQuoteCurrency(state),
-  shippingAddress: getShippingAddress(state),
   isUpdating: getIsCartUpdating(state),
   isFetching: getIsCartFetching(state),
   isFetchingMethods: getIsFetchingShippingMethods(state),
   methods: getShippingMethods(state),
-  selectedShippingMethod: getSelectedMethod(state),
   messages: getMessages(state),
   isVirtual: getIsVirtual(state),
 });
@@ -141,9 +143,16 @@ const mapDispatchToProps = dispatch =>
       estimateShippingMethods: getMethods,
       updateShippingAddress: updateAddress,
       selectShippingMethod: selectMethod,
+      saveShippingInformation,
     },
     dispatch,
   );
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
-export default connector(ShippingMethod);
+export default compose(
+  connector,
+  subscribe({
+    shippingAddress: quote.shippingAddress,
+    selectedShippingMethod: quote.shippingMethod,
+  }),
+)(ShippingMethod);

@@ -3,13 +3,13 @@ import AvardaCheckOutClient from 'AvardaCheckOutClient';
 import {isEqual} from 'lodash';
 import {takeLatest} from 'redux-saga';
 import {all, call, fork, put, select, take} from 'redux-saga/effects';
+import quote from 'Magento_Checkout/js/model/quote';
 import {getConfig} from '$src/config';
 import {apiGet, apiPost, getApiUrl} from '$src/m2api';
 import {ActionTypes as Cart} from '$src/cart/constants';
 import {getCartApiPath} from '$src/cart/utils';
-import {getShippingAddress, getIsVirtual} from '$src/cart/selectors';
+import {getIsVirtual} from '$src/cart/selectors';
 import {ActionTypes as ShippingActions} from '$src/shipping/constants';
-import {getSelectedMethod} from '$src/shipping/selectors';
 import {fetchShippingMethods} from '$src/shipping/api';
 import {addMessage, updateAddress, scrollToForm} from '$src/shipping/actions';
 import {
@@ -60,8 +60,8 @@ function* addressChanged({
   if (yield select(getIsVirtual)) {
     return result.continue();
   }
-  const shippingAddress = yield select(getShippingAddress);
-  const selectedMethod = yield select(getSelectedMethod);
+  const shippingAddress = yield call([quote, quote.shippingAddress]);
+  const selectedMethod = yield call([quote, quote.shippingMethod]);
   const newAddress = mergeAddress(shippingAddress, info);
   const methods = yield call(fetchShippingMethods, newAddress);
 

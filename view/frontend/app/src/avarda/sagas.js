@@ -84,7 +84,7 @@ function* addressChanged({
     yield call([result, result.continue]);
   } catch (err) {
     toast(
-      `Failed to sync address information. Try reloading the page.`,
+      $.mage.__('Failed to sync address information. Try reloading the page.'),
       TYPES.ERROR,
     );
     result.cancel();
@@ -105,7 +105,10 @@ function* cartUpdated() {
       yield put(fetchPurchaseIdAction());
     }
   } catch (err) {
-    toast(`Failed to sync updates to Avarda. Try reloading the page.`);
+    toast(
+      $.mage.__('Failed to sync updates to Avarda. Try reloading the page.'),
+      TYPES.ERROR,
+    );
   }
 }
 
@@ -116,7 +119,7 @@ function* completePayment({
     yield call(apiPost, getApiUrl(`${getCartApiPath()}/avarda-payment`));
     yield call([result, result.continue]);
   } catch (err) {
-    toast(`Failed to create an order.`, TYPES.ERROR);
+    toast($.mage.__('Failed to create an order.'), TYPES.ERROR);
     result.cancel();
   }
 }

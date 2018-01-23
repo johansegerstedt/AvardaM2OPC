@@ -1,6 +1,7 @@
 // @flow
 import {takeEvery, takeLatest} from 'redux-saga';
 import {all, call, fork, put} from 'redux-saga/effects';
+import {$, interpolate} from '$i18n';
 import toast, {TYPES} from '$src/utils/toast';
 import {getCartApiPath} from './utils';
 import {
@@ -32,7 +33,9 @@ function* fetchCart(): Generator<*, *, *> {
   } catch (err) {
     yield put(fetchCartFailure(err));
     toast(
-      `There was a problem loading the cart. Please reload the page.`,
+      $.mage.__(
+        'There was a problem loading the cart. Please reload the page.',
+      ),
       TYPES.ERROR,
     );
   }
@@ -45,7 +48,9 @@ export function* refreshCart(): Generator<*, *, *> {
   } catch (err) {
     yield put(fetchCartFailure(err));
     toast(
-      `There was a problem loading the cart. Please reload the page.`,
+      $.mage.__(
+        'There was a problem loading the cart. Please reload the page.',
+      ),
       TYPES.ERROR,
     );
   }
@@ -75,7 +80,7 @@ function* updateCartItems(
     yield put(fetchCartSuccess(cart));
   } catch (err) {
     yield put(updateCartItemsFailure(err));
-    toast(`Couldn't update the cart.`, TYPES.ERROR);
+    toast($.mage.__("Couldn't update the cart."), TYPES.ERROR);
   }
 }
 
@@ -95,7 +100,10 @@ function* deleteCartItem({
     yield put(fetchCartSuccess(cart));
   } catch (err) {
     yield put(deleteCartItemFailure(err));
-    toast(`There was a problem removing an item from the cart.`, TYPES.ERROR);
+    toast(
+      $.mage.__('There was a problem removing an item from the cart.'),
+      TYPES.ERROR,
+    );
   }
 }
 
@@ -114,7 +122,10 @@ function* applyCoupon({
     yield put(fetchCartSuccess(cart));
   } catch (err) {
     yield put(applyCouponFailure(err));
-    toast(`The coupon code "${couponCode}" is not valid.`, TYPES.ERROR);
+    toast(
+      interpolate($.mage.__('The coupon code "%1" is not valid.'), couponCode),
+      TYPES.ERROR,
+    );
   }
 }
 
@@ -129,7 +140,7 @@ function* removeCoupon() {
     yield put(fetchCartRequest());
   } catch (err) {
     yield put(removeCouponFailure(err));
-    toast(`There was a problem with the coupon code.`, TYPES.ERROR);
+    toast($.mage.__('There was a problem with the coupon code.'), TYPES.ERROR);
   }
 }
 

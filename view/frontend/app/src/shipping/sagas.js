@@ -49,7 +49,10 @@ function* receiveShipping({
     try {
       methods = yield call(apiFetchShippingMethods, address);
     } catch (err) {
-      toast(`Failed to load available shipping methods.`, TYPES.ERROR);
+      toast(
+        $.mage.__('Failed to load available shipping methods.'),
+        TYPES.ERROR,
+      );
       return;
     }
     const [carrier_code, method_code] = method.split('_');
@@ -82,7 +85,7 @@ function* getMethods() {
   try {
     methods = yield call(apiFetchShippingMethods, address);
   } catch (err) {
-    toast(`Failed to load available shipping methods.`, TYPES.ERROR);
+    toast($.mage.__('Failed to load available shipping methods.'), TYPES.ERROR);
     return;
   }
   yield put(receiveMethods(methods));
@@ -108,7 +111,7 @@ function* saveInformation() {
     setShippingInformation();
     yield put(saveShippingInformationSuccess());
   } catch (err) {
-    toast(`Failed to save shipping information.`, TYPES.ERROR);
+    toast($.mage.__('Failed to save shipping information.'), TYPES.ERROR);
     yield put(saveShippingInformationFailure(err));
   }
 }

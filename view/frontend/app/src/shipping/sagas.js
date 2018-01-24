@@ -76,7 +76,9 @@ function* updateAddress({payload: address}) {
   };
   quote.shippingAddress(newCustomerAddress(emptyStreetFix(address)));
   selectShippingAddress(quote.shippingAddress());
-  yield put(getMethodsAction());
+  if (address && address.postcode) {
+    yield put(getMethodsAction());
+  }
 }
 
 function* getMethods() {

@@ -9,6 +9,7 @@ import selectShippingAddress from 'Magento_Checkout/js/action/select-shipping-ad
 import selectShippingMethod from 'Magento_Checkout/js/action/select-shipping-method';
 import setShippingInformation from 'Magento_Checkout/js/action/set-shipping-information';
 import {MessageTypes} from '$src/utils/components/Message';
+import toast, {TYPES} from '$src/utils/toast';
 import {ActionTypes as Shipping} from './constants';
 import {ActionTypes as Cart} from '$src/cart/constants';
 import {fetchCartSuccess as fetchCartSuccessAction} from '$src/cart/actions';
@@ -18,6 +19,7 @@ import {
   getMethods as getMethodsAction,
   receiveShippingAssignment,
   receiveMethods,
+  saveShippingInformationFailure,
   saveShippingInformationSuccess,
   selectMethod as selectMethodAction,
   updateAddress as updateAddressAction,
@@ -43,7 +45,16 @@ function* receiveShipping({
 }: ActionType<typeof receiveShippingAssignment>) {
   yield put(updateAddressAction(address));
   if (method) {
-    const methods = yield call(apiFetchShippingMethods, address);
+    let methods = null;
+    try {
+      methods = yield call(apiFetchShippingMethods, address);
+    } catch (err) {
+      toast(
+        $.mage.__('Failed to load available shipping methods.'),
+        TYPES.ERROR,
+      );
+      return;
+    }
     const [carrier_code, method_code] = method.split('_');
     const selectedMethod = find(methods, {carrier_code, method_code});
     if (selectedMethod) {
@@ -70,7 +81,13 @@ function* updateAddress({payload: address}) {
 
 function* getMethods() {
   const address = yield call([quote, quote.shippingAddress]);
-  const methods = yield call(apiFetchShippingMethods, address);
+  let methods = null;
+  try {
+    methods = yield call(apiFetchShippingMethods, address);
+  } catch (err) {
+    toast($.mage.__('Failed to load available shipping methods.'), TYPES.ERROR);
+    return;
+  }
   yield put(receiveMethods(methods));
 }
 
@@ -87,18 +104,16 @@ function* selectMethod({
   }
 
   selectShippingMethod(method);
-  // yield put(
-  //   saveShippingInformation({
-  //     shipping_address,
-  //     shipping_carrier_code,
-  //     shipping_method_code,
-  //   }),
-  // );
 }
 
 function* saveInformation() {
-  setShippingInformation();
-  yield put(saveShippingInformationSuccess());
+  try {
+    setShippingInformation();
+    yield put(saveShippingInformationSuccess());
+  } catch (err) {
+    toast($.mage.__('Failed to save shipping information.'), TYPES.ERROR);
+    yield put(saveShippingInformationFailure(err));
+  }
 }
 
 function* scrollToShippingContainer() {

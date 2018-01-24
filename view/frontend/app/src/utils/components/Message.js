@@ -7,7 +7,7 @@ type Props = {
   type: $Values<typeof MessageTypes>,
 };
 
-const getMessageClass = (type: string): string =>
+export const getMessageClass = (type: string): string =>
   `message ${type} message-${type}`;
 
 export const MessageTypes: {[string]: MessageType} = {

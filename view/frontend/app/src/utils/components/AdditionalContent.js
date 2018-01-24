@@ -51,4 +51,7 @@ class AdditionalContent extends React.Component<Props> {
   }
 }
 
-export default AdditionalContent;
+const ConditionalWrapper = (props: Props) =>
+  getRegion(props.region) ? <AdditionalContent {...props} /> : null;
+
+export default ConditionalWrapper;

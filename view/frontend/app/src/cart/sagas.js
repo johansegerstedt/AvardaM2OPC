@@ -42,11 +42,9 @@ export function* refreshCart(): Generator<*, *, *> {
   }
 }
 
-function* updateCartItems({payload = []}: {payload: any[]} = {}): Generator<
-  *,
-  *,
-  *,
-> {
+function* updateCartItems(
+  {payload = []}: {payload: any[]} = {},
+): Generator<*, *, *> {
   const baseUrl = `${getCartApiPath()}/items`;
   try {
     const updatedItems = yield all(

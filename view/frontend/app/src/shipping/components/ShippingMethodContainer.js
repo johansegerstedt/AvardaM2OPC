@@ -108,7 +108,7 @@ class ShippingMethod extends React.Component<Props> {
           role="tabpanel"
           aria-hidden="false"
         >
-          {shippingAddress && currency ? (
+          {shippingAddress && shippingAddress.postcode && currency ? (
             <ShippingMethodForm // Submit this to select shipping method
               shippingAddress={shippingAddress}
               selectShippingMethod={selectShippingMethod}

@@ -38,7 +38,14 @@ class AvardaCheckOutContainer extends Component<ConnectedProps> {
   render() {
     const {purchaseId, isFetching, ...props} = this.props;
     return purchaseId ? (
-      <AvardaCheckOut purchaseId={purchaseId} onDone={this.onDone} {...props} />
+      <AvardaCheckOut
+        purchaseId={purchaseId}
+        onDone={this.onDone}
+        callbackUrl={`${window.location.href}?purchaseId=${encodeURIComponent(
+          purchaseId,
+        )}`}
+        {...props}
+      />
     ) : (
       <Loader isLoading={isFetching}>{null}</Loader>
     );

@@ -1,6 +1,5 @@
 // @flow
 import React from 'react';
-import {initial, last} from 'lodash';
 import {$} from '$i18n';
 import {formatCurrency} from '$src/utils/format';
 import Loader from '$src/utils/components/Loader';
@@ -15,8 +14,17 @@ type Props = {
 class CartSummary extends React.Component<Props> {
   render() {
     const {currency, totalSegments, isLoading} = this.props;
-    const segments = initial(totalSegments);
-    const grandTotal = last(totalSegments);
+    const {segments, footerSegments} = totalSegments.reduce(
+      (obj, segment) => {
+        if (segment.area && segment.area === 'footer') {
+          obj.footerSegments.push(segment);
+        } else {
+          obj.segments.push(segment);
+        }
+        return obj;
+      },
+      {segments: [], footerSegments: []},
+    );
     return (
       <div className="cart-summary" style={{top: 0}}>
         <strong className="summary title">{$.mage.__('Summary')}</strong>
@@ -28,30 +36,41 @@ class CartSummary extends React.Component<Props> {
                   {$.mage.__('Total')}
                 </caption>
                 <tbody>
-                  {segments.map(({code, title, value}) => (
-                    <tr key={code} className="totals sub">
-                      <th className="mark" scope="row">
-                        {title}
-                      </th>
-                      <td className="amount">
-                        <span className="price" data-th={$.mage.__('Subtotal')}>
-                          {formatCurrency(value, currency)}
-                        </span>
-                      </td>
-                    </tr>
-                  ))}
-                  <tr key={grandTotal.code} className="grand totals">
-                    <th className="mark" scope="row">
-                      <strong>{grandTotal.title}</strong>
-                    </th>
-                    <td className="amount">
-                      <strong>
-                        <span className="price">
-                          {formatCurrency(grandTotal.value, currency)}
-                        </span>
-                      </strong>
-                    </td>
-                  </tr>
+                  {segments.map(
+                    ({code, title, value}) =>
+                      value !== null ? (
+                        <tr key={code} className="totals sub">
+                          <th className="mark" scope="row">
+                            {$.mage.__(title)}
+                          </th>
+                          <td className="amount">
+                            <span
+                              className="price"
+                              data-th={$.mage.__('Subtotal')}
+                            >
+                              {formatCurrency(value, currency)}
+                            </span>
+                          </td>
+                        </tr>
+                      ) : null,
+                  )}
+                  {footerSegments.map(
+                    ({code, title, value}) =>
+                      value !== null ? (
+                        <tr key={code} className="grand totals">
+                          <th className="mark" scope="row">
+                            <strong>{$.mage.__(title)}</strong>
+                          </th>
+                          <td className="amount">
+                            <strong>
+                              <span className="price">
+                                {formatCurrency(value, currency)}
+                              </span>
+                            </strong>
+                          </td>
+                        </tr>
+                      ) : null,
+                  )}
                 </tbody>
               </table>
             </Loader>

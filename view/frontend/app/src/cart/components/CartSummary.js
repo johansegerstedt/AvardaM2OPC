@@ -3,17 +3,45 @@ import React from 'react';
 import {$} from '$i18n';
 import {formatCurrency} from '$src/utils/format';
 import Loader from '$src/utils/components/Loader';
-import type {TotalSegment} from '../types';
+import type {Cart, TotalSegment} from '../types';
 
 type Props = {
   currency: string,
   isLoading: boolean,
   totalSegments: TotalSegment[],
+  cart: Cart,
+};
+
+/**
+ * Choose and display correct value in the correct format.
+ * Basically workaround for https://github.com/magento/magento2/issues/13392
+ * @param  {Object}  totalSegment
+ * @param  {Object}  totalsData
+ * @param  {string}  currency
+ * @return {string}
+ */
+const displayTotalSegmentValue = (
+  {code, value}: TotalSegment,
+  totalsData: Cart,
+  currency: string,
+): string => {
+  let theValue = '';
+  switch (code) {
+    case 'shipping': {
+      theValue = window.checkoutConfig.isDisplayShippingPriceExclTax
+        ? totalsData.shipping_amount
+        : totalsData.shipping_incl_tax;
+      break;
+    }
+    default:
+      theValue = value;
+  }
+  return formatCurrency(theValue, currency);
 };
 
 class CartSummary extends React.Component<Props> {
   render() {
-    const {currency, totalSegments, isLoading} = this.props;
+    const {currency, totalSegments, isLoading, cart: totalsData} = this.props;
     const {segments, footerSegments} = totalSegments.reduce(
       (obj, segment) => {
         if (segment.area && segment.area === 'footer') {
@@ -48,7 +76,11 @@ class CartSummary extends React.Component<Props> {
                               className="price"
                               data-th={$.mage.__('Subtotal')}
                             >
-                              {formatCurrency(value, currency)}
+                              {displayTotalSegmentValue(
+                                {code, value, title},
+                                totalsData,
+                                currency,
+                              )}
                             </span>
                           </td>
                         </tr>
@@ -64,7 +96,11 @@ class CartSummary extends React.Component<Props> {
                           <td className="amount">
                             <strong>
                               <span className="price">
-                                {formatCurrency(value, currency)}
+                                {displayTotalSegmentValue(
+                                  {code, value, title},
+                                  totalsData,
+                                  currency,
+                                )}
                               </span>
                             </strong>
                           </td>

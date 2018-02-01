@@ -34,6 +34,8 @@ class Checkout extends Onepage
      */
     protected $config;
 
+    protected $assetRepo;
+
     /**
      * Checkout constructor.
      *
@@ -57,6 +59,7 @@ class Checkout extends Onepage
         $this->checkoutSession = $checkoutSession;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->config = $config;
+        $this->assetRepo = $context->getAssetRepository();
     }
 
     /**
@@ -139,6 +142,25 @@ class Checkout extends Onepage
      */
     public function getPurchaseId() {
         return $this->_request->getParam('purchase');
+    }
+    /**
+     * @return string|null
+     */
+    public function getCustomCssUrl()
+    {
+      $url = $this->config->getCustomCssUrl();
+      if ($url) {
+          if(substr( $url, 0, 4 ) === "http"){
+              return $url;
+          }
+          $fullUrl = $this->assetRepo->getUrl($url);
+          return $fullUrl;
+      }
+    }
+
+    public function getReplaceDefaultCss()
+    {
+      return $this->config->getReplaceDefaultCss();
     }
 
     /**

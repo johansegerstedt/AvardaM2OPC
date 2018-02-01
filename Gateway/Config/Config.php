@@ -17,6 +17,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     const KEY_SITE_PASSWORD = 'site_password';
     const KEY_ONEPAGE_REDIRECT_ACTIVE = 'onepage_redirect_active';
     const KEY_AUTOMATIC_INVOICING_ACTIVE = 'automatic_invoicing_active';
+    const KEY_CUSTOM_CSS_URL  = 'custom_css_url';
+    const KEY_REPLACE_DEFAULT_CSS = 'replace_default_css';
 
     const APPLICATION_URL_STAGE = 'https://stage.avarda.org/CheckOut2';
     const APPLICATION_URL_ONLINE = 'https://online.avarda.org/CheckOut2';
@@ -81,5 +83,21 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     public function isAutomaticInvoicingActive()
     {
         return (bool) $this->getValue(self::KEY_AUTOMATIC_INVOICING_ACTIVE);
+    }
+
+    /**
+     * Get custom css url
+     * @return string|null
+     */
+    public function getCustomCssUrl()
+    {
+        return $this->getValue(self::KEY_CUSTOM_CSS_URL);
+    }
+
+    /**
+     * @return bool
+     */
+    public function getReplaceDefaultCss() {
+        return (bool) $this->getValue(self::KEY_REPLACE_DEFAULT_CSS);
     }
 }

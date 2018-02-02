@@ -41,7 +41,7 @@ class AvardaCheckOutContainer extends Component<ConnectedProps> {
       <AvardaCheckOut
         purchaseId={purchaseId}
         onDone={this.onDone}
-        callbackUrl={`${window.location.href}?purchaseId=${encodeURIComponent(
+        callbackUrl={`${getConfig().callbackUrl}/purchase/${encodeURIComponent(
           purchaseId,
         )}`}
         {...props}

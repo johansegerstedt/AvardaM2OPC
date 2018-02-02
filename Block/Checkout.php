@@ -137,6 +137,13 @@ class Checkout extends Onepage
     /**
      * @return string
      */
+    public function getPurchaseId() {
+        return $this->_request->getParam('purchase');
+    }
+
+    /**
+     * @return string
+     */
     public function getSaveOrderUrl() {
         return $this->getUrl('avarda/checkout/saveOrder', ['_secure' => true]);
     }

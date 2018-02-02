@@ -16,6 +16,10 @@ export const receivePurchaseId = createAction(
   createString,
 );
 
+export const getPurchaseIdFailure = createAction(
+  ActionTypes.GET_PURCHASE_ID_FAILURE,
+);
+
 export const addressChanged = createAction(
   ActionTypes.ADDRESS_CHANGED,
   (result: Result, info: CustomerInfo): * => ({

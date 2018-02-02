@@ -10,9 +10,9 @@ use Digia\AvardaCheckout\Api\ItemStorageInterface;
 use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactory;
 use Digia\AvardaCheckout\Gateway\Data\ItemAdapter\ArrayDataItemFactory;
 use Digia\AvardaCheckout\Gateway\Data\ItemAdapter\OrderItemFactory;
-use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\Data\CreditmemoInterface;
 
-class InvoiceCollectTotalsPrepareItems
+class CreditmemoCollectTotalsPrepareItems
 {
     /**
      * @var \Psr\Log\LoggerInterface $logger
@@ -50,7 +50,7 @@ class InvoiceCollectTotalsPrepareItems
     protected $collectTotalsFlag = false;
 
     /**
-     * InvoiceCollectTotals constructor.
+     * CreditmemoCollectTotalsPrepareItems constructor.
      *
      * @param \Psr\Log\LoggerInterface $logger
      * @param ItemStorageInterface $itemStorage
@@ -76,13 +76,13 @@ class InvoiceCollectTotalsPrepareItems
     }
 
     /**
-     * @param InvoiceInterface $subject
-     * @param InvoiceInterface $result
-     * @return InvoiceInterface
+     * @param CreditmemoInterface $subject
+     * @param CreditmemoInterface $result
+     * @return CreditmemoInterface
      */
     public function afterCollectTotals(
-        InvoiceInterface $subject,
-        InvoiceInterface $result
+        CreditmemoInterface $subject,
+        CreditmemoInterface $result
     ) {
         try {
             $payment = $subject->getOrder()->getPayment();
@@ -102,9 +102,9 @@ class InvoiceCollectTotalsPrepareItems
     /**
      * Populate the item storage with Avarda items needed for request building
      *
-     * @param InvoiceInterface $subject
+     * @param CreditmemoInterface $subject
      */
-    public function prepareItemStorage(InvoiceInterface $subject)
+    public function prepareItemStorage(CreditmemoInterface $subject)
     {
         $this->prepareItems($subject);
         $this->prepareShipment($subject);
@@ -114,9 +114,9 @@ class InvoiceCollectTotalsPrepareItems
     /**
      * Create item data objects from invoice items
      *
-     * @param InvoiceInterface $subject
+     * @param CreditmemoInterface $subject
      */
-    protected function prepareItems(InvoiceInterface $subject)
+    protected function prepareItems(CreditmemoInterface $subject)
     {
         foreach ($subject->getItems() as $item) {
             $orderItem = $item->getOrderItem();
@@ -148,12 +148,12 @@ class InvoiceCollectTotalsPrepareItems
     /**
      * Create item data object from shipment information
      *
-     * @param InvoiceInterface $subject
+     * @param CreditmemoInterface $subject
      */
-    protected function prepareShipment(InvoiceInterface $subject)
+    protected function prepareShipment(CreditmemoInterface $subject)
     {
-        $shippingAmount = $subject->getShippingInclTax();
-        if ($shippingAmount > 0) {
+        $shippingAmount = $subject->getShippingAmount();
+        if ($subject->getShippingAmount() > 0) {
             $order = $subject->getOrder();
             $itemAdapter = $this->arrayDataItemAdapterFactory->create([
                 'data' => [
@@ -175,9 +175,9 @@ class InvoiceCollectTotalsPrepareItems
     /**
      * Create item data object from gift card information
      *
-     * @param InvoiceInterface $subject
+     * @param CreditmemoInterface $subject
      */
-    protected function prepareGiftCards(InvoiceInterface $subject)
+    protected function prepareGiftCards(CreditmemoInterface $subject)
     {
         $giftCardsAmount = $subject->getGiftCardsAmount();
         if ($giftCardsAmount > 0) {

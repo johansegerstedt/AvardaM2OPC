@@ -21,22 +21,22 @@ class AutomaticInvoicing implements ObserverInterface
     /**
      * @var \Digia\AvardaCheckout\Gateway\Config\Config
      */
-    private $config;
+    protected $config;
 
     /**
      * @var \Digia\AvardaCheckout\Helper\PaymentData
      */
-    private $paymentDataHelper;
+    protected $paymentDataHelper;
 
     /**
      * @var \Magento\Sales\Api\InvoiceManagementInterface
      */
-    private $invoiceService;
+    protected $invoiceService;
 
     /**
      * @var \Magento\Framework\DB\TransactionFactory
      */
-    private $transactionFactory;
+    protected $transactionFactory;
 
     /**
      * AutomaticInvoicing constructor.

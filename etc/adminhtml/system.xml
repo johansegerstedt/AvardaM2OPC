@@ -38,7 +38,7 @@
 
                 <field id="custom_css_url" type="text" sortOrder="48" showInDefault="1" showInWebsite="1" showInStore="1"   translate="label">
                     <label>Custom CSS url</label>
-                    <comment>Assets URL of the custom CSS file to use.in this format module::css/avarda.css</comment>
+                    <comment>Assets URL of the custom CSS file to use. Use URL with https protocol or module::css/avarda.css format.</comment>
                 </field>
 
                 <field id="replace_default_css" type="select" sortOrder="49" showInDefault="1" showInWebsite="1" showInStore="1"  translate="label">

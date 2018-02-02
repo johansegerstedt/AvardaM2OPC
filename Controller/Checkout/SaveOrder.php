@@ -6,12 +6,12 @@
  */
 namespace Digia\AvardaCheckout\Controller\Checkout;
 
-use \Digia\AvardaCheckout\Api\GuestPaymentManagementInterface;
-use \Digia\AvardaCheckout\Api\PaymentManagementInterface;
-use \Magento\Framework\App\Action\Action;
-use \Magento\Framework\Exception\PaymentException;
+use Digia\AvardaCheckout\Api\GuestPaymentManagementInterface;
+use Digia\AvardaCheckout\Api\PaymentManagementInterface;
+use Digia\AvardaCheckout\Controller\AbstractCheckout;
+use Magento\Framework\Exception\PaymentException;
 
-class SaveOrder extends Action
+class SaveOrder extends AbstractCheckout
 {
     /**
      * @var \Magento\Checkout\Model\Session
@@ -37,6 +37,8 @@ class SaveOrder extends Action
      * Index constructor.
      *
      * @param \Magento\Framework\App\Action\Context $context
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param \Digia\AvardaCheckout\Gateway\Config\Config $config
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
      * @param GuestPaymentManagementInterface $guestPaymentManagement
@@ -44,12 +46,14 @@ class SaveOrder extends Action
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
+        \Psr\Log\LoggerInterface $logger,
+        \Digia\AvardaCheckout\Gateway\Config\Config $config,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
         GuestPaymentManagementInterface $guestPaymentManagement,
         PaymentManagementInterface $paymentManagement
     ) {
-        parent::__construct($context);
+        parent::__construct($context, $logger, $config);
         $this->checkoutSession = $checkoutSession;
         $this->customerSession = $customerSession;
         $this->guestPaymentManagement = $guestPaymentManagement;

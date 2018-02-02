@@ -19,6 +19,11 @@ class AutomaticInvoicing implements ObserverInterface
     protected $logger;
 
     /**
+     * @var \Digia\AvardaCheckout\Gateway\Config\Config
+     */
+    private $config;
+
+    /**
      * @var \Digia\AvardaCheckout\Helper\PaymentData
      */
     private $paymentDataHelper;
@@ -37,17 +42,20 @@ class AutomaticInvoicing implements ObserverInterface
      * AutomaticInvoicing constructor.
      *
      * @param \Psr\Log\LoggerInterface $logger
+     * @param \Digia\AvardaCheckout\Gateway\Config\Config $config
      * @param \Digia\AvardaCheckout\Helper\PaymentData $paymentDataHelper
      * @param \Magento\Sales\Api\InvoiceManagementInterface $invoiceService
      * @param \Magento\Framework\DB\TransactionFactory $transactionFactory
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
+        \Digia\AvardaCheckout\Gateway\Config\Config $config,
         \Digia\AvardaCheckout\Helper\PaymentData $paymentDataHelper,
         \Magento\Sales\Api\InvoiceManagementInterface $invoiceService,
         \Magento\Framework\DB\TransactionFactory $transactionFactory
     ) {
         $this->logger = $logger;
+        $this->config = $config;
         $this->paymentDataHelper = $paymentDataHelper;
         $this->invoiceService = $invoiceService;
         $this->transactionFactory = $transactionFactory;
@@ -62,7 +70,9 @@ class AutomaticInvoicing implements ObserverInterface
         try {
             $order = $observer->getEvent()->getOrder();
             $payment = $order->getPayment();
-            if ($this->paymentDataHelper->isAvardaPayment($payment)) {
+            if ($this->paymentDataHelper->isAvardaPayment($payment) &&
+                $this->config->isAutomaticInvoicingActive()
+            ) {
                 $invoice = $this->invoiceService->prepareInvoice($order);
                 $invoice->setRequestedCaptureCase($invoice::CAPTURE_ONLINE);
                 $invoice->register();

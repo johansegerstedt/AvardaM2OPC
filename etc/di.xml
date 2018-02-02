@@ -98,7 +98,7 @@
                 <item name="avarda_update_items" xsi:type="string">AvardaCheckoutUpdateItemsCommand</item>
                 <item name="avarda_get_payment_status" xsi:type="string">AvardaCheckoutGetPaymentStatusCommand</item>
                 <item name="capture" xsi:type="string">AvardaCheckoutPurchaseOrderCommand</item>
-                <item name="refund" xsi:type="string">AvardaCheckoutRefundCommand</item>
+                <item name="refund" xsi:type="string">AvardaCheckoutReturnCommand</item>
             </argument>
         </arguments>
     </virtualType>

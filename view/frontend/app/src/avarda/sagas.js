@@ -17,6 +17,7 @@ import toast, {TYPES} from '$src/utils/toast';
 import {
   fetchPurchaseId as fetchPurchaseIdAction,
   receivePurchaseId,
+  getPurchaseIdFailure,
   addressChanged as addressChangedAction,
   updatedItems,
   completePaymentPressed as completePaymentPressedAction,
@@ -43,6 +44,7 @@ function* fetchPurchaseId() {
       ),
       TYPES.ERROR,
     );
+    yield put(getPurchaseIdFailure(err));
   }
 }
 

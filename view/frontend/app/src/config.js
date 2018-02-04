@@ -20,6 +20,7 @@ export const validate = (
     magentoLocale,
     maskedQuoteId,
     saveOrderUrl,
+    callbackUrl,
   } = foo;
 
   if (
@@ -31,7 +32,8 @@ export const validate = (
       h.isBoolean(hasItems) &&
       h.isString(magentoLocale) &&
       h.oneOf(h.isString, h.isVoid, h.isNull)(maskedQuoteId) &&
-      h.isString(saveOrderUrl)
+      h.isString(saveOrderUrl) &&
+      h.isString(callbackUrl)
     )
   ) {
     return {error: true, value: null};
@@ -48,6 +50,7 @@ export const validate = (
       magentoLocale,
       maskedQuoteId,
       saveOrderUrl,
+      callbackUrl,
     },
   };
 };

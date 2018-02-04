@@ -49,6 +49,16 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
     protected $quoteRepository;
 
     /**
+     * @var \Digia\AvardaCheckout\Api\PaymentQueueRepositoryInterface
+     */
+    protected $paymentQueueRepository;
+
+    /**
+     * @var \Digia\AvardaCheckout\Api\Data\PaymentQueueInterfaceFactory
+     */
+    protected $paymentQueueFactory;
+
+    /**
      * @var CartInterface
      */
     protected $quote;
@@ -62,6 +72,7 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
      * @param \Magento\Payment\Gateway\Command\CommandPoolInterface $commandPool
      * @param PaymentDataObjectFactoryInterface $paymentDataObjectFactory
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+     * @param \Digia\AvardaCheckout\Api\PaymentQueueRepositoryInterface $paymentQueueRepository
      */
     public function __construct(
         \Digia\AvardaCheckout\Api\ItemManagementInterface $itemManagement,
@@ -69,7 +80,9 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
         \Digia\AvardaCheckout\Helper\Quote $quoteHelper,
         \Magento\Payment\Gateway\Command\CommandPoolInterface $commandPool,
         PaymentDataObjectFactoryInterface $paymentDataObjectFactory,
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
+        \Digia\AvardaCheckout\Api\PaymentQueueRepositoryInterface $paymentQueueRepository,
+        \Digia\AvardaCheckout\Api\Data\PaymentQueueInterfaceFactory $paymentQueueFactory
     ) {
         $this->itemManagement = $itemManagement;
         $this->itemStorage = $itemStorage;
@@ -77,6 +90,8 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
         $this->commandPool = $commandPool;
         $this->paymentDataObjectFactory = $paymentDataObjectFactory;
         $this->quoteRepository = $quoteRepository;
+        $this->paymentQueueRepository = $paymentQueueRepository;
+        $this->paymentQueueFactory = $paymentQueueFactory;
     }
 
     /**
@@ -110,8 +125,18 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
          */
         $quote->save();
 
+
+        $purchaseId = $this->quoteHelper->getPurchaseId($quote);
+
+        /** @var \Digia\AvardaCheckout\Api\Data\PaymentQueueInterface $paymentQueue */
+        $paymentQueue = $this->paymentQueueFactory->create();
+        $paymentQueue->setPurchaseId($purchaseId);
+        $paymentQueue->setQuoteId($quote->getId());
+
+        $this->paymentQueueRepository->save($paymentQueue);
+
         // Get purchase ID from payment additional information
-        return $this->quoteHelper->getPurchaseId($quote);
+        return $purchaseId;
     }
 
     /**

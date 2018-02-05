@@ -59,6 +59,11 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
     protected $paymentQueueFactory;
 
     /**
+     * @var \Magento\Quote\Api\CartManagementInterface
+     */
+    protected $cartManagement;
+
+    /**
      * @var CartInterface
      */
     protected $quote;
@@ -73,6 +78,7 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
      * @param PaymentDataObjectFactoryInterface $paymentDataObjectFactory
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Digia\AvardaCheckout\Api\PaymentQueueRepositoryInterface $paymentQueueRepository
+     * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
      */
     public function __construct(
         \Digia\AvardaCheckout\Api\ItemManagementInterface $itemManagement,
@@ -82,7 +88,8 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
         PaymentDataObjectFactoryInterface $paymentDataObjectFactory,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Digia\AvardaCheckout\Api\PaymentQueueRepositoryInterface $paymentQueueRepository,
-        \Digia\AvardaCheckout\Api\Data\PaymentQueueInterfaceFactory $paymentQueueFactory
+        \Digia\AvardaCheckout\Api\Data\PaymentQueueInterfaceFactory $paymentQueueFactory,
+        \Magento\Quote\Api\CartManagementInterface $cartManagement
     ) {
         $this->itemManagement = $itemManagement;
         $this->itemStorage = $itemStorage;
@@ -92,6 +99,7 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
         $this->quoteRepository = $quoteRepository;
         $this->paymentQueueRepository = $paymentQueueRepository;
         $this->paymentQueueFactory = $paymentQueueFactory;
+        $this->cartManagement = $cartManagement;
     }
 
     /**
@@ -130,7 +138,7 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
         $quote->save();
 
 
-        $this->paymentDataHelper->getPurchaseId(
+        $purchaseId = $this->paymentDataHelper->getPurchaseId(
             $quote->getPayment()
         );
 
@@ -216,6 +224,46 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function placeOrder($purchaseId, $isGuest = false)
+    {
+        $quoteId = null;
+
+        try {
+            $quote = $this->getQuoteByPurchaseId($purchaseId);
+            $quoteId = $quote->getId();
+            if ($this->paymentDataHelper->getPurchaseId(
+                    $quote->getPayment()
+                ) != $purchaseId
+            ) {
+                throw new PaymentException(__('Failed to save Avarda order. Please try again later.'));
+            }
+            $this->updatePaymentStatus($quoteId);
+
+            // Unfreeze cart before placing the order
+            $this->unfreezeCart($quoteId);
+
+            // Must set checkout method for guests
+            if ($isGuest) {
+                $quote->setCheckoutMethod(\Magento\Quote\Api\CartManagementInterface::METHOD_GUEST);
+            }
+
+            $this->cartManagement->placeOrder($quoteId);
+        } catch (\Exception $e) {
+
+            // Freeze cart again if place order failed
+            if (isset($quoteId) !== null) {
+                $this->freezeCart($quoteId);
+            }
+
+            throw new PaymentException(
+                __('Failed to save Avarda order. Please try again later.')
+            );
+        }
+    }
+
+    /**
      * Prepare arguments for gateway commands
      *
      * @param CartInterface $quote
@@ -245,6 +293,32 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
     {
         if (!isset($this->quote) || $this->quote->getId() != $cartId) {
             $this->quote = $this->quoteRepository->get($cartId);
+        }
+
+        return $this->quote;
+    }
+
+    /**
+     * Get quote by cart/quote ID
+     *
+     * @param $purchaseId
+     * @return CartInterface
+     */
+    protected function getQuoteByPurchaseId($purchaseId)
+    {
+        if (!isset($this->quote) ||
+            $this->paymentDataHelper->getPurchaseId(
+                $this->quote->getPayment()
+            ) != $purchaseId
+        ) {
+            $paymentQueue = $this->paymentQueueRepository->get($purchaseId);
+            if ($paymentQueue->getQuoteId() === null) {
+                throw new \Exception(__('No quote linked with purchase ID "%purchase_id"', [
+                    'purchase_id' => $purchaseId
+                ]));
+            }
+
+            $this->getQuote($paymentQueue->getQuoteId());
         }
 
         return $this->quote;

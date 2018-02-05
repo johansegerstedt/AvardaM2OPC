@@ -1,9 +1,9 @@
 {
   "presets": ["env", "stage-2", "flow", "react"],
-  "plugins": ["lodash"],
+  "plugins": [["transform-runtime", {"polyfill": false}], "lodash"],
   "env": {
     "production": {
-      "presets": [["minify", { "mangle": false }]]
+      "presets": [["minify", {"mangle": false}]]
     },
     "development": {
       "plugins": ["react-flow-props-to-prop-types"]

@@ -1,4 +1,5 @@
 // @flow
+import 'es6-collections'; // Magento's polyfills
 import React from 'react';
 import ReactDOM from 'react-dom';
 import url from 'mage/url';
@@ -24,7 +25,12 @@ export const execute = (config: Config, additionalContent: Object = {}) => {
 
     if (process.env.NODE_ENV !== 'production') {
       const mainContent = document.getElementById('maincontent');
-      if (mainContent !== null) {
+
+      // IE and Edge don't support ParentNode.prepend
+      // https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/prepend
+      const canUseExperimentalPrepend =
+        mainContent && typeof mainContent.prepend === 'function';
+      if (mainContent !== null && canUseExperimentalPrepend) {
         const configContainer = document.createElement('div');
         configContainer.id = 'avardaCheckoutConfigContainer';
         mainContent.prepend(configContainer);

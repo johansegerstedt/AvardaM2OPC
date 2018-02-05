@@ -4,8 +4,18 @@ import path from 'path';
 import {DefinePlugin} from 'webpack';
 import LodashPlugin from 'lodash-webpack-plugin';
 
+// Required polyfills that are not covered with Magento's es6-collections or
+// babel-transform-runtime plugin (the plugin is used without polyfills to
+// not conflict with es6-collections).
+const polyfills = [
+  'core-js/fn/symbol',
+  'core-js/fn/symbol/iterator',
+  'core-js/fn/promise',
+  'whatwg-fetch',
+];
+
 export default {
-  entry: ['babel-polyfill', 'whatwg-fetch', './src/index.js'],
+  entry: [...polyfills, './src/index.js'],
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, '../web/js'),
@@ -15,6 +25,7 @@ export default {
   },
   externals: {
     AvardaCheckOutClient: 'AvardaCheckOutClient',
+    'es6-collections': 'es6-collections',
     jquery: 'jquery',
     knockout: 'knockout',
     'mage/translate': 'mage/translate',

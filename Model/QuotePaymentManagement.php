@@ -250,6 +250,10 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
             }
 
             $this->cartManagement->placeOrder($quoteId);
+
+            // Clean payment queue
+            $paymentQueue = $this->paymentQueueRepository->get($purchaseId);
+            $this->paymentQueueRepository->delete($paymentQueue);
         } catch (\Exception $e) {
 
             // Freeze cart again if place order failed

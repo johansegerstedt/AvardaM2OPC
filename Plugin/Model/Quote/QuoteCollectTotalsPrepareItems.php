@@ -151,7 +151,7 @@ class QuoteCollectTotalsPrepareItems
     protected function prepareShipment(CartInterface $subject)
     {
         $shippingAddress = $subject->getShippingAddress();
-        if ($shippingAddress) {
+        if ($shippingAddress && $shippingAddress->getShippingTaxAmount() > 0) {
             $itemAdapter = $this->arrayDataItemAdapterFactory->create([
                 'data' => [
                     'name' => $shippingAddress->getShippingDescription(),

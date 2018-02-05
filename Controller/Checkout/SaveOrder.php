@@ -6,8 +6,7 @@
  */
 namespace Digia\AvardaCheckout\Controller\Checkout;
 
-use Digia\AvardaCheckout\Api\GuestPaymentManagementInterface;
-use Digia\AvardaCheckout\Api\PaymentManagementInterface;
+use Digia\AvardaCheckout\Api\QuotePaymentManagementInterface;
 use Digia\AvardaCheckout\Controller\AbstractCheckout;
 use Magento\Framework\Exception\PaymentException;
 
@@ -24,14 +23,9 @@ class SaveOrder extends AbstractCheckout
     protected $customerSession;
 
     /**
-     * @var \Digia\AvardaCheckout\Api\GuestPaymentManagementInterface
+     * @var QuotePaymentManagementInterface $quotePaymentManagement
      */
-    protected $guestPaymentManagement;
-
-    /**
-     * @var \Digia\AvardaCheckout\Api\PaymentManagementInterface
-     */
-    protected $paymentManagement;
+    protected $quotePaymentManagement;
 
     /**
      * Index constructor.
@@ -41,8 +35,7 @@ class SaveOrder extends AbstractCheckout
      * @param \Digia\AvardaCheckout\Gateway\Config\Config $config
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
-     * @param GuestPaymentManagementInterface $guestPaymentManagement
-     * @param PaymentManagementInterface $paymentManagement
+     * @param QuotePaymentManagementInterface $quotePaymentManagement
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -50,14 +43,12 @@ class SaveOrder extends AbstractCheckout
         \Digia\AvardaCheckout\Gateway\Config\Config $config,
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Customer\Model\Session $customerSession,
-        GuestPaymentManagementInterface $guestPaymentManagement,
-        PaymentManagementInterface $paymentManagement
+        QuotePaymentManagementInterface $quotePaymentManagement
     ) {
         parent::__construct($context, $logger, $config);
         $this->checkoutSession = $checkoutSession;
         $this->customerSession = $customerSession;
-        $this->guestPaymentManagement = $guestPaymentManagement;
-        $this->paymentManagement = $paymentManagement;
+        $this->quotePaymentManagement = $quotePaymentManagement;
     }
 
     /**
@@ -68,12 +59,18 @@ class SaveOrder extends AbstractCheckout
     public function execute()
     {
         try {
-            $cartId = $this->checkoutSession->getAvardaCartId();
-            if (!$this->customerSession->isLoggedIn()) {
-                $this->guestPaymentManagement->updateAndPlaceOrder($cartId);
-            } else {
-                $this->paymentManagement->updateAndPlaceOrder($cartId);
+            if (($purchaseId = $this->getPurchaseId()) == null) {
+                throw new \Exception(
+                    __('Failed to save order with purchase ID "%purchase_id"', [
+                        'purchase_id' => $purchaseId
+                    ])
+                );
             }
+
+            $this->quotePaymentManagement->placeOrder(
+                $purchaseId,
+                !$this->customerSession->isLoggedIn()
+            );
 
             return $this->resultRedirectFactory->create()->setPath(
                 'checkout/onepage/success'
@@ -81,6 +78,7 @@ class SaveOrder extends AbstractCheckout
         } catch (PaymentException $e) {
             $message = $e->getMessage();
         } catch (\Exception $e) {
+            $this->logger->error($e);
             $message = __('Failed to save Avarda order. Please try again later.');
         }
 

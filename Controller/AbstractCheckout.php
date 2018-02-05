@@ -75,4 +75,19 @@ abstract class AbstractCheckout extends Action
         return $this->resultFactory->create(ResultFactory::TYPE_FORWARD)
             ->forward('noroute');
     }
+
+    /**
+     * Get purchase ID from request if available
+     *
+     * @return string|null
+     */
+    public function getPurchaseId()
+    {
+        $purchaseId = $this->_request->getParam('purchase', '');
+        if (!empty($purchaseId) && ctype_alnum($purchaseId)) {
+            return $purchaseId;
+        }
+
+        return null;
+    }
 }

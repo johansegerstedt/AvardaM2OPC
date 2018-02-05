@@ -54,13 +54,10 @@ class Process extends AbstractCheckout
             }
         }
 
-        // Check if valid purchase ID, TODO: Check if purchase is valid
-        $purchaseId = $this->_request->getParam('purchase', '');
-        if (!empty($purchaseId)) {
+        if (($purchaseId = $this->getPurchaseId()) !== null) {
             return $this->resultPageFactory->create();
         }
 
-        // Otherwise return to checkout
         return $this->resultRedirectFactory
             ->create()->setPath('avarda/checkout');
     }

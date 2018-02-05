@@ -1,17 +1,15 @@
 <?php $purchaseId = $this->getPurchaseId(); ?>
-<a href="<?= $this->getSaveOrderUrl() . '/purchase/' + $purchaseId; ?>">Process Order</a>
+<a href="<?= $this->getSaveOrderUrl() . 'purchase/' . $purchaseId; ?>">
+    <?= __("If you don't get redirected in 5 seconds, click this link to continue."); ?>
+</a>
 <div id="checkOutDiv"></div>
 <script src="<?= $this->getCheckOutClientScriptPath(); ?>.js"></script>
 <script>
   var options = {
-    // ID of the <div> inside which to render the form
     divId: "checkOutDiv",
-
     purchaseId: "<?= $purchaseId; ?>",
-
-    // What to do once the result is available
     done: function (purchaseId) {
-      window.location.href = "<?= $this->getSaveOrderUrl(); ?>/purchase/" + purchaseId;
+      window.location.href = "<?= $this->getSaveOrderUrl(); ?>purchase/" + purchaseId;
     }
   };
   AvardaCheckOutClient.init(options);

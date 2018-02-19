@@ -69,4 +69,22 @@ interface QuotePaymentManagementInterface
      * @return void
      */
     public function updatePaymentStatus($cartId);
+
+    /**
+     * Prepare and save order to Magento.
+     *
+     * @param string $cartId
+     * @param bool $isGuest
+     * @return void
+     */
+    public function placeOrder($cartId, $isGuest = false);
+
+    /**
+     * Get quote ID by Avarda purchase ID
+     *
+     * @param $purchaseId
+     * @throws \Magento\Framework\Exception\PaymentException
+     * @return int
+     */
+    public function getQuoteIdByPurchaseId($purchaseId);
 }

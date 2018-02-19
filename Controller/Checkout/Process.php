@@ -8,6 +8,7 @@ namespace Digia\AvardaCheckout\Controller\Checkout;
 
 use Digia\AvardaCheckout\Api\QuotePaymentManagementInterface;
 use Digia\AvardaCheckout\Controller\AbstractCheckout;
+use Magento\Framework\Exception\PaymentException;
 
 class Process extends AbstractCheckout
 {
@@ -54,10 +55,30 @@ class Process extends AbstractCheckout
             }
         }
 
-        if (($purchaseId = $this->getPurchaseId()) !== null) {
+        try {
+            if (($purchaseId = $this->getPurchaseId()) == null) {
+                throw new \Exception(
+                    __('Failed to save order with purchase ID "%purchase_id"', [
+                        'purchase_id' => $purchaseId
+                    ])
+                );
+            }
+
+            $quoteId = $this->quotePaymentManagement
+                ->getQuoteIdByPurchaseId($purchaseId);
+
+            $this->quotePaymentManagement->updatePaymentStatus($quoteId);
+            $this->quotePaymentManagement->unfreezeCart($quoteId);
             return $this->resultPageFactory->create();
+
+        } catch (PaymentException $e) {
+            $message = $e->getMessage();
+        } catch (\Exception $e) {
+            $this->logger->error($e);
+            $message = __('Failed to save Avarda order. Please try again later.');
         }
 
+        $this->messageManager->addErrorMessage($message);
         return $this->resultRedirectFactory
             ->create()->setPath('avarda/checkout');
     }

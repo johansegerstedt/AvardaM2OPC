@@ -67,8 +67,11 @@ class SaveOrder extends AbstractCheckout
                 );
             }
 
+            $quoteId = $this->quotePaymentManagement
+                ->getQuoteIdByPurchaseId($purchaseId);
+
             $this->quotePaymentManagement->placeOrder(
-                $purchaseId,
+                $quoteId,
                 !$this->customerSession->isLoggedIn()
             );
 

@@ -117,5 +117,9 @@ class GetPaymentStatusHandler implements HandlerInterface
         $paymentMethod = $this->methodHelper
             ->getPaymentMethod($response->PaymentMethod);
         $quote->getPayment()->setMethod($paymentMethod);
+
+        // Set payment state
+        $paymentState = $this->stateHelper
+            ->getState($response->State);
     }
 }

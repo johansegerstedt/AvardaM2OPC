@@ -106,6 +106,7 @@ class CreditmemoCollectTotalsPrepareItems
      */
     public function prepareItemStorage(CreditmemoInterface $subject)
     {
+        $this->itemStorage->reset();
         $this->prepareItems($subject);
         $this->prepareShipment($subject);
         $this->prepareGiftCards($subject);

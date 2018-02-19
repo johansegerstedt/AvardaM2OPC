@@ -105,6 +105,7 @@ class QuoteCollectTotalsPrepareItems
      */
     protected function prepareItemStorage(CartInterface $subject)
     {
+        $this->itemStorage->reset();
         $this->prepareItems($subject);
         $this->prepareShipment($subject);
         $this->prepareGiftCards($subject);

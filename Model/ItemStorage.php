@@ -24,6 +24,8 @@ class ItemStorage implements ItemStorageInterface
         if ($items !== null) {
             $this->items = $items;
         }
+
+        return $this;
     }
 
     /**
@@ -35,6 +37,8 @@ class ItemStorage implements ItemStorageInterface
             $this->getItems(),
             [$item]
         );
+
+        return $this;
     }
 
     /**
@@ -48,5 +52,15 @@ class ItemStorage implements ItemStorageInterface
 
         return [];
 
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function reset()
+    {
+        $this->items = [];
+
+        return $this;
     }
 }

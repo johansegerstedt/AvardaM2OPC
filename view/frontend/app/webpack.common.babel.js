@@ -14,6 +14,8 @@ export default {
     libraryTarget: 'amd',
   },
   externals: {
+    'Magento_Ui/js/lib/knockout/bootstrap':
+      'Magento_Ui/js/lib/knockout/bootstrap',
     AvardaCheckOutClient: 'AvardaCheckOutClient',
     jquery: 'jquery',
     knockout: 'knockout',

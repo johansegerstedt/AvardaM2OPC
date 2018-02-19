@@ -57,6 +57,7 @@ class Checkout extends Onepage
         $this->checkoutSession = $checkoutSession;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->config = $config;
+        $this->jsLayout = isset($data['jsLayout']) && is_array($data['jsLayout']) ? $data['jsLayout'] : [];
     }
 
     /**
@@ -139,5 +140,25 @@ class Checkout extends Onepage
      */
     public function getSaveOrderUrl() {
       return $this->getUrl('avarda/checkout/saveOrder', ['_secure' => true]);
+    }
+
+    public function getJsLayout() {
+      $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test.log');
+      $logger = new \Zend\Log\Logger();
+      $logger->addWriter($writer);
+      $logger->info('Your text message');
+      //$logger->info(print_r($this->layoutProcessors, true));
+      foreach ($this->layoutProcessors as $processor) {
+            $logger->info('---');
+            $logger->info(print_r($this->jsLayout, true));
+            if (!isset($this->jsLayout)) {
+              exit;
+              // return;
+            }
+            $logger->info('Processing...');
+            // $this->jsLayout = $processor->process($this->jsLayout);
+        }
+        $logger->info('^^^');
+        return \Zend_Json::encode($this->jsLayout);
     }
 }

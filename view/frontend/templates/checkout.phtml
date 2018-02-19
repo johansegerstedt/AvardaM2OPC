@@ -22,6 +22,13 @@ window.checkoutConfig = <?php /* @escapeNotVerified */ echo \Zend_Json::encode($
 window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
 window.customerData = window.checkoutConfig.customerData;
 </script>
+<script type="text/x-magento-init">
+{
+    "*": {
+      "Magento_Ui/js/core/app": <?php echo $block->getJsLayout(); ?>
+    }
+}
+</script>
 <script type="text/javascript">
 require.config(({
   shim: {
@@ -38,10 +45,6 @@ require([
   //'Markup_Smartship/js/view/checkout/shipping/additional-block'
 ], function(avardaCheckout, /*Smartship*/) {
   avardaCheckout.execute(
-    <?php echo json_encode($config); ?>,
-    {
-      //shippingAdditional: Smartship
-    }
-  );
+    <?php echo json_encode($config); ?>);
 });
 </script>

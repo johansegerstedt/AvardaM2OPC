@@ -1,16 +1,16 @@
 // @flow
+import 'Magento_Ui/js/lib/knockout/bootstrap';
 import React from 'react';
 import ReactDOM from 'react-dom';
 import url from 'mage/url';
 import Root from './root/components/Root';
 import configureStore from './root/configureStore';
 import {setConfig} from '$src/config';
-import {setRegions} from '$src/additionalContent';
 import type {Config} from './types';
 
 import './index.scss';
 
-export const execute = (config: Config, additionalContent: Object = {}) => {
+export const execute = (config: Config) => {
   try {
     const container = document.getElementById('checkout-root');
 
@@ -18,7 +18,6 @@ export const execute = (config: Config, additionalContent: Object = {}) => {
       const store = configureStore();
       setConfig(config);
       url.setBaseUrl(config.baseUrl);
-      setRegions(additionalContent);
       ReactDOM.render(<Root config={config} store={store} />, container);
     }
 

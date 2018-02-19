@@ -1,7 +1,4 @@
 <?php $purchaseId = $this->getPurchaseId(); ?>
-<a href="<?= $this->getSaveOrderUrl() . 'purchase/' . $purchaseId; ?>">
-    <?= __("If you don't get redirected in 5 seconds, click this link to continue."); ?>
-</a>
 <div id="checkOutDiv"></div>
 <script src="<?= $this->getCheckOutClientScriptPath(); ?>.js"></script>
 <script>

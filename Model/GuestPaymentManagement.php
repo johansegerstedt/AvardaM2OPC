@@ -33,11 +33,6 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
     protected $quotePaymentManagement;
 
     /**
-     * @var \Magento\Checkout\Model\Session
-     */
-    protected $checkoutSession;
-
-    /**
      * @var \Magento\Quote\Api\GuestCartManagementInterface
      */
     protected $cartManagement;
@@ -53,7 +48,6 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
      * @param \Psr\Log\LoggerInterface $logger
      * @param PaymentDetailsInterfaceFactory $paymentDetailsFactory
      * @param QuotePaymentManagementInterface $quotePaymentManagement
-     * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Quote\Api\GuestCartManagementInterface $guestCartManagement
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      */
@@ -61,14 +55,12 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
         \Psr\Log\LoggerInterface $logger,
         PaymentDetailsInterfaceFactory $paymentDetailsFactory,
         QuotePaymentManagementInterface $quotePaymentManagement,
-        \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Quote\Api\GuestCartManagementInterface $cartManagement,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
         $this->logger = $logger;
         $this->paymentDetailsFactory = $paymentDetailsFactory;
         $this->quotePaymentManagement = $quotePaymentManagement;
-        $this->checkoutSession = $checkoutSession;
         $this->cartManagement = $cartManagement;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
     }
@@ -139,32 +131,6 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
 
             throw new PaymentException(
                 __('Something went wrong with Avarda checkout. Please try again later.')
-            );
-        }
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function updateAndPlaceOrder($cartId)
-    {
-        try {
-            $quoteId = $this->getQuoteId($cartId);
-            $this->quotePaymentManagement->updatePaymentStatus($quoteId);
-
-            // Unfreeze cart before placing the order
-            $this->quotePaymentManagement->unfreezeCart($quoteId);
-
-            // Place order from updated quote
-            $this->cartManagement->placeOrder($cartId);
-        } catch (\Exception $e) {
-
-            // Freeze cart again if place order failed
-            $this->freezeCart($cartId);
-            $this->logger->error($e);
-
-            throw new PaymentException(
-                __('Failed to save Avarda order. Please try again later.')
             );
         }
     }

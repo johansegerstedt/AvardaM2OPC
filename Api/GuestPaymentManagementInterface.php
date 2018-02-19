@@ -39,13 +39,4 @@ interface GuestPaymentManagementInterface
      * @return \Digia\AvardaCheckout\Api\Data\ItemDetailsListInterface
      */
     public function getItemDetailsList($cartId);
-
-    /**
-     * Update order (quote) from Avarda and save order to Magento.
-     *
-     * @param string $cartId
-     * @throws \Magento\Framework\Exception\PaymentException
-     * @return void
-     */
-    public function updateAndPlaceOrder($cartId);
 }

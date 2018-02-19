@@ -64,15 +64,15 @@ class PurchaseState
     /**
      * Get payment state code for Magento order
      *
-     * @param int $paymentState
+     * @param int $stateId
      * @return string
      */
-    public function getPaymentState($paymentState)
+    public function getState($stateId)
     {
-        if (is_int($paymentState) &&
-            array_key_exists($paymentState, self::$states)
+        if (is_int($stateId) &&
+            array_key_exists($stateId, self::$states)
         ){
-            return self::$states[$paymentState];
+            return self::$states[$stateId];
 
         }
 
@@ -82,13 +82,13 @@ class PurchaseState
     /**
      * Check if customer is in checkout
      *
-     * @param int $paymentState
+     * @param int $stateId
      * @return bool
      */
-    public function isInCheckout($paymentState)
+    public function isInCheckout($stateId)
     {
         return in_array(
-            $this->getPaymentState($paymentState),
+            $this->getState($stateId),
             [self::STATE_NEW, self::STATE_BEING_PROCESSED]
         );
     }
@@ -96,13 +96,13 @@ class PurchaseState
     /**
      * Check if payment is complete
      *
-     * @param int $paymentState
+     * @param int $stateId
      * @return bool
      */
-    public function isComplete($paymentState)
+    public function isComplete($stateId)
     {
         return in_array(
-            $this->getPaymentState($paymentState),
+            $this->getState($stateId),
             [self::STATE_COMPLETED]
         );
     }
@@ -110,13 +110,13 @@ class PurchaseState
     /**
      * Check if payment is waiting for card/bank actions
      *
-     * @param int $paymentState
+     * @param int $stateId
      * @return bool
      */
-    public function isWaiting($paymentState)
+    public function isWaiting($stateId)
     {
         return in_array(
-            $this->getPaymentState($paymentState),
+            $this->getState($stateId),
             [
                 self::STATE_WAITING_FOR_BANK_ID,
                 self::STATE_WAITING_FOR_CARD_PAYMENTS,
@@ -129,13 +129,13 @@ class PurchaseState
     /**
      * Check if payment is cancelled
      *
-     * @param int $paymentState
+     * @param int $stateId
      * @return bool
      */
-    public function isCancelled($paymentState)
+    public function isCancelled($stateId)
     {
         return in_array(
-            $this->getPaymentState($paymentState),
+            $this->getState($stateId),
             [self::STATE_ERROR, self::STATE_CANCELLED]
         );
     }
@@ -143,15 +143,15 @@ class PurchaseState
     /**
      * Check if payment is killed
      *
-     * @param int $paymentState
+     * @param int $stateId
      * @return bool
      */
-    public function isKilled($paymentState)
+    public function isKilled($stateId)
     {
         return (
-            $this->isCancelled($paymentState) ||
+            $this->isCancelled($stateId) ||
             in_array(
-                $this->getPaymentState($paymentState),
+                $this->getState($stateId),
                 [self::STATE_SESSION_TIMED_OUT]
             )
         );

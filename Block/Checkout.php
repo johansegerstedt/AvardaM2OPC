@@ -126,6 +126,7 @@ class Checkout extends Onepage
 
     /**
      * Get AvardaCheckOutClient script path for Require.js.
+     *
      * @return string
      */
     public function getCheckOutClientScriptPath()
@@ -134,10 +135,23 @@ class Checkout extends Onepage
     }
 
     /**
-     * [getSaveOrderUrl description]
+     * @return string
+     */
+    public function getPurchaseId() {
+        return $this->_request->getParam('purchase');
+    }
+
+    /**
      * @return string
      */
     public function getSaveOrderUrl() {
-      return $this->getUrl('avarda/checkout/saveOrder', ['_secure' => true]);
+        return $this->getUrl('avarda/checkout/saveOrder', ['_secure' => true]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCallbackUrl() {
+        return $this->getUrl('avarda/checkout/process', ['_secure' => true]);
     }
 }

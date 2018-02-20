@@ -21,6 +21,7 @@ export type Config = {|
   +magentoLocale: string,
   +maskedQuoteId: ?string,
   +saveOrderUrl: string,
+  +callbackUrl: string,
 |};
 
 export type Reference = string | number;

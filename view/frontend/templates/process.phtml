@@ -1,0 +1,13 @@
+<?php $purchaseId = $this->getPurchaseId(); ?>
+<div id="checkOutDiv"></div>
+<script src="<?= $this->getCheckOutClientScriptPath(); ?>.js"></script>
+<script>
+  var options = {
+    divId: "checkOutDiv",
+    purchaseId: "<?= $purchaseId; ?>",
+    done: function (purchaseId) {
+      window.location.href = "<?= $this->getSaveOrderUrl(); ?>purchase/" + purchaseId;
+    }
+  };
+  AvardaCheckOutClient.init(options);
+</script>

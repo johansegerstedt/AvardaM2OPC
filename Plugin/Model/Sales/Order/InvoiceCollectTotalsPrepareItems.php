@@ -106,6 +106,7 @@ class InvoiceCollectTotalsPrepareItems
      */
     public function prepareItemStorage(InvoiceInterface $subject)
     {
+        $this->itemStorage->reset();
         $this->prepareItems($subject);
         $this->prepareShipment($subject);
         $this->prepareGiftCards($subject);

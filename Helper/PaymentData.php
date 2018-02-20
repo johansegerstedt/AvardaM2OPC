@@ -15,6 +15,11 @@ use Magento\Payment\Model\InfoInterface;
 class PaymentData
 {
     /**
+     * Payment additional information field name for state ID
+     */
+    const STATE_ID = 'state_id';
+
+    /**
      * Get purchase ID from payment info
      *
      * @param InfoInterface $payment
@@ -33,6 +38,27 @@ class PaymentData
         }
 
         return false;
+    }
+
+    /**
+     * Get state ID from payment info
+     *
+     * @param InfoInterface $payment
+     * @return int
+     */
+    public function getStateId(InfoInterface $payment)
+    {
+        $additionalInformation = $payment->getAdditionalInformation();
+        if (is_array($additionalInformation) &&
+            array_key_exists(
+                self::STATE_ID,
+                $additionalInformation
+            )
+        ) {
+            return $additionalInformation[self::STATE_ID];
+        }
+
+        return array_search(PurchaseState::STATE_NEW, PurchaseState::$states);
     }
 
     /**

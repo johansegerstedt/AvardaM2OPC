@@ -2,6 +2,7 @@
 import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
+import quote from 'Magento_Checkout/js/model/quote';
 import Loader from '$src/utils/components/Loader';
 import {getConfig} from '$src/config';
 import {
@@ -39,6 +40,20 @@ type Props = {
 const GiftOptionsCart = () => <div id="gift-options-cart" />;
 
 class Cart extends React.Component<Props> {
+  totalsSubscription = null;
+
+  componentDidMount() {
+    this.totalsSubscription = quote.totals.subscribe(() => {
+      this.props.fetchCartRequest();
+    });
+  }
+
+  componentWillUnMount() {
+    if (this.totalsSubscription) {
+      this.totalsSubscription.dispose();
+    }
+  }
+
   render() {
     const {
       cart,

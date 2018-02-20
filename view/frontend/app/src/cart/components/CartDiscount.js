@@ -1,7 +1,8 @@
 // @flow
-import React from 'react';
+import React, {Fragment} from 'react';
 import {get} from 'lodash';
 import {$} from '$i18n';
+import KoBindScope from '$src/utils/components/KoBindScope';
 
 type Props = {
   coupon?: string,
@@ -65,76 +66,84 @@ class CartDiscount extends React.Component<Props, State> {
     const isApplying: boolean = typeof coupon !== 'string';
 
     return (
-      <div className="cart-discount">
-        <div
-          className={`block discount${isOpen ? ' active' : ''}`}
-          id="block-discount"
-          data-collapsible="true"
-          role="tablist"
-        >
+      <Fragment>
+        <div className="cart-discount">
           <div
-            className="title"
-            data-role="title"
-            role="tab"
-            aria-selected="false"
-            aria-expanded={JSON.stringify(isOpen)}
-            onClick={this.toggle}
-            onKeyPress={this.handleSpaceAndEnter(this.toggle)}
-            tabIndex={0}
+            className={`block discount${isOpen ? ' active' : ''}`}
+            id="block-discount"
+            data-collapsible="true"
+            role="tablist"
           >
-            <strong id="block-discount-heading" role="heading" aria-level={2}>
-              {$.mage.__('Apply Discount Code')}
-            </strong>
-          </div>
-          <div
-            className="content"
-            data-role="content"
-            aria-labelledby="block-discount-heading"
-            role="tabpanel"
-            aria-hidden="true"
-            style={{display: isOpen ? 'block' : 'none'}}
-          >
-            <form id="discount-coupon-form" onSubmit={this.handleSubmit}>
-              <div className="fieldset coupon">
-                <input
-                  type="hidden"
-                  name="remove"
-                  id="remove-coupon"
-                  defaultValue={0}
-                />
-                <div className="field">
-                  <label htmlFor="coupon_code" className="label">
-                    <span>{$.mage.__('Enter discount code')}</span>
-                  </label>
-                  <div className="control">
-                    <input
-                      key={coupon}
-                      type="text"
-                      className="input-text"
-                      id="coupon_code"
-                      name="coupon_code"
-                      defaultValue={isApplying ? '' : coupon}
-                      disabled={!isApplying}
-                      placeholder={$.mage.__('Enter discount code')}
-                    />
+            <div
+              className="title"
+              data-role="title"
+              role="tab"
+              aria-selected="false"
+              aria-expanded={JSON.stringify(isOpen)}
+              onClick={this.toggle}
+              onKeyPress={this.handleSpaceAndEnter(this.toggle)}
+              tabIndex={0}
+            >
+              <strong id="block-discount-heading" role="heading" aria-level={2}>
+                {$.mage.__('Apply Discount Code')}
+              </strong>
+            </div>
+            <div
+              className="content"
+              data-role="content"
+              aria-labelledby="block-discount-heading"
+              role="tabpanel"
+              aria-hidden="true"
+              style={{display: isOpen ? 'block' : 'none'}}
+            >
+              <form id="discount-coupon-form" onSubmit={this.handleSubmit}>
+                <div className="fieldset coupon">
+                  <input
+                    type="hidden"
+                    name="remove"
+                    id="remove-coupon"
+                    defaultValue={0}
+                  />
+                  <div className="field">
+                    <label htmlFor="coupon_code" className="label">
+                      <span>{$.mage.__('Enter discount code')}</span>
+                    </label>
+                    <div className="control">
+                      <input
+                        key={coupon}
+                        type="text"
+                        className="input-text"
+                        id="coupon_code"
+                        name="coupon_code"
+                        defaultValue={isApplying ? '' : coupon}
+                        disabled={!isApplying}
+                        placeholder={$.mage.__('Enter discount code')}
+                      />
+                    </div>
+                  </div>
+                  <div className="actions-toolbar">
+                    <div className="primary">
+                      <SubmitButton
+                        label={
+                          isApplying
+                            ? $.mage.__('Apply Discount')
+                            : $.mage.__('Cancel Coupon')
+                        }
+                      />
+                    </div>
                   </div>
                 </div>
-                <div className="actions-toolbar">
-                  <div className="primary">
-                    <SubmitButton
-                      label={
-                        isApplying
-                          ? $.mage.__('Apply Discount')
-                          : $.mage.__('Cancel Coupon')
-                      }
-                    />
-                  </div>
-                </div>
-              </div>
-            </form>
+              </form>
+            </div>
           </div>
         </div>
-      </div>
+        <KoBindScope
+          scope="gift-card"
+          divProps={{
+            className: 'checkout-payment-method',
+          }}
+        />
+      </Fragment>
     );
   }
 }

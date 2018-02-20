@@ -1,0 +1,21 @@
+.checkout-payment-method {
+  clear: both;
+
+  @media (min-width: 768px), print {
+    width: 75%;
+  }
+
+  .payment-option {
+    margin: 0;
+    .payment-option-title {
+      padding: 10px 40px 10px 15px;
+      margin: 0;
+      border: 0;
+
+      @media (min-width: 768px) {
+        padding-left: 0;
+        font-size: 1.6rem;
+      }
+    }
+  }
+}

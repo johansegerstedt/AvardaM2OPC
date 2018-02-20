@@ -51,13 +51,31 @@ class Checkout extends Onepage
         array $data = [],
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
-        Config $config
+        Config $config,
+        \Magento\Framework\App\ProductMetadataInterface $productMetadata
     ) {
         parent::__construct($context,$formKey, $configProvider, $layoutProcessors, $data);
         $this->checkoutSession = $checkoutSession;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->config = $config;
         $this->jsLayout = isset($data['jsLayout']) && is_array($data['jsLayout']) ? $data['jsLayout'] : [];
+        if ($productMetadata->getEdition() === 'Enterprise') {
+          $this->jsLayout = array_merge_recursive([
+            "components" => [
+              "gift-card" => [
+                "component" => "Magento_GiftCardAccount/js/view/payment/gift-card-account",
+                "children" => [
+                  "errors" => [
+                    "sortOrder" => 0,
+                    "component" => "Magento_GiftCardAccount/js/view/payment/gift-card-messages",
+                    "displayArea" => "messages"
+                    ]
+                  ]
+                ]
+              ]
+            ]
+          , $this->jsLayout);
+        }
     }
 
     /**

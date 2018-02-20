@@ -27,6 +27,11 @@ class QuoteCollectTotalsUpdateItems
     protected $paymentDataHelper;
 
     /**
+     * @var \Digia\AvardaCheckout\Helper\PurchaseState
+     */
+    protected $purchaseStateHelper;
+
+    /**
      * @var bool
      */
     protected $collectTotalsFlag = false;
@@ -37,15 +42,18 @@ class QuoteCollectTotalsUpdateItems
      * @param \Psr\Log\LoggerInterface $logger
      * @param QuotePaymentManagementInterface $quotePaymentManagement
      * @param \Digia\AvardaCheckout\Helper\PaymentData $paymentDataHelper
+     * @param \Digia\AvardaCheckout\Helper\PurchaseState $purchaseStateHelper
      */
     public function __construct(
         \Psr\Log\LoggerInterface $logger,
         QuotePaymentManagementInterface $quotePaymentManagement,
-        \Digia\AvardaCheckout\Helper\PaymentData $paymentDataHelper
+        \Digia\AvardaCheckout\Helper\PaymentData $paymentDataHelper,
+        \Digia\AvardaCheckout\Helper\PurchaseState $purchaseStateHelper
     ) {
         $this->logger = $logger;
         $this->quotePaymentManagement = $quotePaymentManagement;
         $this->paymentDataHelper = $paymentDataHelper;
+        $this->purchaseStateHelper = $purchaseStateHelper;
     }
 
     /**
@@ -59,8 +67,10 @@ class QuoteCollectTotalsUpdateItems
     {
         try {
             $payment = $subject->getPayment();
+            $stateId = $this->paymentDataHelper->getStateId($payment);
             if (!$this->collectTotalsFlag &&
-                $this->paymentDataHelper->isAvardaPayment($payment)
+                $this->paymentDataHelper->isAvardaPayment($payment) &&
+                $this->purchaseStateHelper->isInCheckout($stateId)
             ) {
                 $this->quotePaymentManagement->updateItems($subject);
                 $this->collectTotalsFlag = true;

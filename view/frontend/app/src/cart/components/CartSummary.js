@@ -72,10 +72,7 @@ class CartSummary extends React.Component<Props> {
                             {$.mage.__(title)}
                           </th>
                           <td className="amount">
-                            <span
-                              className="price"
-                              data-th={$.mage.__('Subtotal')}
-                            >
+                            <span className="price">
                               {displayTotalSegmentValue(
                                 {code, value, title},
                                 totalsData,

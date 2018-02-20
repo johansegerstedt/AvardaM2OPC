@@ -82,6 +82,7 @@ class Cart extends React.Component<Props> {
                   totalSegments={cart.total_segments}
                   isLoading={isFetching || isUpdatingCart}
                   currency={getQuoteCurrency(cart)}
+                  cart={cart}
                 />,
                 <CartForm
                   key="cartForm"

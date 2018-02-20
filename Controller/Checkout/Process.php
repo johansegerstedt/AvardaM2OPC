@@ -10,54 +10,51 @@ use Digia\AvardaCheckout\Api\QuotePaymentManagementInterface;
 use Digia\AvardaCheckout\Controller\AbstractCheckout;
 use Magento\Framework\Exception\PaymentException;
 
-class SaveOrder extends AbstractCheckout
+class Process extends AbstractCheckout
 {
     /**
-     * @var \Magento\Checkout\Model\Session
+     * @var \Magento\Framework\View\Result\PageFactory
      */
-    protected $checkoutSession;
+    protected $resultPageFactory;
 
     /**
-     * @var \Magento\Customer\Model\Session
-     */
-    protected $customerSession;
-
-    /**
-     * @var QuotePaymentManagementInterface $quotePaymentManagement
+     * @var QuotePaymentManagementInterface
      */
     protected $quotePaymentManagement;
 
     /**
-     * Index constructor.
+     * Process constructor.
      *
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Digia\AvardaCheckout\Gateway\Config\Config $config
-     * @param \Magento\Checkout\Model\Session $checkoutSession
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Framework\View\Result\PageFactory $resultPageFactory
      * @param QuotePaymentManagementInterface $quotePaymentManagement
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Psr\Log\LoggerInterface $logger,
         \Digia\AvardaCheckout\Gateway\Config\Config $config,
-        \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         QuotePaymentManagementInterface $quotePaymentManagement
     ) {
         parent::__construct($context, $logger, $config);
-        $this->checkoutSession = $checkoutSession;
-        $this->customerSession = $customerSession;
+        $this->resultPageFactory = $resultPageFactory;
         $this->quotePaymentManagement = $quotePaymentManagement;
     }
 
     /**
-     * Order success action
-     *
      * @return \Magento\Framework\Controller\ResultInterface
      */
     public function execute()
     {
+        if (!$this->isCallback()) {
+            // Show no route if Avarda is inactive and notify webmaster in logs.
+            if (!$this->config->isActive()) {
+                return $this->noroute('/checkout/avarda/process');
+            }
+        }
+
         try {
             if (($purchaseId = $this->getPurchaseId()) == null) {
                 throw new \Exception(
@@ -70,14 +67,10 @@ class SaveOrder extends AbstractCheckout
             $quoteId = $this->quotePaymentManagement
                 ->getQuoteIdByPurchaseId($purchaseId);
 
-            $this->quotePaymentManagement->placeOrder(
-                $quoteId,
-                !$this->customerSession->isLoggedIn()
-            );
+            $this->quotePaymentManagement->updatePaymentStatus($quoteId);
+            $this->quotePaymentManagement->unfreezeCart($quoteId);
+            return $this->resultPageFactory->create();
 
-            return $this->resultRedirectFactory->create()->setPath(
-                'checkout/onepage/success'
-            );
         } catch (PaymentException $e) {
             $message = $e->getMessage();
         } catch (\Exception $e) {
@@ -86,8 +79,7 @@ class SaveOrder extends AbstractCheckout
         }
 
         $this->messageManager->addErrorMessage($message);
-        return $this->resultRedirectFactory->create()->setPath(
-            'checkout/cart'
-        );
+        return $this->resultRedirectFactory
+            ->create()->setPath('avarda/checkout');
     }
 }

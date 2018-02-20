@@ -30,4 +30,9 @@ interface ItemStorageInterface
      * @return ItemDataObjectInterface[]
      */
     public function getItems();
+
+    /**
+     * @return $this
+     */
+    public function reset();
 }

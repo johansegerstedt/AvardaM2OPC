@@ -49,9 +49,7 @@ const ShippingMethodRadio = ({
       <td className="col col-price">
         <span className="price">
           <span className="price">
-            {method.available
-              ? formatCurrency(method.price_excl_tax, currency)
-              : ' '}
+            {method.available ? formatCurrency(method.amount, currency) : ' '}
           </span>
         </span>
       </td>

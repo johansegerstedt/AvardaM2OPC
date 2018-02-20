@@ -32,13 +32,24 @@ class AvardaCheckOutContainer extends Component<ConnectedProps> {
   // All the checks are handled in backend.
   // eslint-disable-next-line no-unused-vars
   onDone = (purchaseId: string) => {
-    window.location.href = getConfig().saveOrderUrl;
+    window.location.href =
+      getConfig().saveOrderUrl + `purchase/` + encodeURIComponent(purchaseId);
   };
 
   render() {
     const {purchaseId, isFetching, ...props} = this.props;
+    const {avardaConfig: {customCssUrl, replaceDefaultCss}} = getConfig();
     return purchaseId ? (
-      <AvardaCheckOut purchaseId={purchaseId} onDone={this.onDone} {...props} />
+      <AvardaCheckOut
+        purchaseId={purchaseId}
+        onDone={this.onDone}
+        callbackUrl={`${getConfig().callbackUrl}purchase/${encodeURIComponent(
+          purchaseId,
+        )}`}
+        customCssUrl={customCssUrl ? customCssUrl : undefined}
+        replaceDefaultCss={replaceDefaultCss}
+        {...props}
+      />
     ) : (
       <Loader isLoading={isFetching}>{null}</Loader>
     );

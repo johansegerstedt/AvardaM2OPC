@@ -8,6 +8,11 @@ const MISSING_CONFIG =
 
 let config: null | Config = null;
 
+const validateAvardaConfig = (foo: any) =>
+  typeof foo === 'object' &&
+  h.oneOf(h.isString, h.isNull)(foo.customCssUrl) &&
+  h.isBoolean(foo.replaceDefaultCss);
+
 export const validate = (
   foo: Object,
 ): {error: false, value: Config} | {error: true, value: null} => {
@@ -20,6 +25,8 @@ export const validate = (
     magentoLocale,
     maskedQuoteId,
     saveOrderUrl,
+    callbackUrl,
+    avardaConfig,
   } = foo;
 
   if (
@@ -31,7 +38,9 @@ export const validate = (
       h.isBoolean(hasItems) &&
       h.isString(magentoLocale) &&
       h.oneOf(h.isString, h.isVoid, h.isNull)(maskedQuoteId) &&
-      h.isString(saveOrderUrl)
+      h.isString(saveOrderUrl) &&
+      h.isString(callbackUrl) &&
+      validateAvardaConfig(avardaConfig)
     )
   ) {
     return {error: true, value: null};
@@ -48,6 +57,8 @@ export const validate = (
       magentoLocale,
       maskedQuoteId,
       saveOrderUrl,
+      callbackUrl,
+      avardaConfig,
     },
   };
 };

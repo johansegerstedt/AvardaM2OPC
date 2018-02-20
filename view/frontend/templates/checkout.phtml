@@ -11,7 +11,12 @@
     "magentoLocale" => $getLocale->getLocale(),
     "maskedQuoteId" => $block->getMaskedQuoteId(),
     "quoteId" => $block->getQuoteId(),
-    "saveOrderUrl" => $block->getSaveOrderUrl()
+    "saveOrderUrl" => $block->getSaveOrderUrl(),
+    "callbackUrl" => $block->getCallbackUrl(),
+    "avardaConfig" => [
+      "customCssUrl" => $block->getCustomCssUrl(),
+      "replaceDefaultCss" => $block->getReplaceDefaultCss(),
+    ],
   ];
 ?>
 
@@ -43,7 +48,7 @@ require.config(({
 require([
   'avardaCheckout',
   //'Markup_Smartship/js/view/checkout/shipping/additional-block'
-], function(avardaCheckout, /*Smartship*/) {
+], function(avardaCheckout/*, Smartship*/) {
   avardaCheckout.execute(
     <?php echo json_encode($config); ?>);
 });

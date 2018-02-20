@@ -117,5 +117,11 @@ class GetPaymentStatusHandler implements HandlerInterface
         $paymentMethod = $this->methodHelper
             ->getPaymentMethod($response->PaymentMethod);
         $quote->getPayment()->setMethod($paymentMethod);
+
+        // Set payment state
+        $quote->getPayment()->setAdditionalInformation(
+            \Digia\AvardaCheckout\Helper\PaymentData::STATE_ID,
+            $response->State
+        );
     }
 }

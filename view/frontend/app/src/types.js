@@ -12,6 +12,11 @@ export type Normalized<Entities> = {
   result: Reference,
 };
 
+export type AvardaConfig = {|
+  +customCssUrl: string | null,
+  +replaceDefaultCss: boolean,
+|};
+
 export type Config = {|
   +baseMediaUrl: string,
   +baseUrl: string,
@@ -21,6 +26,8 @@ export type Config = {|
   +magentoLocale: string,
   +maskedQuoteId: ?string,
   +saveOrderUrl: string,
+  +callbackUrl: string,
+  +avardaConfig: AvardaConfig,
 |};
 
 export type Reference = string | number;

@@ -35,6 +35,11 @@ class Checkout extends Onepage
     protected $config;
 
     /**
+     * @var \Magento\Framework\View\Asset\Repository
+     */
+    protected $assetRepo;
+
+    /**
      * Checkout constructor.
      *
      * @param Context $context
@@ -54,27 +59,27 @@ class Checkout extends Onepage
         Config $config,
         \Magento\Framework\App\ProductMetadataInterface $productMetadata
     ) {
-        parent::__construct($context,$formKey, $configProvider, $layoutProcessors, $data);
+        parent::__construct($context, $formKey, $configProvider, $layoutProcessors, $data);
         $this->checkoutSession = $checkoutSession;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->config = $config;
+        $this->assetRepo = $context->getAssetRepository();
         $this->jsLayout = isset($data['jsLayout']) && is_array($data['jsLayout']) ? $data['jsLayout'] : [];
         if ($productMetadata->getEdition() === 'Enterprise') {
-          $this->jsLayout = array_merge_recursive([
-            "components" => [
-              "gift-card" => [
-                "component" => "Magento_GiftCardAccount/js/view/payment/gift-card-account",
-                "children" => [
-                  "errors" => [
-                    "sortOrder" => 0,
-                    "component" => "Magento_GiftCardAccount/js/view/payment/gift-card-messages",
-                    "displayArea" => "messages"
+            $this->jsLayout = array_merge_recursive([
+                "components" => [
+                    "gift-card" => [
+                        "component" => "Magento_GiftCardAccount/js/view/payment/gift-card-account",
+                        "children" => [
+                            "errors" => [
+                                "sortOrder" => 0,
+                                "component" => "Magento_GiftCardAccount/js/view/payment/gift-card-messages",
+                                "displayArea" => "messages"
+                            ]
+                        ]
                     ]
-                  ]
                 ]
-              ]
-            ]
-          , $this->jsLayout);
+            ], $this->jsLayout);
         }
     }
 
@@ -145,6 +150,7 @@ class Checkout extends Onepage
 
     /**
      * Get AvardaCheckOutClient script path for Require.js.
+     *
      * @return string
      */
     public function getCheckOutClientScriptPath()
@@ -153,11 +159,43 @@ class Checkout extends Onepage
     }
 
     /**
-     * [getSaveOrderUrl description]
+     * @return string
+     */
+    public function getPurchaseId() {
+        return $this->_request->getParam('purchase');
+    }
+    /**
+     * @return string|null
+     */
+    public function getCustomCssUrl()
+    {
+      $url = $this->config->getCustomCssUrl();
+      if ($url) {
+          if(substr( $url, 0, 4 ) === "http"){
+              return $url;
+          }
+          $fullUrl = $this->assetRepo->getUrl($url);
+          return $fullUrl;
+      }
+    }
+
+    public function getReplaceDefaultCss()
+    {
+      return $this->config->getReplaceDefaultCss();
+    }
+
+    /**
      * @return string
      */
     public function getSaveOrderUrl() {
-      return $this->getUrl('avarda/checkout/saveOrder', ['_secure' => true]);
+        return $this->getUrl('avarda/checkout/saveOrder', ['_secure' => true]);
+    }
+
+    /**
+     * @return string
+     */
+    public function getCallbackUrl() {
+        return $this->getUrl('avarda/checkout/process', ['_secure' => true]);
     }
 
     public function getJsLayout() {

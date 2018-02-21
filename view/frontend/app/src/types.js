@@ -18,16 +18,17 @@ export type AvardaConfig = {|
 |};
 
 export type Config = {|
+  +avardaConfig: AvardaConfig,
   +baseMediaUrl: string,
   +baseUrl: string,
+  +callbackUrl: string,
   +countryId: string,
   +customerId: ?number,
   +hasItems: boolean,
   +magentoLocale: string,
   +maskedQuoteId: ?string,
+  +productPlaceholderImage: string,
   +saveOrderUrl: string,
-  +callbackUrl: string,
-  +avardaConfig: AvardaConfig,
 |};
 
 export type Reference = string | number;

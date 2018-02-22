@@ -97,7 +97,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * @return bool
      */
-    public function getReplaceDefaultCss() {
+    public function isReplaceDefaultCss()
+    {
         return (bool) $this->getValue(self::KEY_REPLACE_DEFAULT_CSS);
     }
 }

@@ -203,9 +203,9 @@ class Checkout extends Template
     /**
      * @return bool
      */
-    public function getReplaceDefaultCss()
+    public function isReplaceDefaultCss()
     {
-        return $this->config->getReplaceDefaultCss();
+        return $this->config->isReplaceDefaultCss();
     }
 
     /**

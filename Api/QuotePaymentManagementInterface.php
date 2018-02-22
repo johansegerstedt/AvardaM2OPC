@@ -25,7 +25,7 @@ interface QuotePaymentManagementInterface
     /**
      * Make Avarda InitializePurchase call and return purchase ID
      *
-     * @param CartInterface $quote
+     * @param CartInterface|\Magento\Quote\Model\Quote $quote
      * @return string
      */
     public function initializePurchase(CartInterface $quote);
@@ -82,7 +82,7 @@ interface QuotePaymentManagementInterface
     /**
      * Get quote ID by Avarda purchase ID
      *
-     * @param $purchaseId
+     * @param string $purchaseId
      * @throws \Magento\Framework\Exception\PaymentException
      * @return int
      */

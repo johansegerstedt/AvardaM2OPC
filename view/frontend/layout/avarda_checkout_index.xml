@@ -3,21 +3,21 @@
     <body>
         <referenceContainer name="content">
             <block class="Digia\AvardaCheckout\Block\Checkout"
-                 name="checkout.root"
-                 template="Digia_AvardaCheckout::checkout.phtml"
-                 cacheable="false">
-                 <arguments>
-                   <argument name="jsLayout" xsi:type="array">
-                     <item name="types" xsi:type="array"/>
-                     <item name="components" xsi:type="array">
-                       <!-- Uncomment to define shippingAdditional content
-                       <item name="shippingAdditional" xsi:type="array">
-                         <item name="component" xsi:type="string">Markup_Smartship/js/view/checkout/shipping/additional-block</item>
-                       </item>
-                       -->
-                     </item>
-                   </argument>
-                 </arguments>
+                   name="checkout.root"
+                   template="Digia_AvardaCheckout::checkout.phtml"
+                   cacheable="false">
+                <arguments>
+                    <argument name="jsLayout" xsi:type="array">
+                        <item name="types" xsi:type="array"/>
+                        <item name="components" xsi:type="array">
+                            <!-- Uncomment to define shippingAdditional content
+                            <item name="shippingAdditional" xsi:type="array">
+                                <item name="component" xsi:type="string">Markup_Smartship/js/view/checkout/shipping/additional-block</item>
+                            </item>
+                            -->
+                        </item>
+                    </argument>
+                </arguments>
             </block>
         </referenceContainer>
         <referenceContainer name="page.messages" remove="true"/>

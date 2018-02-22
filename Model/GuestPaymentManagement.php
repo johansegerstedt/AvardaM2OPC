@@ -98,9 +98,8 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
     public function freezeCart($cartId)
     {
         try {
-            $this->quotePaymentManagement->freezeCart(
-                $this->getQuoteId($cartId)
-            );
+            $this->quotePaymentManagement
+                ->setQuoteIsActive($this->getQuoteId($cartId), false);
         } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
             $this->logger->error($e);
 

@@ -88,7 +88,8 @@ class PaymentManagement implements PaymentManagementInterface
     public function freezeCart($cartId)
     {
         try {
-            $this->quotePaymentManagement->freezeCart($cartId);
+            $this->quotePaymentManagement
+                ->setQuoteIsActive($cartId, false);
         } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
             $this->logger->error($e);
 

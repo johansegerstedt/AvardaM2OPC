@@ -148,6 +148,7 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
             $purchaseId = $this->paymentDataHelper->getPurchaseId(
                 $quote->getPayment()
             );
+
         } catch (PaymentException $e) {
             if (!isset($quote)) {
                 throw $e;
@@ -210,29 +211,7 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
     /**
      * {@inheritdoc}
      */
-    public function freezeCart($cartId)
-    {
-        $this->setQuoteIsActive($cartId, false);
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function unfreezeCart($cartId)
-    {
-        $this->setQuoteIsActive($cartId, false);
-    }
-
-    /**
-     * Setting the quote is_active to false hides it from the frontend and
-     * renders the customer unable to manipulate the cart while payment is
-     * processed.
-     *
-     * @param int  $cartId
-     * @param bool $isActive
-     * @return void
-     */
-    protected function setQuoteIsActive($cartId, $isActive)
+    public function setQuoteIsActive($cartId, $isActive)
     {
         $quote = $this->getQuote($cartId);
         if ($quote->getIsActive() != $isActive) {
@@ -257,10 +236,8 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
     {
         $quote = $this->getQuote($cartId);
 
-        $this->updatePaymentStatus($cartId);
-
         /** Unfreeze cart before placing the order */
-        $this->unfreezeCart($cartId);
+        $this->setQuoteIsActive($cartId, true);
 
         /** Must set checkout method for guests */
         if ($isGuest) {

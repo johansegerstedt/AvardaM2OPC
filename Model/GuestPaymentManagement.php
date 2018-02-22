@@ -10,34 +10,30 @@ use Digia\AvardaCheckout\Api\Data\PaymentDetailsInterface;
 use Digia\AvardaCheckout\Api\Data\PaymentDetailsInterfaceFactory;
 use Digia\AvardaCheckout\Api\GuestPaymentManagementInterface;
 use Digia\AvardaCheckout\Api\QuotePaymentManagementInterface;
-use Magento\Framework\Exception\PaymentException;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * GuestPaymentManagement
+ * @see \Digia\AvardaCheckout\Api\GuestPaymentManagementInterface
  */
 class GuestPaymentManagement implements GuestPaymentManagementInterface
 {
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
-    /**
+     * Required to create purchase ID response.
+     *
      * @var PaymentDetailsInterfaceFactory
      */
     protected $paymentDetailsFactory;
 
     /**
+     * A common interface to execute Webapi actions.
+     *
      * @var \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface
      */
     protected $quotePaymentManagement;
 
     /**
-     * @var \Magento\Quote\Api\GuestCartManagementInterface
-     */
-    protected $cartManagement;
-
-    /**
+     * Required to get the real quote ID from masked quote ID.
+     *
      * @var \Magento\Quote\Model\QuoteIdMaskFactory
      */
     protected $quoteIdMaskFactory;
@@ -45,23 +41,17 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
     /**
      * GuestPaymentManagement constructor.
      *
-     * @param \Psr\Log\LoggerInterface $logger
      * @param PaymentDetailsInterfaceFactory $paymentDetailsFactory
      * @param QuotePaymentManagementInterface $quotePaymentManagement
-     * @param \Magento\Quote\Api\GuestCartManagementInterface $guestCartManagement
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      */
     public function __construct(
-        \Psr\Log\LoggerInterface $logger,
         PaymentDetailsInterfaceFactory $paymentDetailsFactory,
         QuotePaymentManagementInterface $quotePaymentManagement,
-        \Magento\Quote\Api\GuestCartManagementInterface $cartManagement,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
     ) {
-        $this->logger = $logger;
         $this->paymentDetailsFactory = $paymentDetailsFactory;
         $this->quotePaymentManagement = $quotePaymentManagement;
-        $this->cartManagement = $cartManagement;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
     }
 
@@ -70,26 +60,14 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
      */
     public function getPurchaseId($cartId)
     {
-        try {
-            $purchaseId = $this->quotePaymentManagement->getPurchaseId(
-                $this->getQuoteId($cartId)
-            );
+        $purchaseId = $this->quotePaymentManagement->getPurchaseId(
+            $this->getQuoteId($cartId)
+        );
 
-            /** @var PaymentDetailsInterface $paymentDetails */
-            $paymentDetails = $this->paymentDetailsFactory->create();
-            $paymentDetails->setPurchaseId($purchaseId);
-            return $paymentDetails;
-        } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
-            $this->logger->error($e);
-
-            throw new PaymentException(__($e->getMessage()));
-        } catch (\Exception $e) {
-            $this->logger->error($e);
-
-            throw new PaymentException(
-                __('Failed to load Avarda payment. Please try again later.')
-            );
-        }
+        /** @var PaymentDetailsInterface $paymentDetails */
+        $paymentDetails = $this->paymentDetailsFactory->create();
+        $paymentDetails->setPurchaseId($purchaseId);
+        return $paymentDetails;
     }
 
     /**
@@ -97,20 +75,8 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
      */
     public function freezeCart($cartId)
     {
-        try {
-            $this->quotePaymentManagement
-                ->setQuoteIsActive($this->getQuoteId($cartId), false);
-        } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
-            $this->logger->error($e);
-
-            throw new PaymentException(__($e->getMessage()));
-        } catch (\Exception $e) {
-            $this->logger->error($e);
-
-            throw new PaymentException(
-                __('Failed to save Avarda order. Please try again later.')
-            );
-        }
+        $this->quotePaymentManagement
+            ->setQuoteIsActive($this->getQuoteId($cartId), false);
     }
 
     /**
@@ -118,20 +84,8 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
      */
     public function getItemDetailsList($cartId)
     {
-        try {
-            $quoteId = $this->getQuoteId($cartId);
-            return $this->quotePaymentManagement->getItemDetailsList($quoteId);
-        } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
-            $this->logger->error($e);
-
-            throw new PaymentException(__($e->getMessage()));
-        } catch (\Exception $e) {
-            $this->logger->error($e);
-
-            throw new PaymentException(
-                __('Something went wrong with Avarda checkout. Please try again later.')
-            );
-        }
+        return $this->quotePaymentManagement
+            ->getItemDetailsList($this->getQuoteId($cartId));
     }
 
     /**

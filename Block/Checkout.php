@@ -6,14 +6,22 @@
  */
 namespace Digia\AvardaCheckout\Block;
 
-use Digia\AvardaCheckout\Gateway\Config\Config;
 use Magento\Framework\View\Element\Template;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Quote\Api\Data\CartInterface;
-use Magento\Checkout\Block\Onepage;
 
-class Checkout extends Onepage
+class Checkout extends Template
 {
+    /**
+     * @var \Digia\AvardaCheckout\Gateway\Config\Config
+     */
+    protected $config;
+
+    /**
+     * @var \Magento\Checkout\Model\CompositeConfigProvider
+     */
+    protected $configProvider;
+
     /**
      * @var \Magento\Checkout\Model\Session
      */
@@ -25,46 +33,48 @@ class Checkout extends Onepage
     protected $quoteIdMaskFactory;
 
     /**
-     * @var CartInterface
-     */
-    protected $quote;
-
-    /**
-     * @var Config
-     */
-    protected $config;
-
-    /**
      * @var \Magento\Framework\View\Asset\Repository
      */
     protected $assetRepo;
 
     /**
+     * @var array
+     */
+    protected $jsLayout;
+
+    /**
+     * @var CartInterface
+     */
+    protected $quote;
+
+    /**
      * Checkout constructor.
      *
      * @param Context $context
+     * @param \Digia\AvardaCheckout\Gateway\Config\Config $config
+     * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
-     * @param Config
-     * @param array $data
+     * @param array $data = []
      */
     public function __construct(
-        \Magento\Framework\View\Element\Template\Context $context,
-        \Magento\Framework\Data\Form\FormKey $formKey,
+        Context $context,
+        \Digia\AvardaCheckout\Gateway\Config\Config $config,
         \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
-        array $layoutProcessors = [],
-        array $data = [],
         \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Framework\App\ProductMetadataInterface $productMetadata,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
-        Config $config,
-        \Magento\Framework\App\ProductMetadataInterface $productMetadata
+        array $data = []
     ) {
-        parent::__construct($context, $formKey, $configProvider, $layoutProcessors, $data);
+        parent::__construct($context, $data);
+        $this->config = $config;
+        $this->configProvider = $configProvider;
         $this->checkoutSession = $checkoutSession;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
-        $this->config = $config;
         $this->assetRepo = $context->getAssetRepository();
         $this->jsLayout = isset($data['jsLayout']) && is_array($data['jsLayout']) ? $data['jsLayout'] : [];
+
         if ($productMetadata->getEdition() === 'Enterprise') {
             $this->jsLayout = array_merge_recursive([
                 "components" => [
@@ -159,62 +169,66 @@ class Checkout extends Onepage
     }
 
     /**
+     * @return \Magento\Checkout\Model\CompositeConfigProvider
+     */
+    public function getCheckoutConfig()
+    {
+        return $this->configProvider->getConfig();
+    }
+
+    /**
      * @return string
      */
-    public function getPurchaseId() {
+    public function getPurchaseId()
+    {
         return $this->_request->getParam('purchase');
     }
+
     /**
      * @return string|null
      */
     public function getCustomCssUrl()
     {
-      $url = $this->config->getCustomCssUrl();
-      if ($url) {
-          if(substr( $url, 0, 4 ) === "http"){
-              return $url;
-          }
-          $fullUrl = $this->assetRepo->getUrl($url);
-          return $fullUrl;
-      }
+        $url = $this->config->getCustomCssUrl();
+        if ($url) {
+            if (substr($url, 0, 4) === "http") {
+                return $url;
+            }
+
+            $fullUrl = $this->assetRepo->getUrl($url);
+            return $fullUrl;
+        }
     }
 
+    /**
+     * @return bool
+     */
     public function getReplaceDefaultCss()
     {
-      return $this->config->getReplaceDefaultCss();
+        return $this->config->getReplaceDefaultCss();
     }
 
     /**
      * @return string
      */
-    public function getSaveOrderUrl() {
+    public function getSaveOrderUrl()
+    {
         return $this->getUrl('avarda/checkout/saveOrder', ['_secure' => true]);
     }
 
     /**
      * @return string
      */
-    public function getCallbackUrl() {
+    public function getCallbackUrl()
+    {
         return $this->getUrl('avarda/checkout/process', ['_secure' => true]);
     }
 
-    public function getJsLayout() {
-      $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/test.log');
-      $logger = new \Zend\Log\Logger();
-      $logger->addWriter($writer);
-      $logger->info('Your text message');
-      //$logger->info(print_r($this->layoutProcessors, true));
-      foreach ($this->layoutProcessors as $processor) {
-            $logger->info('---');
-            $logger->info(print_r($this->jsLayout, true));
-            if (!isset($this->jsLayout)) {
-              exit;
-              // return;
-            }
-            $logger->info('Processing...');
-            // $this->jsLayout = $processor->process($this->jsLayout);
-        }
-        $logger->info('^^^');
-        return \Zend_Json::encode($this->jsLayout);
+    /**
+     * @return string
+     */
+    public function getJsLayout()
+    {
+        return json_encode($this->jsLayout);
     }
 }

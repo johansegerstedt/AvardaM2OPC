@@ -41,7 +41,7 @@ interface QuotePaymentManagementInterface
     /**
      * Make Avarda UpdateItems call and return purchase ID
      *
-     * @param CartInterface $quote
+     * @param CartInterface|\Magento\Quote\Model\Quote $quote
      * @return void
      */
     public function updateItems(CartInterface $quote);

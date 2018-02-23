@@ -68,7 +68,7 @@ class Process extends AbstractCheckout
                 ->getQuoteIdByPurchaseId($purchaseId);
 
             $this->quotePaymentManagement->updatePaymentStatus($quoteId);
-            $this->quotePaymentManagement->unfreezeCart($quoteId);
+            $this->quotePaymentManagement->setQuoteIsActive($quoteId, true);
             return $this->resultPageFactory->create();
 
         } catch (PaymentException $e) {

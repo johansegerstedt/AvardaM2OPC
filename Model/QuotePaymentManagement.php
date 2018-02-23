@@ -209,7 +209,7 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
         $this->isAvardaPayment(($quote = $this->getQuote($cartId)));
         if ($quote->getIsActive() != $isActive) {
             $quote->setIsActive($isActive);
-            $this->quoteRepository->save($quote);
+            $quote->save();
         }
     }
 

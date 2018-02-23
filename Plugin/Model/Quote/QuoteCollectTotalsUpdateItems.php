@@ -109,9 +109,7 @@ class QuoteCollectTotalsUpdateItems
                 ->updatePaymentStatus($subject->getId());
 
             $stateId = $this->paymentDataHelper->getStateId($payment);
-            if ($this->purchaseStateHelper->isWaiting($stateId) ||
-                $this->purchaseStateHelper->isComplete($stateId)
-            ) {
+            if ($this->purchaseStateHelper->isWaiting($stateId)) {
                 throw new PaymentException(
                     __('Avarda is processing the purchase, unable to update items.')
                 );

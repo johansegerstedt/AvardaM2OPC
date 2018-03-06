@@ -15,7 +15,6 @@ import {fetchShippingMethods} from '$src/shipping/api';
 import {addMessage, updateAddress, scrollToForm} from '$src/shipping/actions';
 import toast, {TYPES} from '$src/utils/toast';
 import {
-  fetchPurchaseId as fetchPurchaseIdAction,
   receivePurchaseId,
   getPurchaseIdFailure,
   addressChanged as addressChangedAction,
@@ -24,7 +23,7 @@ import {
 } from './actions';
 import * as ShippingMessages from './messages';
 import {ActionTypes} from './constants';
-import {getPurchaseId, getIsFetching} from './selectors';
+import {getPurchaseId} from './selectors';
 import {DIV_ID} from './components/AvardaCheckOut';
 import type {ActionType} from 'redux-actions';
 import type {CustomerInfo} from 'AvardaCheckOutClient';
@@ -103,8 +102,6 @@ function* cartUpdated() {
       }
 
       yield put(updatedItems());
-    } else if (!(yield select(getIsFetching)) && (yield select(getIsVirtual))) {
-      yield put(fetchPurchaseIdAction());
     }
   } catch (err) {
     toast(

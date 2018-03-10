@@ -49,14 +49,14 @@ class PaymentMethod
     /**
      * Get payment method code for Magento order
      *
-     * @param int $value
+     * @param int $paymentMethod
      * @return string
      */
     public function getPaymentMethod($paymentMethod)
     {
         if (is_int($paymentMethod) &&
             array_key_exists($paymentMethod, self::$methods)
-        ){
+        ) {
             $method = self::$methods[$paymentMethod];
             if (array_key_exists($method, self::$codes)) {
                 return self::$codes[$method];

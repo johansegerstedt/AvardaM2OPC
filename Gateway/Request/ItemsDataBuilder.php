@@ -43,6 +43,7 @@ class ItemsDataBuilder implements BuilderInterface
     /**
      * ItemsDataBuilder constructor.
      *
+     * @param ItemStorageInterface $itemStorage
      * @param ItemDataObjectFactoryInterface $itemDataObjectFactory
      * @param BuilderInterface $itemBuilder
      */
@@ -62,7 +63,7 @@ class ItemsDataBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         $preparedItems = $this->itemStorage->getItems();
-        if (count($preparedItems) == 0) {
+        if (count($preparedItems) === 0) {
             throw new PaymentException(
                 __('Could not generate items for Avarda checkout.')
             );

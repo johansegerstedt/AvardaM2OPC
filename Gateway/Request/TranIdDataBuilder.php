@@ -6,7 +6,6 @@
  */
 namespace Digia\AvardaCheckout\Gateway\Request;
 
-use Digia\AvardaCheckout\Api\Data\PaymentDetailsInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 

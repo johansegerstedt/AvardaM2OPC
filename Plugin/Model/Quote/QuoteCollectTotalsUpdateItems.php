@@ -77,7 +77,7 @@ class QuoteCollectTotalsUpdateItems
         ) {
             $this->collectTotalsFlag = true;
             $stateId = $this->getStateId($subject);
-            if (($renew = $this->purchaseStateHelper->isDead($stateId)) == false) {
+            if (($renew = $this->purchaseStateHelper->isDead($stateId)) === false) {
                 try {
                     $this->quotePaymentManagement->updateItems($subject);
                 } catch (WebapiException $e) {

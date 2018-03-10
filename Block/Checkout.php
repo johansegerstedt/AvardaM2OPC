@@ -38,11 +38,6 @@ class Checkout extends Template
     protected $assetRepo;
 
     /**
-     * @var array
-     */
-    protected $jsLayout;
-
-    /**
      * @var CartInterface
      */
     protected $quote;
@@ -68,23 +63,23 @@ class Checkout extends Template
         array $data = []
     ) {
         parent::__construct($context, $data);
+
         $this->config = $config;
         $this->configProvider = $configProvider;
         $this->checkoutSession = $checkoutSession;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->assetRepo = $context->getAssetRepository();
-        $this->jsLayout = isset($data['jsLayout']) && is_array($data['jsLayout']) ? $data['jsLayout'] : [];
 
         if ($productMetadata->getEdition() === 'Enterprise') {
             $this->jsLayout = array_merge_recursive([
-                "components" => [
-                    "gift-card" => [
-                        "component" => "Magento_GiftCardAccount/js/view/payment/gift-card-account",
-                        "children" => [
-                            "errors" => [
-                                "sortOrder" => 0,
-                                "component" => "Magento_GiftCardAccount/js/view/payment/gift-card-messages",
-                                "displayArea" => "messages"
+                'components' => [
+                    'gift-card' => [
+                        'component' => 'Magento_GiftCardAccount/js/view/payment/gift-card-account',
+                        'children' => [
+                            'errors' => [
+                                'sortOrder' => 0,
+                                'component' => 'Magento_GiftCardAccount/js/view/payment/gift-card-messages',
+                                'displayArea' => 'messages'
                             ]
                         ]
                     ]
@@ -191,13 +186,14 @@ class Checkout extends Template
     {
         $url = $this->config->getCustomCssUrl();
         if ($url) {
-            if (substr($url, 0, 4) === "http") {
+            if (0 === strpos($url, 'http')) {
                 return $url;
             }
 
-            $fullUrl = $this->assetRepo->getUrl($url);
-            return $fullUrl;
+            return $this->assetRepo->getUrl($url);
         }
+        
+        return null;
     }
 
     /**
@@ -222,13 +218,5 @@ class Checkout extends Template
     public function getCallbackUrl()
     {
         return $this->getUrl('avarda/checkout/process', ['_secure' => true]);
-    }
-
-    /**
-     * @return string
-     */
-    public function getJsLayout()
-    {
-        return json_encode($this->jsLayout);
     }
 }

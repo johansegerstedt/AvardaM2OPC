@@ -27,7 +27,7 @@ interface PaymentDetailsInterface
     /**
      * Return the generated purchase ID
      *
-     * @return string $purchaseId
+     * @param string $purchaseId
      * @return $this
      */
     public function setPurchaseId($purchaseId);

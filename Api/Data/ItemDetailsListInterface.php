@@ -35,7 +35,7 @@ interface ItemDetailsListInterface
     /**
      * Set quote items
      *
-     * $param \Digia\AvardaCheckout\Api\Data\ItemDetailsInterface $item
+     * @param \Digia\AvardaCheckout\Api\Data\ItemDetailsInterface $item
      * @return $this
      */
     public function addItem(ItemDetailsInterface $item);

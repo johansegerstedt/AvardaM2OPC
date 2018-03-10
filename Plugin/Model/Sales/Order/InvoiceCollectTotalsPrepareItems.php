@@ -115,14 +115,15 @@ class InvoiceCollectTotalsPrepareItems
     /**
      * Create item data objects from invoice items
      *
-     * @param InvoiceInterface $subject
+     * @param InvoiceInterface|\Magento\Sales\Model\Order\Invoice $subject
      */
     protected function prepareItems(InvoiceInterface $subject)
     {
+        /** @var \Magento\Sales\Model\Order\Invoice\Item $item */
         foreach ($subject->getItems() as $item) {
             $orderItem = $item->getOrderItem();
             if (!$orderItem->getProductId() ||
-                $orderItem->hasParentItemId() ||
+                $item->hasData('parent_item_id') ||
                 $item->isDeleted()
             ) {
                 continue;
@@ -134,12 +135,11 @@ class InvoiceCollectTotalsPrepareItems
             $itemDataObject = $this->itemDataObjectFactory->create(
                 $itemAdapter,
                 $item->getQty(),
-                ($item->getRowTotalInclTax() - $item->getDiscountAmount()),
-                (
-                    $item->getTaxAmount() +
-                    $item->getHiddenTaxAmount() +
+                $item->getRowTotalInclTax() -
+                    $item->getDiscountAmount(),
+                $item->getTaxAmount() +
+                    $item->getDiscountTaxCompensationAmount() +
                     $item->getWeeeTaxAppliedAmount()
-                )
             );
 
             $this->itemStorage->addItem($itemDataObject);
@@ -149,7 +149,7 @@ class InvoiceCollectTotalsPrepareItems
     /**
      * Create item data object from shipment information
      *
-     * @param InvoiceInterface $subject
+     * @param InvoiceInterface|\Magento\Sales\Model\Order\Invoice $subject
      */
     protected function prepareShipment(InvoiceInterface $subject)
     {
@@ -176,12 +176,12 @@ class InvoiceCollectTotalsPrepareItems
     /**
      * Create item data object from gift card information
      *
-     * @param InvoiceInterface $subject
+     * @param InvoiceInterface|\Magento\Sales\Model\Order\Invoice $subject
      */
     protected function prepareGiftCards(InvoiceInterface $subject)
     {
-        $giftCardsAmount = $subject->getGiftCardsAmount();
-        if ($giftCardsAmount > 0) {
+        $giftCardsAmount = $subject->getData('gift_cards_amount');
+        if ($giftCardsAmount !== null && $giftCardsAmount > 0) {
             $itemAdapter = $this->arrayDataItemAdapterFactory->create([
                 'data' => [
                     'name' => __('Gift Card'),
@@ -191,7 +191,7 @@ class InvoiceCollectTotalsPrepareItems
             $itemDataObject = $this->itemDataObjectFactory->create(
                 $itemAdapter,
                 1,
-                ($giftCardsAmount * -1),
+                $giftCardsAmount * -1,
                 0
             );
 

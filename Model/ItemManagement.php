@@ -43,10 +43,10 @@ class ItemManagement implements ItemManagementInterface
     /**
      * ItemManagement constructor.
      *
-     * @param ItemStorage $itemStorage
+     * @param ItemStorageInterface $itemStorage
      * @param ItemDetailsInterfaceFactory $itemDetailsFactory
      * @param ItemDetailsListInterfaceFactory $itemDetailsListFactory
-     * @param \Magento\Catalog\Block\Product\ImageBuilder $imageBuilder
+     * @param \Magento\Catalog\Helper\ImageFactory $imageHelperFactory
      */
     public function __construct(
         ItemStorageInterface $itemStorage,
@@ -80,7 +80,7 @@ class ItemManagement implements ItemManagementInterface
 
             /**
              * Set image thumbnail url
-             * 
+             *
              * TODO: Make image size details load dynamically from view.xml
              */
             $imageUrl = $this->getImageUrl($item, self::IMAGE_THUMBNAIL, [
@@ -122,9 +122,12 @@ class ItemManagement implements ItemManagementInterface
      * Retrieve product image
      *
      * @param \Magento\Quote\Api\Data\CartItemInterface $item
-     * @return \Magento\Catalog\Block\Product\Image
+     * @param string $imageId
+     * @param array $attributes
+     *
+     * @return string
      */
-    public function getImageUrl($item, $imageId, $attributes = [])
+    public function getImageUrl($item, $imageId, array $attributes = [])
     {
         $product = $item->getProduct();
         $helper = $this->imageHelperFactory->create()

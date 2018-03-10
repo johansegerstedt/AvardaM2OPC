@@ -58,7 +58,7 @@ class PaymentData
             return $additionalInformation[self::STATE_ID];
         }
 
-        return array_search(PurchaseState::STATE_NEW, PurchaseState::$states);
+        return array_search(PurchaseState::STATE_NEW, PurchaseState::$states, true);
     }
 
     /**

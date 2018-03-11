@@ -6,6 +6,7 @@
  */
 namespace Digia\AvardaCheckout\Gateway\Request;
 
+use Magento\Payment\Gateway\Data\OrderAdapterInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
@@ -21,19 +22,19 @@ class AddressDataBuilder implements BuilderInterface
     const IS_INVOICING_EDITABLE = 'IsInvoicingEditable';
 
     /**
-     * 	Enabling/disabling checkbox visibility for delivery address.
+     * Enabling/disabling checkbox visibility for delivery address.
      */
     const IS_DELIVERY_EDITABLE = 'IsDeliveryEditable';
 
     /**
      * Delivery address fields prefix
      */
-    const DELIVERY_ADDRESS_PREFIX = 'Delivery';
+    const DELIVERY_PREFIX = 'Delivery';
 
     /**
      * Invoicing address fields prefix
      */
-    const INVOICING_ADDRESS_PREFIX = 'Invoicing';
+    const INVOICING_PREFIX = 'Invoicing';
 
     /**
      * The first name value must be less than or equal to 40 characters.
@@ -48,12 +49,12 @@ class AddressDataBuilder implements BuilderInterface
     /**
      * The street address line 1. Maximum 40 characters.
      */
-    const STREET_ADDRESS_1 = 'StreetAddress';
+    const STREET_1 = 'AddressLine1';
 
     /**
      * The street address line 2. Maximum 40 characters.
      */
-    const STREET_ADDRESS_2 = 'StreetAddress';
+    const STREET_2 = 'AddressLine2';
 
     /**
      * The Zip/Postal code. Maximum 6 characters.
@@ -71,32 +72,66 @@ class AddressDataBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         $paymentDO = SubjectReader::readPayment($buildSubject);
+        $order     = $paymentDO->getOrder();
 
-        $order = $paymentDO->getOrder();
-        $result = [];
+        return array_merge(
+            $this->setBillingAddress($order),
+            $this->setShippingAddress($order),
+            $this->setAdditionalData($order)
+        );
+    }
 
-        // Enable editing inside the Avarda iframe
-        $result[self::IS_INVOICING_EDITABLE] = 'true';
-        $result[self::IS_DELIVERY_EDITABLE] = 'true';
-
-        $billingAddress = $order->getBillingAddress();
-        if ($billingAddress) {
-            $result[self::INVOICING_ADDRESS_PREFIX . self::FIRST_NAME] = $billingAddress->getFirstname();
-            $result[self::INVOICING_ADDRESS_PREFIX . self::LAST_NAME] = $billingAddress->getLastname();
-            $result[self::INVOICING_ADDRESS_PREFIX . self::STREET_ADDRESS_1] = $billingAddress->getStreetLine1();
-            $result[self::INVOICING_ADDRESS_PREFIX . self::STREET_ADDRESS_2] = $billingAddress->getStreetLine2();
-            $result[self::INVOICING_ADDRESS_PREFIX . self::ZIP] = $billingAddress->getPostcode();
-            $result[self::INVOICING_ADDRESS_PREFIX . self::CITY] = $billingAddress->getCity();
+    /**
+     * @param OrderAdapterInterface $order
+     * @return array
+     */
+    protected function setBillingAddress(OrderAdapterInterface $order)
+    {
+        $address = $order->getBillingAddress();
+        if ($address === null) {
+            return [];
         }
 
-        $shippingAddress = $order->getShippingAddress();
-        if ($shippingAddress) {
-            $result[self::DELIVERY_ADDRESS_PREFIX . self::FIRST_NAME] = $billingAddress->getFirstname();
-            $result[self::DELIVERY_ADDRESS_PREFIX . self::LAST_NAME] = $billingAddress->getLastname();
-            $result[self::DELIVERY_ADDRESS_PREFIX . self::ZIP] = $billingAddress->getPostcode();
-            $result[self::DELIVERY_ADDRESS_PREFIX . self::CITY] = $billingAddress->getCity();
+        return [
+            self::INVOICING_PREFIX . self::FIRST_NAME => $address->getFirstname(),
+            self::INVOICING_PREFIX . self::LAST_NAME  => $address->getLastname(),
+            self::INVOICING_PREFIX . self::STREET_1   => $address->getStreetLine1(),
+            self::INVOICING_PREFIX . self::STREET_2   => $address->getStreetLine2(),
+            self::INVOICING_PREFIX . self::ZIP        => $address->getPostcode(),
+            self::INVOICING_PREFIX . self::CITY       => $address->getCity(),
+        ];
+    }
+
+    /**
+     * @param OrderAdapterInterface $order
+     * @return array
+     */
+    protected function setShippingAddress(OrderAdapterInterface $order)
+    {
+        $address = $order->getShippingAddress();
+        if ($address === null) {
+            return [];
         }
-        $result['IsDeliveryEditable'] = 'true';
-        return $result;
+
+        return [
+            self::DELIVERY_PREFIX . self::FIRST_NAME => $address->getFirstname(),
+            self::DELIVERY_PREFIX . self::LAST_NAME  => $address->getLastname(),
+            self::DELIVERY_PREFIX . self::ZIP        => $address->getPostcode(),
+            self::DELIVERY_PREFIX . self::CITY       => $address->getCity(),
+        ];
+    }
+
+    /**
+     * Enable editing inside the Avarda iframe
+     *
+     * @param OrderAdapterInterface $order
+     * @return array
+     */
+    protected function setAdditionalData(OrderAdapterInterface $order)
+    {
+        return [
+            self::IS_INVOICING_EDITABLE => 'true',
+            self::IS_DELIVERY_EDITABLE  => 'true',
+        ];
     }
 }

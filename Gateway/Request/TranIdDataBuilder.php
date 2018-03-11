@@ -20,6 +20,8 @@ class TranIdDataBuilder implements BuilderInterface
     const TRAN_ID = 'TranId';
 
     /**
+     * Helper for payment info instances, eg. to generate transaction IDs.
+     *
      * @var \Digia\AvardaCheckout\Helper\PaymentData
      */
     protected $paymentDataHelper;
@@ -36,11 +38,11 @@ class TranIdDataBuilder implements BuilderInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function build(array $buildSubject)
     {
-        $paymentDO = SubjectReader::readPayment($buildSubject);
+        $paymentDO     = SubjectReader::readPayment($buildSubject);
         $transactionId = $this->paymentDataHelper->getTransactionId();
         $paymentDO->getPayment()->setTransactionId($transactionId);
 

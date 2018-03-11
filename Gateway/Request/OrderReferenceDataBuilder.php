@@ -25,7 +25,7 @@ class OrderReferenceDataBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         $paymentDO = SubjectReader::readPayment($buildSubject);
-        $order = $paymentDO->getOrder();
+        $order     = $paymentDO->getOrder();
 
         return [self::ORDER_REFERENCE => $order->getOrderIncrementId()];
     }

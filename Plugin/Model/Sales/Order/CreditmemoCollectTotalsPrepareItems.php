@@ -123,7 +123,7 @@ class CreditmemoCollectTotalsPrepareItems
         foreach ($subject->getItems() as $item) {
             $orderItem = $item->getOrderItem();
             if (!$orderItem->getProductId() ||
-                $orderItem->hasData('parent_item_id') ||
+                $orderItem->getData('parent_item_id') !== null ||
                 $item->isDeleted()
             ) {
                 continue;

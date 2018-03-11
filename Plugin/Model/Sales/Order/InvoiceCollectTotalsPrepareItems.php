@@ -123,7 +123,7 @@ class InvoiceCollectTotalsPrepareItems
         foreach ($subject->getItems() as $item) {
             $orderItem = $item->getOrderItem();
             if (!$orderItem->getProductId() ||
-                $item->hasData('parent_item_id') ||
+                $orderItem->getData('parent_item_id') !== null ||
                 $item->isDeleted()
             ) {
                 continue;

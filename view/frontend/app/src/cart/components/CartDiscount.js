@@ -28,9 +28,9 @@ class CartDiscount extends React.Component<Props, State> {
   toggle = () => this.setState(state => ({...state, isOpen: !state.isOpen}));
 
   applyCoupon = () => {
-    const {coupon, applyCoupon} = this.props;
+    const {coupon} = this.props;
     if (typeof coupon === 'string') {
-      applyCoupon(coupon);
+      this.props.applyCoupon(coupon);
     }
   };
 
@@ -137,6 +137,7 @@ class CartDiscount extends React.Component<Props, State> {
             </div>
           </div>
         </div>
+        {/* Get the gift card input when using Enterprise edition */}
         <KoBindScope
           scope="gift-card"
           divProps={{

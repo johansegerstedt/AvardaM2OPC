@@ -61,6 +61,7 @@ function* updateCartItems(
 ): Generator<*, *, *> {
   const baseUrl = `${getCartApiPath()}/items`;
   try {
+    // Each cart item must be updated separately
     const updatedItems = yield all(
       payload.map(({item_id, quote_id, sku, qty}) =>
         call(apiPut, getApiUrl(`${baseUrl}/${item_id}`), {

@@ -1,5 +1,5 @@
 // @flow
-import 'Magento_Ui/js/lib/knockout/bootstrap';
+import 'Magento_Ui/js/lib/knockout/bootstrap'; // Bootstrap Knockout with Magento stuff
 import 'es6-collections'; // Magento's polyfills
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -17,7 +17,9 @@ export const execute = (config: Config) => {
 
     if (container !== null) {
       const store = configureStore();
+      // Initialize configuration singleton
       setConfig(config);
+      // Set base URL for Magento's JS actions
       url.setBaseUrl(config.baseUrl);
       ReactDOM.render(<Root config={config} store={store} />, container);
     } else {

@@ -72,6 +72,7 @@ const mapDispatchToProps = (dispatch: Dispatch<*>): DispatchProps =>
 
 const connector = connect(mapStateToProps, mapDispatchToProps);
 const Connected = connector(AvardaCheckOutContainer);
+// Hack to let flow know we don't want any props
 // eslint-disable-next-line no-unused-vars
 const withoutProps = (props: {||}) => <Connected />;
 export default withoutProps;

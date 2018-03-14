@@ -35,7 +35,7 @@ export const interpolateHTML: InterpolateHTML = (...args) => ({
 export * from './types';
 
 /**
- * Usage to get phrases collected:
+ * Usage to get phrases collected with Magento i18n CLI tool:
  *
  * import {$} from '$i18n';
  * const Foobar = () => <div>{$.mage.__('Translate this')}/>;

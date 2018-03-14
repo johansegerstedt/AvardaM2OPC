@@ -105,12 +105,6 @@ const ItemRow = ({
             id="gift-options-cart-item-98"
             className="gift-options-cart-item"
           />
-          {/*<a
-          className="action action-edit"
-          href="http://avarda.box/checkout/cart/configure/id/98/product_id/6/"
-          title="Edit item parameters">
-          <span>Edit </span>
-        </a>*/}
           <button
             title={$.mage.__('Remove item')}
             className="action action-delete"

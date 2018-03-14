@@ -69,6 +69,7 @@ function* addressChanged({
     if (yield select(getIsVirtual)) {
       return result.continue();
     }
+    // Get shipping address and the selected method from ko.observables
     const shippingAddress = yield call([quote, quote.shippingAddress]);
     const selectedMethod = yield call([quote, quote.shippingMethod]);
     const newAddress = mergeAddress(shippingAddress, info);
@@ -77,8 +78,11 @@ function* addressChanged({
     // Continue if no need to select new shipping method
     yield put(updateAddress(newAddress));
     if (methods.some(method => isEqual(method, selectedMethod))) {
+      // result.continue let's iframe continue
       return yield call([result, result.continue]);
     }
+    // Scroll the page to the shipping method selection
+    // and instruct the customer to select new shipping method
     yield put(scrollToForm());
     yield put(addMessage(ShippingMessages.SelectShippingMethod));
     yield take(ShippingActions.SAVE_SHIPPING_INFORMATION_SUCCESS);
@@ -89,6 +93,7 @@ function* addressChanged({
       $.mage.__('Failed to sync address information. Try reloading the page.'),
       TYPES.ERROR,
     );
+    // Tell the iframe there was an error and the action must be cancelled
     result.cancel();
   }
 }
@@ -99,6 +104,7 @@ function* cartUpdated() {
       yield put({type: 'avarda/updateItems'});
 
       if (document.getElementById(DIV_ID)) {
+        // Make the iframe get updates from Avarda API
         yield call(AvardaCheckOutClient.updateItems);
       }
 

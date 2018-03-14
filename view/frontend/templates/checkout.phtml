@@ -27,6 +27,7 @@ window.checkoutConfig = <?php /* @escapeNotVerified */ echo json_encode($block->
 window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
 window.customerData = window.checkoutConfig.customerData;
 </script>
+<!-- Get the components from layout configuration -->
 <script type="text/x-magento-init">
 {
     "*": {
@@ -35,6 +36,7 @@ window.customerData = window.checkoutConfig.customerData;
 }
 </script>
 <script type="text/javascript">
+// Shim Avarda's iframe script to be used with Require.js
 require.config(({
   shim: {
     AvardaCheckOutClient: {

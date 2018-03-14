@@ -4,6 +4,10 @@ import {fetchPurchaseId} from './actions';
 import type {Middleware} from 'redux';
 import type {AppState, Actions} from '$src/root/types';
 
+/**
+ * Redux middleware that decides when to fetch Avarda purchase ID
+ * and therefore show the iframe
+ */
 const middleware: Middleware<AppState, Actions> = ({
   getState,
   dispatch,

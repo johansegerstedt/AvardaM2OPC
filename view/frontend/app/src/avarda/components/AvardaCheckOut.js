@@ -18,7 +18,10 @@ export type Props = {
 };
 
 export const DIV_ID = 'avarda-check-out-container';
-
+/**
+ * Avarda is a React component to show the Avarda payment iframe
+ * @extends Component
+ */
 class Avarda extends Component<Props> {
   static DIV_ID = DIV_ID;
 

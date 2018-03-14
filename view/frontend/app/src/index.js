@@ -1,5 +1,5 @@
 // @flow
-import 'Magento_Ui/js/lib/knockout/bootstrap';
+import 'Magento_Ui/js/lib/knockout/bootstrap'; // Bootstrap Knockout with Magento stuff
 import 'es6-collections'; // Magento's polyfills
 import React from 'react';
 import ReactDOM from 'react-dom';
@@ -17,27 +17,13 @@ export const execute = (config: Config) => {
 
     if (container !== null) {
       const store = configureStore();
+      // Initialize configuration singleton
       setConfig(config);
+      // Set base URL for Magento's JS actions
       url.setBaseUrl(config.baseUrl);
       ReactDOM.render(<Root config={config} store={store} />, container);
-    }
-
-    if (process.env.NODE_ENV !== 'production') {
-      const mainContent = document.getElementById('maincontent');
-
-      // IE and Edge don't support ParentNode.prepend
-      // https://developer.mozilla.org/en-US/docs/Web/API/ParentNode/prepend
-      const canUseExperimentalPrepend =
-        mainContent && typeof mainContent.prepend === 'function';
-      if (mainContent !== null && canUseExperimentalPrepend) {
-        const configContainer = document.createElement('div');
-        configContainer.id = 'avardaCheckoutConfigContainer';
-        mainContent.prepend(configContainer);
-        ReactDOM.render(
-          <pre>{JSON.stringify(config, null, 2)}</pre>,
-          configContainer,
-        );
-      }
+    } else {
+      throw new Error("Couldn't mount the checkout application.");
     }
   } catch (err) {
     // eslint-disable-next-line no-console

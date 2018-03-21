@@ -31,6 +31,11 @@ class Index extends AbstractCheckout
     protected $checkoutSession;
 
     /**
+     * @var \Magento\Quote\Api\CartRepositoryInterface
+     */
+    protected $quoteRepository;
+
+    /**
      * Index constructor.
      *
      * @param \Magento\Framework\App\Action\Context $context
@@ -40,6 +45,7 @@ class Index extends AbstractCheckout
      * @param \Magento\Checkout\Helper\Data $checkoutHelper
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -48,13 +54,15 @@ class Index extends AbstractCheckout
         \Magento\Framework\View\Result\PageFactory $resultPageFactory,
         \Magento\Checkout\Helper\Data $checkoutHelper,
         \Magento\Checkout\Model\Session $checkoutSession,
-        \Magento\Customer\Model\Session $customerSession
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
     ) {
         parent::__construct($context, $logger, $config);
         $this->resultPageFactory = $resultPageFactory;
         $this->checkoutHelper = $checkoutHelper;
         $this->checkoutSession = $checkoutSession;
         $this->customerSession = $customerSession;
+        $this->quoteRepository = $quoteRepository;
     }
 
     /**
@@ -85,6 +93,13 @@ class Index extends AbstractCheckout
             );
             return $this->resultRedirectFactory
                 ->create()->setPath('checkout/cart');
+        }
+
+        if ($this->customerSession->isLoggedIn()) {
+            $quote->assignCustomer(
+                $this->customerSession->getCustomerDataObject()
+            );
+            $this->quoteRepository->save($quote);
         }
 
         $this->customerSession->regenerateId();

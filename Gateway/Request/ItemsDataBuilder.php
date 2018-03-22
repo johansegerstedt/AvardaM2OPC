@@ -7,7 +7,6 @@
 namespace Digia\AvardaCheckout\Gateway\Request;
 
 use Digia\AvardaCheckout\Api\ItemStorageInterface;
-use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectFactoryInterface;
 use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectInterface;
 use Magento\Framework\Exception\PaymentException;
 use Magento\Payment\Gateway\Request\BuilderInterface;
@@ -31,11 +30,6 @@ class ItemsDataBuilder implements BuilderInterface
     protected $itemStorage;
 
     /**
-     * @var ItemDataObjectFactoryInterface
-     */
-    protected $itemDataObjectFactory;
-
-    /**
      * @var BuilderInterface
      */
     protected $itemBuilder;
@@ -43,16 +37,14 @@ class ItemsDataBuilder implements BuilderInterface
     /**
      * ItemsDataBuilder constructor.
      *
-     * @param ItemDataObjectFactoryInterface $itemDataObjectFactory
+     * @param ItemStorageInterface $itemStorage
      * @param BuilderInterface $itemBuilder
      */
     public function __construct(
         ItemStorageInterface $itemStorage,
-        ItemDataObjectFactoryInterface $itemDataObjectFactory,
         BuilderInterface $itemBuilder
     ) {
         $this->itemStorage = $itemStorage;
-        $this->itemDataObjectFactory = $itemDataObjectFactory;
         $this->itemBuilder = $itemBuilder;
     }
 
@@ -62,7 +54,7 @@ class ItemsDataBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         $preparedItems = $this->itemStorage->getItems();
-        if (count($preparedItems) == 0) {
+        if (count($preparedItems) === 0) {
             throw new PaymentException(
                 __('Could not generate items for Avarda checkout.')
             );

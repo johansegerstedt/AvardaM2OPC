@@ -33,6 +33,9 @@ class CustomerDataBuilder implements BuilderInterface
 
         $order = $paymentDO->getOrder();
         $billingAddress = $order->getBillingAddress();
+        if ($billingAddress === null) {
+            return [];
+        }
 
         return [
             self::PHONE => $billingAddress->getTelephone(),

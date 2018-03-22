@@ -22,7 +22,7 @@ class PaymentQueue extends AbstractModel implements PaymentQueueInterface
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Digia\AvardaCheckout\Model\ResourceModel\PaymentQueue');
+        $this->_init(\Digia\AvardaCheckout\Model\ResourceModel\PaymentQueue::class);
     }
 
     /**

@@ -52,7 +52,7 @@ class Zend implements ClientInterface
     }
 
     /**
-     * {inheritdoc}
+     * {@inheritdoc}
      */
     public function placeRequest(TransferInterface $transferObject)
     {

@@ -51,7 +51,6 @@ class ItemStorage implements ItemStorageInterface
         }
 
         return [];
-
     }
 
     /**

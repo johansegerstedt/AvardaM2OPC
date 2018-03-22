@@ -164,6 +164,8 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
      */
     public function initializePurchase(CartInterface $quote)
     {
+        $quote->reserveOrderId();
+
         $this->executeCommand('avarda_initialize_payment', $quote);
 
         /**
@@ -206,8 +208,8 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
      */
     public function setQuoteIsActive($cartId, $isActive)
     {
-        $this->isAvardaPayment(($quote = $this->getQuote($cartId)));
-        if ($quote->getIsActive() != $isActive) {
+        $this->isAvardaPayment($quote = $this->getQuote($cartId));
+        if ($quote->getIsActive() !== $isActive) {
             $quote->setIsActive($isActive);
             $quote->save();
         }
@@ -218,7 +220,7 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
      */
     public function updatePaymentStatus($cartId)
     {
-        $this->isAvardaPayment(($quote = $this->getQuote($cartId)));
+        $this->isAvardaPayment($quote = $this->getQuote($cartId));
         $this->executeCommand('avarda_get_payment_status', $quote);
     }
 
@@ -227,7 +229,7 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
      */
     public function placeOrder($cartId, $isGuest = false)
     {
-        $this->isAvardaPayment(($quote = $this->getQuote($cartId)));
+        $this->isAvardaPayment($quote = $this->getQuote($cartId));
 
         /** Unfreeze cart before placing the order */
         $this->setQuoteIsActive($cartId, true);
@@ -260,7 +262,7 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
         }
 
         $payment = $this->getQuote($paymentQueue->getQuoteId())->getPayment();
-        if ($this->paymentDataHelper->getPurchaseId($payment) != $purchaseId) {
+        if ($this->paymentDataHelper->getPurchaseId($payment) !== $purchaseId) {
             throw new PaymentException(__('Purchase ID "%purchase_id" is outdated', [
                 'purchase_id' => $purchaseId
             ]));
@@ -299,7 +301,7 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
      */
     protected function getQuote($cartId)
     {
-        if (!isset($this->quote) || $this->quote->getId() != $cartId) {
+        if (!isset($this->quote) || $this->quote->getId() !== $cartId) {
             /** @var CartInterface|\Magento\Quote\Model\Quote $quote */
             $this->quote = $this->quoteRepository->get($cartId);
         }

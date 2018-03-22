@@ -6,9 +6,6 @@
  */
 namespace Digia\AvardaCheckout\Gateway\Data;
 
-use Digia\AvardaCheckout\Gateway\Data\ItemAdapterInterface;
-use Digia\AvardaCheckout\Gateway\Data\ItemDataObjectInterface;
-
 /**
  * Service for creation transferable item object from model
  *

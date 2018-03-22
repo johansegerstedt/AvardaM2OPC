@@ -59,7 +59,7 @@ class SaveOrder extends AbstractCheckout
     public function execute()
     {
         try {
-            if (($purchaseId = $this->getPurchaseId()) == null) {
+            if (($purchaseId = $this->getPurchaseId()) === null) {
                 throw new \Exception(
                     __('Failed to save order with purchase ID "%purchase_id"', [
                         'purchase_id' => $purchaseId

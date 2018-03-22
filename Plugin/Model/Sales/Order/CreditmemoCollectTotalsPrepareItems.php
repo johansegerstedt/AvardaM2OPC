@@ -115,14 +115,15 @@ class CreditmemoCollectTotalsPrepareItems
     /**
      * Create item data objects from invoice items
      *
-     * @param CreditmemoInterface $subject
+     * @param CreditmemoInterface|\Magento\Sales\Model\Order\Creditmemo $subject
      */
     protected function prepareItems(CreditmemoInterface $subject)
     {
+        /** @var \Magento\Sales\Model\Order\Creditmemo\Item $item */
         foreach ($subject->getItems() as $item) {
             $orderItem = $item->getOrderItem();
             if (!$orderItem->getProductId() ||
-                $orderItem->hasParentItemId() ||
+                $orderItem->getData('parent_item_id') !== null ||
                 $item->isDeleted()
             ) {
                 continue;
@@ -134,12 +135,11 @@ class CreditmemoCollectTotalsPrepareItems
             $itemDataObject = $this->itemDataObjectFactory->create(
                 $itemAdapter,
                 $item->getQty(),
-                ($item->getRowTotalInclTax() - $item->getDiscountAmount()),
-                (
-                    $item->getTaxAmount() +
-                    $item->getHiddenTaxAmount() +
+                $item->getRowTotalInclTax() -
+                    $item->getDiscountAmount(),
+                $item->getTaxAmount() +
+                    $item->getDiscountTaxCompensationAmount() +
                     $item->getWeeeTaxAppliedAmount()
-                )
             );
 
             $this->itemStorage->addItem($itemDataObject);
@@ -149,7 +149,7 @@ class CreditmemoCollectTotalsPrepareItems
     /**
      * Create item data object from shipment information
      *
-     * @param CreditmemoInterface $subject
+     * @param CreditmemoInterface|\Magento\Sales\Model\Order\Creditmemo $subject
      */
     protected function prepareShipment(CreditmemoInterface $subject)
     {
@@ -176,12 +176,12 @@ class CreditmemoCollectTotalsPrepareItems
     /**
      * Create item data object from gift card information
      *
-     * @param CreditmemoInterface $subject
+     * @param CreditmemoInterface|\Magento\Sales\Model\Order\Creditmemo $subject
      */
     protected function prepareGiftCards(CreditmemoInterface $subject)
     {
-        $giftCardsAmount = $subject->getGiftCardsAmount();
-        if ($giftCardsAmount > 0) {
+        $giftCardsAmount = $subject->getData('gift_cards_amount');
+        if ($giftCardsAmount !== null && $giftCardsAmount > 0) {
             $itemAdapter = $this->arrayDataItemAdapterFactory->create([
                 'data' => [
                     'name' => __('Gift Card'),
@@ -191,7 +191,7 @@ class CreditmemoCollectTotalsPrepareItems
             $itemDataObject = $this->itemDataObjectFactory->create(
                 $itemAdapter,
                 1,
-                ($giftCardsAmount * -1),
+                $giftCardsAmount * -1,
                 0
             );
 

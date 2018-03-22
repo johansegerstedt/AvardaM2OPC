@@ -164,6 +164,8 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
      */
     public function initializePurchase(CartInterface $quote)
     {
+        $quote->reserveOrderId();
+
         $this->executeCommand('avarda_initialize_payment', $quote);
 
         /**

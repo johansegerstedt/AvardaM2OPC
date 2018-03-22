@@ -98,7 +98,7 @@ class Checkout extends Template
     }
 
     /**
-     * @return integer|null
+     * @return int|null
      */
     public function getMaskedQuoteId()
     {
@@ -109,15 +109,15 @@ class Checkout extends Template
     }
 
     /**
-     * @return integer|null
+     * @return int|null
      */
     public function getCustomerId()
     {
-        return $this->getQuote()->getCustomerId();
+        return (int) $this->getQuote()->getCustomerId();
     }
 
     /**
-     * @return integer|null
+     * @return int|null
      */
     public function getQuoteId()
     {

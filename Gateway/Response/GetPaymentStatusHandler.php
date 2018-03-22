@@ -39,23 +39,39 @@ class GetPaymentStatusHandler implements HandlerInterface
     protected $stateHelper;
 
     /**
+     * @var \Magento\Customer\Model\Session
+     */
+    protected $customerSession;
+
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
      * GetPaymentStatusHandler constructor.
      *
      * @param CartRepositoryInterface $quoteRepository
      * @param AddressInterfaceFactory $addressFactory
      * @param PaymentMethod $methodHelper
      * @param PurchaseState $stateHelper
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
         CartRepositoryInterface $quoteRepository,
         AddressInterfaceFactory $addressFactory,
         PaymentMethod $methodHelper,
-        PurchaseState $stateHelper
+        PurchaseState $stateHelper,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->addressFactory = $addressFactory;
         $this->methodHelper = $methodHelper;
         $this->stateHelper = $stateHelper;
+        $this->customerSession = $customerSession;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -123,5 +139,29 @@ class GetPaymentStatusHandler implements HandlerInterface
             \Digia\AvardaCheckout\Helper\PaymentData::STATE_ID,
             $response->State
         );
+
+        // Save customer token
+        $this->saveCustomerToken($response);
+    }
+
+    /**
+     * @param $response
+     *
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\State\InputMismatchException
+     */
+    public function saveCustomerToken($response)
+    {
+        if (isset($response->CustomerToken) && !empty($response->CustomerToken)) {
+            $customer = $this->customerSession
+                ->getCustomerData()
+                ->setCustomAttribute(
+                    'avarda_customer_token',
+                    $response->CustomerToken
+                );
+
+            $this->customerRepository->save($customer);
+        }
     }
 }

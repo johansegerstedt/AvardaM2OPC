@@ -126,6 +126,7 @@
                 <item name="address" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\AddressDataBuilder</item>
                 <item name="price" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\PriceDataBuilder</item>
                 <item name="items" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\ItemsDataBuilder</item>
+                <item name="order_reference" xsi:type="string">Digia\AvardaCheckout\Gateway\Request\OrderReferenceDataBuilder</item>
             </argument>
         </arguments>
     </virtualType>

@@ -121,7 +121,7 @@ class QuoteCollectTotalsPrepareItems
         /** @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($subject->getItems() as $item) {
             if ($item->getData('product_id') === null ||
-                $item->hasData('parent_item_id') ||
+                $item->getData('parent_item_id') !== null ||
                 $item->isDeleted()
             ) {
                 continue;
@@ -151,6 +151,10 @@ class QuoteCollectTotalsPrepareItems
      */
     protected function prepareShipment(CartInterface $subject)
     {
+        if ($subject->isVirtual()) {
+            return;
+        }
+
         $shippingAddress = $subject->getShippingAddress();
         if ($shippingAddress && $shippingAddress->getShippingTaxAmount() > 0) {
             $itemAdapter = $this->arrayDataItemAdapterFactory->create([

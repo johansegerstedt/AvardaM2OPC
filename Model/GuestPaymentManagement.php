@@ -1,8 +1,8 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Model;
 
@@ -102,6 +102,13 @@ class GuestPaymentManagement implements GuestPaymentManagementInterface
         $quoteIdMask = $this->quoteIdMaskFactory->create()
             ->load($cartId, 'masked_id');
 
-        return $quoteIdMask->getQuoteId();
+        $quoteId = $quoteIdMask->getData('quote_id');
+        if ($quoteId === null) {
+            throw new \Magento\Framework\Exception\PaymentException(
+                __('Could not find quote with given ID.')
+            );
+        }
+
+        return $quoteId;
     }
 }

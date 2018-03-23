@@ -1,8 +1,8 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Controller\Checkout;
 
@@ -48,15 +48,13 @@ class Process extends AbstractCheckout
      */
     public function execute()
     {
-        if (!$this->isCallback()) {
-            // Show no route if Avarda is inactive and notify webmaster in logs.
-            if (!$this->config->isActive()) {
-                return $this->noroute('/checkout/avarda/process');
-            }
+        // Show no route if Avarda is inactive and notify webmaster in logs.
+        if (!$this->isCallback() && !$this->config->isActive()) {
+            return $this->noroute('/checkout/avarda/process');
         }
 
         try {
-            if (($purchaseId = $this->getPurchaseId()) == null) {
+            if (($purchaseId = $this->getPurchaseId()) === null) {
                 throw new \Exception(
                     __('Failed to save order with purchase ID "%purchase_id"', [
                         'purchase_id' => $purchaseId

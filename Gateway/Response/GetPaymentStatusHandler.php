@@ -1,8 +1,8 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Gateway\Response;
 
@@ -59,7 +59,7 @@ class GetPaymentStatusHandler implements HandlerInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function handle(array $handlingSubject, array $response)
     {
@@ -84,7 +84,7 @@ class GetPaymentStatusHandler implements HandlerInterface
         $billingAddress->setLastname($response->InvoicingLastName);
         $billingAddress->setStreet([
             $response->InvoicingAddressLine1,
-            $response->InvoicingAddressLine2 !== null ? $response->InvoicingAddressLine2 : "",
+            $response->InvoicingAddressLine2 !== null ? $response->InvoicingAddressLine2 : '',
         ]);
         $billingAddress->setPostcode($response->InvoicingZip);
         $billingAddress->setCity($response->InvoicingCity);
@@ -102,7 +102,7 @@ class GetPaymentStatusHandler implements HandlerInterface
             $shippingAddress->setLastname($response->DeliveryLastName);
             $shippingAddress->setStreet([
                 $response->DeliveryAddressLine1,
-                $response->DeliveryAddressLine2 !== null ? $response->DeliveryAddressLine2 : "",
+                $response->DeliveryAddressLine2 !== null ? $response->DeliveryAddressLine2 : '',
             ]);
             $shippingAddress->setPostcode($response->DeliveryZip);
             $shippingAddress->setCity($response->DeliveryCity);

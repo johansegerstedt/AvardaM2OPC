@@ -1,8 +1,8 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Plugin\Model\Quote;
 
@@ -77,7 +77,7 @@ class QuoteCollectTotalsUpdateItems
         ) {
             $this->collectTotalsFlag = true;
             $stateId = $this->getStateId($subject);
-            if (($renew = $this->purchaseStateHelper->isDead($stateId)) == false) {
+            if (($renew = $this->purchaseStateHelper->isDead($stateId)) === false) {
                 try {
                     $this->quotePaymentManagement->updateItems($subject);
                 } catch (WebapiException $e) {

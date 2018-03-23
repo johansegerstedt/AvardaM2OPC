@@ -1,8 +1,8 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Gateway\Http\Converter;
 
@@ -61,7 +61,7 @@ class JsonConverter implements ConverterInterface
     {
         $body = json_decode($response->getBody(), true);
         $errors = [];
-        if ($response->getStatus() == WebapiException::HTTP_UNAUTHORIZED) {
+        if ($response->getStatus() === WebapiException::HTTP_UNAUTHORIZED) {
             $errors[] = new AuthorizationException(
                 __('Failed to authorize Avarda checkout payment.')
             );
@@ -87,7 +87,7 @@ class JsonConverter implements ConverterInterface
         }
 
         if (empty($errors)) {
-            $message = isset($body['Message']) ? $body['Message'] : 'An unknown error occured';
+            $message = isset($body['Message']) ? $body['Message'] : 'An unknown error occurred';
             $errors[] = new LocalizedException(
                 __(self::WEBAPI_EXCEPTION_MESSAGE, [
                     'code' => '0',
@@ -99,7 +99,7 @@ class JsonConverter implements ConverterInterface
         throw new WebapiException(
             __('Something went wrong with Avarda checkout. Please try again later.'),
             0,
-            intval($response->getStatus()),
+            (int) $response->getStatus(),
             [],
             self::WEBAPI_EXCEPTION_NAME,
             $errors

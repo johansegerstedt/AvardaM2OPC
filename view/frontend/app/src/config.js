@@ -17,20 +17,22 @@ export const validate = (
   foo: Object,
 ): {error: false, value: Config} | {error: true, value: null} => {
   const {
+    avardaConfig,
     baseMediaUrl,
     baseUrl,
+    callbackUrl,
     countryId,
     customerId,
     hasItems,
     magentoLocale,
     maskedQuoteId,
+    productPlaceholderImage,
     saveOrderUrl,
-    callbackUrl,
-    avardaConfig,
   } = foo;
 
   if (
     !(
+      validateAvardaConfig(avardaConfig) &&
       h.isString(baseMediaUrl) &&
       h.isString(baseUrl) &&
       h.isString(countryId) &&
@@ -40,7 +42,7 @@ export const validate = (
       h.oneOf(h.isString, h.isVoid, h.isNull)(maskedQuoteId) &&
       h.isString(saveOrderUrl) &&
       h.isString(callbackUrl) &&
-      validateAvardaConfig(avardaConfig)
+      h.isString(productPlaceholderImage)
     )
   ) {
     return {error: true, value: null};
@@ -59,6 +61,7 @@ export const validate = (
       saveOrderUrl,
       callbackUrl,
       avardaConfig,
+      productPlaceholderImage,
     },
   };
 };

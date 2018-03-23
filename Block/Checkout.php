@@ -231,4 +231,12 @@ class Checkout extends Template
     {
         return json_encode($this->jsLayout);
     }
+
+    /**
+     * @return string
+     */
+    public function getProductPlaceholderUrl() {
+        return $this->getViewFileUrl('Magento_Catalog::images/product/placeholder/thumbnail.jpg');
+    }
+
 }

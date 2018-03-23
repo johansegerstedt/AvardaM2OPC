@@ -3,6 +3,7 @@ import React from 'react';
 import {get} from 'lodash';
 import {$} from '$i18n';
 import {formatCurrency} from '$src/utils/format';
+import {getConfig} from '$src/config';
 import type {CartItem} from '../types';
 
 type Props = {
@@ -11,6 +12,12 @@ type Props = {
   deleteCartItem(itemId: string): void,
   isUpdating: boolean,
   updateCartItems(CartItem[]): void,
+};
+
+const getSrcFallbackHandler = (uri: string) => (ev: SyntheticEvent<>): void => {
+  if (ev.target instanceof HTMLImageElement) {
+    ev.target.src = uri;
+  }
 };
 
 const ItemRow = ({
@@ -46,7 +53,10 @@ const ItemRow = ({
             >
               <img
                 className="product-image-photo"
-                src={image_url}
+                src={image_url || getConfig().productPlaceholderImage}
+                onError={getSrcFallbackHandler(
+                  getConfig().productPlaceholderImage,
+                )}
                 width={165}
                 height={165}
                 alt={name}

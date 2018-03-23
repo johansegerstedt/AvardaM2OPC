@@ -25,7 +25,7 @@ interface QuotePaymentManagementInterface
     /**
      * Make Avarda InitializePurchase call and return purchase ID
      *
-     * @param CartInterface $quote
+     * @param CartInterface|\Magento\Quote\Model\Quote $quote
      * @return string
      */
     public function initializePurchase(CartInterface $quote);
@@ -41,26 +41,21 @@ interface QuotePaymentManagementInterface
     /**
      * Make Avarda UpdateItems call and return purchase ID
      *
-     * @param CartInterface $quote
+     * @param CartInterface|\Magento\Quote\Model\Quote $quote
      * @return void
      */
     public function updateItems(CartInterface $quote);
 
     /**
-     * Freeze the cart before redirected to payment.
+     * Setting the quote is_active to false hides it from the frontend and
+     * renders the customer unable to manipulate the cart while payment is
+     * processed.
      *
-     * @param string $cartId
+     * @param int  $cartId
+     * @param bool $isActive
      * @return void
      */
-    public function freezeCart($cartId);
-
-    /**
-     * Unfreeze the cart before placing order in Magento.
-     *
-     * @param string $cartId
-     * @return void
-     */
-    public function unfreezeCart($cartId);
+    public function setQuoteIsActive($cartId, $isActive);
 
     /**
      * Update order (quote) from Avarda payment status.
@@ -82,7 +77,7 @@ interface QuotePaymentManagementInterface
     /**
      * Get quote ID by Avarda purchase ID
      *
-     * @param $purchaseId
+     * @param string $purchaseId
      * @throws \Magento\Framework\Exception\PaymentException
      * @return int
      */

@@ -6,69 +6,96 @@
  */
 namespace Digia\AvardaCheckout\Model;
 
-use Digia\AvardaCheckout\Api\ItemStorageInterface;
 use Digia\AvardaCheckout\Api\QuotePaymentManagementInterface;
 use Magento\Framework\Exception\PaymentException;
-use Magento\Payment\Gateway\Data\PaymentDataObjectFactoryInterface;
 use Magento\Payment\Model\InfoInterface;
+use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Api\Data\CartInterface;
 
 /**
+ * QuotePaymentManagement
+ * @see \Digia\AvardaCheckout\Api\QuotePaymentManagementInterface
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class QuotePaymentManagement implements QuotePaymentManagementInterface
 {
+    const ERROR_QUOTE_MISSING_PURCHASE = 'Cart ID %cart_id does not have an active Avarda payment.';
+
     /**
+     * Required for GET /avarda-items.
+     *
      * @var \Digia\AvardaCheckout\Api\ItemManagementInterface $itemManagement
      */
     protected $itemManagement;
 
     /**
-     * @var ItemStorageInterface $itemStorage
+     * Required for populating requests with item data.
+     *
+     * @var \Digia\AvardaCheckout\Api\ItemStorageInterface $itemStorage
      */
     protected $itemStorage;
 
     /**
+     * Helper for reading payment info instances, e.g. getting purchase ID
+     * from quote payment.
+     *
      * @var \Digia\AvardaCheckout\Helper\PaymentData
      */
     protected $paymentDataHelper;
 
     /**
+     * Helper to determine Avarda's purchase state.
+     *
      * @var \Digia\AvardaCheckout\Helper\PurchaseState
      */
     protected $purchaseStateHelper;
 
     /**
+     * Command pool for API requests to Avarda.
+     *
      * @var \Magento\Payment\Gateway\Command\CommandPoolInterface
      */
     protected $commandPool;
 
     /**
-     * @var PaymentDataObjectFactoryInterface
+     * Required for executing API requests from command pool.
+     *
+     * @var \Magento\Payment\Gateway\Data\PaymentDataObjectFactoryInterface
      */
     protected $paymentDataObjectFactory;
 
     /**
+     * Repository to load quote from database.
+     *
      * @var \Magento\Quote\Api\CartRepositoryInterface
      */
     protected $quoteRepository;
 
     /**
+     * Repository for Avarda's payment queue which links Avarda's purchase ID to
+     * Magento's quote ID.
+     *
      * @var \Digia\AvardaCheckout\Api\PaymentQueueRepositoryInterface
      */
     protected $paymentQueueRepository;
 
     /**
+     * Required to operate with payment queue repository.
+     *
      * @var \Digia\AvardaCheckout\Api\Data\PaymentQueueInterfaceFactory
      */
     protected $paymentQueueFactory;
 
     /**
+     * Required for placing order in Magento.
+     *
      * @var \Magento\Quote\Api\CartManagementInterface
      */
     protected $cartManagement;
 
     /**
+     * Temporary quote object to limit calls to repository.
+     *
      * @var CartInterface
      */
     protected $quote;
@@ -77,11 +104,11 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
      * QuotePaymentManagement constructor.
      *
      * @param \Digia\AvardaCheckout\Api\ItemManagementInterface $itemManagement
-     * @param ItemStorageInterface $itemStorage
+     * @param \Digia\AvardaCheckout\Api\ItemStorageInterface $itemStorage
      * @param \Digia\AvardaCheckout\Helper\PaymentData $paymentDataHelper
      * @param \Digia\AvardaCheckout\Helper\PurchaseState $purchaseStateHelper
      * @param \Magento\Payment\Gateway\Command\CommandPoolInterface $commandPool
-     * @param PaymentDataObjectFactoryInterface $paymentDataObjectFactory
+     * @param \Magento\Payment\Gateway\Data\PaymentDataObjectFactoryInterface $paymentDataObjectFactory
      * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
      * @param \Digia\AvardaCheckout\Api\PaymentQueueRepositoryInterface $paymentQueueRepository
      * @param \Digia\AvardaCheckout\Api\Data\PaymentQueueInterfaceFactory $paymentQueueFactory
@@ -89,11 +116,11 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
      */
     public function __construct(
         \Digia\AvardaCheckout\Api\ItemManagementInterface $itemManagement,
-        ItemStorageInterface $itemStorage,
+        \Digia\AvardaCheckout\Api\ItemStorageInterface $itemStorage,
         \Digia\AvardaCheckout\Helper\PaymentData $paymentDataHelper,
         \Digia\AvardaCheckout\Helper\PurchaseState $purchaseStateHelper,
         \Magento\Payment\Gateway\Command\CommandPoolInterface $commandPool,
-        PaymentDataObjectFactoryInterface $paymentDataObjectFactory,
+        \Magento\Payment\Gateway\Data\PaymentDataObjectFactoryInterface $paymentDataObjectFactory,
         \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
         \Digia\AvardaCheckout\Api\PaymentQueueRepositoryInterface $paymentQueueRepository,
         \Digia\AvardaCheckout\Api\Data\PaymentQueueInterfaceFactory $paymentQueueFactory,
@@ -122,6 +149,8 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
         );
 
         if (!$purchaseId) {
+            /** We have to manually collect totals to populate the item storage */
+            $quote->collectTotals();
             $purchaseId = $this->initializePurchase($quote);
         }
 
@@ -130,34 +159,27 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
 
     /**
      * {@inheritdoc}
+     *
+     * @param CartInterface|\Magento\Quote\Model\Quote $quote
      */
     public function initializePurchase(CartInterface $quote)
     {
-        $quote->collectTotals();
-
-        // Execute InitializePurchase command
-        $arguments = $this->getCommandArguments($quote);
-        $this->commandPool->get('avarda_initialize_payment')
-            ->execute($arguments);
+        $this->executeCommand('avarda_initialize_payment', $quote);
 
         /**
-         * Save the additional data to quote payment
+         * Save the additional data to quote payment and retrieve purchase ID
          * @see \Digia\AvardaCheckout\Gateway\Response\InitializePaymentHandler
          */
         $quote->save();
+        $purchaseId = $this->paymentDataHelper
+            ->getPurchaseId($quote->getPayment());
 
-        $purchaseId = $this->paymentDataHelper->getPurchaseId(
-            $quote->getPayment()
-        );
-
-        /** @var \Digia\AvardaCheckout\Api\Data\PaymentQueueInterface $paymentQueue */
+        /** Save purchase ID link to quote ID in payment queue */
         $paymentQueue = $this->paymentQueueFactory->create();
         $paymentQueue->setPurchaseId($purchaseId);
         $paymentQueue->setQuoteId($quote->getId());
-
         $this->paymentQueueRepository->save($paymentQueue);
 
-        // Get purchase ID from payment additional information
         return $purchaseId;
     }
 
@@ -176,43 +198,17 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
      */
     public function updateItems(CartInterface $quote)
     {
-        // Execute UpdateItems command
-        $arguments = $this->getCommandArguments($quote);
-        $this->commandPool->get('avarda_update_items')->execute($arguments);
+        $this->executeCommand('avarda_update_items', $quote);
     }
 
     /**
      * {@inheritdoc}
      */
-    public function freezeCart($cartId)
+    public function setQuoteIsActive($cartId, $isActive)
     {
-        $quote = $this->getQuote($cartId);
-        if (!$this->paymentDataHelper->isAvardaPayment($quote->getPayment())) {
-            throw new PaymentException(__('No purchase ID on quote %s.', $cartId));
-        }
-
-        /**
-         * Setting the quote is_active to false hides it from the frontend and
-         * renders the customer unable to manipulate the cart while payment is
-         * processed.
-         */
-        $quote->setIsActive(false);
-        $quote->save();
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    public function unfreezeCart($cartId)
-    {
-        $quote = $this->getQuote($cartId);
-        if (!$this->paymentDataHelper->isAvardaPayment($quote->getPayment())) {
-            throw new PaymentException(__('No purchase ID on quote %s.', $cartId));
-        }
-
-        /** We want to unfreeze the cart before placing an order. */
-        if (!$quote->getIsActive()) {
-            $quote->setIsActive(true);
+        $this->isAvardaPayment(($quote = $this->getQuote($cartId)));
+        if ($quote->getIsActive() != $isActive) {
+            $quote->setIsActive($isActive);
             $quote->save();
         }
     }
@@ -222,16 +218,8 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
      */
     public function updatePaymentStatus($cartId)
     {
-        $quote = $this->getQuote($cartId);
-        if (!$this->paymentDataHelper->isAvardaPayment($quote->getPayment())) {
-            throw new \Exception(__('No purchase ID on quote %cart_id.', [
-                'cart_id' => $cartId
-            ]));
-        }
-
-        // Execute GetPaymentStatus command
-        $arguments = $this->getCommandArguments($quote);
-        $this->commandPool->get('avarda_get_payment_status')->execute($arguments);
+        $this->isAvardaPayment(($quote = $this->getQuote($cartId)));
+        $this->executeCommand('avarda_get_payment_status', $quote);
     }
 
     /**
@@ -239,15 +227,14 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
      */
     public function placeOrder($cartId, $isGuest = false)
     {
-        $quote = $this->getQuote($cartId);
-        $this->updatePaymentStatus($cartId);
+        $this->isAvardaPayment(($quote = $this->getQuote($cartId)));
 
-        // Unfreeze cart before placing the order
-        $this->unfreezeCart($cartId);
+        /** Unfreeze cart before placing the order */
+        $this->setQuoteIsActive($cartId, true);
 
-        // Must set checkout method for guests
+        /** Must set checkout method for guests */
         if ($isGuest) {
-            $quote->setCheckoutMethod(\Magento\Quote\Api\CartManagementInterface::METHOD_GUEST);
+            $quote->setCheckoutMethod(CartManagementInterface::METHOD_GUEST);
         }
 
         $this->cartManagement->placeOrder($cartId);
@@ -283,12 +270,13 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
     }
 
     /**
-     * Prepare arguments for gateway commands
+     * Execute command for request to Avarda API based on quote.
      *
-     * @param CartInterface $quote
-     * @return array
+     * @param string $commandCode
+     * @param CartInterface|\Magento\Quote\Model\Quote $quote
+     * @return void
      */
-    protected function getCommandArguments($quote)
+    protected function executeCommand($commandCode, CartInterface $quote)
     {
         $arguments['amount'] = $quote->getGrandTotal();
 
@@ -299,21 +287,39 @@ class QuotePaymentManagement implements QuotePaymentManagementInterface
                 ->create($payment);
         }
 
-        return $arguments;
+        $this->commandPool->get($commandCode)
+            ->execute($arguments);
     }
 
     /**
      * Get quote by cart/quote ID
      *
-     * @param $cartId
-     * @return CartInterface
+     * @param int $cartId
+     * @return CartInterface|\Magento\Quote\Model\Quote
      */
     protected function getQuote($cartId)
     {
         if (!isset($this->quote) || $this->quote->getId() != $cartId) {
+            /** @var CartInterface|\Magento\Quote\Model\Quote $quote */
             $this->quote = $this->quoteRepository->get($cartId);
         }
 
         return $this->quote;
+    }
+
+    /**
+     * Check if quote has a valid Avarda payment.
+     *
+     * @param CartInterface|\Magento\Quote\Model\Quote $quote
+     * @throws PaymentException
+     * @return void
+     */
+    protected function isAvardaPayment(CartInterface $quote)
+    {
+        if (!$this->paymentDataHelper->isAvardaPayment($quote->getPayment())) {
+            throw new PaymentException(__(self::ERROR_QUOTE_MISSING_PURCHASE, [
+                'cart_id' => $quote->getId()
+            ]));
+        }
     }
 }

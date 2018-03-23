@@ -110,7 +110,6 @@
     <virtualType name="AvardaCheckoutCommand" type="Magento\Payment\Gateway\Command\GatewayCommand">
         <arguments>
             <argument name="client" xsi:type="object">AvardaCheckoutClient</argument>
-            <argument name="validator" xsi:type="object">Digia\AvardaCheckout\Gateway\Validator\ErrorValidator</argument>
         </arguments>
     </virtualType>
     <virtualType name="AvardaCheckoutInitializePaymentCommand" type="AvardaCheckoutCommand">
@@ -269,14 +268,6 @@
         </arguments>
     </type>
     <!-- END Quote command pool -->
-
-    <!-- Avarda response validator -->
-    <type name="Digia\AvardaCheckout\Gateway\Validator\ErrorValidator">
-        <arguments>
-            <argument name="logger" xsi:type="object">AvardaCheckoutLogger</argument>
-        </arguments>
-    </type>
-    <!-- END Avarda response validator -->
 
     <!-- Avarda HTTP client -->
     <virtualType name="AvardaCheckoutClient" type="Digia\AvardaCheckout\Gateway\Http\Client\Zend">

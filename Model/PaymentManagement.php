@@ -10,51 +10,39 @@ use Digia\AvardaCheckout\Api\Data\PaymentDetailsInterface;
 use Digia\AvardaCheckout\Api\Data\PaymentDetailsInterfaceFactory;
 use Digia\AvardaCheckout\Api\PaymentManagementInterface;
 use Digia\AvardaCheckout\Api\QuotePaymentManagementInterface;
-use Magento\Framework\Exception\PaymentException;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * PaymentManagement
+ * @see \Digia\AvardaCheckout\Api\PaymentManagementInterface
  */
 class PaymentManagement implements PaymentManagementInterface
 {
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    protected $logger;
-
-    /**
+     * Required to create purchase ID response.
+     *
      * @var PaymentDetailsInterfaceFactory
      */
     protected $paymentDetailsFactory;
 
     /**
+     * A common interface to execute Webapi actions.
+     *
      * @var QuotePaymentManagementInterface
      */
     protected $quotePaymentManagement;
 
     /**
-     * @var \Magento\Quote\Api\CartManagementInterface
-     */
-    protected $cartManagement;
-
-    /**
      * GuestPaymentManagement constructor.
      *
-     * @param \Psr\Log\LoggerInterface $logger
      * @param PaymentDetailsInterfaceFactory $paymentDetailsFactory
      * @param QuotePaymentManagementInterface $quotePaymentManagement
-     * @param \Magento\Quote\Api\CartManagementInterface $cartManagement
      */
     public function __construct(
-        \Psr\Log\LoggerInterface $logger,
         PaymentDetailsInterfaceFactory $paymentDetailsFactory,
-        QuotePaymentManagementInterface $quotePaymentManagement,
-        \Magento\Quote\Api\CartManagementInterface $cartManagement
+        QuotePaymentManagementInterface $quotePaymentManagement
     ) {
-        $this->logger = $logger;
         $this->paymentDetailsFactory = $paymentDetailsFactory;
         $this->quotePaymentManagement = $quotePaymentManagement;
-        $this->cartManagement = $cartManagement;
     }
 
     /**
@@ -62,24 +50,12 @@ class PaymentManagement implements PaymentManagementInterface
      */
     public function getPurchaseId($cartId)
     {
-        try {
-            $purchaseId = $this->quotePaymentManagement->getPurchaseId($cartId);
+        $purchaseId = $this->quotePaymentManagement->getPurchaseId($cartId);
 
-            /** @var PaymentDetailsInterface $paymentDetails */
-            $paymentDetails = $this->paymentDetailsFactory->create();
-            $paymentDetails->setPurchaseId($purchaseId);
-            return $paymentDetails;
-        } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
-            $this->logger->error($e);
-
-            throw new PaymentException(__($e->getMessage()));
-        } catch (\Exception $e) {
-            $this->logger->error($e);
-
-            throw new PaymentException(
-                __('Failed to load Avarda payment. Please try again later.')
-            );
-        }
+        /** @var PaymentDetailsInterface $paymentDetails */
+        $paymentDetails = $this->paymentDetailsFactory->create();
+        $paymentDetails->setPurchaseId($purchaseId);
+        return $paymentDetails;
     }
 
     /**
@@ -87,19 +63,7 @@ class PaymentManagement implements PaymentManagementInterface
      */
     public function freezeCart($cartId)
     {
-        try {
-            $this->quotePaymentManagement->freezeCart($cartId);
-        } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
-            $this->logger->error($e);
-
-            throw new PaymentException(__($e->getMessage()));
-        } catch (\Exception $e) {
-            $this->logger->error($e);
-
-            throw new PaymentException(
-                __('Failed to save Avarda order. Please try again later.')
-            );
-        }
+        $this->quotePaymentManagement->setQuoteIsActive($cartId, false);
     }
 
     /**
@@ -107,18 +71,6 @@ class PaymentManagement implements PaymentManagementInterface
      */
     public function getItemDetailsList($cartId)
     {
-        try {
-            return $this->quotePaymentManagement->getItemDetailsList($cartId);
-        } catch (\Digia\AvardaCheckout\Exception\BadRequestException $e) {
-            $this->logger->error($e);
-
-            throw new PaymentException(__($e->getMessage()));
-        } catch (\Exception $e) {
-            $this->logger->error($e);
-
-            throw new PaymentException(
-                __('Something went wrong with Avarda checkout. Please try again later.')
-            );
-        }
+        return $this->quotePaymentManagement->getItemDetailsList($cartId);
     }
 }

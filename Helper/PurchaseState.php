@@ -141,12 +141,12 @@ class PurchaseState
     }
 
     /**
-     * Check if payment is killed
+     * Check if payment is dead
      *
      * @param int $stateId
      * @return bool
      */
-    public function isKilled($stateId)
+    public function isDead($stateId)
     {
         return (
             $this->isCancelled($stateId) ||

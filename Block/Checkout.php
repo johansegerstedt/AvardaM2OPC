@@ -219,4 +219,12 @@ class Checkout extends Template
     {
         return $this->getUrl('avarda/checkout/process', ['_secure' => true]);
     }
+
+    /**
+     * @return string
+     */
+    public function getProductPlaceholderUrl()
+    {
+        return $this->getViewFileUrl('Magento_Catalog::images/product/placeholder/thumbnail.jpg');
+    }
 }

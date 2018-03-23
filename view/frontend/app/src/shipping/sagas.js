@@ -3,11 +3,14 @@ import {$} from '$i18n';
 import {takeLatest} from 'redux-saga';
 import {call, put} from 'redux-saga/effects';
 import {find, head, isEqual} from 'lodash';
+// The following actions and models are used to keep
+// Magento UI components up to date with updated state
 import quote from 'Magento_Checkout/js/model/quote';
 import newCustomerAddress from 'Magento_Checkout/js/model/new-customer-address';
 import selectShippingAddress from 'Magento_Checkout/js/action/select-shipping-address';
 import selectShippingMethod from 'Magento_Checkout/js/action/select-shipping-method';
 import setShippingInformation from 'Magento_Checkout/js/action/set-shipping-information';
+
 import {MessageTypes} from '$src/utils/components/Message';
 import toast, {TYPES} from '$src/utils/toast';
 import {ActionTypes as Shipping} from './constants';
@@ -58,6 +61,7 @@ function* receiveShipping({
     const [carrier_code, method_code] = method.split('_');
     const selectedMethod = find(methods, {carrier_code, method_code});
     if (selectedMethod) {
+      // Update the shipping method to quote model
       yield call([quote, quote.shippingMethod], selectedMethod);
     }
   }
@@ -74,6 +78,7 @@ function* updateAddress({payload: address}) {
     }
     return result;
   };
+  // Update shipping address to quote model
   quote.shippingAddress(newCustomerAddress(emptyStreetFix(address)));
   selectShippingAddress(quote.shippingAddress());
   if (address && address.postcode) {

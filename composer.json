@@ -1,1 +1,28 @@
-{}
+{
+  "name": "digia/avarda-checkout",
+  "description": "Standalone checkout page tailored for Avarda Check-out 2 API as Magento 2 module.",
+  "type": "magento2-module",
+  "version": "0.3.0",
+  "repositories": [
+    {
+      "type": "composer",
+      "url": "https://repo.magento.com/"
+    }
+  ],
+  "require": {
+    "magento/checkout": ">=100.1.5"
+  },
+  "autoload": {
+    "files": [
+      "registration.php"
+    ],
+    "psr-4": {
+      "Digia\\AvardaCheckout\\": ""
+    }
+  },
+  "autoload-dev": {
+    "psr-4": {
+      "Digia\\AvardaCheckout\\Test\\": "test/"
+    }
+  }
+}

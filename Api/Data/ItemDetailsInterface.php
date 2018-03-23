@@ -1,8 +1,8 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Api\Data;
 
@@ -29,7 +29,7 @@ interface ItemDetailsInterface
     /**
      * Set item ID
      *
-     * @return int $itemId
+     * @param int $itemId
      * @return $this
      */
     public function setItemId($itemId);
@@ -44,7 +44,7 @@ interface ItemDetailsInterface
     /**
      * Set product URL
      *
-     * @return string $productUrl
+     * @param string $productUrl
      * @return $this
      */
     public function setProductUrl($productUrl);
@@ -59,7 +59,7 @@ interface ItemDetailsInterface
     /**
      * Set product image URL
      *
-     * @return string $imageUrl
+     * @param string $imageUrl
      * @return $this
      */
     public function setImageUrl($imageUrl);

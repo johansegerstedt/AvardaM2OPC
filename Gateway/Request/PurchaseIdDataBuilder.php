@@ -1,8 +1,8 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Gateway\Request;
 
@@ -21,15 +21,36 @@ class PurchaseIdDataBuilder implements BuilderInterface
     const PURCHASE_ID = 'PurchaseId';
 
     /**
-     * @inheritdoc
+     * Helper for reading payment info instances, e.g. getting purchase ID
+     * from quote payment.
+     *
+     * @var \Digia\AvardaCheckout\Helper\PaymentData
+     */
+    protected $paymentDataHelper;
+
+    /**
+     * ExternalIdDataBuilder constructor.
+     *
+     * @param \Digia\AvardaCheckout\Helper\PaymentData $paymentDataHelper
+     */
+    public function __construct(
+        \Digia\AvardaCheckout\Helper\PaymentData $paymentDataHelper
+    ) {
+        $this->paymentDataHelper = $paymentDataHelper;
+    }
+
+    /**
+     * {@inheritdoc}
      */
     public function build(array $buildSubject)
     {
         $paymentDO = SubjectReader::readPayment($buildSubject);
-        $payment = $paymentDO->getPayment();
+        $payment   = $paymentDO->getPayment();
 
-        $additionalInformation = $payment->getAdditionalInformation();
-        $purchaseId = $additionalInformation[PaymentDetailsInterface::PURCHASE_ID];
+        $purchaseId = $this->paymentDataHelper->getPurchaseId($payment);
+        if (!$purchaseId) {
+            return [];
+        }
 
         return [self::PURCHASE_ID => $purchaseId];
     }

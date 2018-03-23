@@ -1,8 +1,8 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Model;
 
@@ -22,7 +22,7 @@ class PaymentQueue extends AbstractModel implements PaymentQueueInterface
     protected function _construct()
     {
         parent::_construct();
-        $this->_init('Digia\AvardaCheckout\Model\ResourceModel\PaymentQueue');
+        $this->_init(\Digia\AvardaCheckout\Model\ResourceModel\PaymentQueue::class);
     }
 
     /**

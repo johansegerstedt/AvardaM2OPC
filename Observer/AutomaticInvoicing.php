@@ -1,8 +1,8 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Observer;
 
@@ -30,7 +30,7 @@ class AutomaticInvoicing implements ObserverInterface
     protected $paymentDataHelper;
 
     /**
-     * @var \Magento\Sales\Api\InvoiceManagementInterface
+     * @var \Magento\Sales\Api\InvoiceManagementInterface|\Magento\Sales\Model\Service\InvoiceService
      */
     protected $invoiceService;
 
@@ -66,16 +66,16 @@ class AutomaticInvoicing implements ObserverInterface
      * @param Observer $observer
      * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         try {
-            $order = $observer->getEvent()->getOrder();
+            $order = $observer->getEvent()->getData('order');
             $payment = $order->getPayment();
             if ($this->paymentDataHelper->isAvardaPayment($payment) &&
                 $this->config->isAutomaticInvoicingActive()
             ) {
                 $invoice = $this->invoiceService->prepareInvoice($order);
-                $invoice->setRequestedCaptureCase($invoice::CAPTURE_ONLINE);
+                $invoice->getData('requested_capture_case', $invoice::CAPTURE_ONLINE);
                 $invoice->register();
                 $invoice->save();
                 $order->save();

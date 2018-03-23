@@ -1,12 +1,11 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Gateway\Request;
 
-use Digia\AvardaCheckout\Api\Data\PaymentDetailsInterface;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Request\BuilderInterface;
 
@@ -26,7 +25,7 @@ class OrderReferenceDataBuilder implements BuilderInterface
     public function build(array $buildSubject)
     {
         $paymentDO = SubjectReader::readPayment($buildSubject);
-        $order = $paymentDO->getOrder();
+        $order     = $paymentDO->getOrder();
 
         return [self::ORDER_REFERENCE => $order->getOrderIncrementId()];
     }

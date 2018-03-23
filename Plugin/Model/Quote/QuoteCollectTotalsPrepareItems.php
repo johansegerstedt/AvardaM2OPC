@@ -1,8 +1,8 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Plugin\Model\Quote;
 
@@ -114,13 +114,14 @@ class QuoteCollectTotalsPrepareItems
     /**
      * Create item data objects from quote items
      *
-     * @param CartInterface $subject
+     * @param CartInterface|\Magento\Quote\Model\Quote $subject
      */
     protected function prepareItems(CartInterface $subject)
     {
+        /** @var \Magento\Quote\Model\Quote\Item $item */
         foreach ($subject->getItems() as $item) {
-            if (!$item->getProductId() ||
-                $item->hasParentItemId() ||
+            if ($item->getData('product_id') === null ||
+                $item->getData('parent_item_id') !== null ||
                 $item->isDeleted()
             ) {
                 continue;
@@ -132,12 +133,11 @@ class QuoteCollectTotalsPrepareItems
             $itemDataObject = $this->itemDataObjectFactory->create(
                 $itemAdapter,
                 $item->getQty(),
-                ($item->getRowTotalInclTax() - $item->getDiscountAmount()),
-                (
-                    $item->getTaxAmount() +
-                    $item->getHiddenTaxAmount() +
+                $item->getRowTotalInclTax() -
+                    $item->getDiscountAmount(),
+                $item->getTaxAmount() +
+                    $item->getDiscountTaxCompensationAmount() +
                     $item->getWeeeTaxAppliedAmount()
-                )
             );
 
             $this->itemStorage->addItem($itemDataObject);
@@ -147,10 +147,14 @@ class QuoteCollectTotalsPrepareItems
     /**
      * Create item data object from shipment information
      *
-     * @param CartInterface $subject
+     * @param CartInterface|\Magento\Quote\Model\Quote $subject
      */
     protected function prepareShipment(CartInterface $subject)
     {
+        if ($subject->isVirtual()) {
+            return;
+        }
+
         $shippingAddress = $subject->getShippingAddress();
         if ($shippingAddress && $shippingAddress->getShippingTaxAmount() > 0) {
             $itemAdapter = $this->arrayDataItemAdapterFactory->create([
@@ -173,12 +177,12 @@ class QuoteCollectTotalsPrepareItems
     /**
      * Create item data object from gift card information
      *
-     * @param CartInterface $subject
+     * @param CartInterface|\Magento\Quote\Model\Quote $subject
      */
     protected function prepareGiftCards(CartInterface $subject)
     {
-        $giftCardsAmountUsed = $subject->getGiftCardsAmountUsed();
-        if ($giftCardsAmountUsed > 0) {
+        $giftCardsAmountUsed = $subject->getData('gift_cards_amount_used');
+        if ($giftCardsAmountUsed !== null && $giftCardsAmountUsed > 0) {
             $itemAdapter = $this->arrayDataItemAdapterFactory->create([
                 'data' => [
                     'name' => __('Gift Card'),
@@ -188,7 +192,7 @@ class QuoteCollectTotalsPrepareItems
             $itemDataObject = $this->itemDataObjectFactory->create(
                 $itemAdapter,
                 1,
-                ($giftCardsAmountUsed * -1),
+                $giftCardsAmountUsed * -1,
                 0
             );
 

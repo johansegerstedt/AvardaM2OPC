@@ -19,6 +19,7 @@ export const validate = (
   const {
     avardaConfig,
     baseMediaUrl,
+    continueShoppingUrl,
     baseUrl,
     callbackUrl,
     countryId,
@@ -34,6 +35,7 @@ export const validate = (
     !(
       validateAvardaConfig(avardaConfig) &&
       h.isString(baseMediaUrl) &&
+      h.isString(continueShoppingUrl) &&
       h.isString(baseUrl) &&
       h.isString(countryId) &&
       h.oneOf(h.isNumber, h.isVoid, h.isNull)(customerId) &&
@@ -52,6 +54,7 @@ export const validate = (
     error: false,
     value: {
       baseMediaUrl,
+      continueShoppingUrl,
       baseUrl,
       countryId,
       customerId,

@@ -7,6 +7,7 @@
 namespace Digia\AvardaCheckout\Setup;
 
 use Magento\Customer\Setup\CustomerSetupFactory;
+use Magento\Eav\Model\Entity\Attribute\SetFactory as AttributeSetFactory;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
@@ -19,13 +20,21 @@ class UpgradeData implements UpgradeDataInterface
     protected $customerSetupFactory;
 
     /**
-     * UpgradeData constructor.
-     *
-     * @param CustomerSetupFactory $customerSetupFactory
+     * @var AttributeSetFactory
      */
-    public function __construct(CustomerSetupFactory $customerSetupFactory)
-    {
+    protected $attributeSetFactory;
+
+    /**
+     * UpgradeData constructor.
+     * @param CustomerSetupFactory $customerSetupFactory
+     * @param AttributeSetFactory $attributeSetFactory
+     */
+    public function __construct(
+        CustomerSetupFactory $customerSetupFactory,
+        AttributeSetFactory $attributeSetFactory
+    ) {
         $this->customerSetupFactory = $customerSetupFactory;
+        $this->attributeSetFactory = $attributeSetFactory;
     }
 
     /**
@@ -41,16 +50,37 @@ class UpgradeData implements UpgradeDataInterface
                 \Magento\Customer\Model\Customer::ENTITY,
                 'avarda_customer_token',
                 [
-                    'type'            => 'varchar',
-                    'label'           => 'Avarda Customer Token',
-                    'input'           => 'text',
-                    'required'        => false,
-                    'sort_order'      => 140,
-                    'global'          => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
-                    'group'           => 'General Information',
-                    'is_user_defined' => true,
+                    'type'         => 'varchar',
+                    'label'        => 'Avarda Customer Token',
+                    'input'        => 'text',
+                    'required'     => false,
+                    'position'     => 140,
+                    'global'       => \Magento\Eav\Model\Entity\Attribute\ScopedAttributeInterface::SCOPE_WEBSITE,
+                    'group'        => 'General Information',
+                    'user_defined' => true,
+                    'system'       => false,
                 ]
             );
+
+            $customerEntity = $customerSetup->getEavConfig()->getEntityType('customer');
+            $attributeSetId = $customerEntity->getDefaultAttributeSetId();
+
+            $attributeSet = $this->attributeSetFactory->create();
+            $attributeGroupId = $attributeSet->getDefaultGroupId($attributeSetId);
+
+            $attribute = $customerSetup
+                ->getEavConfig()
+                ->getAttribute(
+                    \Magento\Customer\Model\Customer::ENTITY,
+                    'avarda_customer_token'
+                )
+                ->addData(
+                    [
+                        'attribute_set_id'   => $attributeSetId,
+                        'attribute_group_id' => $attributeGroupId,
+                    ]
+                );
+            $attribute->save();
         }
 
         $setup->endSetup();

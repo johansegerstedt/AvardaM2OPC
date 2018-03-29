@@ -5,8 +5,8 @@ import {DefinePlugin} from 'webpack';
 import LodashPlugin from 'lodash-webpack-plugin';
 
 // Required polyfills that are not covered with Magento's es6-collections or
-// babel-transform-runtime plugin (the plugin is used without polyfills to
-// not conflict with es6-collections).
+// babel-transform-runtime plugin in .babelrc (the plugin is used without
+// polyfills to not conflict with es6-collections).
 const polyfills = [
   'core-js/fn/symbol',
   'core-js/fn/symbol/iterator',
@@ -21,8 +21,9 @@ export default {
     path: path.resolve(__dirname, '../web/js'),
     publicPath: '/assets/',
     library: 'avardaCheckout',
-    libraryTarget: 'amd',
+    libraryTarget: 'amd', // Bundle will be consumed with Require.js
   },
+  // Externals aka Require.js dependencies
   externals: {
     'Magento_Ui/js/lib/knockout/bootstrap':
       'Magento_Ui/js/lib/knockout/bootstrap',

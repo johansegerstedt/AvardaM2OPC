@@ -77,6 +77,10 @@ class QuoteCollectTotalsUpdateItems
         ) {
             $this->collectTotalsFlag = true;
             $stateId = $this->getStateId($subject);
+            if ($this->purchaseStateHelper->isComplete($stateId)) {
+                return $result;
+            }
+
             if (($renew = $this->purchaseStateHelper->isDead($stateId)) === false) {
                 try {
                     $this->quotePaymentManagement->updateItems($subject);

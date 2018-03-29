@@ -3,6 +3,7 @@ import React from 'react';
 import {get} from 'lodash';
 import {$} from '$i18n';
 import {formatCurrency} from '$src/utils/format';
+import {getConfig} from '$src/config';
 import type {CartItem} from '../types';
 
 type Props = {
@@ -11,6 +12,12 @@ type Props = {
   deleteCartItem(itemId: string): void,
   isUpdating: boolean,
   updateCartItems(CartItem[]): void,
+};
+
+const getSrcFallbackHandler = (uri: string) => (ev: SyntheticEvent<>): void => {
+  if (ev.target instanceof HTMLImageElement) {
+    ev.target.src = uri;
+  }
 };
 
 const ItemRow = ({
@@ -46,7 +53,10 @@ const ItemRow = ({
             >
               <img
                 className="product-image-photo"
-                src={image_url}
+                src={image_url || getConfig().productPlaceholderImage}
+                onError={getSrcFallbackHandler(
+                  getConfig().productPlaceholderImage,
+                )}
                 width={165}
                 height={165}
                 alt={name}
@@ -105,12 +115,6 @@ const ItemRow = ({
             id="gift-options-cart-item-98"
             className="gift-options-cart-item"
           />
-          {/*<a
-          className="action action-edit"
-          href="http://avarda.box/checkout/cart/configure/id/98/product_id/6/"
-          title="Edit item parameters">
-          <span>Edit </span>
-        </a>*/}
           <button
             title={$.mage.__('Remove item')}
             className="action action-delete"

@@ -1,5 +1,5 @@
 // @flow
-import React, {Fragment} from 'react';
+import React from 'react';
 import KoBindScope from '$src/utils/components/KoBindScope';
 
 /**
@@ -8,14 +8,12 @@ import KoBindScope from '$src/utils/components/KoBindScope';
  */
 const GiftCardAccount = () => {
   return (
-    <Fragment>
-      <KoBindScope
-        scope="gift-card"
-        divProps={{
-          className: 'checkout-payment-method',
-        }}
-      />
-    </Fragment>
+    <KoBindScope
+      scope="gift-card"
+      divProps={{
+        className: 'checkout-payment-method',
+      }}
+    />
   );
 };
 

@@ -8,6 +8,7 @@ namespace Digia\AvardaCheckout\Gateway\Response;
 
 use Digia\AvardaCheckout\Helper\PaymentMethod;
 use Digia\AvardaCheckout\Helper\PurchaseState;
+use Magento\Directory\Model\CountryFactory;
 use Magento\Payment\Gateway\Helper\SubjectReader;
 use Magento\Payment\Gateway\Response\HandlerInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
@@ -39,23 +40,31 @@ class GetPaymentStatusHandler implements HandlerInterface
     protected $stateHelper;
 
     /**
+     * @var CountryFactory
+     */
+    protected $countryFactory;
+
+    /**
      * GetPaymentStatusHandler constructor.
      *
      * @param CartRepositoryInterface $quoteRepository
      * @param AddressInterfaceFactory $addressFactory
      * @param PaymentMethod $methodHelper
      * @param PurchaseState $stateHelper
+     * @param CountryFactory $countryFactory
      */
     public function __construct(
         CartRepositoryInterface $quoteRepository,
         AddressInterfaceFactory $addressFactory,
         PaymentMethod $methodHelper,
-        PurchaseState $stateHelper
+        PurchaseState $stateHelper,
+        CountryFactory $countryFactory
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->addressFactory = $addressFactory;
         $this->methodHelper = $methodHelper;
         $this->stateHelper = $stateHelper;
+        $this->countryFactory = $countryFactory;
     }
 
     /**
@@ -88,8 +97,11 @@ class GetPaymentStatusHandler implements HandlerInterface
         ]);
         $billingAddress->setPostcode($response->InvoicingZip);
         $billingAddress->setCity($response->InvoicingCity);
-        $billingAddress->setCountryId('FI');
-        $billingAddress->setRegionId(336);
+
+        // Convert country from alpha-3 to alpha-2
+        $billingCountry = $this->countryFactory->create()->loadByCode($response->CountryCode);
+        $billingAddress->setCountryId($billingCountry->getId());
+
         $quote->setBillingAddress($billingAddress);
 
         // Save shipping (delivery) address
@@ -106,8 +118,11 @@ class GetPaymentStatusHandler implements HandlerInterface
             ]);
             $shippingAddress->setPostcode($response->DeliveryZip);
             $shippingAddress->setCity($response->DeliveryCity);
-            $shippingAddress->setCountryId('FI');
-            $shippingAddress->setRegionId(336);
+
+            // Convert country from alpha-3 to alpha-2
+            $shippingCountry = $this->countryFactory->create()->loadByCode($response->DeliveryCountry);
+            $shippingAddress->setCountryId($shippingCountry->getId());
+
             $quote->setShippingAddress($shippingAddress);
         } else {
             $quote->setShippingAddress($billingAddress);

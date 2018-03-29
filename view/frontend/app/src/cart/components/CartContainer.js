@@ -22,8 +22,9 @@ import {getQuoteCurrency} from '../utils';
 import CartSummary from './CartSummary';
 import CartForm from './CartForm';
 import CartDiscount from './CartDiscount';
-import GiftCardAccount from './GiftCardAccount';
 import type {Cart as CartType, CartItem} from '../types';
+import GiftCardAccount from './GiftCardAccount';
+import GiftMessage from './GiftMessage';
 
 type Props = {
   cart: null | CartType,
@@ -94,6 +95,7 @@ class Cart extends React.Component<Props> {
                   currency={getQuoteCurrency(cart)}
                 />,
                 <GiftOptionsCart key="giftOptionsCart" />,
+                <GiftMessage key="giftMessage" />,
                 <CartDiscount
                   key="cartDiscount"
                   coupon={cart.coupon_code}

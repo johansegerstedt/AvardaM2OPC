@@ -1,7 +1,7 @@
 // @flow
 import React from 'react';
 import {isEqual} from 'lodash';
-import {formatCurrency} from '$src/utils/format';
+import {formatCurrency, formatTax} from '$src/utils/format';
 import Loader from '$src/utils/components/Loader';
 import AdditionalContent from '$src/utils/components/AdditionalContent';
 import {REGION_KEYS} from '$src/additionalContent';
@@ -31,6 +31,7 @@ const ShippingMethodRadio = ({
     // ev.stopPropagation();
     selectShippingMethod(method);
   };
+
   return [
     <tr key="method" className="row">
       <td className="col col-method">
@@ -50,6 +51,18 @@ const ShippingMethodRadio = ({
         <span className="price">
           <span className="price">
             {method.available ? formatCurrency(method.amount, currency) : ' '}
+          </span>
+        </span>
+      </td>
+      <td className="col col-tax">
+        <span className="tax">
+          <span className="tax">
+            ({method.available
+              ? formatCurrency(
+                  formatTax(method.price_incl_tax, method.price_excl_tax),
+                  currency,
+                )
+              : ' '})
           </span>
         </span>
       </td>
@@ -131,6 +144,7 @@ class ShippingMethodForm extends React.Component<Props> {
                     {$.mage.__('Select Method')}
                   </th>
                   <th className="col col-price">{$.mage.__('Price')}</th>
+                  <th className="col col-tax">{$.mage.__('Tax')}</th>
                   <th className="col col-method">
                     {$.mage.__('Method Title')}
                   </th>

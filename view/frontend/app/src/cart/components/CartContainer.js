@@ -22,6 +22,7 @@ import {getQuoteCurrency} from '../utils';
 import CartSummary from './CartSummary';
 import CartForm from './CartForm';
 import CartDiscount from './CartDiscount';
+import GiftCardAccount from './GiftCardAccount';
 import type {Cart as CartType, CartItem} from '../types';
 
 type Props = {
@@ -99,6 +100,7 @@ class Cart extends React.Component<Props> {
                   applyCoupon={applyCoupon}
                   removeCoupon={removeCoupon}
                 />,
+                <GiftCardAccount key="giftCardAccount" />,
               ]
             : null}
         </Loader>

@@ -2,7 +2,6 @@
 import React, {Fragment} from 'react';
 import {get} from 'lodash';
 import {$} from '$i18n';
-import KoBindScope from '$src/utils/components/KoBindScope';
 
 type Props = {
   coupon?: string,
@@ -138,12 +137,6 @@ class CartDiscount extends React.Component<Props, State> {
           </div>
         </div>
         {/* Get the gift card input when using Enterprise edition */}
-        <KoBindScope
-          scope="gift-card"
-          divProps={{
-            className: 'checkout-payment-method',
-          }}
-        />
       </Fragment>
     );
   }

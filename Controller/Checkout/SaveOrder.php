@@ -70,6 +70,7 @@ class SaveOrder extends AbstractCheckout
             $quoteId = $this->quotePaymentManagement
                 ->getQuoteIdByPurchaseId($purchaseId);
 
+            $this->quotePaymentManagement->updatePaymentStatus($quoteId);
             $this->quotePaymentManagement->placeOrder(
                 $quoteId,
                 !$this->customerSession->isLoggedIn()

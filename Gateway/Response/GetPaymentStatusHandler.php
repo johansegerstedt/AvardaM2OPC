@@ -45,6 +45,16 @@ class GetPaymentStatusHandler implements HandlerInterface
     protected $countryFactory;
 
     /**
+     * @var \Magento\Customer\Model\Session
+     */
+    protected $customerSession;
+
+    /**
+     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     */
+    protected $customerRepository;
+
+    /**
      * GetPaymentStatusHandler constructor.
      *
      * @param CartRepositoryInterface $quoteRepository
@@ -52,19 +62,25 @@ class GetPaymentStatusHandler implements HandlerInterface
      * @param PaymentMethod $methodHelper
      * @param PurchaseState $stateHelper
      * @param CountryFactory $countryFactory
+     * @param \Magento\Customer\Model\Session $customerSession
+     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
      */
     public function __construct(
         CartRepositoryInterface $quoteRepository,
         AddressInterfaceFactory $addressFactory,
         PaymentMethod $methodHelper,
         PurchaseState $stateHelper,
-        CountryFactory $countryFactory
+        CountryFactory $countryFactory,
+        \Magento\Customer\Model\Session $customerSession,
+        \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
     ) {
         $this->quoteRepository = $quoteRepository;
         $this->addressFactory = $addressFactory;
         $this->methodHelper = $methodHelper;
         $this->stateHelper = $stateHelper;
         $this->countryFactory = $countryFactory;
+        $this->customerSession = $customerSession;
+        $this->customerRepository = $customerRepository;
     }
 
     /**
@@ -138,5 +154,33 @@ class GetPaymentStatusHandler implements HandlerInterface
             \Digia\AvardaCheckout\Helper\PaymentData::STATE_ID,
             $response->State
         );
+
+        // Save customer token
+        $this->saveCustomerToken($response);
+    }
+
+    /**
+     * Save customer token from response so it can be reused in iframe
+     *
+     * @param array $response
+     *
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\State\InputMismatchException
+     *
+     * @return void
+     */
+    public function saveCustomerToken(array $response)
+    {
+        if (isset($response->CustomerToken) && !empty($response->CustomerToken)) {
+            $customer = $this->customerSession
+                ->getCustomerData()
+                ->setCustomAttribute(
+                    'avarda_customer_token',
+                    $response->CustomerToken
+                );
+
+            $this->customerRepository->save($customer);
+        }
     }
 }

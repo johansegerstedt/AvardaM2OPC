@@ -145,14 +145,22 @@ class GetPaymentStatusHandler implements HandlerInterface
     }
 
     /**
-     * @param $response
+     * Save customer token from response so it can be reused in iframe
+     *
+     * @param \StdClass $response
      *
      * @throws \Magento\Framework\Exception\InputException
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Magento\Framework\Exception\State\InputMismatchException
+     *
+     * @return void
      */
-    public function saveCustomerToken($response)
+    public function saveCustomerToken(\StdClass $response)
     {
+        if (!$this->customerSession->isLoggedIn()) {
+            return;
+        }
+
         if (isset($response->CustomerToken) && !empty($response->CustomerToken)) {
             $customer = $this->customerSession
                 ->getCustomerData()

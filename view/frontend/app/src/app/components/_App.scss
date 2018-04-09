@@ -60,20 +60,19 @@
   }
 
   .avarda-checkout-sidebar {
-    background-color: #f8f8f8;
-    border: 1px solid #d8d8d8;
-    position: sticky;
-    top: 20px;
     width: 40%;
-    padding: 20px;
     transition: 0.4s;
     box-sizing: border-box;
     margin: 10px 0;
-    border-radius: 2px;
     flex-direction: column;
   }
 }
 
 .side-container {
   background-color: #f8f8f8;
+  border: 1px solid #d8d8d8;
+  border-radius: 2px;
+  position: sticky;
+  top: 20px;
+  padding: 20px;
 }

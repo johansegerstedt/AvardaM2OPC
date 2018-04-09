@@ -94,21 +94,21 @@ class Cart extends React.Component<Props> {
                 //   deleteCartItem={deleteCartItem}
                 //   currency={getQuoteCurrency(cart)}
                 // />,
-                // <CartSummary
-                //   key="cartSummary"
-                //   totalSegments={cart.total_segments}
-                //   isLoading={isFetching || isUpdatingCart}
-                //   currency={getQuoteCurrency(cart)}
-                //   cart={cart}
-                // />,
+                <CartSummary
+                  key="cartSummary"
+                  totalSegments={cart.total_segments}
+                  isLoading={isFetching || isUpdatingCart}
+                  currency={getQuoteCurrency(cart)}
+                  cart={cart}
+                />,
 
-                // <GiftOptionsCart key="giftOptionsCart" />,
-                // <CartDiscount
-                //   key="cartDiscount"
-                //   coupon={cart.coupon_code}
-                //   applyCoupon={applyCoupon}
-                //   removeCoupon={removeCoupon}
-                // />,
+                <GiftOptionsCart key="giftOptionsCart" />,
+                <CartDiscount
+                  key="cartDiscount"
+                  coupon={cart.coupon_code}
+                  applyCoupon={applyCoupon}
+                  removeCoupon={removeCoupon}
+                />,
               ]
             : null}
         </Loader>

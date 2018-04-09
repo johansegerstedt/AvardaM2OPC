@@ -55,12 +55,15 @@ class CartForm extends React.Component<Props> {
     return (
       <div className="side-container">
         <div className="avarda-mobile-hide">
-          <i className="material-icons md-orange md-36">check_circle</i>
+          <i className="material-icons md-orange md-24">check_circle</i>
           <div className="avarda-sidebar-header">
             <span>Order Review</span>
           </div>
         </div>
         <div className="avarda-cart-items">
+          <div className="collapsable-info">
+            <span>{cartItems.length} Items in cart</span>
+          </div>
           <form
             id="form-validate"
             name="cartForm"
@@ -76,47 +79,54 @@ class CartForm extends React.Component<Props> {
                 currency={currency}
               />
             ))}
-            <div className="cart main actions cart-actions">
-              <a
-                className="action continue"
-                href="/"
-                title={$.mage.__('Continue Shopping')}
-              >
-                <span>{$.mage.__('Continue Shopping')}</span>
-              </a>
-              <button
-                name="update_cart_action"
-                data-cart-empty
-                value="empty_cart"
-                title={$.mage.__('Clear Shopping Cart')}
-                className="action clear"
-                id="empty_cart_button"
-              >
-                <span>{$.mage.__('Clear Shopping Cart')}</span>
-              </button>
-              <button
-                type="submit"
-                name="update_cart_action"
-                value="update_qty"
-                disabled={!!isUpdating}
-                title={$.mage.__('Update Shopping Cart')}
-                className="action update"
-              >
-                <span>{$.mage.__('Update Shopping Cart')}</span>
-              </button>
-              <input
-                type="hidden"
-                defaultValue
-                id="update_cart_action_container"
-                data-cart-item-update
-              />
-            </div>
+            <Actions isUpdating={isUpdating} />
           </form>
         </div>
       </div>
     );
   }
 }
+
+const Actions = ({isUpdating}: {isUpdating: boolean}) => {
+  return (
+    <div className="cart main actions cart-actions">
+      <a
+        className="action continue"
+        href="/"
+        title={$.mage.__('Continue Shopping')}
+      >
+        <span>{$.mage.__('Continue Shopping')}</span>
+      </a>
+      <button
+        name="update_cart_action"
+        data-cart-empty
+        value="empty_cart"
+        title={$.mage.__('Clear Shopping Cart')}
+        className="action clear"
+        id="empty_cart_button"
+      >
+        <span>{$.mage.__('Clear Shopping Cart')}</span>
+      </button>
+      <button
+        type="submit"
+        name="update_cart_action"
+        value="update_qty"
+        disabled={!!isUpdating}
+        title={$.mage.__('Update Shopping Cart')}
+        className="action update"
+      >
+        <span>{$.mage.__('Update Shopping Cart')}</span>
+      </button>
+      <input
+        type="hidden"
+        defaultValue
+        id="update_cart_action_container"
+        data-cart-item-update
+      />
+    </div>
+  );
+};
+
 const ProductItem = ({
   currency,
   deleteItem,

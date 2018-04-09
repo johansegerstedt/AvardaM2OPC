@@ -1,8 +1,13 @@
-.cart-summary {
-  .summary.title {
-    @media only screen and (max-width: 767px) {
-      padding: 0 15px;
-      display: inline-block;
-    }
+.avarda-cart-summary {
+  width: 100%;
+  @media only screen and (max-width: 767px) {
+    // padding: 0 15px;
+
+    // display: inline-block;
   }
+}
+
+.avarda-cart-totals {
+}
+.avarda-title {
 }

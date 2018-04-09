@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, {Fragment} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import quote from 'Magento_Checkout/js/model/quote';
@@ -20,6 +20,7 @@ import {
 } from '../selectors';
 import {getQuoteCurrency} from '../utils';
 import CartSummary from './CartSummary';
+import CartItems from './CartItems';
 import CartForm from './CartForm';
 import CartDiscount from './CartDiscount';
 import type {Cart as CartType, CartItem} from '../types';
@@ -73,36 +74,45 @@ class Cart extends React.Component<Props> {
     const loaded = !!cart && !cartIsEmpty;
 
     return (
-      <div className="cart-container">
+      <Fragment>
         <Loader isLoading={!loaded}>
           {cart
             ? [
-                <CartSummary
-                  key="cartSummary"
-                  totalSegments={cart.total_segments}
-                  isLoading={isFetching || isUpdatingCart}
-                  currency={getQuoteCurrency(cart)}
-                  cart={cart}
-                />,
-                <CartForm
-                  key="cartForm"
+                <CartItems
+                  key="cartItems"
                   cartItems={cartItems}
                   isUpdating={isUpdatingCart}
                   updateCartItems={updateCartItems}
                   deleteCartItem={deleteCartItem}
                   currency={getQuoteCurrency(cart)}
                 />,
-                <GiftOptionsCart key="giftOptionsCart" />,
-                <CartDiscount
-                  key="cartDiscount"
-                  coupon={cart.coupon_code}
-                  applyCoupon={applyCoupon}
-                  removeCoupon={removeCoupon}
-                />,
+                // <CartForm
+                //   key="cartItems"
+                //   cartItems={cartItems}
+                //   isUpdating={isUpdatingCart}
+                //   updateCartItems={updateCartItems}
+                //   deleteCartItem={deleteCartItem}
+                //   currency={getQuoteCurrency(cart)}
+                // />,
+                // <CartSummary
+                //   key="cartSummary"
+                //   totalSegments={cart.total_segments}
+                //   isLoading={isFetching || isUpdatingCart}
+                //   currency={getQuoteCurrency(cart)}
+                //   cart={cart}
+                // />,
+
+                // <GiftOptionsCart key="giftOptionsCart" />,
+                // <CartDiscount
+                //   key="cartDiscount"
+                //   coupon={cart.coupon_code}
+                //   applyCoupon={applyCoupon}
+                //   removeCoupon={removeCoupon}
+                // />,
               ]
             : null}
         </Loader>
-      </div>
+      </Fragment>
     );
   }
 }

@@ -1,8 +1,8 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Gateway\Config;
 
@@ -97,7 +97,8 @@ class Config extends \Magento\Payment\Gateway\Config\Config
     /**
      * @return bool
      */
-    public function getReplaceDefaultCss() {
+    public function isReplaceDefaultCss()
+    {
         return (bool) $this->getValue(self::KEY_REPLACE_DEFAULT_CSS);
     }
 }

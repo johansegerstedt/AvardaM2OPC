@@ -1,8 +1,8 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Helper;
 
@@ -49,14 +49,14 @@ class PaymentMethod
     /**
      * Get payment method code for Magento order
      *
-     * @param int $value
+     * @param int $paymentMethod
      * @return string
      */
     public function getPaymentMethod($paymentMethod)
     {
         if (is_int($paymentMethod) &&
             array_key_exists($paymentMethod, self::$methods)
-        ){
+        ) {
             $method = self::$methods[$paymentMethod];
             if (array_key_exists($method, self::$codes)) {
                 return self::$codes[$method];

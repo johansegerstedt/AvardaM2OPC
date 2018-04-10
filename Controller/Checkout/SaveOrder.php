@@ -1,8 +1,8 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Controller\Checkout;
 
@@ -59,7 +59,7 @@ class SaveOrder extends AbstractCheckout
     public function execute()
     {
         try {
-            if (($purchaseId = $this->getPurchaseId()) == null) {
+            if (($purchaseId = $this->getPurchaseId()) === null) {
                 throw new \Exception(
                     __('Failed to save order with purchase ID "%purchase_id"', [
                         'purchase_id' => $purchaseId
@@ -70,6 +70,7 @@ class SaveOrder extends AbstractCheckout
             $quoteId = $this->quotePaymentManagement
                 ->getQuoteIdByPurchaseId($purchaseId);
 
+            $this->quotePaymentManagement->updatePaymentStatus($quoteId);
             $this->quotePaymentManagement->placeOrder(
                 $quoteId,
                 !$this->customerSession->isLoggedIn()

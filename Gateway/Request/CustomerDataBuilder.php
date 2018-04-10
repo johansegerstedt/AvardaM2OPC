@@ -1,8 +1,8 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Gateway\Request;
 
@@ -33,6 +33,9 @@ class CustomerDataBuilder implements BuilderInterface
 
         $order = $paymentDO->getOrder();
         $billingAddress = $order->getBillingAddress();
+        if ($billingAddress === null) {
+            return [];
+        }
 
         return [
             self::PHONE => $billingAddress->getTelephone(),

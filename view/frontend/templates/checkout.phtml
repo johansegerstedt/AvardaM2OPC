@@ -5,6 +5,7 @@
   $config = [
     "baseMediaUrl" => $block->getBaseMediaUrl(),
     "baseUrl" => $block->getBaseUrl(),
+    "continueShoppingUrl" => $block->getBaseUrl(),
     "countryId" => $block->getCountryId(),
     "customerId" => $block->getCustomerId(),
     "hasItems" => $block->hasItems(),
@@ -13,9 +14,10 @@
     "quoteId" => $block->getQuoteId(),
     "saveOrderUrl" => $block->getSaveOrderUrl(),
     "callbackUrl" => $block->getCallbackUrl(),
+    "productPlaceholderImage" => $block->getProductPlaceholderUrl(),
     "avardaConfig" => [
       "customCssUrl" => $block->getCustomCssUrl(),
-      "replaceDefaultCss" => $block->getReplaceDefaultCss(),
+      "replaceDefaultCss" => $block->isReplaceDefaultCss(),
     ],
   ];
 ?>

@@ -1,8 +1,8 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Block;
 
@@ -38,11 +38,6 @@ class Checkout extends Template
     protected $assetRepo;
 
     /**
-     * @var array
-     */
-    protected $jsLayout;
-
-    /**
      * @var CartInterface
      */
     protected $quote;
@@ -68,23 +63,23 @@ class Checkout extends Template
         array $data = []
     ) {
         parent::__construct($context, $data);
+
         $this->config = $config;
         $this->configProvider = $configProvider;
         $this->checkoutSession = $checkoutSession;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->assetRepo = $context->getAssetRepository();
-        $this->jsLayout = isset($data['jsLayout']) && is_array($data['jsLayout']) ? $data['jsLayout'] : [];
 
         if ($productMetadata->getEdition() === 'Enterprise') {
             $this->jsLayout = array_merge_recursive([
-                "components" => [
-                    "gift-card" => [
-                        "component" => "Magento_GiftCardAccount/js/view/payment/gift-card-account",
-                        "children" => [
-                            "errors" => [
-                                "sortOrder" => 0,
-                                "component" => "Magento_GiftCardAccount/js/view/payment/gift-card-messages",
-                                "displayArea" => "messages"
+                'components' => [
+                    'gift-card' => [
+                        'component' => 'Magento_GiftCardAccount/js/view/payment/gift-card-account',
+                        'children' => [
+                            'errors' => [
+                                'sortOrder' => 0,
+                                'component' => 'Magento_GiftCardAccount/js/view/payment/gift-card-messages',
+                                'displayArea' => 'messages'
                             ]
                         ]
                     ]
@@ -103,7 +98,7 @@ class Checkout extends Template
     }
 
     /**
-     * @return integer|null
+     * @return int|null
      */
     public function getMaskedQuoteId()
     {
@@ -114,15 +109,15 @@ class Checkout extends Template
     }
 
     /**
-     * @return integer|null
+     * @return int|null
      */
     public function getCustomerId()
     {
-        return $this->getQuote()->getCustomerId();
+        return (int) $this->getQuote()->getCustomerId();
     }
 
     /**
-     * @return integer|null
+     * @return int|null
      */
     public function getQuoteId()
     {
@@ -191,21 +186,22 @@ class Checkout extends Template
     {
         $url = $this->config->getCustomCssUrl();
         if ($url) {
-            if (substr($url, 0, 4) === "http") {
+            if (0 === strpos($url, 'http')) {
                 return $url;
             }
 
-            $fullUrl = $this->assetRepo->getUrl($url);
-            return $fullUrl;
+            return $this->assetRepo->getUrl($url);
         }
+        
+        return null;
     }
 
     /**
      * @return bool
      */
-    public function getReplaceDefaultCss()
+    public function isReplaceDefaultCss()
     {
-        return $this->config->getReplaceDefaultCss();
+        return $this->config->isReplaceDefaultCss();
     }
 
     /**
@@ -227,8 +223,8 @@ class Checkout extends Template
     /**
      * @return string
      */
-    public function getJsLayout()
+    public function getProductPlaceholderUrl()
     {
-        return json_encode($this->jsLayout);
+        return $this->getViewFileUrl('Magento_Catalog::images/product/placeholder/thumbnail.jpg');
     }
 }

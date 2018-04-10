@@ -1,9 +1,14 @@
 <?xml version="1.0"?>
-<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="../../../../../lib/internal/Magento/Framework/Module/etc/module.xsd">
-    <module name="Digia_AvardaCheckout" setup_version="0.3.0">
+<!--
+/**
+ * @author      Digia Commerce Oy
+ * @copyright   Copyright © 2017 Digia. All rights reserved.
+ * @package     Digia_AvardaCheckout
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Module/etc/module.xsd">
+    <module name="Digia_AvardaCheckout" setup_version="0.4.0">
         <sequence>
-            <module name="Magento_Directory" />
-            <module name="Magento_Config" />
             <module name="Magento_Checkout" />
         </sequence>
     </module>

@@ -1,13 +1,14 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Gateway\Http\Client;
 
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
+use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Payment\Gateway\Http\ClientInterface;
 use Magento\Payment\Gateway\Http\ConverterInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
@@ -51,7 +52,7 @@ class Zend implements ClientInterface
     }
 
     /**
-     * {inheritdoc}
+     * {@inheritdoc}
      */
     public function placeRequest(TransferInterface $transferObject)
     {
@@ -98,6 +99,11 @@ class Zend implements ClientInterface
                 __($e->getMessage())
             );
         } catch (\Magento\Payment\Gateway\Http\ConverterException $e) {
+            throw $e;
+        } catch (WebapiException $e) {
+            foreach ($e->getErrors() as $error) {
+                $log['response']['errors'][] = $error->getMessage();
+            }
             throw $e;
         } finally {
             $this->logger->debug($log);

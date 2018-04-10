@@ -1,8 +1,8 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Controller;
 
@@ -49,11 +49,11 @@ abstract class AbstractCheckout extends Action
     public function isCallback()
     {
         return (
-            (bool) $this->_request->getParam('callback', false) == true ||
+            (bool) $this->_request->getParam('callback', false) === true ||
             $this->_request->getParam(
                 'PaymentStatus',
                 self::CALLBACK_FAILURE
-            ) == self::CALLBACK_SUCCESS
+            ) === self::CALLBACK_SUCCESS
         );
     }
 

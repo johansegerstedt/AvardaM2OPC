@@ -1,8 +1,8 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Plugin\Model\Sales\Order;
 
@@ -115,14 +115,15 @@ class InvoiceCollectTotalsPrepareItems
     /**
      * Create item data objects from invoice items
      *
-     * @param InvoiceInterface $subject
+     * @param InvoiceInterface|\Magento\Sales\Model\Order\Invoice $subject
      */
     protected function prepareItems(InvoiceInterface $subject)
     {
+        /** @var \Magento\Sales\Model\Order\Invoice\Item $item */
         foreach ($subject->getItems() as $item) {
             $orderItem = $item->getOrderItem();
             if (!$orderItem->getProductId() ||
-                $orderItem->hasParentItemId() ||
+                $orderItem->getData('parent_item_id') !== null ||
                 $item->isDeleted()
             ) {
                 continue;
@@ -134,12 +135,11 @@ class InvoiceCollectTotalsPrepareItems
             $itemDataObject = $this->itemDataObjectFactory->create(
                 $itemAdapter,
                 $item->getQty(),
-                ($item->getRowTotalInclTax() - $item->getDiscountAmount()),
-                (
-                    $item->getTaxAmount() +
-                    $item->getHiddenTaxAmount() +
+                $item->getRowTotalInclTax() -
+                    $item->getDiscountAmount(),
+                $item->getTaxAmount() +
+                    $item->getDiscountTaxCompensationAmount() +
                     $item->getWeeeTaxAppliedAmount()
-                )
             );
 
             $this->itemStorage->addItem($itemDataObject);
@@ -149,7 +149,7 @@ class InvoiceCollectTotalsPrepareItems
     /**
      * Create item data object from shipment information
      *
-     * @param InvoiceInterface $subject
+     * @param InvoiceInterface|\Magento\Sales\Model\Order\Invoice $subject
      */
     protected function prepareShipment(InvoiceInterface $subject)
     {
@@ -176,12 +176,12 @@ class InvoiceCollectTotalsPrepareItems
     /**
      * Create item data object from gift card information
      *
-     * @param InvoiceInterface $subject
+     * @param InvoiceInterface|\Magento\Sales\Model\Order\Invoice $subject
      */
     protected function prepareGiftCards(InvoiceInterface $subject)
     {
-        $giftCardsAmount = $subject->getGiftCardsAmount();
-        if ($giftCardsAmount > 0) {
+        $giftCardsAmount = $subject->getData('gift_cards_amount');
+        if ($giftCardsAmount !== null && $giftCardsAmount > 0) {
             $itemAdapter = $this->arrayDataItemAdapterFactory->create([
                 'data' => [
                     'name' => __('Gift Card'),
@@ -191,7 +191,7 @@ class InvoiceCollectTotalsPrepareItems
             $itemDataObject = $this->itemDataObjectFactory->create(
                 $itemAdapter,
                 1,
-                ($giftCardsAmount * -1),
+                $giftCardsAmount * -1,
                 0
             );
 

@@ -1,8 +1,8 @@
 <?php
 /**
- * @author      Digia Commerce Oy
- * @copyright   Copyright © 2017 Digia. All rights reserved.
- * @package     Digia_AvardaCheckout
+ * @author    Digia Commerce Oy
+ * @copyright Copyright © 2018 Digia. All rights reserved.
+ * @package   Digia_AvardaCheckout
  */
 namespace Digia\AvardaCheckout\Helper;
 
@@ -48,17 +48,17 @@ class PurchaseState
      * @var array
      */
     public static $descriptions = [
-        self::STATE_NEW => "The partner site just negotiated a session but the Check-Out form hasn't been shown in a browser yet.",
-        self::STATE_BEING_PROCESSED => "The customer is going through the Check-Out wizard.",
-        self::STATE_COMPLETED => "The Check-Out has been successfully completed.",
-        self::STATE_ERROR => "The Check-Out session has been canceled either by the user or due to an error.",
-        self::STATE_WAITING_FOR_SIGNICAT => "A redirect to Signicat website has been made and the customer hasn’t get redirected back to the original page yet. It purchases gets stuck it this state, a possible cause is that the page of the partner site that hosts the Check-Out form doesn't handle redirects correctly.",
-        self::STATE_SESSION_TIMED_OUT => "The session timed out or wasn’t even created for a long time after the purchase has been initialized.",
-        self::STATE_WAITING_FOR_CARD_PAYMENTS => "A redirect to card payment provider has been made and the customer hasn't been redirected back to the original page yet. Same as with WaitingForSignicat state, if purchases gets stuck in this state, the host page might not be able to render itself repeatedly.",
-        self::STATE_WAITING_FOR_BANK_ID => "Waiting for response from BankId application.",
-        self::STATE_CANCELLED => "When merchant calls CancelPayment method and order is canceled.",
-        self::STATE_WAITING_FOR_FINNISH_DIRECT_PAYMENT => "The customer has been redirected to a Finnish bank for a direct payment.",
-        self::STATE_UNKNOWN => "The payment is in an unknown state.",
+        self::STATE_NEW => 'The partner site just negotiated a session but the Check-Out form hasn´t been shown in a browser yet.',
+        self::STATE_BEING_PROCESSED => 'The customer is going through the Check-Out wizard.',
+        self::STATE_COMPLETED => 'The Check-Out has been successfully completed.',
+        self::STATE_ERROR => 'The Check-Out session has been canceled either by the user or due to an error.',
+        self::STATE_WAITING_FOR_SIGNICAT => 'A redirect to Signicat website has been made and the customer hasn´t get redirected back to the original page yet. It purchases gets stuck it this state, a possible cause is that the page of the partner site that hosts the Check-Out form doesn´t handle redirects correctly.',
+        self::STATE_SESSION_TIMED_OUT => 'The session timed out or wasn’t even created for a long time after the purchase has been initialized.',
+        self::STATE_WAITING_FOR_CARD_PAYMENTS => 'A redirect to card payment provider has been made and the customer hasn´t been redirected back to the original page yet. Same as with WaitingForSignicat state, if purchases gets stuck in this state, the host page might not be able to render itself repeatedly.',
+        self::STATE_WAITING_FOR_BANK_ID => 'Waiting for response from BankId application.',
+        self::STATE_CANCELLED => 'When merchant calls CancelPayment method and order is canceled.',
+        self::STATE_WAITING_FOR_FINNISH_DIRECT_PAYMENT => 'The customer has been redirected to a Finnish bank for a direct payment.',
+        self::STATE_UNKNOWN => 'The payment is in an unknown state.',
     ];
 
     /**
@@ -71,9 +71,8 @@ class PurchaseState
     {
         if (is_int($stateId) &&
             array_key_exists($stateId, self::$states)
-        ){
+        ) {
             return self::$states[$stateId];
-
         }
 
         return self::STATE_UNKNOWN;
@@ -89,7 +88,8 @@ class PurchaseState
     {
         return in_array(
             $this->getState($stateId),
-            [self::STATE_NEW, self::STATE_BEING_PROCESSED]
+            [self::STATE_NEW, self::STATE_BEING_PROCESSED],
+            true
         );
     }
 
@@ -101,10 +101,7 @@ class PurchaseState
      */
     public function isComplete($stateId)
     {
-        return in_array(
-            $this->getState($stateId),
-            [self::STATE_COMPLETED]
-        );
+        return ($this->getState($stateId) == self::STATE_COMPLETED);
     }
 
     /**
@@ -122,7 +119,8 @@ class PurchaseState
                 self::STATE_WAITING_FOR_CARD_PAYMENTS,
                 self::STATE_WAITING_FOR_FINNISH_DIRECT_PAYMENT,
                 self::STATE_WAITING_FOR_SIGNICAT
-            ]
+            ],
+            true
         );
     }
 
@@ -136,24 +134,22 @@ class PurchaseState
     {
         return in_array(
             $this->getState($stateId),
-            [self::STATE_ERROR, self::STATE_CANCELLED]
+            [self::STATE_ERROR, self::STATE_CANCELLED],
+            true
         );
     }
 
     /**
-     * Check if payment is killed
+     * Check if payment is dead
      *
      * @param int $stateId
      * @return bool
      */
-    public function isKilled($stateId)
+    public function isDead($stateId)
     {
         return (
             $this->isCancelled($stateId) ||
-            in_array(
-                $this->getState($stateId),
-                [self::STATE_SESSION_TIMED_OUT]
-            )
+            $this->getState($stateId) == self::STATE_SESSION_TIMED_OUT
         );
     }
 }

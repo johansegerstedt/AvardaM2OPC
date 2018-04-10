@@ -53,36 +53,38 @@ class CartForm extends React.Component<Props> {
   render() {
     const {cartItems, currency, isUpdating} = this.props;
     return (
-      <div className="side-container">
+      <Fragment>
         <div className="avarda-mobile-hide">
-          <i className="material-icons md-orange md-24">check_circle</i>
+          <i className="material-icons md-orange md-48">check_circle</i>
           <div className="avarda-sidebar-header">
             <span>Order Review</span>
+            <div className="collapsable-info">
+              <span>{cartItems.length} Items in cart</span>
+            </div>
           </div>
         </div>
-        <div className="avarda-cart-items">
-          <div className="collapsable-info">
-            <span>{cartItems.length} Items in cart</span>
+        <div className="avarda-cart-items-container">
+          <div className="avarda-cart-items">
+            <form
+              id="form-validate"
+              name="cartForm"
+              className="form form-cart"
+              noValidate="novalidate"
+              onSubmit={this.updateCartItems}
+            >
+              {cartItems.map(item => (
+                <ProductItem
+                  key={item.item_id}
+                  item={item}
+                  deleteItem={this.deleteCartItem}
+                  currency={currency}
+                />
+              ))}
+              <Actions isUpdating={isUpdating} />
+            </form>
           </div>
-          <form
-            id="form-validate"
-            name="cartForm"
-            className="form form-cart"
-            noValidate="novalidate"
-            onSubmit={this.updateCartItems}
-          >
-            {cartItems.map(item => (
-              <ProductItem
-                key={item.item_id}
-                item={item}
-                deleteItem={this.deleteCartItem}
-                currency={currency}
-              />
-            ))}
-            <Actions isUpdating={isUpdating} />
-          </form>
         </div>
-      </div>
+      </Fragment>
     );
   }
 }
@@ -97,25 +99,26 @@ const Actions = ({isUpdating}: {isUpdating: boolean}) => {
       >
         <span>{$.mage.__('Continue Shopping')}</span>
       </a>
+
       <button
         name="update_cart_action"
         data-cart-empty
         value="empty_cart"
-        title={$.mage.__('Clear Shopping Cart')}
+        title={$.mage.__('Clear')}
         className="action clear"
         id="empty_cart_button"
       >
-        <span>{$.mage.__('Clear Shopping Cart')}</span>
+        <i className="material-icons md-18">clear</i>
       </button>
       <button
         type="submit"
         name="update_cart_action"
         value="update_qty"
         disabled={!!isUpdating}
-        title={$.mage.__('Update Shopping Cart')}
-        className="action update"
+        title={$.mage.__('Update')}
+        className="action update primary"
       >
-        <span>{$.mage.__('Update Shopping Cart')}</span>
+        <i className="material-icons md-18">mode_edit</i>
       </button>
       <input
         type="hidden"
@@ -160,9 +163,12 @@ const ProductItem = ({
       </span>
       <div className="product-info product-row">
         <div>
-          <span>{name}</span>
+          <a href={product_url} target="_blank">
+            <span>{name}</span>
+          </a>
         </div>
         <div className="control qty">
+          {/* <i className="material-icons md-18">add</i> */}
           <input
             id="cart-98-qty"
             name={`cart[${item_id}][qty]`} // Used to get updated quantities!
@@ -171,24 +177,25 @@ const ProductItem = ({
             size={4}
             title="Qty"
             min="0"
-            className="input-text qty"
+            className="input-text avarda-input-qty"
           />
+          {/* <i className="material-icons md-18">remove</i> */}
         </div>
       </div>
       <div className="product-subtotal product-row">
         <div>
           <span>{formatCurrency(price_incl_tax * qty, currency)}</span>
         </div>
-        <div className="actions-toolbar">
+        <div>
           <button
             title={$.mage.__('Remove item')}
-            className="action action-delete"
+            className="avarda-action-delete"
             onClick={deleteItem}
             disabled={isDeleting}
             type="button"
           >
             <i data-itemid={item_id} className="material-icons md-18">
-              close
+              remove_circle
             </i>
           </button>
         </div>

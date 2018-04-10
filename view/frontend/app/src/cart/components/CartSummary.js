@@ -54,11 +54,8 @@ class CartSummary extends React.Component<Props> {
       {segments: [], footerSegments: []},
     );
     return (
-      <div className="cart-summary avarda-cart-summary">
-        <strong className="summary title avarda-title">
-          {$.mage.__('Summary')}
-        </strong>
-        <div id="cart-totals" className="cart-totals avarda-cart-totals">
+      <div className="avarda-cart-summary cart-summary">
+        <div id="cart-totals" className="avarda-cart-totals cart-totals">
           <div className="table-wrapper">
             <Loader isLoading={isLoading} block>
               <table className="data table totals">

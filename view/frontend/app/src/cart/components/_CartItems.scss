@@ -1,6 +1,7 @@
-.avarda-cart-items {
-  width: 100%;
-  padding-top: 20px;
+.avarda-cart-items-container {
+  border-bottom: 1px solid #cccccc;
+  margin-top: 20px;
+  padding-bottom: 20px;
 }
 
 .avarda-mobile-hide {
@@ -36,7 +37,6 @@
 }
 
 .collapsable-info {
-  padding-left: 66px;
   font-size: 20px;
   font-weight: 100;
 }
@@ -55,10 +55,8 @@
     flex-direction: row;
     padding-left: 20px;
     flex: 4;
-    div {
-      align-self: auto;
-      font-size: 15px;
-      font-weight: 600;
+    .avarda-input-qty {
+      width: 22%;
     }
   }
 
@@ -72,7 +70,11 @@
     flex-direction: row-reverse;
   }
 }
-
+.avarda-action-delete {
+  background: none;
+  box-shadow: none !important;
+  border: none;
+}
 .cart-actions {
   display: flex;
 }

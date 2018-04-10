@@ -1,18 +1,18 @@
 .avarda-app {
-  color: #333333;
-  font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  // color: #333333;
+  // font-family: 'Open Sans', 'Helvetica Neue', Helvetica, Arial, sans-serif;
   line-height: 1.43;
   transition: 1s;
   font-size: 1.4rem;
   display: flex;
   flex-wrap: wrap;
-  flex-direction: row;
+  // flex-direction: row;
   justify-content: flex-start;
   align-items: stretch;
   margin: auto;
 
   @media screen and (min-width: 600px) {
-    .container {
+    .avarda-app {
       flex-wrap: nowrap;
     }
 
@@ -28,6 +28,16 @@
       flex-basis: 200px;
       order: 3;
     }
+  }
+  .side-container {
+    background-color: #f8f8f8;
+    border: 1px solid #d8d8d8;
+    border-radius: 2px;
+    position: sticky;
+    top: 20px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
   }
 
   .left {
@@ -55,7 +65,6 @@
     box-sizing: border-box;
     margin: 10px 0;
     width: 60%;
-    flex-direction: column;
     padding: 20px;
   }
 
@@ -64,15 +73,12 @@
     transition: 0.4s;
     box-sizing: border-box;
     margin: 10px 0;
-    flex-direction: column;
   }
 }
 
-.side-container {
-  background-color: #f8f8f8;
-  border: 1px solid #d8d8d8;
-  border-radius: 2px;
-  position: sticky;
-  top: 20px;
-  padding: 20px;
+.avarda-spinner {
+  width: 100%;
+  height: 100%;
+  padding-left: calc((100% / 2) - 22px);
+  padding-top: calc((100% / 4) - 22px);
 }

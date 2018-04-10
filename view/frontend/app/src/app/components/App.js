@@ -30,7 +30,9 @@ const CartIsNotEmpty = () => {
         <AvardaContainer key="avarda" />
       </div>
       <div className="avarda-checkout-sidebar">
-        <CartContainer key="cart" />
+        <div className="side-container">
+          <CartContainer key="cart" />
+        </div>
       </div>
     </Fragment>
   );

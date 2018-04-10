@@ -11,9 +11,9 @@
     "build":
       "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.prod.babel.js",
     "lint": "eslint ./src && flow --quiet",
-    "lint:fix": "eslint src --fix && flow --quiet",
+    "lint:fix": "eslint ./src --fix && flow --quiet",
     "flow-typed": "flow-typed install -i dev",
-    "precommit": "yarn lint"
+    "prepush": "yarn lint"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

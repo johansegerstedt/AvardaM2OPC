@@ -1,21 +1,36 @@
-.checkout-payment-method {
-  clear: both;
+// .checkout-payment-method {
+//   clear: both;
 
-  @media (min-width: 768px), print {
-    width: 75%;
-  }
+//   @media (min-width: 768px), print {
+//     width: 75%;
+//   }
 
-  .payment-option {
-    margin: 0;
-    .payment-option-title {
-      padding: 10px 40px 10px 15px;
-      margin: 0;
-      border: 0;
+//   .payment-option {
+//     margin: 0;
+//     .payment-option-title {
+//       padding: 10px 40px 10px 15px;
+//       margin: 0;
+//       border: 0;
 
-      @media (min-width: 768px) {
-        padding-left: 0;
-        font-size: 1.6rem;
-      }
+//       @media (min-width: 768px) {
+//         padding-left: 0;
+//         font-size: 1.6rem;
+//       }
+//     }
+//   }
+// }
+
+.cart-discount {
+  width: 100%;
+  float: none;
+  padding: 20px 0 0 0;
+}
+.avarda-discount {
+  .discount {
+    width: 100%;
+
+    .title {
+      padding-bottom: 20px;
     }
   }
 }

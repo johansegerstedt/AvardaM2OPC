@@ -75,7 +75,7 @@ class ShippingMethod extends React.Component<Props> {
     }
 
     return (
-      <div className="checkout-shipping-method opc-wrapper">
+      <div className="checkout-shipping-method">
         <h2 id={SHIPPING_ANCHOR_ID} className="step-title">
           {$.mage.__('Shipping Methods')}
         </h2>

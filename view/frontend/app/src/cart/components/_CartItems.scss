@@ -1,0 +1,83 @@
+.avarda-cart-items-container {
+  border-bottom: 1px solid #cccccc;
+  margin-top: 20px;
+  padding-bottom: 20px;
+}
+
+.avarda-mobile-hide {
+  display: flex;
+  flex-direction: row;
+
+  .avarda-sidebar-header {
+    font-size: 24px;
+    font-weight: 600;
+    text-transform: uppercase;
+    padding-left: 24px;
+    position: relative;
+  }
+}
+
+.material-icons.md-orange {
+  color: orange;
+}
+.material-icons .md-green {
+  color: greenyellow;
+}
+.material-icons.md-18 {
+  font-size: 18px;
+}
+.material-icons.md-24 {
+  font-size: 24px;
+}
+.material-icons.md-36 {
+  font-size: 36px;
+}
+.material-icons.md-48 {
+  font-size: 48px;
+}
+
+.collapsable-info {
+  font-size: 20px;
+  font-weight: 100;
+}
+
+.product-container {
+  display: flex;
+  justify-content: flex-start;
+  padding-bottom: 10px;
+
+  .product-image-container {
+    flex: 1;
+    flex-grow: 1;
+  }
+
+  .product-row {
+    flex-direction: row;
+    padding-left: 20px;
+    flex: 4;
+    .avarda-input-qty {
+      width: 22%;
+    }
+  }
+
+  .product-info {
+    flex-grow: 4;
+  }
+
+  .product-subtotal {
+    flex-grow: 1;
+    align-self: center;
+    flex-direction: row-reverse;
+  }
+}
+.avarda-action-delete {
+  background: none;
+  box-shadow: none !important;
+  border: none;
+}
+.cart-actions {
+  display: flex;
+  button {
+    margin: 5px;
+  }
+}

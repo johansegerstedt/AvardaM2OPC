@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, {Fragment} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import quote from 'Magento_Checkout/js/model/quote';
@@ -20,7 +20,7 @@ import {
 } from '../selectors';
 import {getQuoteCurrency} from '../utils';
 import CartSummary from './CartSummary';
-import CartForm from './CartForm';
+import CartItems from './CartItems';
 import CartDiscount from './CartDiscount';
 import type {Cart as CartType, CartItem} from '../types';
 import GiftCardAccount from './GiftCardAccount';
@@ -87,24 +87,24 @@ class Cart extends React.Component<Props> {
     const loaded = !!cart && !cartIsEmpty;
 
     return (
-      <div className="cart-container">
+      <Fragment>
         <Loader isLoading={!loaded}>
           {cart
             ? [
+                <CartItems
+                  key="cartItems"
+                  cartItems={cartItems}
+                  isUpdating={isUpdatingCart}
+                  updateCartItems={updateCartItems}
+                  deleteCartItem={deleteCartItem}
+                  currency={getQuoteCurrency(cart)}
+                />,
                 <CartSummary
                   key="cartSummary"
                   totalSegments={cart.total_segments}
                   isLoading={isFetching || isUpdatingCart}
                   currency={getQuoteCurrency(cart)}
                   cart={cart}
-                />,
-                <CartForm
-                  key="cartForm"
-                  cartItems={cartItems}
-                  isUpdating={isUpdatingCart}
-                  updateCartItems={updateCartItems}
-                  deleteCartItem={deleteCartItem}
-                  currency={getQuoteCurrency(cart)}
                 />,
                 <GiftOptionsCart key="giftOptionsCart" />,
                 <ContinueShoppingContainer key="continueShoppingContainer" />,
@@ -119,7 +119,7 @@ class Cart extends React.Component<Props> {
               ]
             : null}
         </Loader>
-      </div>
+      </Fragment>
     );
   }
 }

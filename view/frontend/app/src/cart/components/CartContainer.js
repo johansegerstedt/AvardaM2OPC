@@ -23,6 +23,8 @@ import CartSummary from './CartSummary';
 import CartForm from './CartForm';
 import CartDiscount from './CartDiscount';
 import type {Cart as CartType, CartItem} from '../types';
+import GiftCardAccount from './GiftCardAccount';
+import GiftMessage from './GiftMessage';
 
 type Props = {
   cart: null | CartType,
@@ -106,12 +108,14 @@ class Cart extends React.Component<Props> {
                 />,
                 <GiftOptionsCart key="giftOptionsCart" />,
                 <ContinueShoppingContainer key="continueShoppingContainer" />,
+                <GiftMessage key="giftMessage" />,
                 <CartDiscount
                   key="cartDiscount"
                   coupon={cart.coupon_code}
                   applyCoupon={applyCoupon}
                   removeCoupon={removeCoupon}
                 />,
+                <GiftCardAccount key="giftCardAccount" />,
               ]
             : null}
         </Loader>

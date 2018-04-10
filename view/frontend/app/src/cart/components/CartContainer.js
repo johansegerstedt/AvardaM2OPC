@@ -21,7 +21,6 @@ import {
 import {getQuoteCurrency} from '../utils';
 import CartSummary from './CartSummary';
 import CartItems from './CartItems';
-import CartForm from './CartForm';
 import CartDiscount from './CartDiscount';
 import type {Cart as CartType, CartItem} from '../types';
 
@@ -107,52 +106,6 @@ class Cart extends React.Component<Props> {
     );
   }
 }
-
-const ContainerHolder = ({
-  cartItems,
-  updateCartItems,
-  deleteCartItem,
-  isUpdatingCart,
-  isFetching,
-  applyCoupon,
-  removeCoupon,
-}: {
-  cartItems: Object,
-  cartItems: CartItem[],
-  isUpdatingCart: boolean,
-  isFetching: boolean,
-  updateCartItems(CartItem[]): void,
-  deleteCartItem(itemId: string): void,
-  applyCoupon(code: string): void,
-  removeCoupon(): void,
-}) => {
-  return (
-    <div>
-      <CartItems
-        key="cartItems"
-        cartItems={cartItems}
-        isUpdating={isUpdatingCart}
-        updateCartItems={updateCartItems}
-        deleteCartItem={deleteCartItem}
-        currency={getQuoteCurrency(cart)}
-      />,
-      <CartSummary
-        key="cartSummary"
-        totalSegments={cart.total_segments}
-        isLoading={isFetching || isUpdatingCart}
-        currency={getQuoteCurrency(cart)}
-        cart={cart}
-      />,
-      <GiftOptionsCart key="giftOptionsCart" />,
-      <CartDiscount
-        key="cartDiscount"
-        coupon={cart.coupon_code}
-        applyCoupon={applyCoupon}
-        removeCoupon={removeCoupon}
-      />,
-    </div>
-  );
-};
 
 const mapStateToProps = state => ({
   cart: getCart(state),

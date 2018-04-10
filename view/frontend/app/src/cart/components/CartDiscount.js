@@ -2,7 +2,7 @@
 import React, {Fragment} from 'react';
 import {get} from 'lodash';
 import {$} from '$i18n';
-import KoBindScope from '$src/utils/components/KoBindScope';
+// import KoBindScope from '$src/utils/components/KoBindScope';
 
 type Props = {
   coupon?: string,

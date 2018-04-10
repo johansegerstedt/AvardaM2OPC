@@ -40,6 +40,10 @@ class CustomerTokenDataBuilder implements BuilderInterface
      */
     public function build(array $buildSubject)
     {
+        if (!$this->customerSession->isLoggedIn()) {
+            return [];
+        }
+        
         $customerToken = $this->customerSession
             ->getCustomerData()
             ->getCustomAttribute('avarda_customer_token');

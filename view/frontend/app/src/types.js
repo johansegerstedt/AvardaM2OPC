@@ -20,6 +20,7 @@ export type AvardaConfig = {|
 export type Config = {|
   +avardaConfig: AvardaConfig,
   +baseMediaUrl: string,
+  +continueShoppingUrl: string,
   +baseUrl: string,
   +callbackUrl: string,
   +countryId: string,

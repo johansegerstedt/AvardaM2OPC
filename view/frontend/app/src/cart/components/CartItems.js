@@ -49,7 +49,6 @@ class CartForm extends React.Component<Props> {
       deleteCartItem(itemId);
     }
   };
-
   render() {
     const {cartItems, currency, isUpdating} = this.props;
     return (
@@ -90,16 +89,23 @@ class CartForm extends React.Component<Props> {
 }
 
 const Actions = ({isUpdating}: {isUpdating: boolean}) => {
+  const goToHome: EventHandler = event => {
+    event.preventDefault();
+    window.location = '/';
+  };
   return (
     <div className="cart main actions cart-actions">
-      <a
-        className="action continue"
-        href="/"
-        title={$.mage.__('Continue Shopping')}
+      <button
+        name="continue_shopping"
+        onClick={goToHome}
+        data-cart-empty
+        value="continue_shopping"
+        title={$.mage.__('Continue shopping')}
+        className="action"
+        id="continue_shopping"
       >
-        <span>{$.mage.__('Continue Shopping')}</span>
-      </a>
-
+        <i className="material-icons md-18">shop</i>
+      </button>
       <button
         name="update_cart_action"
         data-cart-empty
@@ -118,7 +124,7 @@ const Actions = ({isUpdating}: {isUpdating: boolean}) => {
         title={$.mage.__('Update')}
         className="action update primary"
       >
-        <i className="material-icons md-18">mode_edit</i>
+        <i className="material-icons md-18">done</i>
       </button>
       <input
         type="hidden"

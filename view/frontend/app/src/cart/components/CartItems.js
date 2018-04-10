@@ -89,9 +89,11 @@ class CartForm extends React.Component<Props> {
 }
 
 const Actions = ({isUpdating}: {isUpdating: boolean}) => {
+  const {continueShoppingUrl} = getConfig();
+
   const goToHome: EventHandler = event => {
     event.preventDefault();
-    window.location = '/';
+    window.location = continueShoppingUrl;
   };
   return (
     <div className="cart main actions cart-actions">

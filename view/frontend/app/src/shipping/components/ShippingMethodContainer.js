@@ -75,10 +75,10 @@ class ShippingMethod extends React.Component<Props> {
     }
 
     return (
-      <div className="checkout-shipping-method">
-        <h2 id={SHIPPING_ANCHOR_ID} className="step-title">
+      <div className="checkout-shipping-method avarda-step">
+        {/* <span id={SHIPPING_ANCHOR_ID} className="avarda-title step-title">
           {$.mage.__('Shipping Methods')}
-        </h2>
+        </span> */}
         {messages && (
           <Messages>
             {messages.map(({id, type, message}) => (
@@ -86,42 +86,48 @@ class ShippingMethod extends React.Component<Props> {
             ))}
           </Messages>
         )}
-        <ShippingPolicy />
-        <div
-          id="checkout-step-shipping"
-          className="step-content"
-          data-role="content"
-        >
-          {shippingAddress && (
-            <ShippingAddressForm
-              handleSubmit={this.updateShippingAddress}
-              shippingAddress={shippingAddress}
-              controlled={selectedShippingMethod !== null}
-            />
-          )}
-          {/* Submit this to estimate shipping methods */}
-        </div>
-        <div
-          id="checkout-step-shipping_method"
-          className="step-content"
-          data-role="content"
-          role="tabpanel"
-          aria-hidden="false"
-        >
-          {shippingAddress && shippingAddress.postcode && currency ? (
-            <ShippingMethodForm // Submit this to select shipping method
-              shippingAddress={shippingAddress}
-              selectShippingMethod={selectShippingMethod}
-              selectedShippingMethod={selectedShippingMethod}
-              methods={methods}
-              currency={currency}
-              fetchShippingMethods={this.fetchShippingMethods}
-              updateShippingAddress={updateShippingAddress}
-              isFetchingMethods={isFetchingMethods}
-              saveShippingInformation={saveShippingInformation}
-            />
-          ) : null}
-        </div>
+        <ul>
+          <li>
+            <ShippingPolicy />
+            <div
+              id="checkout-step-shipping"
+              className="step-content"
+              data-role="content"
+            >
+              {shippingAddress && (
+                <ShippingAddressForm
+                  handleSubmit={this.updateShippingAddress}
+                  shippingAddress={shippingAddress}
+                  controlled={selectedShippingMethod !== null}
+                />
+              )}
+              {/* Submit this to estimate shipping methods */}
+            </div>
+          </li>
+          <li>
+            <div
+              id="checkout-step-shipping_method"
+              className="step-content"
+              data-role="content"
+              role="tabpanel"
+              aria-hidden="false"
+            >
+              {shippingAddress && shippingAddress.postcode && currency ? (
+                <ShippingMethodForm // Submit this to select shipping method
+                  shippingAddress={shippingAddress}
+                  selectShippingMethod={selectShippingMethod}
+                  selectedShippingMethod={selectedShippingMethod}
+                  methods={methods}
+                  currency={currency}
+                  fetchShippingMethods={this.fetchShippingMethods}
+                  updateShippingAddress={updateShippingAddress}
+                  isFetchingMethods={isFetchingMethods}
+                  saveShippingInformation={saveShippingInformation}
+                />
+              ) : null}
+            </div>
+          </li>
+        </ul>
       </div>
     );
   }

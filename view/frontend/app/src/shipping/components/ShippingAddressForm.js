@@ -39,10 +39,8 @@ class ShippingAddressForm extends React.Component<Props> {
         onSubmit={this.handleSubmit}
       >
         <div id="shipping-new-address-form" className="fieldset address">
+          <div className="step-title">{$.mage.__('Zip/Postal Code')}</div>
           <div className="field _required" name="shippingAddress.postcode">
-            <label className="label" htmlFor="postcode">
-              <span>{$.mage.__('Zip/Postal Code')}</span>
-            </label>
             <div className="control">
               <input
                 key={JSON.stringify(controlled) + JSON.stringify(postcode)}
@@ -58,9 +56,7 @@ class ShippingAddressForm extends React.Component<Props> {
           </div>
           <div className="fieldset">
             <div className="control">
-              <button type="submit">
-                {$.mage.__('Update')} {$.mage.__('Zip/Postal Code')}
-              </button>
+              <button type="submit">{$.mage.__('Proceed to next step')}</button>
             </div>
           </div>
         </div>

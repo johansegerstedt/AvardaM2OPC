@@ -58,7 +58,7 @@ class CartForm extends React.Component<Props> {
           <div className="avarda-sidebar-header">
             <span className="avarda-title">Order Review</span>
             <div className="collapsable-info">
-              <span>{cartItems.length} Items in cart</span>
+              <span>{cartItems.length} Item(s) in cart</span>
             </div>
           </div>
         </div>

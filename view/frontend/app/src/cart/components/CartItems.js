@@ -56,9 +56,9 @@ class CartForm extends React.Component<Props> {
         <div className="avarda-mobile-hide">
           <i className="material-icons md-orange md-48">check_circle</i>
           <div className="avarda-sidebar-header">
-            <span>Order Review</span>
+            <span className="avarda-title">Order Review</span>
             <div className="collapsable-info">
-              <span>{cartItems.length} Items in cart</span>
+              <span>{cartItems.length} Item(s) in cart</span>
             </div>
           </div>
         </div>
@@ -89,9 +89,11 @@ class CartForm extends React.Component<Props> {
 }
 
 const Actions = ({isUpdating}: {isUpdating: boolean}) => {
+  const {continueShoppingUrl} = getConfig();
+
   const goToHome: EventHandler = event => {
     event.preventDefault();
-    window.location = '/';
+    window.location = continueShoppingUrl;
   };
   return (
     <div className="cart main actions cart-actions">

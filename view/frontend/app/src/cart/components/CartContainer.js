@@ -41,18 +41,6 @@ type Props = {
 // TODO
 const GiftOptionsCart = () => <div id="gift-options-cart" />;
 
-const ContinueShoppingContainer = () => {
-  const {continueShoppingUrl} = getConfig();
-  return (
-    <div
-      id="continue-shopping-container"
-      className="continue-shopping-container"
-    >
-      <a href={continueShoppingUrl}>Continue shopping</a>
-    </div>
-  );
-};
-
 class Cart extends React.Component<Props> {
   totalsSubscription = null;
 
@@ -107,7 +95,6 @@ class Cart extends React.Component<Props> {
                   cart={cart}
                 />,
                 <GiftOptionsCart key="giftOptionsCart" />,
-                <ContinueShoppingContainer key="continueShoppingContainer" />,
                 <GiftMessage key="giftMessage" />,
                 <CartDiscount
                   key="cartDiscount"

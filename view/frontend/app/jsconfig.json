@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./",
+    "target": "es6",
+    "jsx": "react",
+    "paths": {
+      "$src/*": ["src/*"],
+      "$i18n/*": ["src/i18n/*"]
+    }
+  },
+  "exclude": ["node_modules", ".history"]
+}

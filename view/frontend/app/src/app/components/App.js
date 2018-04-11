@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, {Fragment} from 'react';
 import queryString from 'query-string';
 import {bindActionCreators} from 'redux';
 import {connect, type MapStateToProps} from 'react-redux';
@@ -22,11 +22,21 @@ type Props = {
   fetchCartRequest(): void,
 };
 
-const CartIsNotEmpty = () => [
-  <CartContainer key="cart" />,
-  <ShippingContainer key="shipping" />,
-  <AvardaContainer key="avarda" />,
-];
+const CartIsNotEmpty = () => {
+  return (
+    <Fragment>
+      <div className="avarda-checkout-main">
+        <ShippingContainer key="shipping" />
+        <AvardaContainer key="avarda" />
+      </div>
+      <div className="avarda-checkout-sidebar">
+        <div className="side-container">
+          <CartContainer key="cart" />
+        </div>
+      </div>
+    </Fragment>
+  );
+};
 
 const PaymentSuccess = () => <AvardaContainer />;
 
@@ -50,7 +60,7 @@ class App extends React.Component<Props> {
     }
 
     return (
-      <div className="app">
+      <div className="avarda-app">
         <Loader isLoading={cart === null && isFetching}>
           {isCartEmpty ? <CartIsEmpty /> : <CartIsNotEmpty />}
         </Loader>

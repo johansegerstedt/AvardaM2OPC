@@ -9,6 +9,10 @@ import {getPurchaseId, getIsFetching} from '../selectors';
 import {addressChanged, completePaymentPressed} from '../actions';
 import type {AppState} from '$src/root/types';
 
+/**
+ * This container represents actual IFRAME handling and Avarda processing
+ */
+
 type StateProps = {|
   purchaseId: null | $PropertyType<Props, 'purchaseId'>,
   isFetching: boolean,

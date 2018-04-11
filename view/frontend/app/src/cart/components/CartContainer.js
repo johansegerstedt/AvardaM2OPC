@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, {Fragment} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import quote from 'Magento_Checkout/js/model/quote';
@@ -20,9 +20,11 @@ import {
 } from '../selectors';
 import {getQuoteCurrency} from '../utils';
 import CartSummary from './CartSummary';
-import CartForm from './CartForm';
+import CartItems from './CartItems';
 import CartDiscount from './CartDiscount';
 import type {Cart as CartType, CartItem} from '../types';
+import GiftCardAccount from './GiftCardAccount';
+import GiftMessage from './GiftMessage';
 
 type Props = {
   cart: null | CartType,
@@ -38,6 +40,18 @@ type Props = {
 
 // TODO
 const GiftOptionsCart = () => <div id="gift-options-cart" />;
+
+const ContinueShoppingContainer = () => {
+  const {continueShoppingUrl} = getConfig();
+  return (
+    <div
+      id="continue-shopping-container"
+      className="continue-shopping-container"
+    >
+      <a href={continueShoppingUrl}>Continue shopping</a>
+    </div>
+  );
+};
 
 class Cart extends React.Component<Props> {
   totalsSubscription = null;
@@ -73,10 +87,18 @@ class Cart extends React.Component<Props> {
     const loaded = !!cart && !cartIsEmpty;
 
     return (
-      <div className="cart-container">
+      <Fragment>
         <Loader isLoading={!loaded}>
           {cart
             ? [
+                <CartItems
+                  key="cartItems"
+                  cartItems={cartItems}
+                  isUpdating={isUpdatingCart}
+                  updateCartItems={updateCartItems}
+                  deleteCartItem={deleteCartItem}
+                  currency={getQuoteCurrency(cart)}
+                />,
                 <CartSummary
                   key="cartSummary"
                   totalSegments={cart.total_segments}
@@ -84,25 +106,20 @@ class Cart extends React.Component<Props> {
                   currency={getQuoteCurrency(cart)}
                   cart={cart}
                 />,
-                <CartForm
-                  key="cartForm"
-                  cartItems={cartItems}
-                  isUpdating={isUpdatingCart}
-                  updateCartItems={updateCartItems}
-                  deleteCartItem={deleteCartItem}
-                  currency={getQuoteCurrency(cart)}
-                />,
                 <GiftOptionsCart key="giftOptionsCart" />,
+                <ContinueShoppingContainer key="continueShoppingContainer" />,
+                <GiftMessage key="giftMessage" />,
                 <CartDiscount
                   key="cartDiscount"
                   coupon={cart.coupon_code}
                   applyCoupon={applyCoupon}
                   removeCoupon={removeCoupon}
                 />,
+                <GiftCardAccount key="giftCardAccount" />,
               ]
             : null}
         </Loader>
-      </div>
+      </Fragment>
     );
   }
 }

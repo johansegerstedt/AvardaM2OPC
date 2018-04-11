@@ -11,7 +11,7 @@ type Props = {
 
 const Spinner = ({alt, block}: {alt: string, block: boolean}) => (
   <span
-    className="avardaCheckout-spinner"
+    className="avarda-spinner"
     style={block ? {display: 'block', textAlign: 'center'} : undefined}
   >
     <img src={spinner} alt={alt} />

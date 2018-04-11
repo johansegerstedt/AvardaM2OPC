@@ -16,3 +16,13 @@ export const formatCurrency = (
     style: 'currency',
     currency,
   });
+
+export const formatTax = (
+  price_including_tax: number,
+  price_excluding_tax: number,
+): number => {
+  let tax = price_including_tax - price_excluding_tax;
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Arithmetic_Operators#Unary_plus
+  tax = +tax.toFixed(2);
+  return tax;
+};

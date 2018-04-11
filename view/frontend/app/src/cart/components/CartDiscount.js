@@ -2,7 +2,6 @@
 import React, {Fragment} from 'react';
 import {get} from 'lodash';
 import {$} from '$i18n';
-import KoBindScope from '$src/utils/components/KoBindScope';
 
 type Props = {
   coupon?: string,
@@ -67,9 +66,9 @@ class CartDiscount extends React.Component<Props, State> {
 
     return (
       <Fragment>
-        <div className="cart-discount">
+        <div className="avarda-discount cart-discount">
           <div
-            className={`block discount${isOpen ? ' active' : ''}`}
+            className={`block discount ${isOpen ? ' active' : ''}`}
             id="block-discount"
             data-collapsible="true"
             role="tablist"
@@ -85,7 +84,7 @@ class CartDiscount extends React.Component<Props, State> {
               tabIndex={0}
             >
               <strong id="block-discount-heading" role="heading" aria-level={2}>
-                {$.mage.__('Apply Discount Code')}
+                {$.mage.__('Discount Code')}
               </strong>
             </div>
             <div
@@ -137,13 +136,6 @@ class CartDiscount extends React.Component<Props, State> {
             </div>
           </div>
         </div>
-        {/* Get the gift card input when using Enterprise edition */}
-        <KoBindScope
-          scope="gift-card"
-          divProps={{
-            className: 'checkout-payment-method',
-          }}
-        />
       </Fragment>
     );
   }

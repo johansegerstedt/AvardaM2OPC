@@ -28,6 +28,11 @@ class Checkout extends Template
     protected $checkoutSession;
 
     /**
+     * @var \Magento\Directory\Helper\Data
+     */
+    protected $directoryHelper;
+
+    /**
      * @var \Magento\Quote\Model\QuoteIdMaskFactory
      */
     protected $quoteIdMaskFactory;
@@ -49,6 +54,7 @@ class Checkout extends Template
      * @param \Digia\AvardaCheckout\Gateway\Config\Config $config
      * @param \Magento\Checkout\Model\CompositeConfigProvider $configProvider
      * @param \Magento\Checkout\Model\Session $checkoutSession
+     * @param \Magento\Directory\Helper\Data $directoryHelper
      * @param \Magento\Framework\App\ProductMetadataInterface $productMetadata
      * @param \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory
      * @param array $data = []
@@ -58,6 +64,7 @@ class Checkout extends Template
         \Digia\AvardaCheckout\Gateway\Config\Config $config,
         \Magento\Checkout\Model\CompositeConfigProvider $configProvider,
         \Magento\Checkout\Model\Session $checkoutSession,
+        \Magento\Directory\Helper\Data $directoryHelper,
         \Magento\Framework\App\ProductMetadataInterface $productMetadata,
         \Magento\Quote\Model\QuoteIdMaskFactory $quoteIdMaskFactory,
         array $data = []
@@ -67,6 +74,7 @@ class Checkout extends Template
         $this->config = $config;
         $this->configProvider = $configProvider;
         $this->checkoutSession = $checkoutSession;
+        $this->directoryHelper = $directoryHelper;
         $this->quoteIdMaskFactory = $quoteIdMaskFactory;
         $this->assetRepo = $context->getAssetRepository();
 
@@ -149,8 +157,7 @@ class Checkout extends Template
      */
     public function getCountryId()
     {
-        // TODO;
-        return 'FI';
+        return $this->directoryHelper->getDefaultCountry();
     }
 
     /**

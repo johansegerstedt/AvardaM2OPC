@@ -2,7 +2,6 @@
 import React from 'react';
 import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
-import {$} from '$i18n';
 import quote from 'Magento_Checkout/js/model/quote';
 import subscribe from '$src/knockout/components/subscribe';
 import {
@@ -21,7 +20,7 @@ import ShippingPolicy from './ShippingPolicy';
 import ShippingMethodForm from './ShippingMethodForm';
 import ShippingAddressForm from './ShippingAddressForm';
 import {updateAddress, getMethods, selectMethod} from '../actions';
-import {SHIPPING_ANCHOR_ID} from '../constants';
+// import {SHIPPING_ANCHOR_ID} from '../constants';
 import {saveShippingInformation} from '../actions';
 import type {BillingAddress} from '$src/cart/types';
 import type {MessageState} from '$src/utils/types';

@@ -56,9 +56,11 @@ class CartForm extends React.Component<Props> {
         <div className="avarda-mobile-hide">
           <i className="material-icons md-orange md-48">check_circle</i>
           <div className="avarda-sidebar-header">
-            <span className="avarda-title">Order Review</span>
+            <span className="avarda-title">{$.mage.__('Order Review')}</span>
             <div className="collapsable-info">
-              <span>{cartItems.length} Item(s) in cart</span>
+              <span>
+                {cartItems.length} {$.mage.__('Item(s) in cart')}
+              </span>
             </div>
           </div>
         </div>

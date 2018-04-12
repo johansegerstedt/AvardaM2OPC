@@ -24,6 +24,7 @@
   width: 100%;
   float: none;
   padding: 20px 0 0 0;
+  // order: 1;
 }
 .avarda-discount {
   .discount {
@@ -31,6 +32,28 @@
 
     .title {
       padding-bottom: 20px;
+    }
+  }
+}
+
+@media screen and (max-width: 768px) {
+  .cart-discount {
+    border: none;
+    padding: 0px;
+    // order: 1;
+  }
+
+  .avarda-discount {
+    .discount {
+      width: 100%;
+
+      .title {
+        padding-left: 0px;
+        padding-right: 0px;
+      }
+      .content {
+        padding: 0px;
+      }
     }
   }
 }

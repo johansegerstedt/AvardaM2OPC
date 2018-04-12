@@ -41,18 +41,15 @@
     flex-wrap: wrap;
 
     .avarda-checkout-main {
-      background-color: #fff;
-      transition: 0.4s;
-      box-sizing: border-box;
       flex-basis: 100%;
-      order: 1;
+      padding-right: 0px;
+      order: 2;
     }
 
     .avarda-checkout-sidebar {
       flex-basis: 100%;
-      transition: 0.4s;
-      box-sizing: border-box;
-      order: 2;
+      order: 1;
+      margin-bottom: 20px;
     }
   }
 }

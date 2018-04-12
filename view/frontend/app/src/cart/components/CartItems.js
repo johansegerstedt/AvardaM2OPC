@@ -178,7 +178,7 @@ const ProductItem = ({
         <div className="control qty">
           {/* <i className="material-icons md-18">add</i> */}
           <input
-            id="cart-98-qty"
+            id={`cart-${item_id}-qty`}
             name={`cart[${item_id}][qty]`} // Used to get updated quantities!
             defaultValue={qty}
             type="number"

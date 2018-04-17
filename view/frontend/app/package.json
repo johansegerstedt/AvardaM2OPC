@@ -6,12 +6,15 @@
   "private": true,
   "scripts": {
     "start": "webpack --config webpack.dev.babel.js --watch",
-    "build:analyze": "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.analyze.babel.js",
-    "build": "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.prod.babel.js",
-    "lint": "eslint ./src && flow --quiet",
-    "lint:fix": "eslint ./src --fix && flow --quiet",
+    "build:analyze":
+      "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.analyze.babel.js",
+    "build":
+      "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.prod.babel.js",
+    "lint": "eslint ./src",
+    "lint:fix": "eslint ./src --fix",
+    "flow": "flow",
     "flow-typed": "flow-typed install -i dev",
-    "prepush": "yarn lint"
+    "prepush": "yarn lint && yarn flow --quiet"
   },
   "devDependencies": {
     "babel-cli": "^6.26.0",

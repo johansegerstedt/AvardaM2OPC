@@ -9,7 +9,7 @@ import configureStore from './root/configureStore';
 import {setConfig} from '$src/config';
 import type {Config} from './types';
 
-import './index.scss';
+import './styles.less';
 
 export const execute = (config: Config) => {
   try {

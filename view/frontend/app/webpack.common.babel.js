@@ -64,16 +64,21 @@ export default {
         loader: 'babel-loader',
       },
       {
-        test: /\.scss$/,
+        test: /\.less$/,
+        exclude: /node_modules/,
         use: [
           {
             loader: 'style-loader', // creates style nodes from JS strings
           },
           {
             loader: 'css-loader', // translates CSS into CommonJS
+            // options: {
+            //   modules: true,
+            //   importLoaders: 1,
+            // },
           },
           {
-            loader: 'sass-loader', // compiles Sass to CSS
+            loader: 'less-loader', // compiles Less to CSS
           },
         ],
       },

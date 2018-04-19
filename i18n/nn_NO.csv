@@ -15,6 +15,7 @@ Checkout,Checkout
 "Apply Discount Code","Apply Discount Code"
 "Enter discount code","Enter discount code"
 "Apply Discount","Apply Discount"
+Discount,Discount
 "Cancel Coupon","Cancel Coupon"
 Item,Item
 Price,Price
@@ -56,3 +57,4 @@ topClose,topClose
 "Grand total", "Grand total"
 "Shipping & Handling", "Shipping & Handling"
 Tax, Tax
+"Order review", "Order review"

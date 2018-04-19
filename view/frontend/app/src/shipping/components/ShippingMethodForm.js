@@ -137,7 +137,7 @@ class ShippingMethodForm extends React.Component<Props> {
           onSubmit={this.handleSubmit}
         >
           <div id="checkout-shipping-method-load">
-            <div className="step-title">{$.mage.__('Shipping method')}</div>
+            <div className="step-title">{$.mage.__('Shipping methods')}</div>
             <table className="table-checkout-shipping-method">
               <thead>
                 <tr className="row">

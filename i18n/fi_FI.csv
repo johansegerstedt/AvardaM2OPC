@@ -15,6 +15,7 @@ Checkout,Checkout
 "Apply Discount Code","Käytä alennuskoodi"
 "Enter discount code","Syötä alennuskoodi"
 "Apply Discount","Käytä alennus"
+Discount,Alennus
 "Cancel Coupon","Peruuta kuponki"
 Item,Nimike
 Price,Hinta
@@ -56,3 +57,4 @@ topClose,topClose
 "Grand total", "Yhteensä"
 "Shipping & Handling", "Toimitus- ja käsittelykulut"
 Tax, Alv
+"Order review", "Tilausten tarkastelu"

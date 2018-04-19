@@ -1,58 +1,60 @@
-"Avarda checkout is turned off.","Avarda checkout is turned off."
-"Guest checkout is disabled.","Guest checkout is disabled."
+"Avarda checkout is turned off.","Avarda checkout är avstängd."
+"Guest checkout is disabled.","Gästkassa är inaktiverad."
 Checkout,Checkout
-"Failed to save Avarda order. Please try again later.","Failed to save Avarda order. Please try again later."
-"Failed to build item data.","Failed to build item data."
+"Failed to save Avarda order. Please try again later.","Misslyckades med att spara Avarda order. Vänligen försök igen senare."
+"Failed to build item data.","Misslyckades med att bygga objektdata."
 "Wrong gateway response format.","Wrong gateway response format."
 "No purchase ID returned from Avarda","No purchase ID returned from Avarda"
-"Failed to load Avarda payment. Please try again later.","Failed to load Avarda payment. Please try again later."
-"Something went wrong with Avarda checkout. Please try again later.","Something went wrong with Avarda checkout. Please try again later."
+"Failed to load Avarda payment. Please try again later.","Misslyckades med att ladda Avarda betalning. Vänligen försök igen senare."
+"Something went wrong with Avarda checkout. Please try again later.","Något gick fel med Avarda checkout. Vänligen försök igen senare."
 "No purchase ID on quote %s.","No purchase ID on quote %s."
-"You have no items in your shopping cart.","You have no items in your shopping cart."
-"Click <a href=""%1"">here</a> to continue shopping.","Click <a href=""%1"">here</a> to continue shopping."
-"Please select a shipping method...","Please select a shipping method..."
-"Please check shipping address information.","Please check shipping address information."
-"Apply Discount Code","Apply Discount Code"
-"Enter discount code","Enter discount code"
-"Apply Discount","Apply Discount"
-"Cancel Coupon","Cancel Coupon"
-Item,Item
+"You have no items in your shopping cart.","Du har inga varor i din varukorg."
+"Click <a href=""%1"">here</a> to continue shopping.","Klicka <a href=""%1"">här</a> för att fortsätta shoppa."
+"Please select a shipping method...","Var god välj en fraktmetod..."
+"Please check shipping address information.","Vänligen kontrollera leveransadressinformation."
+"Apply Discount Code","Använd rabattkod"
+"Enter discount code","Ange rabattkod"
+"Apply Discount","Ansök rabatt"
+Discount,Discount
+"Cancel Coupon","Avbryt kupong"
+Item,punkt
 Price,Price
-Qty,Qty
-Subtotal,Subtotal
-"Remove item","Remove item"
-"Shopping Cart Items","Shopping Cart Items"
-"Continue Shopping","Continue Shopping"
-"Clear Shopping Cart","Clear Shopping Cart"
-"Update Shopping Cart","Update Shopping Cart"
-Summary,Summary
-Total,Total
-"Hello %1!","Hello %1!"
-"Translate this","Translate this"
-"Zip/Postal Code","Zip/Postal Code"
-Update,Update
-"Shipping Methods","Shipping Methods"
-"Select Method","Select Method"
-"Method Title","Method Title"
+Qty,St
+Subtotal,Delsumma
+"Remove item","Ta bort objekt"
+"Shopping Cart Items","Varukorg artikels"
+"Continue Shopping","Fortsätt shoppa"
+"Clear Shopping Cart","Klara varukorgen"
+"Update Shopping Cart","Uppdatera varukorgen"
+Summary,Sammanfattning
+Total,Totalt
+"Hello %1!","Hej %1!"
+"Translate this","Översätt det här"
+"Zip/Postal Code","Postnummer"
+Update,Uppdatering
+"Shipping Methods","Fraktmetoder"
+"Select Method","Välj metod"
+"Method Title","Metodstitel"
 "Carrier Title","Carrier Title"
-"See our Shipping Policy","See our Shipping Policy"
-"Invalid shipping method","Invalid shipping method"
+"See our Shipping Policy","Se vår Fraktpolicy"
+"Invalid shipping method","Ogiltig fraktmetod"
 Loading...,Loading...
 topScroll,topScroll
 topFocus,topFocus
 topBlur,topBlur
 topCancel,topCancel
 topClose,topClose
-"Unable to save address. Please check input data.","Unable to save address. Please check input data."
+"Unable to save address. Please check input data.","Kan inte spara adress. Vänligen kontrollera inmatningsdata."
 "Avarda Checkout","Avarda Checkout"
-"Accept payments through the Avarda Checkout payment solution.","Accept payments through the Avarda Checkout payment solution."
-"Enable Avarda Checkout","Enable Avarda Checkout"
+"Accept payments through the Avarda Checkout payment solution.","Acceptera betalningar via Avarda Checkout betalningslösningen."
+"Enable Avarda Checkout","Aktivera Avarda Checkout"
 "Test Mode (Stage)","Test Mode (Stage)"
 "Site Code","Site Code"
 "Site Password","Site Password"
-"Redirect Onepage to Avarda Checkout","Redirect Onepage to Avarda Checkout"
-"%1 Item(s) in cart","%1 Item(s) in cart"
-"Proceed to next step", "Proceed to next step"
+"Redirect Onepage to Avarda Checkout","Omdirigera Onepage to Avarda Checkout"
+"%1 Item(s) in cart","%1 artiklar i varukorgen"
+"Proceed to next step", "Fortsätt till nästa steg"
 "Grand total", "Grand total"
-"Shipping & Handling", "Shipping & Handling"
-Tax, Tax
+"Shipping & Handling", "Frakt och hantering"
+Tax, Skatt
+"Order review", "Order review"

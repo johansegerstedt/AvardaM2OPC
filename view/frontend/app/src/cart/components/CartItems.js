@@ -59,7 +59,9 @@ class CartForm extends React.Component<Props> {
             <span className="avarda-title">{$.mage.__('Order Review')}</span>
             <div className="collapsable-info">
               <span>
-                {cartItems.length} {$.mage.__('Item(s) in cart')}
+                {$.mage
+                  .__('%1 Item(s) in cart')
+                  .replace('%1', cartItems.length.toString())}
               </span>
             </div>
           </div>

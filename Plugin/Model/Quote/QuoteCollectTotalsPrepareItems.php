@@ -86,7 +86,7 @@ class QuoteCollectTotalsPrepareItems
     {
         try {
             if (!$this->collectTotalsFlag &&
-                count($subject->getItems()) > 0
+                $subject->getItemsCount() > 0
             ) {
                 $this->prepareItemStorage($subject);
                 $this->collectTotalsFlag = true;
@@ -102,6 +102,8 @@ class QuoteCollectTotalsPrepareItems
      * Populate the item storage with Avarda items needed for request building
      *
      * @param CartInterface $subject
+     *
+     * @return void
      */
     protected function prepareItemStorage(CartInterface $subject)
     {
@@ -115,6 +117,8 @@ class QuoteCollectTotalsPrepareItems
      * Create item data objects from quote items
      *
      * @param CartInterface|\Magento\Quote\Model\Quote $subject
+     *
+     * @return void
      */
     protected function prepareItems(CartInterface $subject)
     {
@@ -148,6 +152,8 @@ class QuoteCollectTotalsPrepareItems
      * Create item data object from shipment information
      *
      * @param CartInterface|\Magento\Quote\Model\Quote $subject
+     *
+     * @return void
      */
     protected function prepareShipment(CartInterface $subject)
     {
@@ -178,6 +184,8 @@ class QuoteCollectTotalsPrepareItems
      * Create item data object from gift card information
      *
      * @param CartInterface|\Magento\Quote\Model\Quote $subject
+     *
+     * @return void
      */
     protected function prepareGiftCards(CartInterface $subject)
     {

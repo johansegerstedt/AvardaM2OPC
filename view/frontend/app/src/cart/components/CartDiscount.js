@@ -1,5 +1,5 @@
 // @flow
-import React, {Fragment} from 'react';
+import React, {Fragment, Component} from 'react';
 import {get} from 'lodash';
 import {$} from '$i18n';
 
@@ -19,7 +19,7 @@ const SubmitButton = ({label}: {label: string}) => (
   </button>
 );
 
-class CartDiscount extends React.Component<Props, State> {
+class CartDiscount extends Component<Props, State> {
   state = {
     isOpen: typeof this.props.coupon === 'string',
   };

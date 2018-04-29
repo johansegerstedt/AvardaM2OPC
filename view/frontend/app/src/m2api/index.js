@@ -28,7 +28,7 @@ const callApi = async (url: string, init?: RequestOptions) => {
     logger = (response: Response): Response => {
       const {url, ok, type, statusText, status} = response;
       // eslint-disable-next-line no-console
-      console.log({
+      console.debug({
         url,
         ok,
         type,

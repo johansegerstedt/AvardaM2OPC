@@ -1,5 +1,5 @@
 // @flow
-import React, {Fragment} from 'react';
+import React, {Fragment, Component} from 'react';
 import {get} from 'lodash';
 import {$} from '$i18n';
 import {formatCurrency} from '$src/utils/format';
@@ -13,6 +13,9 @@ type Props = {
   isUpdating: boolean,
   updateCartItems(CartItem[]): void,
 };
+type State = {
+  isOpen: boolean,
+};
 
 const getSrcFallbackHandler = (uri: string) => (ev: SyntheticEvent<>): void => {
   if (ev.target instanceof HTMLImageElement) {
@@ -20,7 +23,13 @@ const getSrcFallbackHandler = (uri: string) => (ev: SyntheticEvent<>): void => {
   }
 };
 
-class CartForm extends React.Component<Props> {
+class CartForm extends Component<Props, State> {
+  state = {
+    isOpen: false,
+  };
+
+  toggleOpenCartItems = () => this.setState(state => ({isOpen: !state.isOpen}));
+
   updateCartItems: EventHandler = event => {
     event.preventDefault();
     const {cartItems, updateCartItems} = this.props;
@@ -49,23 +58,60 @@ class CartForm extends React.Component<Props> {
       deleteCartItem(itemId);
     }
   };
+  handleSpaceAndEnter = (callback: Function) => (
+    event: SyntheticKeyboardEvent<*>,
+  ) => {
+    const key = event.key;
+    if (key === 'Enter' || ' ') {
+      event.preventDefault();
+      callback();
+    }
+  };
   render() {
     const {cartItems, currency, isUpdating} = this.props;
+    const {isOpen} = this.state;
+
     return (
       <Fragment>
-        <div className="avarda-mobile-hide">
-          <i className="material-icons md-orange md-48">check_circle</i>
-          <div className="avarda-sidebar-header">
-            <span className="avarda-title">{$.mage.__('Order Review')}</span>
-            <div className="collapsable-info">
-              <span>
-                {cartItems.length} {$.mage.__('Item(s) in cart')}
-              </span>
+        <div
+          className="avarda-cart-items-container"
+          id="avarda-cart-items-container"
+        >
+          <div className="avarda-mobile-hide">
+            <i className="material-icons md-orange md-48">check_circle</i>
+            <div className="avarda-sidebar-header">
+              <span className="avarda-title">{$.mage.__('Order Review')}</span>
+              <div
+                id="avarda-cart-items-trigger"
+                className="collapsable-info"
+                data-role="title"
+                role="tab"
+                aria-selected="false"
+                aria-expanded={JSON.stringify(isOpen)}
+                onClick={this.toggleOpenCartItems}
+                onKeyPress={this.handleSpaceAndEnter(this.toggleOpenCartItems)}
+                tabIndex={0}
+              >
+                <span
+                  id="avarda-cart-item-header"
+                  role="heading"
+                  aria-level={2}
+                >
+                  {$.mage
+                    .__('%1 Item(s) in cart')
+                    .replace('%1', cartItems.length.toString())}
+                </span>
+              </div>
             </div>
           </div>
-        </div>
-        <div className="avarda-cart-items-container">
-          <div className="avarda-cart-items">
+          <div
+            id="avarda-cart-items-content"
+            className="avarda-cart-items"
+            data-role="content"
+            role="tabpanel"
+            aria-hidden="true"
+            style={{display: isOpen ? 'block' : 'none'}}
+          >
             <form
               id="form-validate"
               name="cartForm"

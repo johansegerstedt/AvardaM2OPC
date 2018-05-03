@@ -65,6 +65,7 @@ class QuoteCollectTotalsUpdateItems
      *
      * @param CartInterface|\Magento\Quote\Model\Quote $subject
      * @param CartInterface|\Magento\Quote\Model\Quote $result
+     *                                                        
      * @return CartInterface
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -73,6 +74,7 @@ class QuoteCollectTotalsUpdateItems
     {
         $payment = $subject->getPayment();
         if (!$this->collectTotalsFlag &&
+            $subject->getItemsCount() > 0 &&
             $this->paymentDataHelper->isAvardaPayment($payment)
         ) {
             $this->collectTotalsFlag = true;
@@ -101,7 +103,9 @@ class QuoteCollectTotalsUpdateItems
      * Get state ID based on payment object
      *
      * @param CartInterface|\Magento\Quote\Model\Quote $subject
+     *
      * @throws PaymentException
+     *
      * @return int
      */
     protected function getStateId(CartInterface $subject)

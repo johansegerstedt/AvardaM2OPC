@@ -22,6 +22,7 @@ const ShippingMethodRadio = ({
   currency,
   isSelected,
   selectShippingMethod,
+  triggerSelect,
   value,
 }: RadioProps) => {
   const handleClick: EventHandler = ev => {
@@ -31,6 +32,9 @@ const ShippingMethodRadio = ({
     // ev.stopPropagation();
     selectShippingMethod(method);
   };
+  if (triggerSelect) {
+    console.log('should trigger the select');
+  }
 
   return [
     <tr key="method" className="row">
@@ -126,6 +130,11 @@ class ShippingMethodForm extends React.Component<Props> {
       return null;
     }
 
+    let triggerSelect = false;
+
+    if (methods != null && methods.length === 1) {
+      triggerSelect = true;
+    }
     // 2) methods.length > 0 => regular
     // 3) methods.length === 0 => Error: No Shipping methods available
     return (
@@ -163,6 +172,7 @@ class ShippingMethodForm extends React.Component<Props> {
                     return (
                       <ShippingMethodRadio
                         key={value}
+                        triggerSelect
                         value={value}
                         method={method}
                         currency={currency}

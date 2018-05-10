@@ -14,9 +14,9 @@ type State = {
   postCode?: number,
 };
 
-class ShippingAddressForm extends React.Component<Props, State> {
+class PostCode extends React.Component<Props, State> {
   state = {};
-  handleSubmit: EventHandler = event => {
+  handleSubmit = (event: EventHandler) => {
     event.preventDefault();
     const {shippingAddress, handleSubmit} = this.props;
 
@@ -29,8 +29,8 @@ class ShippingAddressForm extends React.Component<Props, State> {
       country_id,
     });
   };
-  handleChange: EventHandler = event => {
-    const {target: {value}} = event;
+  handleChange = (event: EventHandler) => {
+    const {value} = event.target;
     event.preventDefault();
     if (value.length === 5) {
       this.handleSubmit(event);
@@ -67,4 +67,4 @@ class ShippingAddressForm extends React.Component<Props, State> {
   }
 }
 
-export default ShippingAddressForm;
+export default PostCode;

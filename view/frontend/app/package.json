@@ -6,10 +6,8 @@
   "private": true,
   "scripts": {
     "start": "webpack --config webpack.dev.babel.js --watch",
-    "build:analyze":
-      "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.analyze.babel.js",
-    "build":
-      "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.prod.babel.js",
+    "build:analyze": "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.analyze.babel.js",
+    "build": "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.prod.babel.js",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
     "flow": "flow",
@@ -75,6 +73,7 @@
     "react": "^16.0.0",
     "react-dom": "^16.0.0",
     "react-redux": "^5.0.6",
+    "react-redux-loading-bar": "^4.0.4",
     "react-toastify": "^3.2.2",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",

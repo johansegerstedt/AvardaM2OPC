@@ -4,11 +4,11 @@ import queryString from 'query-string';
 import {bindActionCreators} from 'redux';
 import {connect, type MapStateToProps} from 'react-redux';
 import {compose} from 'redux';
+import LoadingBar from 'react-redux-loading-bar';
 import CartContainer from '$src/cart/components/CartContainer';
 import ShippingContainer from '$src/shipping/components/ShippingMethodContainer';
 import AvardaContainer from '$src/avarda/components/AvardaCheckOutContainer';
 import CartIsEmpty from './CartIsEmpty';
-import Loader from '$src/utils/components/Loader';
 import {getCart, getIsCartFetching} from '$src/cart/selectors';
 import {fetchCartRequest} from '$src/cart/actions';
 import type {Config} from '$src/types';
@@ -49,7 +49,7 @@ class App extends React.Component<Props> {
   }
 
   render() {
-    const {cart, isFetching, config: {hasItems}} = this.props;
+    const {cart, config: {hasItems}} = this.props;
 
     const isCartEmpty = !hasItems || (cart && cart.items.length === 0); // || cart === null;
     const isSuccess =
@@ -61,9 +61,10 @@ class App extends React.Component<Props> {
 
     return (
       <div className="avarda-app">
-        <Loader isLoading={cart === null && isFetching}>
-          {isCartEmpty ? <CartIsEmpty /> : <CartIsNotEmpty />}
-        </Loader>
+        <LoadingBar
+          style={{backgroundColor: 'blue', height: '5px', zIndex: 333333}}
+        />
+        {isCartEmpty ? <CartIsEmpty /> : <CartIsNotEmpty />}
       </div>
     );
   }

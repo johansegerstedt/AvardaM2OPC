@@ -1,15 +1,14 @@
 // @flow
-import * as React from 'react';
-import {$} from '$i18n';
-// import spinner from './spinner.gif';
+import React, {Component} from 'react';
+import type {Node} from 'react';
 
 type Props = {
   isLoading: boolean,
-  children: null | React.Node,
+  children: null | Node,
   block: boolean,
 };
 
-const Spinner = ({alt, block}: {alt: string, block: boolean}) => (
+const RealLoader = () => (
   <div className="loading">
     <div className="loading-bar" />
     <div className="loading-bar" />
@@ -18,18 +17,10 @@ const Spinner = ({alt, block}: {alt: string, block: boolean}) => (
   </div>
 );
 
-class Loader extends React.Component<Props> {
-  static defaultProps = {
-    block: false,
-  };
-
+class Loader extends Component<Props> {
   render() {
-    const {isLoading, children, block} = this.props;
-    return isLoading ? (
-      <Spinner alt={$.mage.__('Loading...')} block={block} />
-    ) : (
-      children
-    );
+    const {isLoading, children} = this.props;
+    return isLoading ? <RealLoader /> : children;
   }
 }
 

@@ -2,7 +2,6 @@
 import React from 'react';
 import {isEqual} from 'lodash';
 import {formatCurrency, formatTax} from '$src/utils/format';
-import Loader from '$src/utils/components/Loader';
 import AdditionalContent from '$src/utils/components/AdditionalContentRegions';
 import {REGION_KEYS} from '$src/additionalContentRegions';
 import {$} from '$i18n';
@@ -22,7 +21,6 @@ const ShippingMethodRadio = ({
   currency,
   isSelected,
   selectShippingMethod,
-  triggerSelect,
   value,
 }: RadioProps) => {
   const handleClick: EventHandler = ev => {
@@ -32,9 +30,6 @@ const ShippingMethodRadio = ({
     // ev.stopPropagation();
     selectShippingMethod(method);
   };
-  if (triggerSelect) {
-    console.log('should trigger the select');
-  }
 
   return [
     <tr key="method" className="row">
@@ -110,35 +105,26 @@ class ShippingMethodForm extends React.Component<Props> {
     isFetchingMethods: false,
   };
 
-  handleSubmit = (submitEvent: Event) => {
+  handleSubmit = (event: EventHandler) => {
     const {saveShippingInformation} = this.props;
-    submitEvent.preventDefault();
+    event.preventDefault();
 
     saveShippingInformation();
   };
-
   render() {
     const {
       currency,
       methods,
-      isFetchingMethods,
       selectShippingMethod,
       selectedShippingMethod,
     } = this.props;
 
-    if (methods === null && !isFetchingMethods) {
-      return null;
-    }
-
-    let triggerSelect = false;
-
-    if (methods != null && methods.length === 1) {
-      triggerSelect = true;
-    }
-    // 2) methods.length > 0 => regular
-    // 3) methods.length === 0 => Error: No Shipping methods available
-    return (
-      <Loader isLoading={isFetchingMethods || methods === null}>
+    if (methods === null) {
+      return <div>loading...</div>;
+    } else {
+      // 2) methods.length > 0 => regular
+      // 3) methods.length === 0 => Error: No Shipping methods available
+      return (
         <form
           className="form methods-shipping"
           id="co-shipping-method-form"
@@ -172,7 +158,6 @@ class ShippingMethodForm extends React.Component<Props> {
                     return (
                       <ShippingMethodRadio
                         key={value}
-                        triggerSelect
                         value={value}
                         method={method}
                         currency={currency}
@@ -189,10 +174,9 @@ class ShippingMethodForm extends React.Component<Props> {
             id="onepage-checkout-shipping-method-additional-load"
             region={REGION_KEYS.SHIPPING}
           />
-          <button type="submit">{$.mage.__('Save shipping method')}</button>
         </form>
-      </Loader>
-    );
+      );
+    }
   }
 }
 

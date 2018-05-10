@@ -2,7 +2,6 @@
 import React from 'react';
 import {$} from '$i18n';
 import {formatCurrency} from '$src/utils/format';
-import Loader from '$src/utils/components/Loader';
 import type {Cart, TotalSegment} from '../types';
 
 type Props = {
@@ -57,20 +56,37 @@ class CartSummary extends React.Component<Props> {
       <div className="avarda-cart-summary cart-summary">
         <div id="cart-totals" className="avarda-cart-totals cart-totals">
           <div className="table-wrapper">
-            <Loader isLoading={isLoading} block>
-              <table className="data table totals">
-                <caption className="table-caption">
-                  {$.mage.__('Total')}
-                </caption>
-                <tbody>
-                  {segments.map(
-                    ({code, title, value}) =>
-                      value !== null ? (
-                        <tr key={code} className="totals sub">
-                          <th className="mark" scope="row">
-                            {$.mage.__(title)}
-                          </th>
-                          <td className="amount">
+            <table className="data table totals">
+              <caption className="table-caption">{$.mage.__('Total')}</caption>
+              <tbody>
+                {segments.map(
+                  ({code, title, value}) =>
+                    value !== null ? (
+                      <tr key={code} className="totals sub">
+                        <th className="mark" scope="row">
+                          {$.mage.__(title)}
+                        </th>
+                        <td className="amount">
+                          <span className="price">
+                            {displayTotalSegmentValue(
+                              {code, value, title},
+                              totalsData,
+                              currency,
+                            )}
+                          </span>
+                        </td>
+                      </tr>
+                    ) : null,
+                )}
+                {footerSegments.map(
+                  ({code, title, value}) =>
+                    value !== null ? (
+                      <tr key={code} className="grand totals">
+                        <th className="mark" scope="row">
+                          <strong>{$.mage.__(title)}</strong>
+                        </th>
+                        <td className="amount">
+                          <strong>
                             <span className="price">
                               {displayTotalSegmentValue(
                                 {code, value, title},
@@ -78,34 +94,13 @@ class CartSummary extends React.Component<Props> {
                                 currency,
                               )}
                             </span>
-                          </td>
-                        </tr>
-                      ) : null,
-                  )}
-                  {footerSegments.map(
-                    ({code, title, value}) =>
-                      value !== null ? (
-                        <tr key={code} className="grand totals">
-                          <th className="mark" scope="row">
-                            <strong>{$.mage.__(title)}</strong>
-                          </th>
-                          <td className="amount">
-                            <strong>
-                              <span className="price">
-                                {displayTotalSegmentValue(
-                                  {code, value, title},
-                                  totalsData,
-                                  currency,
-                                )}
-                              </span>
-                            </strong>
-                          </td>
-                        </tr>
-                      ) : null,
-                  )}
-                </tbody>
-              </table>
-            </Loader>
+                          </strong>
+                        </td>
+                      </tr>
+                    ) : null,
+                )}
+              </tbody>
+            </table>
           </div>
         </div>
       </div>

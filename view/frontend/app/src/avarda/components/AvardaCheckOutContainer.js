@@ -3,11 +3,11 @@ import React, {Component} from 'react';
 import {bindActionCreators, type Dispatch} from 'redux';
 import {connect /*, type Connector */} from 'react-redux';
 import {getConfig} from '$src/config';
-import Loader from '$src/utils/components/Loader';
 import AvardaCheckOut, {type Props} from './AvardaCheckOut';
 import {getPurchaseId, getIsFetching} from '../selectors';
 import {addressChanged, completePaymentPressed} from '../actions';
 import type {AppState} from '$src/root/types';
+import Loader from '$src/utils/components/Loader';
 
 /**
  * This container represents actual IFRAME handling and Avarda processing
@@ -55,7 +55,9 @@ class AvardaCheckOutContainer extends Component<ConnectedProps> {
         {...props}
       />
     ) : (
-      <Loader isLoading={isFetching}>{null}</Loader>
+      <Loader isLoading={isFetching}>
+        <div>should load this???</div>
+      </Loader>
     );
   }
 }

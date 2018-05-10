@@ -1,8 +1,16 @@
 // @flow
 import AvardaCheckOutClient from 'AvardaCheckOutClient';
 import {isEqual} from 'lodash';
-import {takeLatest} from 'redux-saga';
-import {all, call, fork, put, select, take} from 'redux-saga/effects';
+import {
+  takeLatest,
+  all,
+  call,
+  fork,
+  put,
+  select,
+  take,
+} from 'redux-saga/effects';
+import {showLoading, hideLoading} from 'react-redux-loading-bar';
 import quote from 'Magento_Checkout/js/model/quote';
 import {$} from '$i18n';
 import {getConfig} from '$src/config';

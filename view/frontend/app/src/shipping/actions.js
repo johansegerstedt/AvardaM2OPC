@@ -34,8 +34,13 @@ export const receiveShippingAssignment = createAction(
   (shipping: {address: BillingAddress, method: null | string}) => shipping,
 );
 
-export const receiveMethods = createAction(
-  ActionTypes.RECEIVE_METHODS,
+export const receiveMethodsSuccess = createAction(
+  ActionTypes.RECEIVE_METHODS_SUCCESS,
+  (methods: ShippingMethod[]) => methods,
+);
+
+export const receiveMethodsFailure = createAction(
+  ActionTypes.RECEIVE_METHODS_FAILURE,
   (methods: ShippingMethod[]) => methods,
 );
 

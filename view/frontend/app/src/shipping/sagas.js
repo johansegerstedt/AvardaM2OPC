@@ -1,7 +1,6 @@
 // @flow
 import {$} from '$i18n';
-import {takeLatest} from 'redux-saga';
-import {call, put} from 'redux-saga/effects';
+import {call, put, takeLatest} from 'redux-saga/effects';
 import {find, head, isEqual} from 'lodash';
 // The following actions and models are used to keep
 // Magento UI components up to date with updated state
@@ -21,11 +20,12 @@ import {
   addMessage,
   getMethods as getMethodsAction,
   receiveShippingAssignment,
-  receiveMethods,
   saveShippingInformationFailure,
   saveShippingInformationSuccess,
   selectMethod as selectMethodAction,
   updateAddress as updateAddressAction,
+  receiveMethodsFailure,
+  receiveMethodsSuccess,
 } from './actions';
 import {fetchShippingMethods as apiFetchShippingMethods} from './api';
 import {SHIPPING_ANCHOR_ID} from './constants';
@@ -91,11 +91,12 @@ function* getMethods() {
   let methods = null;
   try {
     methods = yield call(apiFetchShippingMethods, address);
+    yield put(receiveMethodsSuccess(methods));
   } catch (err) {
     toast($.mage.__('Failed to load available shipping methods.'), TYPES.ERROR);
+    yield put(receiveMethodsFailure(methods));
     return;
   }
-  yield put(receiveMethods(methods));
 }
 
 function* selectMethod({

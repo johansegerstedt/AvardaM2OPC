@@ -1,6 +1,5 @@
 // @flow
-import {takeEvery, takeLatest} from 'redux-saga';
-import {all, call, fork, put} from 'redux-saga/effects';
+import {takeEvery, takeLatest, all, call, fork, put} from 'redux-saga/effects';
 import {$, interpolate} from '$i18n';
 import toast, {TYPES} from '$src/utils/toast';
 import {getCartApiPath} from './utils';

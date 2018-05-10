@@ -118,7 +118,7 @@ class ShippingMethodForm extends React.Component<Props> {
       selectShippingMethod,
       selectedShippingMethod,
     } = this.props;
-
+    console.log(methods);
     if (methods === null) {
       return <div>loading...</div>;
     } else {

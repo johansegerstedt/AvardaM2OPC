@@ -2,6 +2,7 @@
 import {$} from '$i18n';
 import {call, put, takeLatest} from 'redux-saga/effects';
 import {find, head, isEqual} from 'lodash';
+import type {ActionType} from 'redux-actions';
 // The following actions and models are used to keep
 // Magento UI components up to date with updated state
 import quote from 'Magento_Checkout/js/model/quote';
@@ -29,7 +30,6 @@ import {
 } from './actions';
 import {fetchShippingMethods as apiFetchShippingMethods} from './api';
 import {SHIPPING_ANCHOR_ID} from './constants';
-import type {ActionType} from 'redux-actions';
 
 function* fetchCartSuccess({
   payload: {result, entities},
@@ -95,7 +95,6 @@ function* getMethods() {
   } catch (err) {
     toast($.mage.__('Failed to load available shipping methods.'), TYPES.ERROR);
     yield put(receiveMethodsFailure(methods));
-    return;
   }
 }
 
@@ -133,7 +132,7 @@ function* scrollToShippingContainer() {
 
 export default function* saga(): Generator<*, *, *> {
   yield takeLatest(Cart.FETCH_SUCCESS, fetchCartSuccess);
-  yield takeLatest(Shipping.GET_METHODS, getMethods);
+  yield takeLatest(Shipping.GET_METHODS_REQUEST, getMethods);
   yield takeLatest(Shipping.RECEIVE_ASSIGNMENT, receiveShipping);
   yield takeLatest(Shipping.SCROLL_TO_FORM, scrollToShippingContainer);
   yield takeLatest(Shipping.UPDATE_ADDRESS, updateAddress);

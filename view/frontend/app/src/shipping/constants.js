@@ -3,7 +3,8 @@
 export const ActionTypes = {
   ADD_MESSAGE: 'shipping/addMessage',
   CLEAR_MESSAGES: 'shipping/clearMessages',
-  GET_METHODS: 'shipping/getMethods',
+  GET_METHODS_REQUEST: 'shipping/getMethodsRequest',
+  GET_METHODS_SUCCESS: 'shipping/getMethodsSuccess',
   GET_METHODS_FAILURE: 'shipping/getMethodsFailure',
   RECEIVE_ASSIGNMENT: 'shipping/receiveShippingAssignment',
   RECEIVE_METHODS: 'shipping/receiveMethodsRequest',

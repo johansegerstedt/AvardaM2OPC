@@ -1,7 +1,7 @@
 // @flow
 import * as React from 'react';
 import {$} from '$i18n';
-import spinner from './spinner.gif';
+// import spinner from './spinner.gif';
 
 type Props = {
   isLoading: boolean,
@@ -10,12 +10,12 @@ type Props = {
 };
 
 const Spinner = ({alt, block}: {alt: string, block: boolean}) => (
-  <span
-    className="avarda-spinner"
-    style={block ? {display: 'block', textAlign: 'center'} : undefined}
-  >
-    <img src={spinner} alt={alt} />
-  </span>
+  <div className="loading">
+    <div className="loading-bar" />
+    <div className="loading-bar" />
+    <div className="loading-bar" />
+    <div className="loading-bar" />
+  </div>
 );
 
 class Loader extends React.Component<Props> {

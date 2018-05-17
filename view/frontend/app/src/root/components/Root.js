@@ -1,5 +1,5 @@
 // @flow
-import React, {Fragment} from 'react';
+import React, {Component, Fragment} from 'react';
 import {Provider} from 'react-redux';
 import {get} from 'lodash';
 import {ToastContainer} from 'react-toastify';
@@ -14,7 +14,7 @@ type Props = {
 };
 type State = {};
 
-class Root extends React.Component<Props, State> {
+class Root extends Component<Props, State> {
   clearM2Cache() {
     if (get(window, 'localStorage')) {
       localStorage.removeItem('mage-cache-storage');

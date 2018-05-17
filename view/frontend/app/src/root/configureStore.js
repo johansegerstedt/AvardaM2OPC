@@ -1,7 +1,6 @@
 // @flow
 import {applyMiddleware, createStore, compose} from 'redux';
 import createSagaMiddleware from 'redux-saga';
-import {loadingBarMiddleware} from 'react-redux-loading-bar';
 import avardaMiddleware from '$src/avarda/middleware';
 import rootSaga from './rootSaga';
 import rootReducer from './rootReducer';
@@ -13,15 +12,7 @@ const configureStore = () => {
 
   const store = createStore(
     rootReducer,
-    composeEnhancers(
-      applyMiddleware(
-        sagaMiddleware,
-        loadingBarMiddleware({
-          promiseTypeSuffixes: ['Request', 'Success', 'Failure'],
-        }),
-        avardaMiddleware,
-      ),
-    ),
+    composeEnhancers(applyMiddleware(sagaMiddleware, avardaMiddleware)),
   );
 
   sagaMiddleware.run(rootSaga);

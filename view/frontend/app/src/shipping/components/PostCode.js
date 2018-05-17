@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, {Component} from 'react';
 import {getConfig} from '$src/config';
 import {$} from '$i18n';
 import type {BillingAddress} from '$src/cart/types';
@@ -14,7 +14,7 @@ type State = {
   postCode?: number,
 };
 
-class PostCode extends React.Component<Props, State> {
+class PostCode extends Component<Props, State> {
   state = {};
   handleSubmit = (event: EventHandler) => {
     event.preventDefault();
@@ -41,6 +41,7 @@ class PostCode extends React.Component<Props, State> {
   render() {
     const {shippingAddress, controlled} = this.props;
     const {postcode} = shippingAddress;
+    const disabled = controlled && !!postcode;
     return (
       <form className="form form-shipping-address" id="co-shipping-form">
         <div id="shipping-new-address-form" className="fieldset address">
@@ -57,7 +58,7 @@ class PostCode extends React.Component<Props, State> {
                 onChange={this.handleChange}
                 defaultValue={!controlled && !!postcode ? postcode : undefined}
                 value={!!controlled && postcode !== null ? postcode : undefined}
-                disabled={controlled && !!postcode}
+                disabled={disabled}
               />
             </div>
           </div>

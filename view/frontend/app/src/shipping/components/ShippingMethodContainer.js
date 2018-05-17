@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, {Component} from 'react';
 import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
 import quote from 'Magento_Checkout/js/model/quote';
@@ -43,7 +43,7 @@ type Props = {
   selectedShippingMethod: null | ShippingMethodType,
 };
 
-class ShippingMethod extends React.Component<Props> {
+class ShippingMethod extends Component<Props> {
   fetchShippingMethods = (address: BillingAddress) => {
     const {estimateShippingMethods} = this.props;
     estimateShippingMethods({

@@ -1,11 +1,11 @@
 // @flow
-import React from 'react';
+import React, {Component} from 'react';
 import {$} from '$i18n';
 
 type Props = {};
 
 // TODO
-class ShippingPolicy extends React.Component<Props> {
+class ShippingPolicy extends Component<Props> {
   render() {
     return (
       <div

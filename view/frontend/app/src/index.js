@@ -4,10 +4,10 @@ import 'es6-collections'; // Magento's polyfills
 import React from 'react';
 import ReactDOM from 'react-dom';
 import url from 'mage/url';
-import Root from './root/components/Root';
-import configureStore from './root/configureStore';
+import Root from '$src/root/components/Root';
+import configureStore from '$src/root/configureStore';
 import {setConfig} from '$src/config';
-import type {Config} from './types';
+import type {Config} from '$src/types';
 
 import './styles.less';
 

@@ -10,7 +10,6 @@ import {
   select,
   take,
 } from 'redux-saga/effects';
-import {showLoading, hideLoading} from 'react-redux-loading-bar';
 import quote from 'Magento_Checkout/js/model/quote';
 import {$} from '$i18n';
 import {getConfig} from '$src/config';

@@ -94,7 +94,7 @@ function* getMethods() {
     yield put(receiveMethodsSuccess(methods));
   } catch (err) {
     toast($.mage.__('Failed to load available shipping methods.'), TYPES.ERROR);
-    yield put(receiveMethodsFailure(methods));
+    yield put(receiveMethodsFailure(err));
   }
 }
 

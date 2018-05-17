@@ -1,10 +1,9 @@
 // @flow
-import React, {Fragment} from 'react';
+import React, {Fragment, Component} from 'react';
 import queryString from 'query-string';
 import {bindActionCreators} from 'redux';
 import {connect, type MapStateToProps} from 'react-redux';
 import {compose} from 'redux';
-import LoadingBar from 'react-redux-loading-bar';
 import CartContainer from '$src/cart/components/CartContainer';
 import ShippingContainer from '$src/shipping/components/ShippingMethodContainer';
 import AvardaContainer from '$src/avarda/components/AvardaCheckOutContainer';
@@ -14,6 +13,7 @@ import {fetchCartRequest} from '$src/cart/actions';
 import type {Config} from '$src/types';
 import type {AppState} from '$src/root/types';
 import type {Cart} from '$src/cart/types';
+import Loader from '$src/utils/components/Loader';
 
 type Props = {
   cart: null | Cart,
@@ -40,7 +40,7 @@ const CartIsNotEmpty = () => {
 
 const PaymentSuccess = () => <AvardaContainer />;
 
-class App extends React.Component<Props> {
+class App extends Component<Props> {
   componentDidMount() {
     const {fetchCartRequest, config: {hasItems}} = this.props;
     if (hasItems) {
@@ -49,7 +49,7 @@ class App extends React.Component<Props> {
   }
 
   render() {
-    const {cart, config: {hasItems}} = this.props;
+    const {cart, config: {hasItems}, isFetching} = this.props;
 
     const isCartEmpty = !hasItems || (cart && cart.items.length === 0); // || cart === null;
     const isSuccess =
@@ -60,12 +60,11 @@ class App extends React.Component<Props> {
     }
 
     return (
-      <div className="avarda-app">
-        <LoadingBar
-          style={{backgroundColor: 'blue', height: '5px', zIndex: 333333}}
-        />
-        {isCartEmpty ? <CartIsEmpty /> : <CartIsNotEmpty />}
-      </div>
+      <Loader isLoading={isFetching} block={true}>
+        <div className="avarda-app">
+          {isCartEmpty ? <CartIsEmpty /> : <CartIsNotEmpty />}
+        </div>
+      </Loader>
     );
   }
 }

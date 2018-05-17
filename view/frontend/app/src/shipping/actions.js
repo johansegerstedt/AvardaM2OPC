@@ -22,11 +22,6 @@ export const clearMessages = createAction(
   createVoid,
 );
 
-export const getMethods = createAction(
-  ActionTypes.GET_METHODS_REQUEST,
-  createVoid,
-);
-
 export const receiveSelectedMethod = createAction(
   ActionTypes.RECEIVE_SELECTED_METHOD,
   (method: ShippingMethod) => method,
@@ -35,6 +30,11 @@ export const receiveSelectedMethod = createAction(
 export const receiveShippingAssignment = createAction(
   ActionTypes.RECEIVE_ASSIGNMENT,
   (shipping: {address: BillingAddress, method: null | string}) => shipping,
+);
+
+export const getMethods = createAction(
+  ActionTypes.GET_METHODS_REQUEST,
+  createVoid,
 );
 
 export const receiveMethodsSuccess = createAction(

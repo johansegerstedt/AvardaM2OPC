@@ -23,7 +23,7 @@ const middleware: Middleware<AppState, Actions> = ({
   const isFetchingPurchaseId = getIsFetching(getState());
 
   if (isVirtual && !purchaseId && !isFetchingPurchaseId) {
-    // Cart is virtual and there's no purhcase id yet
+    // Cart is virtual and there's no purchase id yet
     dispatch(fetchPurchaseId());
   } else if (!shippingMethodSelected) {
     // Shipping method appears for the first time

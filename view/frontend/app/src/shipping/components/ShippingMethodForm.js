@@ -1,12 +1,13 @@
 // @flow
-import React from 'react';
+
+import React, {Component} from 'react';
 import {isEqual} from 'lodash';
 import {formatCurrency, formatTax} from '$src/utils/format';
 import AdditionalContent from '$src/utils/components/AdditionalContentRegions';
 import {REGION_KEYS} from '$src/additionalContentRegions';
 import {$} from '$i18n';
 import type {BillingAddress} from '$src/cart/types';
-import type {ShippingMethod} from '../types';
+import type {ShippingMethod} from '$src/shipping/types';
 
 type RadioProps = {
   method: ShippingMethod,
@@ -98,7 +99,7 @@ type Props = {
   isFetchingMethods: boolean,
 };
 
-class ShippingMethodForm extends React.Component<Props> {
+class ShippingMethodForm extends Component<Props> {
   static defaultProps = {
     estimateShippingMethods: () => {},
     selectShippingMethod: () => {},
@@ -118,8 +119,8 @@ class ShippingMethodForm extends React.Component<Props> {
       selectShippingMethod,
       selectedShippingMethod,
     } = this.props;
-    console.log(methods);
-    if (methods === null) {
+
+    if (!methods) {
       return <div>loading...</div>;
     } else {
       // 2) methods.length > 0 => regular

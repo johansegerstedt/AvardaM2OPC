@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, {Component} from 'react';
 import {$} from '$i18n';
 import {formatCurrency} from '$src/utils/format';
 import type {Cart, TotalSegment} from '../types';
@@ -38,7 +38,7 @@ const displayTotalSegmentValue = (
   return formatCurrency(theValue, currency);
 };
 
-class CartSummary extends React.Component<Props> {
+class CartSummary extends Component<Props> {
   render() {
     const {currency, totalSegments, isLoading, cart: totalsData} = this.props;
     const {segments, footerSegments} = totalSegments.reduce(

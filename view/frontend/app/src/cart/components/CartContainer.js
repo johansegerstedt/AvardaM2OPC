@@ -1,5 +1,5 @@
 // @flow
-import React, {Fragment} from 'react';
+import React, {Fragment, Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import quote from 'Magento_Checkout/js/model/quote';
@@ -40,7 +40,7 @@ type Props = {
 // TODO
 const GiftOptionsCart = () => <div id="gift-options-cart" />;
 
-class Cart extends React.Component<Props> {
+class Cart extends Component<Props> {
   totalsSubscription = null;
 
   componentDidMount() {

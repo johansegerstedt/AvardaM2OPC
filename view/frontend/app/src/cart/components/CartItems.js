@@ -81,26 +81,30 @@ class CartForm extends Component<Props, State> {
             <i className="material-icons md-orange md-48">check_circle</i>
             <div className="avarda-sidebar-header">
               <span className="avarda-title">{$.mage.__('Order Review')}</span>
-              <div
-                id="avarda-cart-items-trigger"
-                className="collapsable-info"
-                data-role="title"
-                role="tab"
-                aria-selected="false"
-                aria-expanded={JSON.stringify(isOpen)}
-                onClick={this.toggleOpenCartItems}
-                onKeyPress={this.handleSpaceAndEnter(this.toggleOpenCartItems)}
-                tabIndex={0}
-              >
-                <span
-                  id="avarda-cart-item-header"
-                  role="heading"
-                  aria-level={2}
+              <div className="block">
+                <div
+                  id="avarda-cart-items-trigger"
+                  className="collapsable-info title"
+                  data-role="title"
+                  role="tab"
+                  aria-selected="false"
+                  aria-expanded={JSON.stringify(isOpen)}
+                  onClick={this.toggleOpenCartItems}
+                  onKeyPress={this.handleSpaceAndEnter(
+                    this.toggleOpenCartItems,
+                  )}
+                  tabIndex={0}
                 >
-                  {$.mage
-                    .__('%1 Item(s) in cart')
-                    .replace('%1', cartItems.length.toString())}
-                </span>
+                  <span
+                    id="avarda-cart-item-header"
+                    role="heading"
+                    aria-level={2}
+                  >
+                    {$.mage
+                      .__('%1 Item(s) in cart')
+                      .replace('%1', cartItems.length.toString())}
+                  </span>
+                </div>
               </div>
             </div>
           </div>

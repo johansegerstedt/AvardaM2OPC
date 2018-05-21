@@ -5,22 +5,25 @@ import type {Node} from 'react';
 type Props = {
   isLoading: boolean,
   children: null | Node,
-  block: boolean,
+  height?: number,
+  center?: boolean,
 };
 
-const RealLoader = () => (
-  <div className="loading">
-    <div className="loading-bar" />
-    <div className="loading-bar" />
-    <div className="loading-bar" />
-    <div className="loading-bar" />
+const RealLoader = (props: {height?: number}) => (
+  <div className="loading-wrapper" style={{height: props.height}}>
+    <div className="loading">
+      <div className="loading-bar" />
+      <div className="loading-bar" />
+      <div className="loading-bar" />
+      <div className="loading-bar" />
+    </div>
   </div>
 );
 
 class Loader extends Component<Props> {
   render() {
-    const {isLoading, children} = this.props;
-    return isLoading ? <RealLoader /> : children;
+    const {isLoading, children, height} = this.props;
+    return isLoading ? <RealLoader height={height} /> : children;
   }
 }
 

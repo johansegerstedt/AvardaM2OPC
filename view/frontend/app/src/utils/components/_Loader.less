@@ -1,8 +1,23 @@
 .loading {
-  position: absolute;
+  // position: absolute;
   //   top: 50%;
-  left: 50%;
+  // left: 50%;
 }
+.loading-wrapper {
+  height: inherit;
+  opacity: 1;
+  transition: visibility 0s 0.4s, opacity 0.4s linear;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.4s, opacity 0.4s linear;
+}
+
 .loading-bar {
   display: inline-block;
   width: 4px;

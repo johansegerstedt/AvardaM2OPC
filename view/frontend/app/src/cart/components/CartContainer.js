@@ -1,5 +1,5 @@
 // @flow
-import React, {Fragment, Component} from 'react';
+import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import quote from 'Magento_Checkout/js/model/quote';
@@ -24,6 +24,7 @@ import CartDiscount from './CartDiscount';
 import type {Cart as CartType, CartItem} from '../types';
 import GiftCardAccount from './GiftCardAccount';
 import GiftMessage from './GiftMessage';
+import Loader from '$src/utils/components/Loader';
 
 type Props = {
   cart: null | CartType,
@@ -47,6 +48,11 @@ class Cart extends Component<Props> {
     this.totalsSubscription = quote.totals.subscribe(() => {
       this.props.fetchCartRequest();
     });
+    const {hasItems} = getConfig();
+
+    if (hasItems) {
+      this.props.fetchCartRequest();
+    }
   }
 
   componentWillUnMount() {
@@ -71,39 +77,41 @@ class Cart extends Component<Props> {
 
     const cartIsEmpty = !hasItems || (cart !== null && cart.items.length === 0);
 
-    // const loaded = !!cart && !cartIsEmpty;
+    const loaded = !!cart && !cartIsEmpty;
 
     return (
-      <Fragment>
-        {cart
-          ? [
-              <CartItems
-                key="cartItems"
-                cartItems={cartItems}
-                isUpdating={isUpdatingCart}
-                updateCartItems={updateCartItems}
-                deleteCartItem={deleteCartItem}
-                currency={getQuoteCurrency(cart)}
-              />,
-              <CartSummary
-                key="cartSummary"
-                totalSegments={cart.total_segments}
-                isLoading={isFetching || isUpdatingCart}
-                currency={getQuoteCurrency(cart)}
-                cart={cart}
-              />,
-              <GiftOptionsCart key="giftOptionsCart" />,
-              <GiftMessage key="giftMessage" />,
-              <CartDiscount
-                key="cartDiscount"
-                coupon={cart.coupon_code}
-                applyCoupon={applyCoupon}
-                removeCoupon={removeCoupon}
-              />,
-              <GiftCardAccount key="giftCardAccount" />,
-            ]
-          : null}
-      </Fragment>
+      <Loader isLoading={!loaded}>
+        <div className="side-container">
+          {cart
+            ? [
+                <CartItems
+                  key="cartItems"
+                  cartItems={cartItems}
+                  isUpdating={isUpdatingCart}
+                  updateCartItems={updateCartItems}
+                  deleteCartItem={deleteCartItem}
+                  currency={getQuoteCurrency(cart)}
+                />,
+                <CartSummary
+                  key="cartSummary"
+                  totalSegments={cart.total_segments}
+                  isLoading={isFetching || isUpdatingCart}
+                  currency={getQuoteCurrency(cart)}
+                  cart={cart}
+                />,
+                <GiftOptionsCart key="giftOptionsCart" />,
+                <GiftMessage key="giftMessage" />,
+                <CartDiscount
+                  key="cartDiscount"
+                  coupon={cart.coupon_code}
+                  applyCoupon={applyCoupon}
+                  removeCoupon={removeCoupon}
+                />,
+                <GiftCardAccount key="giftCardAccount" />,
+              ]
+            : null}
+        </div>
+      </Loader>
     );
   }
 }

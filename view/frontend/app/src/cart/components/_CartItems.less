@@ -1,7 +1,32 @@
+.side-container {
+  background-color: #f8f8f8;
+  border: 1px solid #d8d8d8;
+  min-height: 335px;
+  border-radius: 2px;
+  position: sticky;
+  top: 20px;
+  padding: 20px;
+  display: flex;
+  flex-direction: column;
+}
+
 .avarda-cart-items-container {
   .border-bottom();
   margin-top: 20px;
   padding-bottom: 20px;
+}
+.avarda-cart-item-header-icon {
+  -webkit-font-smoothing: antialiased;
+  // font-size: 12px;
+  // line-height: 12px;
+  color: inherit;
+  margin: 3px 0 0;
+  vertical-align: middle;
+  display: inline-block;
+  font-weight: normal;
+  overflow: hidden;
+  speak: none;
+  text-align: center;
 }
 .avarda-cart-items {
   padding-top: 20px;
@@ -22,6 +47,9 @@
   color: @secondary-color;
 }
 
+.material-icons.md-12 {
+  font-size: 12px;
+}
 .material-icons.md-18 {
   font-size: 18px;
 }

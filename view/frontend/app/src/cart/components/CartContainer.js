@@ -68,7 +68,6 @@ class Cart extends Component<Props> {
       updateCartItems,
       deleteCartItem,
       isUpdatingCart,
-      isFetching,
       applyCoupon,
       removeCoupon,
     } = this.props;
@@ -80,8 +79,8 @@ class Cart extends Component<Props> {
     const loaded = !!cart && !cartIsEmpty;
 
     return (
-      <Loader isLoading={!loaded}>
-        <div className="side-container">
+      <div className="side-container">
+        <Loader isLoading={!loaded} height={335}>
           {cart
             ? [
                 <CartItems
@@ -95,7 +94,7 @@ class Cart extends Component<Props> {
                 <CartSummary
                   key="cartSummary"
                   totalSegments={cart.total_segments}
-                  isLoading={isFetching || isUpdatingCart}
+                  isUpdating={isUpdatingCart}
                   currency={getQuoteCurrency(cart)}
                   cart={cart}
                 />,
@@ -110,8 +109,8 @@ class Cart extends Component<Props> {
                 <GiftCardAccount key="giftCardAccount" />,
               ]
             : null}
-        </div>
-      </Loader>
+        </Loader>
+      </div>
     );
   }
 }

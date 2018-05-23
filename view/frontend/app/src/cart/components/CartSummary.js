@@ -3,10 +3,12 @@ import React, {Component} from 'react';
 import {$} from '$i18n';
 import {formatCurrency} from '$src/utils/format';
 import type {Cart, TotalSegment} from '../types';
+import Loader from '$src/utils/components/Loader';
 
 type Props = {
   currency: string,
   isLoading: boolean,
+  isUpdating: boolean,
   totalSegments: TotalSegment[],
   cart: Cart,
 };
@@ -40,7 +42,7 @@ const displayTotalSegmentValue = (
 
 class CartSummary extends Component<Props> {
   render() {
-    const {currency, totalSegments, isLoading, cart: totalsData} = this.props;
+    const {currency, totalSegments, isUpdating, cart: totalsData} = this.props;
     const {segments, footerSegments} = totalSegments.reduce(
       (obj, segment) => {
         if (segment.area && segment.area === 'footer') {
@@ -53,40 +55,23 @@ class CartSummary extends Component<Props> {
       {segments: [], footerSegments: []},
     );
     return (
-      <div className="avarda-cart-summary cart-summary">
-        <div id="cart-totals" className="avarda-cart-totals cart-totals">
-          <div className="table-wrapper">
-            <table className="data table totals">
-              <caption className="table-caption">{$.mage.__('Total')}</caption>
-              <tbody>
-                {segments.map(
-                  ({code, title, value}) =>
-                    value !== null ? (
-                      <tr key={code} className="totals sub">
-                        <th className="mark" scope="row">
-                          {$.mage.__(title)}
-                        </th>
-                        <td className="amount">
-                          <span className="price">
-                            {displayTotalSegmentValue(
-                              {code, value, title},
-                              totalsData,
-                              currency,
-                            )}
-                          </span>
-                        </td>
-                      </tr>
-                    ) : null,
-                )}
-                {footerSegments.map(
-                  ({code, title, value}) =>
-                    value !== null ? (
-                      <tr key={code} className="grand totals">
-                        <th className="mark" scope="row">
-                          <strong>{$.mage.__(title)}</strong>
-                        </th>
-                        <td className="amount">
-                          <strong>
+      <Loader isLoading={isUpdating} height={150}>
+        <div className="avarda-cart-summary cart-summary">
+          <div id="cart-totals" className="avarda-cart-totals cart-totals">
+            <div className="table-wrapper">
+              <table className="data table totals">
+                <caption className="table-caption">
+                  {$.mage.__('Total')}
+                </caption>
+                <tbody>
+                  {segments.map(
+                    ({code, title, value}) =>
+                      value !== null ? (
+                        <tr key={code} className="totals sub">
+                          <th className="mark" scope="row">
+                            {$.mage.__(title)}
+                          </th>
+                          <td className="amount">
                             <span className="price">
                               {displayTotalSegmentValue(
                                 {code, value, title},
@@ -94,16 +79,37 @@ class CartSummary extends Component<Props> {
                                 currency,
                               )}
                             </span>
-                          </strong>
-                        </td>
-                      </tr>
-                    ) : null,
-                )}
-              </tbody>
-            </table>
+                          </td>
+                        </tr>
+                      ) : null,
+                  )}
+                  {footerSegments.map(
+                    ({code, title, value}) =>
+                      value !== null ? (
+                        <tr key={code} className="grand totals">
+                          <th className="mark" scope="row">
+                            <strong>{$.mage.__(title)}</strong>
+                          </th>
+                          <td className="amount">
+                            <strong>
+                              <span className="price">
+                                {displayTotalSegmentValue(
+                                  {code, value, title},
+                                  totalsData,
+                                  currency,
+                                )}
+                              </span>
+                            </strong>
+                          </td>
+                        </tr>
+                      ) : null,
+                  )}
+                </tbody>
+              </table>
+            </div>
           </div>
         </div>
-      </div>
+      </Loader>
     );
   }
 }

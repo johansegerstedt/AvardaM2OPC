@@ -55,9 +55,7 @@ class AvardaCheckOutContainer extends Component<ConnectedProps> {
         {...props}
       />
     ) : (
-      <Loader isLoading={isFetching}>
-        <div>should load this???</div>
-      </Loader>
+      <Loader isLoading={isFetching}>{null}</Loader>
     );
   }
 }

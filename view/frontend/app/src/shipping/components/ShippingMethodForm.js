@@ -8,6 +8,7 @@ import {REGION_KEYS} from '$src/additionalContentRegions';
 import {$} from '$i18n';
 import type {BillingAddress} from '$src/cart/types';
 import type {ShippingMethod} from '$src/shipping/types';
+import Loader from '$src/utils/components/Loader';
 
 type RadioProps = {
   method: ShippingMethod,
@@ -117,15 +118,13 @@ class ShippingMethodForm extends Component<Props> {
       currency,
       methods,
       selectShippingMethod,
+      isFetchingMethods,
       selectedShippingMethod,
     } = this.props;
-
-    if (!methods) {
-      return <div>loading...</div>;
-    } else {
-      // 2) methods.length > 0 => regular
-      // 3) methods.length === 0 => Error: No Shipping methods available
-      return (
+    // 2) methods.length > 0 => regular
+    // 3) methods.length === 0 => Error: No Shipping methods available
+    return (
+      <Loader isLoading={isFetchingMethods || methods === null}>
         <form
           className="form methods-shipping"
           id="co-shipping-method-form"
@@ -176,8 +175,8 @@ class ShippingMethodForm extends Component<Props> {
             region={REGION_KEYS.SHIPPING}
           />
         </form>
-      );
-    }
+      </Loader>
+    );
   }
 }
 

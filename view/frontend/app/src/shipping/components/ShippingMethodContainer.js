@@ -89,13 +89,7 @@ class ShippingMethod extends Component<Props> {
               className="step-content"
               data-role="content"
             >
-              {shippingAddress && (
-                <PostCode
-                  handleSubmit={this.updateShippingAddress}
-                  shippingAddress={shippingAddress}
-                  controlled={selectedShippingMethod !== null}
-                />
-              )}
+              {shippingAddress && <PostCode />}
               {/* Submit this to estimate shipping methods */}
             </div>
           </li>

@@ -1,0 +1,173 @@
+.loading-wrapper {
+  height: inherit;
+  opacity: 1;
+  transition: visibility 0s 0.4s, opacity 0.4s linear;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hidden {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s 0.4s, opacity 0.4s linear;
+}
+
+.loading-bar {
+  display: inline-block;
+  width: 4px;
+  margin-left: 4px;
+  height: 18px;
+  border-radius: 4px;
+  animation: loading 1s ease-in-out infinite;
+}
+.loading-bar:nth-child(1) {
+  background-color: @primary-color;
+  animation-delay: 0;
+}
+.loading-bar:nth-child(2) {
+  background-color: @error-color;
+  animation-delay: 0.09s;
+}
+.loading-bar:nth-child(3) {
+  background-color: @secondary-color;
+  opacity: 0.8;
+  animation-delay: 0.18s;
+}
+.loading-bar:nth-child(4) {
+  background-color: @success-color;
+  animation-delay: 0.27s;
+}
+
+@keyframes loading {
+  0% {
+    transform: scale(1);
+  }
+  20% {
+    transform: scale(1, 2.2);
+  }
+  40% {
+    transform: scale(1);
+  }
+}
+
+/////////////////
+// Circular
+/////////////////
+.showbox {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 5%;
+}
+
+.loader {
+  position: relative;
+  margin: 0 auto;
+  width: 36px;
+}
+.loader:before {
+  content: '';
+  display: block;
+  padding-top: 100%;
+}
+
+.circular {
+  -webkit-animation: rotate 2s linear infinite;
+  animation: rotate 2s linear infinite;
+  height: 100%;
+  -webkit-transform-origin: center center;
+  transform-origin: center center;
+  width: 100%;
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+
+.path {
+  stroke-dasharray: 1, 200;
+  stroke-dashoffset: 0;
+  -webkit-animation: dash 1.5s ease-in-out infinite,
+    color 6s ease-in-out infinite;
+  animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+  stroke-linecap: round;
+}
+
+@-webkit-keyframes rotate {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+
+@keyframes rotate {
+  100% {
+    -webkit-transform: rotate(360deg);
+    transform: rotate(360deg);
+  }
+}
+@-webkit-keyframes dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35px;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124px;
+  }
+}
+@keyframes dash {
+  0% {
+    stroke-dasharray: 1, 200;
+    stroke-dashoffset: 0;
+  }
+  50% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -35px;
+  }
+  100% {
+    stroke-dasharray: 89, 200;
+    stroke-dashoffset: -124px;
+  }
+}
+@-webkit-keyframes color {
+  100%,
+  0% {
+    stroke: @error-color;
+  }
+  40% {
+    stroke: @primary-color;
+  }
+  66% {
+    stroke: @success-color;
+  }
+  80%,
+  90% {
+    stroke: @secondary-color;
+  }
+}
+@keyframes color {
+  100%,
+  0% {
+    stroke: @error-color;
+  }
+  40% {
+    stroke: @primary-color;
+  }
+  66% {
+    stroke: @success-color;
+  }
+  80%,
+  90% {
+    stroke: @secondary-color;
+  }
+}

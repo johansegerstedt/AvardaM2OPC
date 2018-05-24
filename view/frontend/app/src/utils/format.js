@@ -6,16 +6,17 @@ const magentoToIETFLanguageTagConverter = (locale: string) =>
   locale.replace(/_/g, '-');
 
 export const formatCurrency = (
-  number: any,
+  amount: any,
   currency: string, // currency code eg. 'USD'
   locale?: string = magentoToIETFLanguageTagConverter(
     getConfig().magentoLocale,
   ),
-): string =>
-  (typeof number === 'number' ? number : 0).toLocaleString(locale, {
+): string => {
+  return (typeof amount === 'number' ? amount : 0).toLocaleString(locale, {
     style: 'currency',
     currency,
   });
+};
 
 export const formatTax = (
   price_including_tax: number,

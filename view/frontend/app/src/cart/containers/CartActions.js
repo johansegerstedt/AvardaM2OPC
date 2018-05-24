@@ -13,15 +13,14 @@ const CartActions = ({isUpdating}: {isUpdating: boolean}) => {
   return (
     <div className="cart main actions cart-actions">
       <button
-        name="continue_shopping"
-        onClick={goToHome}
-        data-cart-empty
-        value="continue_shopping"
-        title={$.mage.__('Continue shopping')}
-        className="action"
-        id="continue_shopping"
+        type="submit"
+        name="update_cart_action"
+        value="update_qty"
+        disabled={!!isUpdating}
+        title={$.mage.__('Update')}
+        className="action update primary"
       >
-        <i className="material-icons md-18">shop</i>
+        <i className="material-icons md-18">done</i>
       </button>
       <button
         name="update_cart_action"
@@ -34,14 +33,15 @@ const CartActions = ({isUpdating}: {isUpdating: boolean}) => {
         <i className="material-icons md-18">clear</i>
       </button>
       <button
-        type="submit"
-        name="update_cart_action"
-        value="update_qty"
-        disabled={!!isUpdating}
-        title={$.mage.__('Update')}
-        className="action update primary"
+        name="continue_shopping"
+        onClick={goToHome}
+        data-cart-empty
+        value="continue_shopping"
+        title={$.mage.__('Continue shopping')}
+        className="action"
+        id="continue_shopping"
       >
-        <i className="material-icons md-18">done</i>
+        <i className="material-icons md-18">shop</i>
       </button>
       <input
         type="hidden"

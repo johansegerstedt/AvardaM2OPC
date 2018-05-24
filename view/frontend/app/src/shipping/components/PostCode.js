@@ -29,7 +29,6 @@ class PostCode extends Component<Props, State> {
     const {shippingAddress: {postcode}} = this.props;
     this.setState({postCode: postcode});
   }
-
   handleChange = (event: EventHandler) => {
     const {value} = event.target;
     if (value.length > 5) {

@@ -2,92 +2,14 @@
 
 import React, {Component} from 'react';
 import {isEqual} from 'lodash';
-import {formatCurrency, formatTax} from '$src/utils/format';
 import AdditionalContent from '$src/utils/components/AdditionalContentRegions';
 import {REGION_KEYS} from '$src/additionalContentRegions';
 import {$} from '$i18n';
 import type {BillingAddress} from '$src/cart/types';
 import type {ShippingMethod} from '$src/shipping/types';
 import Loader from '$src/utils/components/Loader';
-
-type RadioProps = {
-  method: ShippingMethod,
-  currency: string,
-  selectShippingMethod(ShippingMethod): void,
-  isSelected: boolean,
-  value: string,
-};
-
-const ShippingMethodRadio = ({
-  method,
-  currency,
-  isSelected,
-  selectShippingMethod,
-  value,
-}: RadioProps) => {
-  const handleClick: EventHandler = ev => {
-    if (ev.type !== 'change') {
-      ev.preventDefault();
-    }
-    // ev.stopPropagation();
-    selectShippingMethod(method);
-  };
-
-  return [
-    <tr key="method" className="row">
-      <td className="col col-method">
-        {method.available ? (
-          <input
-            type="radio"
-            className="radio"
-            defaultValue={value}
-            id={value}
-            name="ko_unique_1"
-            onChange={handleClick}
-            checked={isSelected}
-          />
-        ) : null}
-      </td>
-      <td className="col col-price">
-        <span className="price">
-          <span className="price">
-            {method.available ? formatCurrency(method.amount, currency) : ' '}
-          </span>
-        </span>
-      </td>
-      <td className="col col-tax">
-        <span className="tax">
-          <span className="tax">
-            ({method.available
-              ? formatCurrency(
-                  formatTax(method.price_incl_tax, method.price_excl_tax),
-                  currency,
-                )
-              : ' '})
-          </span>
-        </span>
-      </td>
-      <td className="col col-method" id={`label_method_${value}`}>
-        {method.available ? method.method_title : null}
-      </td>
-      <td className="col col-carrier" id={`label_carrier_${value}`}>
-        {method.carrier_title}
-      </td>
-    </tr>,
-    method.available ? null : (
-      <tr key="error" className="row row-error">
-        <td className="col col-error" colSpan={4}>
-          <div className="message error">
-            <div>{method.error_message}</div>
-          </div>
-          <span className="no-display">
-            <input type="radio" id={`s_method_${value}`} />
-          </span>
-        </td>
-      </tr>
-    ),
-  ];
-};
+import ShippingMethodRadio from '$src/shipping/components/ShippingMethodRadio';
+import {selectMethod, saveShippingInformation} from '$src/shipping/actions';
 
 type Props = {
   shippingAddress: BillingAddress,
@@ -123,13 +45,17 @@ class ShippingMethodForm extends Component<Props> {
     } = this.props;
     // 2) methods.length > 0 => regular
     // 3) methods.length === 0 => Error: No Shipping methods available
+    // let moreThanOneMethod = true;
+    // if (methods) {
+    //   moreThanOneMethod = methods.length > 1 ? true : false;
+    // }
     return (
-      <Loader isLoading={isFetchingMethods || methods === null}>
+      <Loader isLoading={isFetchingMethods}>
         <form
           className="form methods-shipping"
           id="co-shipping-method-form"
           noValidate="novalidate"
-          onSubmit={this.handleSubmit}
+          // onSubmit={this.handleSubmit}
         >
           <div id="checkout-shipping-method-load">
             <div className="step-title">{$.mage.__('Shipping Methods')}</div>
@@ -179,5 +105,4 @@ class ShippingMethodForm extends Component<Props> {
     );
   }
 }
-
 export default ShippingMethodForm;

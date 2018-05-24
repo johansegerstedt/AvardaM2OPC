@@ -7,7 +7,6 @@ import Loader from '$src/utils/components/Loader';
 
 type Props = {
   currency: string,
-  isLoading: boolean,
   isUpdating: boolean,
   totalSegments: TotalSegment[],
   cart: Cart,

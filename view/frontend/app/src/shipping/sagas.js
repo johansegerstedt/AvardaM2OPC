@@ -110,7 +110,14 @@ function* selectMethod({
     );
   }
 
-  selectShippingMethod(method);
+  try {
+    selectShippingMethod(method);
+    setShippingInformation();
+    yield put(saveShippingInformationSuccess());
+  } catch (err) {
+    toast($.mage.__('Failed to save shipping information.'), TYPES.ERROR);
+    yield put(saveShippingInformationFailure(err));
+  }
 }
 
 function* saveInformation() {

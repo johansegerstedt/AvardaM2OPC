@@ -36,8 +36,10 @@ const CartIsNotEmpty = () => {
 
 const CartIsEmpty = () => (
   <div className="cart-empty">
-    <p>{$.mage.__('You have no items in your shopping cart.')}</p>
-    <p
+    <div>
+      <span>{$.mage.__('You have no items in your shopping cart.')}</span>
+    </div>
+    <div
       dangerouslySetInnerHTML={interpolateHTML(
         $.mage.__('Click <a href="%1">here</a> to continue shopping.'),
         getConfig().baseUrl,

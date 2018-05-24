@@ -3,7 +3,7 @@ import React, {Component} from 'react';
 import {$} from '$i18n';
 import {formatCurrency} from '$src/utils/format';
 import type {Cart, TotalSegment} from '../types';
-import Loader from '$src/utils/components/Loader';
+import Loader from '$src/utils/components/Loader/Loader';
 
 type Props = {
   currency: string,
@@ -54,7 +54,7 @@ class CartSummary extends Component<Props> {
       {segments: [], footerSegments: []},
     );
     return (
-      <Loader isLoading={isUpdating} height={150}>
+      <Loader show={isUpdating} height={150}>
         <div className="avarda-cart-summary cart-summary">
           <div id="cart-totals" className="avarda-cart-totals cart-totals">
             <div className="table-wrapper">

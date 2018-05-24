@@ -7,7 +7,7 @@ import AvardaCheckOut, {type Props} from './AvardaCheckOut';
 import {getPurchaseId, getIsFetching} from '../selectors';
 import {addressChanged, completePaymentPressed} from '../actions';
 import type {AppState} from '$src/root/types';
-import Loader from '$src/utils/components/Loader';
+import Loader from '$src/utils/components/Loader/Loader';
 
 /**
  * This container represents actual IFRAME handling and Avarda processing
@@ -55,7 +55,9 @@ class AvardaCheckOutContainer extends Component<ConnectedProps> {
         {...props}
       />
     ) : (
-      <Loader isLoading={isFetching}>{null}</Loader>
+      <Loader show={isFetching} height={0}>
+        {null}
+      </Loader>
     );
   }
 }

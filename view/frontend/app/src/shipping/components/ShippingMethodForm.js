@@ -7,7 +7,7 @@ import {REGION_KEYS} from '$src/additionalContentRegions';
 import {$} from '$i18n';
 import type {BillingAddress} from '$src/cart/types';
 import type {ShippingMethod} from '$src/shipping/types';
-import Loader from '$src/utils/components/Loader';
+import Loader from '$src/utils/components/Loader/Loader';
 import ShippingMethodRadio from '$src/shipping/components/ShippingMethodRadio';
 import {selectMethod, saveShippingInformation} from '$src/shipping/actions';
 
@@ -50,7 +50,7 @@ class ShippingMethodForm extends Component<Props> {
     //   moreThanOneMethod = methods.length > 1 ? true : false;
     // }
     return (
-      <Loader isLoading={isFetchingMethods}>
+      <Loader show={isFetchingMethods} height={200}>
         <form
           className="form methods-shipping"
           id="co-shipping-method-form"

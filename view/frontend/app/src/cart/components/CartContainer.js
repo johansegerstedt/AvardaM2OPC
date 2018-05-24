@@ -24,7 +24,7 @@ import CartDiscount from './CartDiscount';
 import type {Cart as CartType, CartItem} from '../types';
 import GiftCardAccount from './GiftCardAccount';
 import GiftMessage from './GiftMessage';
-import Loader from '$src/utils/components/Loader';
+import Loader from '$src/utils/components/Loader/Loader';
 
 type Props = {
   cart: null | CartType,
@@ -75,12 +75,9 @@ class Cart extends Component<Props> {
     const {hasItems} = getConfig();
 
     const cartIsEmpty = !hasItems || (cart !== null && cart.items.length === 0);
-
-    const loaded = !!cart && !cartIsEmpty;
-
     return (
       <div className="side-container">
-        <Loader isLoading={!loaded} height={335}>
+        <Loader show={!cart || cartIsEmpty} height={335} type="circular">
           {cart
             ? [
                 <CartItems

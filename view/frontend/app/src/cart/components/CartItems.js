@@ -72,9 +72,9 @@ class CartForm extends Component<Props, State> {
           id="avarda-cart-items-container"
         >
           <div className="avarda-mobile-hide">
-            <i className="material-icons md-orange md-48">check_circle</i>
+            {/* <i className="material-icons md-orange md-48">check_circle</i> */}
             <div className="avarda-sidebar-header">
-              <span className="avarda-title">{$.mage.__('Order Review')}</span>
+              {/* <span className="avarda-title">{$.mage.__('Order Review')}</span> */}
               <div className="block">
                 <div
                   id="avarda-cart-items-trigger"

@@ -41,13 +41,13 @@ const ShippingMethodRadio = ({
           />
         ) : null}
       </td>
-      <td className="col col-price">
+      {/* <td className="col col-price">
         <span className="price">
           <span className="price">
             {method.available ? formatCurrency(method.amount, currency) : ' '}
           </span>
         </span>
-      </td>
+      </td> */}
       <td className="col col-tax">
         <span className="tax">
           <span className="tax">

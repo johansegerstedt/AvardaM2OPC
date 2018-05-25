@@ -9,6 +9,7 @@ import configureStore from '$src/root/configureStore';
 import {setConfig} from '$src/config';
 import type {Config} from '$src/types';
 
+// $FlowFixMe
 import './styles.less';
 
 export const execute = (config: Config) => {
@@ -21,7 +22,7 @@ export const execute = (config: Config) => {
       setConfig(config);
       // Set base URL for Magento's JS actions
       url.setBaseUrl(config.baseUrl);
-      ReactDOM.render(<Root config={config} store={store} />, container);
+      ReactDOM.render(<Root store={store} />, container);
     } else {
       throw new Error("Couldn't mount the checkout application.");
     }

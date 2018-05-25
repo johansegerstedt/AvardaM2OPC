@@ -15,9 +15,7 @@ import type {Cart} from '$src/cart/types';
 
 type Props = {
   cart: null | Cart,
-  isFetching: boolean,
   config: Config,
-  fetchCartRequest(): void,
 };
 
 const CartIsNotEmpty = () => {
@@ -71,6 +69,7 @@ class App extends Component<Props> {
 
 const mapStateToProps: MapStateToProps<AppState, *, *> = state => ({
   cart: getCart(state),
+  config: getConfig(),
 });
 
 export default compose(connect(mapStateToProps))(App);

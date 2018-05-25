@@ -4,13 +4,11 @@ import {Provider} from 'react-redux';
 import {get} from 'lodash';
 import {ToastContainer} from 'react-toastify';
 import App from '$src/app/components/App';
-import type {Config} from '$src/types';
 import type {Actions, AppState} from '../types';
 import type {Store} from 'redux';
 
 type Props = {
   store: Store<AppState, Actions>,
-  config: Config,
 };
 type State = {};
 
@@ -26,11 +24,11 @@ class Root extends Component<Props, State> {
   }
 
   render() {
-    const {config, store} = this.props;
+    const {store} = this.props;
     return (
       <Provider store={store}>
         <Fragment>
-          <App config={config} />
+          <App />
           <ToastContainer autoClose={10000} closeButton={false} />
         </Fragment>
       </Provider>

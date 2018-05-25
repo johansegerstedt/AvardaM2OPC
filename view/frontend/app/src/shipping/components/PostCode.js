@@ -16,24 +16,29 @@ type Props = {
 };
 
 type State = {
-  postCode?: null | string,
+  postCode?: typeof undefined | string,
   config: Config,
 };
 
 class PostCode extends Component<Props, State> {
   state = {
     config: getConfig(),
-    postCode: null,
+    postCode: undefined,
   };
   componentDidMount() {
-    const {shippingAddress: {postcode}} = this.props;
-    this.setState({postCode: postcode});
+    const {shippingAddress} = this.props;
+    if (shippingAddress) {
+      const {postcode} = shippingAddress;
+      this.setState({postCode: postcode});
+    }
   }
   handleChange = (event: EventHandler) => {
     const {value} = event.target;
-    if (value.length > 5) {
+    const vLen = value.length;
+
+    if (vLen > 5) {
       event.preventDefault();
-    } else if (value.length === 5) {
+    } else if (vLen === 5) {
       const {shippingAddress, updateShippingAddress} = this.props;
 
       const country_id = this.state.config.countryId;
@@ -61,7 +66,7 @@ class PostCode extends Component<Props, State> {
               maxLength={5}
               placeholder={$.mage.__('Zip/Postal Code')}
               onChange={this.handleChange}
-              value={postCode ? postCode : undefined}
+              value={postCode}
             />
           </div>
         </div>

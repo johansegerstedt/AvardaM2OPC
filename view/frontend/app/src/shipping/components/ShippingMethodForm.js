@@ -17,7 +17,6 @@ type Props = {
   selectedShippingMethod: null | ShippingMethod,
   selectShippingMethod(ShippingMethod): void,
   fetchShippingMethods(BillingAddress): void,
-
   saveShippingInformation(): void,
   currency: string,
   methods: null | ShippingMethod[],
@@ -56,7 +55,7 @@ class ShippingMethodForm extends Component<Props> {
       <Fragment>
         <Loader show={isFetchingMethods} height={200}>
           <div id="checkout-shipping-method-load">
-            <div className="step-title">{$.mage.__('Shipping Methods')}</div>
+            {/* <div className="step-title">{$.mage.__('Shipping Methods')}</div> */}
             <Methods
               selectShippingMethod={selectShippingMethod}
               selectedShippingMethod={selectedShippingMethod}

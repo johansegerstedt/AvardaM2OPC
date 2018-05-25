@@ -1,6 +1,7 @@
 // @flow
-import React from 'react';
+import React, {Fragment} from 'react';
 import {isEqual} from 'lodash';
+import {$} from '$i18n';
 import MethodItem from '$src/shipping/components/Methods/MethodItem';
 import {type ShippingMethod} from '$src/shipping/types';
 
@@ -29,7 +30,14 @@ const Methods = ({
       isSelected={isEqual(method, selectedShippingMethod)}
     />
   ));
-  return <ul className="cards">{methodItems}</ul>;
+  return (
+    <Fragment>
+      <ul className="cards">{methodItems}</ul>
+      <span className="input-helper">
+        {$.mage.__('How do you want your items to be delivered?')}
+      </span>
+    </Fragment>
+  );
 };
 
 export default Methods;

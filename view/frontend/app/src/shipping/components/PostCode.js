@@ -68,6 +68,9 @@ class PostCode extends Component<Props, State> {
               onChange={this.handleChange}
               value={postCode}
             />
+            <span className="input-helper">
+              {$.mage.__('Where you want your items to be delivered?')}
+            </span>
           </div>
         </div>
       </div>

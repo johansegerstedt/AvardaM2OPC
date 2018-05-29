@@ -1,6 +1,6 @@
 // @flow
 import React, {Fragment} from 'react';
-import {isEqual} from 'lodash';
+import isEqual from 'lodash/isEqual';
 import {$} from '$i18n';
 import MethodItem from '$src/shipping/components/Methods/MethodItem';
 import {type ShippingMethod} from '$src/shipping/types';
@@ -24,7 +24,6 @@ const Methods = ({
     <MethodItem
       key={i}
       selectShippingMethod={selectShippingMethod}
-      selectedShippingMethod={selectedShippingMethod}
       method={method}
       currency={currency}
       isSelected={isEqual(method, selectedShippingMethod)}

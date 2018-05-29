@@ -1,6 +1,7 @@
 //@flow
 import React from 'react';
 import {type ShippingMethod} from '$src/shipping/types';
+import {$} from '$i18n';
 import {formatCurrency, formatTax} from '$src/utils/format';
 type Props = {
   method: ShippingMethod,
@@ -14,31 +15,37 @@ const MethodItem = ({
   selectShippingMethod,
   isSelected,
 }: Props) => {
-  const handleClick: EventHandler = event => {
+  const handleClick = (event: EventHandler) => {
     event.stopPropagation();
     selectShippingMethod(method);
   };
 
   return (
-    <li className="cards__item">
+    <li className="cards-item">
       <a
         role="button"
         className={`card ${isSelected ? 'selected' : ''}`}
         onClick={handleClick}
+        tabIndex="1"
       >
-        <div className="card__content">
-          <div className="card__title">
+        <div className="card-content">
+          <div className="card-title">
             {method.available ? method.method_title : null}
           </div>
-          <p className="card__text">
-            {method.carrier_title}
-            ({method.available
-              ? formatCurrency(
-                  formatTax(method.price_incl_tax, method.price_excl_tax),
-                  currency,
-                )
-              : ' '})
-          </p>
+          <div className="card-price">
+            {formatCurrency(method.price_incl_tax, currency)}
+          </div>
+          <div className="card-footnote">
+            {$.mage.__('Tax included')}{' '}
+            <span>
+              ({method.available
+                ? formatCurrency(
+                    formatTax(method.price_incl_tax, method.price_excl_tax),
+                    currency,
+                  )
+                : ''})
+            </span>
+          </div>
         </div>
       </a>
     </li>

@@ -89,7 +89,7 @@ class ShippingMethod extends Component<Props> {
               className="step-content"
               data-role="content"
             >
-              {shippingAddress && <PostCode />}
+              {shippingAddress && <PostCode key="postCode" />}
               {/* Submit this to estimate shipping methods */}
             </div>
           </li>

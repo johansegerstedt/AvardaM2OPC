@@ -44,12 +44,9 @@ class ShippingMethodForm extends Component<Props> {
       isFetchingMethods,
       selectedShippingMethod,
     } = this.props;
+    // 1) methods.length === 1 => auto-select
     // 2) methods.length > 0 => regular
     // 3) methods.length === 0 => Error: No Shipping methods available
-    // let moreThanOneMethod = true;
-    // if (methods) {
-    //   moreThanOneMethod = methods.length > 1 ? true : false;
-    // }
 
     return (
       <Fragment>
@@ -64,12 +61,10 @@ class ShippingMethodForm extends Component<Props> {
             />
           </div>
         </Loader>
-        <Loader show={isFetchingMethods} height={200}>
-          <AdditionalContent
-            id="onepage-checkout-shipping-method-additional-load"
-            region={REGION_KEYS.SHIPPING}
-          />
-        </Loader>
+        <AdditionalContent
+          id="onepage-checkout-shipping-method-additional-load"
+          region={REGION_KEYS.SHIPPING}
+        />
       </Fragment>
     );
   }

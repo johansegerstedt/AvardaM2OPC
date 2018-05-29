@@ -1,7 +1,7 @@
 // @flow
 import React, {Fragment, Component} from 'react';
 import {get} from 'lodash';
-import {$} from '$i18n';
+import {$, interpolate} from '$i18n';
 import type {CartItem} from '../types';
 import ProductItem from '$src/cart/containers/ProductItem';
 import CartActions from '$src/cart/containers/CartActions';
@@ -64,7 +64,8 @@ class CartForm extends Component<Props, State> {
   render() {
     const {cartItems, currency, isUpdating} = this.props;
     const {isOpen} = this.state;
-
+    const cartItemsLen = cartItems.length;
+    const itemsPlaceholder = cartItemsLen > 1 ? 'Items' : 'Item';
     return (
       <Fragment>
         <div
@@ -94,9 +95,13 @@ class CartForm extends Component<Props, State> {
                     role="heading"
                     aria-level={2}
                   >
-                    {$.mage
-                      .__('%1 Item(s) in cart')
-                      .replace('%1', cartItems.length.toString())}
+                    {$.mage.__(
+                      interpolate(
+                        '%1 %2 in cart',
+                        cartItemsLen,
+                        itemsPlaceholder,
+                      ),
+                    )}
                     <i className="material-icons avarda-cart-item-header-icon">
                       {!isOpen ? 'keyboard_arrow_down' : 'keyboard_arrow_up'}
                     </i>

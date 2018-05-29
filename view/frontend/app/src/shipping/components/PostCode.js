@@ -16,14 +16,14 @@ type Props = {
 };
 
 type State = {
-  postCode?: typeof undefined | string,
+  postCode?: string,
   config: Config,
 };
 
 class PostCode extends Component<Props, State> {
   state = {
     config: getConfig(),
-    postCode: undefined,
+    postCode: '',
   };
   componentDidMount() {
     const {shippingAddress} = this.props;
@@ -32,17 +32,14 @@ class PostCode extends Component<Props, State> {
       this.setState({postCode: postcode});
     }
   }
+
   handleChange = (event: EventHandler) => {
     const {value} = event.target;
-    const vLen = value.length;
+    this.setState({postCode: value});
 
-    if (vLen > 5) {
-      event.preventDefault();
-    } else if (vLen === 5) {
+    if (value.length === 5) {
       const {shippingAddress, updateShippingAddress} = this.props;
-
       const country_id = this.state.config.countryId;
-
       updateShippingAddress({
         ...shippingAddress,
         postcode: value,
@@ -56,22 +53,21 @@ class PostCode extends Component<Props, State> {
     return (
       <div id="shipping-new-address-form" className="fieldset address">
         <div className="field _required" name="shippingAddress.postcode">
-          <div className="control">
-            <input
-              key={JSON.stringify(postCode)}
-              className="avarda-input-text"
-              type="string"
-              id="postcode"
-              name="postcode"
-              maxLength={5}
-              placeholder={$.mage.__('Zip/Postal Code')}
-              onChange={this.handleChange}
-              value={postCode}
-            />
-            <span className="input-helper">
-              {$.mage.__('Where you want your items to be delivered?')}
-            </span>
-          </div>
+          <input
+            key="postCode"
+            type="number"
+            id="postcode"
+            name="postcode"
+            maxLength={5}
+            placeholder={$.mage.__('Zip/Postal Code')}
+            onChange={this.handleChange}
+            value={postCode}
+          />
+          <span className="input-helper">
+            {$.mage.__(
+              'Please write Postal code where you would like the items to be delivered?',
+            )}
+          </span>
         </div>
       </div>
     );

@@ -29,7 +29,10 @@ const isFetching: Reducer<boolean> = handleActions(
 
 const isSelecting: Reducer<boolean> = handleActions(
   {
-    [ActionTypes.SAVE_SHIPPING_INFORMATION]: () => true,
+    [combineActions(
+      ActionTypes.SAVE_SHIPPING_INFORMATION,
+      ActionTypes.SELECT_METHOD,
+    )]: () => true,
     [combineActions(
       ActionTypes.SAVE_SHIPPING_INFORMATION_SUCCESS,
       ActionTypes.SAVE_SHIPPING_INFORMATION_FAILURE,

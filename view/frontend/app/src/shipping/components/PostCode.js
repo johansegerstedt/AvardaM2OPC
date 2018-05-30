@@ -16,20 +16,23 @@ type Props = {
 };
 
 type State = {
-  postCode?: string,
+  postCode: string,
   config: Config,
 };
 
 class PostCode extends Component<Props, State> {
-  state = {
-    config: getConfig(),
-    postCode: '',
-  };
+  constructor() {
+    super();
+    this.state = {
+      config: getConfig(),
+      postCode: '',
+    };
+  }
+
   componentDidMount() {
     const {shippingAddress} = this.props;
-    if (shippingAddress) {
-      const {postcode} = shippingAddress;
-      this.setState({postCode: postcode});
+    if (shippingAddress && shippingAddress['postcode']) {
+      this.setState({postCode: shippingAddress.postcode});
     }
   }
 

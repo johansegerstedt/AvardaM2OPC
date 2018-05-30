@@ -22,10 +22,13 @@ const MethodItem = ({
 
   return (
     <li className="cards-item">
-      <a
+      <div
         role="button"
         className={`card ${isSelected ? 'selected' : ''}`}
         onClick={handleClick}
+        onKeyPress={handleClick}
+        onMouseEnter={handleClick}
+        tabIndex={0}
       >
         <div className="card-content">
           <div className="card-title">
@@ -46,7 +49,7 @@ const MethodItem = ({
             </span>
           </div>
         </div>
-      </a>
+      </div>
     </li>
   );
 };

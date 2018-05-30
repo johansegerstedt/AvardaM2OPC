@@ -1,7 +1,6 @@
 // @flow
 import {normalize, schema} from 'normalizr';
 import {getApiUrl, apiGet} from '$src/m2api';
-import merge from 'lodash/merge';
 import {getCartApiPath} from './utils';
 import type {NormalizedCart} from './types';
 
@@ -25,6 +24,6 @@ export const fetchCart = async (): Promise<NormalizedCart> => {
     apiGet(`${url}/totals`),
     apiGet(`${url}/avarda-items`),
   ]);
-  const data = merge({}, cart, totals, items);
+  const data = Object.assign({}, cart, totals, items);
   return normalize(data, cartSchema);
 };

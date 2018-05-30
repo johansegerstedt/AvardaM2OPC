@@ -10,7 +10,3 @@ export const getCartApiPath = () => {
 export const getQuoteCurrency = ({
   currency: {quote_currency_code},
 }: Cart): string => quote_currency_code;
-
-export const createActionName = actionName => {
-  return {};
-};

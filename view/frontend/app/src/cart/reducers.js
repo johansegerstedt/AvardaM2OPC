@@ -6,21 +6,17 @@ import omit from 'lodash/omit';
 import {
   fetchCartSuccess,
   updateCartItemsSuccess,
-  deleteCartItem,
   deleteCartItemSuccess,
   applyCoupon,
-  FETCH_REQUEST,
-  FETCH_SUCCESS,
-  FETCH_FAILURE,
-  UPDATE_ITEMS_REQUEST,
-  UPDATE_ITEMS_SUCCESS,
-  UPDATE_ITEMS_FAILURE,
-  DELETE_ITEM_REQUEST,
-  DELETE_ITEM_SUCCESS,
-  DELETE_ITEM_FAILURE,
-  APPLY_COUPON_SUCCESS,
-  REMOVE_COUPON_SUCCESS,
-  REFRESH_CART,
+  refreshCart,
+  applyCouponSuccess,
+  removeCouponSuccess,
+  updateCartItemsFailure,
+  deleteCartItemFailure,
+  deleteCartItemRequest,
+  updateCartItemsRequest,
+  fetchCartRequest,
+  fetchCartFailure,
 } from './actions';
 import type {ActionType} from 'redux-actions';
 import type {ById} from '$src/types';
@@ -29,38 +25,38 @@ import type {Cart, CartState, CartItemState} from './types';
 
 const cartData: Reducer<null | Cart> = handleActions(
   {
-    [combineActions(FETCH_SUCCESS, REFRESH_CART)]: (
+    [combineActions(fetchCartSuccess, refreshCart)]: (
       state,
       {payload: {entities, result}}: ActionType<typeof fetchCartSuccess>,
     ) => entities.cart[result.toString()],
-    [DELETE_ITEM_SUCCESS]: (
+    [combineActions(deleteCartItemSuccess)]: (
       state,
       {payload: deletedId}: ActionType<typeof deleteCartItemSuccess>,
     ) => ({
       ...state,
       items: state.items.filter(id => id !== deletedId),
     }),
-    [APPLY_COUPON_SUCCESS]: (
+    [combineActions(applyCouponSuccess)]: (
       state,
       {payload: coupon_code}: ActionType<typeof applyCoupon>,
     ) => ({
       ...state,
       coupon_code,
     }),
-    [REMOVE_COUPON_SUCCESS]: state => omit(state, 'coupon_code'),
+    [combineActions(removeCouponSuccess)]: state => omit(state, 'coupon_code'),
   },
   null,
 );
 
 const pendingUpdates: Reducer<number> = handleActions(
   {
-    [combineActions(UPDATE_ITEMS_REQUEST, DELETE_ITEM_REQUEST)]: state =>
+    [combineActions(updateCartItemsRequest, deleteCartItemRequest)]: state =>
       state + 1,
     [combineActions(
-      UPDATE_ITEMS_SUCCESS,
-      UPDATE_ITEMS_FAILURE,
-      DELETE_ITEM_SUCCESS,
-      DELETE_ITEM_FAILURE,
+      updateCartItemsSuccess,
+      updateCartItemsFailure,
+      deleteCartItemSuccess,
+      deleteCartItemFailure,
     )]: state => Math.max(state - 1, 0),
   },
   0,
@@ -68,27 +64,20 @@ const pendingUpdates: Reducer<number> = handleActions(
 
 const isFetching = handleActions(
   {
-    [FETCH_REQUEST]: () => true,
-    [combineActions(FETCH_SUCCESS, FETCH_FAILURE)]: () => false,
+    [combineActions(fetchCartRequest)]: () => true,
+    [combineActions(fetchCartSuccess, fetchCartFailure)]: () => false,
   },
   false,
 );
-
-export const cart: Reducer<CartState> = combineReducers({
-  data: cartData,
-  isFetching,
-  pendingUpdates,
-});
-
 export const cartItemsById: Reducer<null | ById<Cart>> = handleActions(
   {
-    [FETCH_SUCCESS]: (
+    [combineActions(fetchCartSuccess)]: (
       state,
       {payload: {entities}}: ActionType<typeof fetchCartSuccess>,
     ) => entities.cartItems,
-    [DELETE_ITEM_REQUEST]: (
+    [combineActions(deleteCartItemRequest)]: (
       state,
-      {payload: itemId}: ActionType<typeof deleteCartItem>,
+      {payload: itemId}: ActionType<typeof deleteCartItemSuccess>,
     ) => ({
       ...state,
       [itemId]: {
@@ -96,7 +85,7 @@ export const cartItemsById: Reducer<null | ById<Cart>> = handleActions(
         isDeleting: true,
       },
     }),
-    [UPDATE_ITEMS_SUCCESS]: (
+    [combineActions(updateCartItemsSuccess)]: (
       state = {},
       {payload: items = []}: ActionType<typeof updateCartItemsSuccess>,
     ) =>
@@ -107,13 +96,19 @@ export const cartItemsById: Reducer<null | ById<Cart>> = handleActions(
         }),
         state,
       ),
-    [DELETE_ITEM_SUCCESS]: (
+    [combineActions(deleteCartItemSuccess)]: (
       state = {},
       {payload: deletedItem}: ActionType<typeof deleteCartItemSuccess>,
     ) => omit(state, deletedItem),
   },
   null,
 );
+
+export const cart: Reducer<CartState> = combineReducers({
+  data: cartData,
+  isFetching,
+  pendingUpdates,
+});
 
 export const cartItems: Reducer<CartItemState> = combineReducers({
   byId: cartItemsById,

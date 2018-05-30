@@ -6,8 +6,8 @@ import quote from 'Magento_Checkout/js/model/quote';
 import {getConfig} from '$src/config';
 import {
   fetchCartRequest,
-  updateCartItems,
-  deleteCartItem,
+  updateCartItemsRequest,
+  deleteCartItemRequest,
   applyCoupon,
   removeCoupon,
 } from '../actions';
@@ -123,8 +123,8 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(
     {
       fetchCartRequest,
-      updateCartItems,
-      deleteCartItem,
+      updateCartItems: updateCartItemsRequest,
+      deleteCartItem: deleteCartItemRequest,
       applyCoupon,
       removeCoupon,
     },

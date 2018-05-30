@@ -18,9 +18,13 @@ import {
   refreshCart as refreshCartAction,
   removeCouponSuccess,
   removeCouponFailure,
+  FETCH_REQUEST,
+  UPDATE_ITEMS_REQUEST,
+  DELETE_ITEM_REQUEST,
+  APPLY_COUPON_REQUEST,
+  REMOVE_COUPON_REQUEST,
 } from './actions';
 import {fetchCart as apiFetchCart} from './api';
-import {ActionTypes as Cart} from './constants';
 import {getApiUrl, apiDelete, apiPut} from '$src/m2api';
 import {getConfig} from '$src/config';
 import type {ActionType} from 'redux-actions';
@@ -147,19 +151,19 @@ function* removeCoupon() {
 export default function* saga(): Generator<*, *, *> {
   yield all([
     yield fork(function* watchFetchCart() {
-      yield takeLatest(Cart.FETCH_REQUEST, fetchCart);
+      yield takeLatest(FETCH_REQUEST, fetchCart);
     }),
     yield fork(function* watchUpdateItems() {
-      yield takeLatest(Cart.UPDATE_ITEMS_REQUEST, updateCartItems);
+      yield takeLatest(UPDATE_ITEMS_REQUEST, updateCartItems);
     }),
     yield fork(function* watchDeleteItem() {
-      yield takeEvery(Cart.DELETE_ITEM_REQUEST, deleteCartItem);
+      yield takeEvery(DELETE_ITEM_REQUEST, deleteCartItem);
     }),
     yield fork(function* watchApplyCoupon() {
-      yield takeEvery(Cart.APPLY_COUPON_REQUEST, applyCoupon);
+      yield takeEvery(APPLY_COUPON_REQUEST, applyCoupon);
     }),
     yield fork(function* watchRemoveCoupon() {
-      yield takeLatest(Cart.REMOVE_COUPON_REQUEST, removeCoupon);
+      yield takeLatest(REMOVE_COUPON_REQUEST, removeCoupon);
     }),
   ]);
 }

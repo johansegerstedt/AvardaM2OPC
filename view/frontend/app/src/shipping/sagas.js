@@ -14,8 +14,10 @@ import setShippingInformation from 'Magento_Checkout/js/action/set-shipping-info
 import {MessageTypes} from '$src/utils/components/Message';
 import toast, {TYPES} from '$src/utils/toast';
 import {ActionTypes as Shipping} from './constants';
-import {ActionTypes as Cart} from '$src/cart/constants';
-import {fetchCartSuccess as fetchCartSuccessAction} from '$src/cart/actions';
+import {
+  fetchCartSuccess as fetchCartSuccessAction,
+  FETCH_SUCCESS,
+} from '$src/cart/actions';
 import {refreshCart} from '$src/cart/sagas';
 import {
   addMessage,
@@ -138,7 +140,7 @@ function* scrollToShippingContainer() {
 }
 
 export default function* saga(): Generator<*, *, *> {
-  yield takeLatest(Cart.FETCH_SUCCESS, fetchCartSuccess);
+  yield takeLatest(FETCH_SUCCESS, fetchCartSuccess);
   yield takeLatest(Shipping.GET_METHODS_REQUEST, getMethods);
   yield takeLatest(Shipping.RECEIVE_ASSIGNMENT, receiveShipping);
   yield takeLatest(Shipping.SCROLL_TO_FORM, scrollToShippingContainer);

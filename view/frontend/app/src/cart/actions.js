@@ -1,85 +1,92 @@
 // @flow
-import {createAction} from 'redux-actions';
-import {ActionTypes as Cart} from './constants';
+import {createAction, type ActionType} from 'redux-actions';
+// import {ActionTypes as Cart} from './constants';
 import {PayloadCreators} from '$src/utils/redux';
-import type {ActionType} from 'redux-actions';
 import type {CartItem, NormalizedCart} from './types';
 
+export const FETCH_REQUEST = 'cart/fetchCartRequest';
+export const FETCH_SUCCESS = 'cart/fetchCartSuccess';
+export const FETCH_FAILURE = 'cart/fetchCartFailure';
+export const UPDATE_ITEMS_REQUEST = 'cart/updateCartItemsRequest';
+export const UPDATE_ITEMS_SUCCESS = 'cart/updateCartItemsSuccess';
+export const UPDATE_ITEMS_FAILURE = 'cart/updateCartItemsFailure';
+export const DELETE_ITEM_REQUEST = 'cart/deleteCartItemRequest';
+export const DELETE_ITEM_SUCCESS = 'cart/deleteCartItemSuccess';
+export const DELETE_ITEM_FAILURE = 'cart/deleteItemFailure';
+export const APPLY_COUPON_REQUEST = 'cart/applyCouponCodeRequest';
+export const APPLY_COUPON_SUCCESS = 'cart/applyCouponCodeSuccess';
+export const APPLY_COUPON_FAILURE = 'cart/applyCouponCodeFailure';
+export const REMOVE_COUPON_REQUEST = 'cart/removeCouponRequest';
+export const REMOVE_COUPON_SUCCESS = 'cart/removeCouponSuccess';
+export const REMOVE_COUPON_FAILURE = 'cart/removeCouponFailure';
+export const REFRESH_CART = 'cart/refreshCart';
+
 const {createError, createString, createVoid} = PayloadCreators;
+
 const createNormalizedCart = (normalizedCart: NormalizedCart): NormalizedCart =>
   normalizedCart;
 
-export const fetchCartRequest = createAction(Cart.FETCH_REQUEST, createVoid);
-
+export const fetchCartRequest = createAction(FETCH_REQUEST, createVoid);
 export const fetchCartSuccess = createAction(
-  Cart.FETCH_SUCCESS,
+  FETCH_SUCCESS,
   createNormalizedCart,
 );
 
-export const refreshCart = createAction(
-  Cart.REFRESH_CART,
-  createNormalizedCart,
-);
+export const refreshCart = createAction(REFRESH_CART, createNormalizedCart);
 
-export const fetchCartFailure = createAction(Cart.FETCH_FAILURE, createError);
+export const fetchCartFailure = createAction(FETCH_FAILURE, createError);
 
 export const updateCartItems = createAction(
-  Cart.UPDATE_ITEMS_REQUEST,
+  UPDATE_ITEMS_REQUEST,
   (items: CartItem[]): CartItem[] => items,
 );
 
 export const updateCartItemsSuccess = createAction(
-  Cart.UPDATE_ITEMS_SUCCESS,
+  UPDATE_ITEMS_SUCCESS,
   (items: CartItem[]): CartItem[] => items,
 );
 
 export const updateCartItemsFailure = createAction(
-  Cart.UPDATE_ITEMS_FAILURE,
+  UPDATE_ITEMS_FAILURE,
   createError,
 );
 
 export const deleteCartItem = createAction(
-  Cart.DELETE_ITEM_REQUEST,
+  DELETE_ITEM_REQUEST,
   (itemId: string): string => itemId,
 );
 
 export const deleteCartItemSuccess = createAction(
-  Cart.DELETE_ITEM_SUCCESS,
+  DELETE_ITEM_SUCCESS,
   (deletedId: string): string => deletedId,
 );
 
 export const deleteCartItemFailure = createAction(
-  Cart.DELETE_ITEM_FAILURE,
+  DELETE_ITEM_FAILURE,
   createError,
 );
 
-export const applyCoupon = createAction(
-  Cart.APPLY_COUPON_REQUEST,
-  createString,
-);
+export const applyCoupon = createAction(APPLY_COUPON_REQUEST, createString);
 
 export const applyCouponSuccess = createAction(
-  Cart.APPLY_COUPON_SUCCESS,
+  APPLY_COUPON_SUCCESS,
   createString,
 );
 
 export const applyCouponFailure = createAction(
-  Cart.APPLY_COUPON_FAILURE,
+  APPLY_COUPON_FAILURE,
   createError,
 );
 
-export const removeCoupon = createAction(
-  Cart.REMOVE_COUPON_REQUEST,
-  createVoid,
-);
+export const removeCoupon = createAction(REMOVE_COUPON_REQUEST, createVoid);
 
 export const removeCouponSuccess = createAction(
-  Cart.REMOVE_COUPON_SUCCESS,
+  REMOVE_COUPON_SUCCESS,
   createVoid,
 );
 
 export const removeCouponFailure = createAction(
-  Cart.REMOVE_COUPON_FAILURE,
+  REMOVE_COUPON_FAILURE,
   createError,
 );
 

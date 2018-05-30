@@ -14,7 +14,6 @@ import quote from 'Magento_Checkout/js/model/quote';
 import {$} from '$i18n';
 import {getConfig} from '$src/config';
 import {apiGet, apiPost, getApiUrl} from '$src/m2api';
-import {ActionTypes as Cart} from '$src/cart/constants';
 import {getCartApiPath} from '$src/cart/utils';
 import {getIsVirtual} from '$src/cart/selectors';
 import {ActionTypes as ShippingActions} from '$src/shipping/constants';
@@ -32,9 +31,10 @@ import * as ShippingMessages from './messages';
 import {ActionTypes} from './constants';
 import {getPurchaseId} from './selectors';
 import {DIV_ID} from './components/AvardaCheckOut';
-import type {ActionType} from 'redux-actions';
-import type {CustomerInfo} from 'AvardaCheckOutClient';
-import type {BillingAddress} from '$src/cart/types';
+import {type ActionType} from 'redux-actions';
+import {type CustomerInfo} from 'AvardaCheckOutClient';
+import {type BillingAddress} from '$src/cart/types';
+import {FETCH_SUCCESS, REFRESH_CART} from '$src/cart/actions';
 
 function* fetchPurchaseId() {
   try {
@@ -142,7 +142,7 @@ export default function*(): Generator<*, *, *> {
       yield takeLatest(ActionTypes.GET_PURCHASE_ID, fetchPurchaseId);
     }),
     yield fork(function* watchCartUpdated() {
-      yield takeLatest([Cart.FETCH_SUCCESS, Cart.REFRESH_CART], cartUpdated);
+      yield takeLatest([FETCH_SUCCESS, REFRESH_CART], cartUpdated);
     }),
     yield fork(function* watchAddressChanged() {
       yield takeLatest(ActionTypes.ADDRESS_CHANGED, addressChanged);

@@ -1,15 +1,11 @@
 // @flow
 
 import React, {Component, Fragment} from 'react';
-import {isEqual} from 'lodash';
 import AdditionalContent from '$src/utils/components/AdditionalContentRegions';
 import {REGION_KEYS} from '$src/additionalContentRegions';
-import {$} from '$i18n';
 import type {BillingAddress} from '$src/cart/types';
 import type {ShippingMethod} from '$src/shipping/types';
 import Loader from '$src/utils/components/Loader/Loader';
-import ShippingMethodRadio from '$src/shipping/components/ShippingMethodRadio';
-import {selectMethod, saveShippingInformation} from '$src/shipping/actions';
 import Methods from '$src/shipping/components/Methods/Methods';
 
 type Props = {

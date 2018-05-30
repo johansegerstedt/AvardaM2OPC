@@ -1,3 +1,4 @@
 *.log
 
 view/frontend/app/.idea
+view/frontend/web/js/stat/statistics.html

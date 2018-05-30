@@ -19,7 +19,7 @@ class Root extends Component<Props, State> {
     }
   }
 
-  componentWillMount() {
+  componentDidMount() {
     this.clearM2Cache();
   }
 

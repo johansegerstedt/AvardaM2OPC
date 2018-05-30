@@ -26,7 +26,6 @@ const MethodItem = ({
         role="button"
         className={`card ${isSelected ? 'selected' : ''}`}
         onClick={handleClick}
-        tabIndex="1"
       >
         <div className="card-content">
           <div className="card-title">

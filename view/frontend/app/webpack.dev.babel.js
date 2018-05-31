@@ -1,10 +1,10 @@
 // @flow
 /* eslint-env node */
-import merge from 'webpack-merge';
 import {DefinePlugin} from 'webpack';
-import Visualizer from 'webpack-visualizer-plugin';
+import merge from 'webpack-merge';
 import common from './webpack.common.babel.js';
 import DashboardPlugin from 'webpack-dashboard/plugin';
+import Visualizer from 'webpack-visualizer-plugin';
 
 export default merge(common, {
   mode: 'development',

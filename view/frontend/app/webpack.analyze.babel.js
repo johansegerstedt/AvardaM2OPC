@@ -7,7 +7,9 @@ import {BundleAnalyzerPlugin} from 'webpack-bundle-analyzer';
 
 export default merge(prod, {
   plugins: [
-    new Visualizer(),
+    new Visualizer({
+      filename: './stat/statistics.html',
+    }),
     new BundleAnalyzerPlugin({
       analyzerMode: 'server',
     }),

@@ -15,3 +15,5 @@ Additional content ( which comes after shipping method is selected ) could be a
 ul-li to box CSS to look and feel same way
 
 http://magento2.ddd/avarda/checkout/process/purchase/11b8b7296ed8beb1d175e507858b3d50?callback=2&purchaseId=11b8b7296ed8beb1d175e507858b3d50
+
+handle the callback when on phones from avarda side.

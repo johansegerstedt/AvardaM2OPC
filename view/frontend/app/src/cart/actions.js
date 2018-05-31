@@ -31,10 +31,8 @@ export const fetchCartSuccess = createAction(
   FETCH_SUCCESS,
   createNormalizedCart,
 );
-
-export const refreshCart = createAction(REFRESH_CART, createNormalizedCart);
-
 export const fetchCartFailure = createAction(FETCH_FAILURE, createError);
+export const refreshCart = createAction(REFRESH_CART, createNormalizedCart);
 
 export const updateCartItems = createAction(
   UPDATE_ITEMS_REQUEST,

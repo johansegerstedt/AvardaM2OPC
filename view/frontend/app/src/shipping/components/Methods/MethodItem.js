@@ -27,7 +27,6 @@ const MethodItem = ({
         className={`card ${isSelected ? 'selected' : ''}`}
         onClick={handleClick}
         onKeyPress={handleClick}
-        onMouseEnter={handleClick}
         tabIndex={0}
       >
         <div className="card-content">

@@ -29,7 +29,7 @@ import {getApiUrl, apiDelete, apiPut} from '$src/m2api';
 import {getConfig} from '$src/config';
 import type {ActionType} from 'redux-actions';
 
-function* fetchCart(): Generator<*, *, *> {
+function* fetchCart(): Saga {
   try {
     const cart = yield call(apiFetchCart);
     yield put(fetchCartSuccess(cart));
@@ -44,7 +44,7 @@ function* fetchCart(): Generator<*, *, *> {
   }
 }
 
-export function* refreshCart(): Generator<*, *, *> {
+export function* refreshCart(): Saga {
   try {
     const cart = yield call(apiFetchCart);
     yield put(refreshCartAction(cart));
@@ -59,9 +59,7 @@ export function* refreshCart(): Generator<*, *, *> {
   }
 }
 
-function* updateCartItems(
-  {payload = []}: {payload: any[]} = {},
-): Generator<*, *, *> {
+function* updateCartItems({payload = []}: {payload: any[]} = {}): Saga {
   const baseUrl = `${getCartApiPath()}/items`;
   try {
     // Each cart item must be updated separately
@@ -148,7 +146,7 @@ function* removeCoupon() {
   }
 }
 
-export default function* saga(): Generator<*, *, *> {
+export default function* saga(): Saga {
   yield all([
     yield fork(function* watchFetchCart() {
       yield takeLatest(FETCH_REQUEST, fetchCart);

@@ -10,7 +10,6 @@ import {
   select,
   take,
 } from 'redux-saga/effects';
-import type {Saga} from 'redux-saga';
 import quote from 'Magento_Checkout/js/model/quote';
 import {$} from '$i18n';
 import {getConfig} from '$src/config';
@@ -86,7 +85,7 @@ function* addressChanged({
     // Continue if no need to select new shipping method
     yield put(updateAddress(newAddress));
     if (methods.some(method => isEqual(method, selectedMethod))) {
-      // result.continue let's iframe continue
+      // result.continue lets iframe continue
       return yield call([result, result.continue]);
     }
     // Scroll the page to the shipping method selection
@@ -138,7 +137,7 @@ function* completePayment({
   }
 }
 
-export default function*(): Saga<*> {
+export default function*(): Saga {
   yield all([
     yield fork(function* watchFetchPurchaseId() {
       yield takeLatest(ActionTypes.GET_PURCHASE_ID, fetchPurchaseId);

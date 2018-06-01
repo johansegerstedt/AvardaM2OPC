@@ -14,7 +14,7 @@
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
     "flow-typed": "flow-typed install -i dev",
-    "prepush": "yarn lint && flow ./src --quiet",
+    "prepush": "yarn lint && flow --quiet",
     "postinstall": "yarn flow-typed install"
   },
   "devDependencies": {

@@ -2,11 +2,12 @@
 .*/build/.*
 .*/dist/.*
 .*/node_modules/.*
-./webpack*
+webpack*
 
 [include]
 
 [libs]
+<PROJECT_ROOT>/flow-typed/
 
 [lints]
 all=warn

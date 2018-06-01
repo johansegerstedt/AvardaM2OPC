@@ -1,7 +1,9 @@
 // @flow
 import {$} from '$i18n';
 import {call, put, takeLatest} from 'redux-saga/effects';
-import {find, head, isEqual} from 'lodash';
+import find from 'lodash/find';
+import head from 'lodash/head';
+import isEqual from 'lodash/isEqual';
 import type {ActionType} from 'redux-actions';
 // The following actions and models are used to keep
 // Magento UI components up to date with updated state
@@ -94,6 +96,8 @@ function* getMethods() {
   try {
     methods = yield call(apiFetchShippingMethods, address);
     yield put(receiveMethodsSuccess(methods));
+    // console.log(methods);
+    // yield selectMethod({payload: methods[0]});
   } catch (err) {
     toast($.mage.__('Failed to load available shipping methods.'), TYPES.ERROR);
     yield put(receiveMethodsFailure(err));
@@ -103,6 +107,7 @@ function* getMethods() {
 function* selectMethod({
   payload: method,
 }: ActionType<typeof selectMethodAction>) {
+  // console.log(method);
   if (!method.available) {
     return yield put(
       addMessage({

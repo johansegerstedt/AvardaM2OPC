@@ -1,6 +1,5 @@
 // @flow
 import {createAction, type ActionType} from 'redux-actions';
-// import {ActionTypes as Cart} from './constants';
 import {PayloadCreators} from '$src/utils/redux';
 import type {CartItem, NormalizedCart} from './types';
 
@@ -23,16 +22,13 @@ export const REFRESH_CART = 'cart/refreshCart';
 
 const {createError, createString, createVoid} = PayloadCreators;
 
-const createNormalizedCart = (normalizedCart: NormalizedCart): NormalizedCart =>
+const normalized = (normalizedCart: NormalizedCart): NormalizedCart =>
   normalizedCart;
 
 export const fetchCartRequest = createAction(FETCH_REQUEST, createVoid);
-export const fetchCartSuccess = createAction(
-  FETCH_SUCCESS,
-  createNormalizedCart,
-);
+export const fetchCartSuccess = createAction(FETCH_SUCCESS, normalized);
 export const fetchCartFailure = createAction(FETCH_FAILURE, createError);
-export const refreshCart = createAction(REFRESH_CART, createNormalizedCart);
+export const refreshCart = createAction(REFRESH_CART, normalized);
 
 export const updateCartItems = createAction(
   UPDATE_ITEMS_REQUEST,

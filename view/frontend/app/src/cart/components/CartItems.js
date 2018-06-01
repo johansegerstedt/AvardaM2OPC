@@ -1,6 +1,6 @@
 // @flow
 import React, {Fragment, Component} from 'react';
-import {get} from 'lodash';
+import get from 'lodash/get';
 import {$, interpolate} from '$i18n';
 import type {CartItem} from '../types';
 import ProductItem from '$src/cart/containers/ProductItem';

@@ -6,6 +6,8 @@ import type {CustomerInfo, Result} from 'AvardaCheckOutClient';
 
 const {createString, createVoid} = PayloadCreators;
 
+export const updateItems = createAction(ActionTypes.UPDATE_ITEMS, createVoid);
+
 export const fetchPurchaseId = createAction(
   ActionTypes.GET_PURCHASE_ID,
   createVoid,
@@ -43,4 +45,5 @@ export type AvardaActions =
   | ActionType<typeof receivePurchaseId>
   | ActionType<typeof addressChanged>
   | ActionType<typeof completePaymentPressed>
-  | ActionType<typeof updatedItems>;
+  | ActionType<typeof updatedItems>
+  | ActionType<typeof updateItems>;

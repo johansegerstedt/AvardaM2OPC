@@ -1,6 +1,6 @@
 // @flow
 import AvardaCheckOutClient from 'AvardaCheckOutClient';
-import {isEqual} from 'lodash';
+import isEqual from 'lodash/isEqual';
 import {
   takeLatest,
   all,
@@ -10,6 +10,7 @@ import {
   select,
   take,
 } from 'redux-saga/effects';
+import type {Saga} from 'redux-saga';
 import quote from 'Magento_Checkout/js/model/quote';
 import {$} from '$i18n';
 import {getConfig} from '$src/config';
@@ -25,6 +26,7 @@ import {
   getPurchaseIdFailure,
   addressChanged as addressChangedAction,
   updatedItems,
+  updateItems,
   completePaymentPressed as completePaymentPressedAction,
 } from './actions';
 import * as ShippingMessages from './messages';
@@ -34,9 +36,9 @@ import {DIV_ID} from './components/AvardaCheckOut';
 import {type ActionType} from 'redux-actions';
 import {type CustomerInfo} from 'AvardaCheckOutClient';
 import {type BillingAddress} from '$src/cart/types';
-import {FETCH_SUCCESS, REFRESH_CART} from '$src/cart/actions';
+import {fetchCartSuccess, refreshCart} from '$src/cart/actions';
 
-function* fetchPurchaseId() {
+function* fetchPurchaseId(): any {
   try {
     const {purchase_id} = yield call(
       apiGet,
@@ -104,10 +106,10 @@ function* addressChanged({
   }
 }
 
-function* cartUpdated() {
+function* cartUpdated(): any {
   try {
     if (yield select(getPurchaseId)) {
-      yield put({type: 'avarda/updateItems'});
+      yield put(updateItems);
 
       if (document.getElementById(DIV_ID)) {
         // Make the iframe get updates from Avarda API
@@ -136,13 +138,13 @@ function* completePayment({
   }
 }
 
-export default function*(): Generator<*, *, *> {
+export default function*(): Saga<*> {
   yield all([
     yield fork(function* watchFetchPurchaseId() {
       yield takeLatest(ActionTypes.GET_PURCHASE_ID, fetchPurchaseId);
     }),
     yield fork(function* watchCartUpdated() {
-      yield takeLatest([FETCH_SUCCESS, REFRESH_CART], cartUpdated);
+      yield takeLatest(([fetchCartSuccess, refreshCart]: any), cartUpdated);
     }),
     yield fork(function* watchAddressChanged() {
       yield takeLatest(ActionTypes.ADDRESS_CHANGED, addressChanged);

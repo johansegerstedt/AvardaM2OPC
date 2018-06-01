@@ -1,7 +1,7 @@
 // @flow
 import React, {Component, Fragment} from 'react';
 import {Provider} from 'react-redux';
-import {get} from 'lodash';
+import get from 'lodash/get';
 import {ToastContainer} from 'react-toastify';
 import App from '$src/app/components/App';
 import type {Actions, AppState} from '../types';

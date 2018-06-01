@@ -1,11 +1,12 @@
 // @flow
 import {createSelector} from 'reselect';
 import {compose} from 'redux';
-import {values} from 'lodash';
-import type {Selector} from '$src/root/types';
+import values from 'lodash/values';
+import type {Selector, AppState} from '$src/root/types';
 import type {BillingAddress, CartItem} from './types';
 
-export const getCartItems: Selector<void, *> = state => state.cartItems.byId;
+export const getCartItems: Selector<void, *> = (state: AppState) =>
+  state.cartItems.byId;
 
 export const getAllCartItems: Selector<void, CartItem[]> = compose(
   values,
@@ -17,7 +18,7 @@ export const getCartItemById = (id: string) =>
 
 export const makeGetCartItemById = () => {
   const selectCartItemId: Selector<{cartItemId: string}, string> = (
-    state,
+    state: AppState,
     {cartItemId},
   ) => cartItemId;
 
@@ -28,11 +29,12 @@ export const makeGetCartItemById = () => {
   );
 };
 
-export const getCart: Selector<void, *> = state => state.cart.data;
-export const getIsCartUpdating: Selector<void, boolean> = state =>
+export const getCart: Selector<void, *> = (state: AppState) => state.cart.data;
+
+export const getIsCartUpdating: Selector<void, boolean> = (state: AppState) =>
   state.cart.pendingUpdates !== 0;
 
-export const getIsCartFetching: Selector<void, *> = state =>
+export const getIsCartFetching: Selector<void, *> = (state: AppState) =>
   state.cart.isFetching;
 
 export const getShippingAssignment: Selector<void, *> = createSelector(

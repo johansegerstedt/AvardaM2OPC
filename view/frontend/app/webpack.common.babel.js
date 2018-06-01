@@ -96,6 +96,7 @@ export default {
     ],
   },
   resolve: {
+    modules: ['src', 'node_modules'],
     alias: {
       $src: path.resolve(__dirname, 'src/'),
       $i18n: path.resolve(__dirname, 'src/i18n'),

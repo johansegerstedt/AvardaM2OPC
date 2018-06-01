@@ -1,6 +1,6 @@
 // @flow
 import {normalize, schema} from 'normalizr';
-import merge from 'lodash.merge';
+import merge from 'lodash/merge';
 import {getApiUrl, apiGet} from '$src/m2api';
 import {getCartApiPath} from './utils';
 import type {NormalizedCart} from './types';

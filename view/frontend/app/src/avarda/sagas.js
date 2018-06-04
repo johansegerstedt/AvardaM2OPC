@@ -10,6 +10,7 @@ import {
   select,
   take,
 } from 'redux-saga/effects';
+import {type Saga} from 'redux-saga';
 import quote from 'Magento_Checkout/js/model/quote';
 import {$} from '$i18n';
 import {getConfig} from '$src/config';
@@ -35,7 +36,7 @@ import {DIV_ID} from './components/AvardaCheckOut';
 import {type ActionType} from 'redux-actions';
 import {type CustomerInfo} from 'AvardaCheckOutClient';
 import {type BillingAddress} from '$src/cart/types';
-import {fetchCartSuccess, refreshCart} from '$src/cart/actions';
+import {FETCH_SUCCESS, REFRESH_CART} from '$src/cart/actions';
 
 function* fetchPurchaseId(): any {
   try {
@@ -108,7 +109,7 @@ function* addressChanged({
 function* cartUpdated(): any {
   try {
     if (yield select(getPurchaseId)) {
-      yield put(updateItems);
+      yield put(updateItems());
 
       if (document.getElementById(DIV_ID)) {
         // Make the iframe get updates from Avarda API
@@ -137,13 +138,13 @@ function* completePayment({
   }
 }
 
-export default function*(): Saga {
+export default function*(): Saga<*> {
   yield all([
     yield fork(function* watchFetchPurchaseId() {
       yield takeLatest(ActionTypes.GET_PURCHASE_ID, fetchPurchaseId);
     }),
     yield fork(function* watchCartUpdated() {
-      yield takeLatest(([fetchCartSuccess, refreshCart]: any), cartUpdated);
+      yield takeLatest([FETCH_SUCCESS, REFRESH_CART], cartUpdated);
     }),
     yield fork(function* watchAddressChanged() {
       yield takeLatest(ActionTypes.ADDRESS_CHANGED, addressChanged);

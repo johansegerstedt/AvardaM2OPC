@@ -88,7 +88,7 @@ class AddressDataBuilder implements BuilderInterface
     protected function setBillingAddress(OrderAdapterInterface $order)
     {
         $address = $order->getBillingAddress();
-        if ($address !== null && $address->getPostcode() != null) {
+        if ($address !== null && $address->getPostcode() !== null) {
             return [
                 self::INVOICING_PREFIX . self::FIRST_NAME => $address->getFirstname(),
                 self::INVOICING_PREFIX . self::LAST_NAME  => $address->getLastname(),

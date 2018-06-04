@@ -131,7 +131,7 @@ function* applyCoupon({
   }
 }
 
-function* removeCoupon() {
+function* removeCoupon(): Saga {
   const url = getApiUrl(`${getCartApiPath()}/coupons`);
   try {
     const success = yield call(apiDelete, url);

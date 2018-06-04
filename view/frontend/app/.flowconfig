@@ -1,11 +1,11 @@
 [ignore]
 .*/build/.*
 .*/dist/.*
-.*/node_modules/.*
+.*/node_modules/**/*
 webpack*
 
 [include]
-
+<PROJECT_ROOT>/src
 [libs]
 <PROJECT_ROOT>/flow-typed/
 

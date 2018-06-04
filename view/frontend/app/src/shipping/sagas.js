@@ -1,5 +1,6 @@
 // @flow
 import {$} from '$i18n';
+import {type Saga} from 'redux-saga';
 import {call, put, takeLatest} from 'redux-saga/effects';
 import find from 'lodash/find';
 import head from 'lodash/head';
@@ -144,7 +145,7 @@ function* scrollToShippingContainer() {
   }
 }
 
-export default function* saga(): Generator<*, *, *> {
+export default function* saga(): Saga<*> {
   yield takeLatest(FETCH_SUCCESS, fetchCartSuccess);
   yield takeLatest(Shipping.GET_METHODS_REQUEST, getMethods);
   yield takeLatest(Shipping.RECEIVE_ASSIGNMENT, receiveShipping);

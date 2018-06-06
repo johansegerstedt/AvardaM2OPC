@@ -1,25 +1,21 @@
 // @flow
-import React, {Fragment} from 'react';
+import React, {Fragment, Component} from 'react';
 import queryString from 'query-string';
-import {bindActionCreators} from 'redux';
 import {connect, type MapStateToProps} from 'react-redux';
 import {compose} from 'redux';
+import {$, interpolateHTML} from '$i18n';
+import {getConfig} from '$src/config';
 import CartContainer from '$src/cart/components/CartContainer';
-import ShippingContainer from '$src/shipping/components/ShippingMethodContainer';
-import AvardaContainer from '$src/avarda/components/AvardaCheckOutContainer';
-import CartIsEmpty from './CartIsEmpty';
-import Loader from '$src/utils/components/Loader';
-import {getCart, getIsCartFetching} from '$src/cart/selectors';
-import {fetchCartRequest} from '$src/cart/actions';
+import ShippingContainer from '$src/shipping/components/ShippingContainer';
+import AvardaContainer from '$src/avarda/components/AvardaContainer';
+import {getCart} from '$src/cart/selectors';
 import type {Config} from '$src/types';
 import type {AppState} from '$src/root/types';
 import type {Cart} from '$src/cart/types';
 
 type Props = {
   cart: null | Cart,
-  isFetching: boolean,
   config: Config,
-  fetchCartRequest(): void,
 };
 
 const CartIsNotEmpty = () => {
@@ -30,40 +26,42 @@ const CartIsNotEmpty = () => {
         <AvardaContainer key="avarda" />
       </div>
       <div className="avarda-checkout-sidebar">
-        <div className="side-container">
-          <CartContainer key="cart" />
-        </div>
+        <CartContainer key="cart" />
       </div>
     </Fragment>
   );
 };
 
+const CartIsEmpty = () => (
+  <div className="cart-empty">
+    <div>
+      <span>{$.mage.__('You have no items in your shopping cart.')}</span>
+    </div>
+    <div
+      dangerouslySetInnerHTML={interpolateHTML(
+        $.mage.__('Click <a href="%1">here</a> to continue shopping.'),
+        getConfig().baseUrl,
+      )}
+    />
+  </div>
+);
+
 const PaymentSuccess = () => <AvardaContainer />;
 
-class App extends React.Component<Props> {
-  componentDidMount() {
-    const {fetchCartRequest, config: {hasItems}} = this.props;
-    if (hasItems) {
-      fetchCartRequest();
-    }
-  }
-
+class App extends Component<Props> {
   render() {
-    const {cart, isFetching, config: {hasItems}} = this.props;
-
-    const isCartEmpty = !hasItems || (cart && cart.items.length === 0); // || cart === null;
-    const isSuccess =
+    const paymentSuccessful =
       queryString.parse(window.location.search).PaymentStatus === 'Success';
 
-    if (isSuccess) {
+    if (paymentSuccessful) {
       return <PaymentSuccess />;
     }
+    const {cart, config: {hasItems}} = this.props;
+    const isCartEmpty = !hasItems || (cart && cart.items.length === 0); // || cart === null;
 
     return (
       <div className="avarda-app">
-        <Loader isLoading={cart === null && isFetching}>
-          {isCartEmpty ? <CartIsEmpty /> : <CartIsNotEmpty />}
-        </Loader>
+        {isCartEmpty ? <CartIsEmpty /> : <CartIsNotEmpty />}
       </div>
     );
   }
@@ -71,15 +69,7 @@ class App extends React.Component<Props> {
 
 const mapStateToProps: MapStateToProps<AppState, *, *> = state => ({
   cart: getCart(state),
-  isFetching: getIsCartFetching(state),
+  config: getConfig(),
 });
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(
-    {
-      fetchCartRequest,
-    },
-    dispatch,
-  );
-
-export default compose(connect(mapStateToProps, mapDispatchToProps))(App);
+export default compose(connect(mapStateToProps))(App);

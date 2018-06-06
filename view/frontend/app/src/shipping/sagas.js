@@ -1,8 +1,11 @@
 // @flow
 import {$} from '$i18n';
-import {takeLatest} from 'redux-saga';
-import {call, put} from 'redux-saga/effects';
-import {find, head, isEqual} from 'lodash';
+import {type Saga} from 'redux-saga';
+import {call, put, takeLatest} from 'redux-saga/effects';
+import find from 'lodash/find';
+import head from 'lodash/head';
+import isEqual from 'lodash/isEqual';
+import type {ActionType} from 'redux-actions';
 // The following actions and models are used to keep
 // Magento UI components up to date with updated state
 import quote from 'Magento_Checkout/js/model/quote';
@@ -14,22 +17,24 @@ import setShippingInformation from 'Magento_Checkout/js/action/set-shipping-info
 import {MessageTypes} from '$src/utils/components/Message';
 import toast, {TYPES} from '$src/utils/toast';
 import {ActionTypes as Shipping} from './constants';
-import {ActionTypes as Cart} from '$src/cart/constants';
-import {fetchCartSuccess as fetchCartSuccessAction} from '$src/cart/actions';
+import {
+  fetchCartSuccess as fetchCartSuccessAction,
+  FETCH_SUCCESS,
+} from '$src/cart/actions';
 import {refreshCart} from '$src/cart/sagas';
 import {
   addMessage,
   getMethods as getMethodsAction,
   receiveShippingAssignment,
-  receiveMethods,
   saveShippingInformationFailure,
   saveShippingInformationSuccess,
   selectMethod as selectMethodAction,
   updateAddress as updateAddressAction,
+  receiveMethodsFailure,
+  receiveMethodsSuccess,
 } from './actions';
 import {fetchShippingMethods as apiFetchShippingMethods} from './api';
 import {SHIPPING_ANCHOR_ID} from './constants';
-import type {ActionType} from 'redux-actions';
 
 function* fetchCartSuccess({
   payload: {result, entities},
@@ -91,16 +96,19 @@ function* getMethods() {
   let methods = null;
   try {
     methods = yield call(apiFetchShippingMethods, address);
+    yield put(receiveMethodsSuccess(methods));
+    // console.log(methods);
+    // yield selectMethod({payload: methods[0]});
   } catch (err) {
     toast($.mage.__('Failed to load available shipping methods.'), TYPES.ERROR);
-    return;
+    yield put(receiveMethodsFailure(err));
   }
-  yield put(receiveMethods(methods));
 }
 
 function* selectMethod({
   payload: method,
 }: ActionType<typeof selectMethodAction>) {
+  // console.log(method);
   if (!method.available) {
     return yield put(
       addMessage({
@@ -110,7 +118,14 @@ function* selectMethod({
     );
   }
 
-  selectShippingMethod(method);
+  try {
+    selectShippingMethod(method);
+    setShippingInformation();
+    yield put(saveShippingInformationSuccess());
+  } catch (err) {
+    toast($.mage.__('Failed to save shipping information.'), TYPES.ERROR);
+    yield put(saveShippingInformationFailure(err));
+  }
 }
 
 function* saveInformation() {
@@ -130,9 +145,9 @@ function* scrollToShippingContainer() {
   }
 }
 
-export default function* saga(): Generator<*, *, *> {
-  yield takeLatest(Cart.FETCH_SUCCESS, fetchCartSuccess);
-  yield takeLatest(Shipping.GET_METHODS, getMethods);
+export default function* saga(): Saga<*> {
+  yield takeLatest(FETCH_SUCCESS, fetchCartSuccess);
+  yield takeLatest(Shipping.GET_METHODS_REQUEST, getMethods);
   yield takeLatest(Shipping.RECEIVE_ASSIGNMENT, receiveShipping);
   yield takeLatest(Shipping.SCROLL_TO_FORM, scrollToShippingContainer);
   yield takeLatest(Shipping.UPDATE_ADDRESS, updateAddress);

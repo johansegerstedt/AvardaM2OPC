@@ -1,13 +1,13 @@
 // @flow
-import React from 'react';
+import React, {Component} from 'react';
 import {$} from '$i18n';
 import {formatCurrency} from '$src/utils/format';
-import Loader from '$src/utils/components/Loader';
 import type {Cart, TotalSegment} from '../types';
+import Loader from '$src/utils/components/Loader/Loader';
 
 type Props = {
   currency: string,
-  isLoading: boolean,
+  isUpdating: boolean,
   totalSegments: TotalSegment[],
   cart: Cart,
 };
@@ -39,9 +39,9 @@ const displayTotalSegmentValue = (
   return formatCurrency(theValue, currency);
 };
 
-class CartSummary extends React.Component<Props> {
+class CartSummary extends Component<Props> {
   render() {
-    const {currency, totalSegments, isLoading, cart: totalsData} = this.props;
+    const {currency, totalSegments, isUpdating, cart: totalsData} = this.props;
     const {segments, footerSegments} = totalSegments.reduce(
       (obj, segment) => {
         if (segment.area && segment.area === 'footer') {
@@ -54,10 +54,10 @@ class CartSummary extends React.Component<Props> {
       {segments: [], footerSegments: []},
     );
     return (
-      <div className="avarda-cart-summary cart-summary">
-        <div id="cart-totals" className="avarda-cart-totals cart-totals">
-          <div className="table-wrapper">
-            <Loader isLoading={isLoading} block>
+      <Loader show={isUpdating} height={150}>
+        <div className="avarda-cart-summary cart-summary">
+          <div id="cart-totals" className="avarda-cart-totals cart-totals">
+            <div className="table-wrapper">
               <table className="data table totals">
                 <caption className="table-caption">
                   {$.mage.__('Total')}
@@ -105,10 +105,10 @@ class CartSummary extends React.Component<Props> {
                   )}
                 </tbody>
               </table>
-            </Loader>
+            </div>
           </div>
         </div>
-      </div>
+      </Loader>
     );
   }
 }

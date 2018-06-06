@@ -1,10 +1,19 @@
 // @flow
-import {normalize} from 'normalizr';
-import {merge} from 'lodash';
+import {normalize, schema} from 'normalizr';
+import merge from 'lodash/merge';
 import {getApiUrl, apiGet} from '$src/m2api';
 import {getCartApiPath} from './utils';
-import {cartSchema} from './constants';
 import type {NormalizedCart} from './types';
+
+const cartItemSchema = new schema.Entity(
+  'cartItems',
+  {},
+  {idAttribute: 'item_id'},
+);
+
+const cartSchema = new schema.Entity('cart', {
+  items: [cartItemSchema],
+});
 
 export const fetchCart = async (): Promise<NormalizedCart> => {
   const url = getApiUrl(getCartApiPath());

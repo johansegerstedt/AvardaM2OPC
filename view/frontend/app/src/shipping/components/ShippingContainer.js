@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, {Component} from 'react';
 import {bindActionCreators, compose} from 'redux';
 import {connect} from 'react-redux';
 import quote from 'Magento_Checkout/js/model/quote';
@@ -18,7 +18,7 @@ import {
 import {Message, Messages} from '$src/utils/components/Message';
 import ShippingPolicy from './ShippingPolicy';
 import ShippingMethodForm from './ShippingMethodForm';
-import ShippingAddressForm from './ShippingAddressForm';
+import PostCode from './PostCode';
 import {updateAddress, getMethods, selectMethod} from '../actions';
 // import {SHIPPING_ANCHOR_ID} from '../constants';
 import {saveShippingInformation} from '../actions';
@@ -43,7 +43,7 @@ type Props = {
   selectedShippingMethod: null | ShippingMethodType,
 };
 
-class ShippingMethod extends React.Component<Props> {
+class ShippingMethod extends Component<Props> {
   fetchShippingMethods = (address: BillingAddress) => {
     const {estimateShippingMethods} = this.props;
     estimateShippingMethods({
@@ -72,12 +72,8 @@ class ShippingMethod extends React.Component<Props> {
     if (isVirtual) {
       return null;
     }
-
     return (
       <div className="checkout-shipping-method avarda-step">
-        {/* <span id={SHIPPING_ANCHOR_ID} className="avarda-title step-title">
-          {$.mage.__('Shipping Methods')}
-        </span> */}
         {messages && (
           <Messages>
             {messages.map(({id, type, message}) => (
@@ -93,13 +89,7 @@ class ShippingMethod extends React.Component<Props> {
               className="step-content"
               data-role="content"
             >
-              {shippingAddress && (
-                <ShippingAddressForm
-                  handleSubmit={this.updateShippingAddress}
-                  shippingAddress={shippingAddress}
-                  controlled={selectedShippingMethod !== null}
-                />
-              )}
+              {shippingAddress && <PostCode key="postCode" />}
               {/* Submit this to estimate shipping methods */}
             </div>
           </li>

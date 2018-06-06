@@ -86,7 +86,8 @@ class QuoteCollectTotalsPrepareItems
     {
         try {
             if (!$this->collectTotalsFlag &&
-                $subject->getItemsCount() > 0
+                $subject->getItemsCount() > 0 &&
+                $subject->getItems() !== null
             ) {
                 $this->prepareItemStorage($subject);
                 $this->collectTotalsFlag = true;

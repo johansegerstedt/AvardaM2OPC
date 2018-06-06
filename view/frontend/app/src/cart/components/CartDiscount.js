@@ -1,6 +1,6 @@
 // @flow
 import React, {Fragment, Component} from 'react';
-import {get} from 'lodash';
+import get from 'lodash/get';
 import {$} from '$i18n';
 
 type Props = {

@@ -1,5 +1,5 @@
 // @flow
-import React from 'react';
+import React, {Component} from 'react';
 import ko from 'knockout';
 
 const getTemplateHTML = `
@@ -13,7 +13,7 @@ type Props = {
   divProps?: Object,
 };
 
-class KoBindScope extends React.Component<Props> {
+class KoBindScope extends Component<Props> {
   node = null;
 
   componentDidMount() {

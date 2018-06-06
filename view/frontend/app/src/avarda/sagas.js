@@ -1,13 +1,20 @@
 // @flow
 import AvardaCheckOutClient from 'AvardaCheckOutClient';
-import {isEqual} from 'lodash';
-import {takeLatest} from 'redux-saga';
-import {all, call, fork, put, select, take} from 'redux-saga/effects';
+import isEqual from 'lodash/isEqual';
+import {
+  takeLatest,
+  all,
+  call,
+  fork,
+  put,
+  select,
+  take,
+} from 'redux-saga/effects';
+import {type Saga} from 'redux-saga';
 import quote from 'Magento_Checkout/js/model/quote';
 import {$} from '$i18n';
 import {getConfig} from '$src/config';
 import {apiGet, apiPost, getApiUrl} from '$src/m2api';
-import {ActionTypes as Cart} from '$src/cart/constants';
 import {getCartApiPath} from '$src/cart/utils';
 import {getIsVirtual} from '$src/cart/selectors';
 import {ActionTypes as ShippingActions} from '$src/shipping/constants';
@@ -19,17 +26,19 @@ import {
   getPurchaseIdFailure,
   addressChanged as addressChangedAction,
   updatedItems,
+  updateItems,
   completePaymentPressed as completePaymentPressedAction,
 } from './actions';
 import * as ShippingMessages from './messages';
 import {ActionTypes} from './constants';
 import {getPurchaseId} from './selectors';
 import {DIV_ID} from './components/AvardaCheckOut';
-import type {ActionType} from 'redux-actions';
-import type {CustomerInfo} from 'AvardaCheckOutClient';
-import type {BillingAddress} from '$src/cart/types';
+import {type ActionType} from 'redux-actions';
+import {type CustomerInfo} from 'AvardaCheckOutClient';
+import {type BillingAddress} from '$src/cart/types';
+import {FETCH_SUCCESS, REFRESH_CART} from '$src/cart/actions';
 
-function* fetchPurchaseId() {
+function* fetchPurchaseId(): any {
   try {
     const {purchase_id} = yield call(
       apiGet,
@@ -77,7 +86,7 @@ function* addressChanged({
     // Continue if no need to select new shipping method
     yield put(updateAddress(newAddress));
     if (methods.some(method => isEqual(method, selectedMethod))) {
-      // result.continue let's iframe continue
+      // result.continue lets iframe continue
       return yield call([result, result.continue]);
     }
     // Scroll the page to the shipping method selection
@@ -97,10 +106,10 @@ function* addressChanged({
   }
 }
 
-function* cartUpdated() {
+function* cartUpdated(): any {
   try {
     if (yield select(getPurchaseId)) {
-      yield put({type: 'avarda/updateItems'});
+      yield put(updateItems());
 
       if (document.getElementById(DIV_ID)) {
         // Make the iframe get updates from Avarda API
@@ -129,13 +138,13 @@ function* completePayment({
   }
 }
 
-export default function*(): Generator<*, *, *> {
+export default function*(): Saga<*> {
   yield all([
     yield fork(function* watchFetchPurchaseId() {
       yield takeLatest(ActionTypes.GET_PURCHASE_ID, fetchPurchaseId);
     }),
     yield fork(function* watchCartUpdated() {
-      yield takeLatest([Cart.FETCH_SUCCESS, Cart.REFRESH_CART], cartUpdated);
+      yield takeLatest([FETCH_SUCCESS, REFRESH_CART], cartUpdated);
     }),
     yield fork(function* watchAddressChanged() {
       yield takeLatest(ActionTypes.ADDRESS_CHANGED, addressChanged);

@@ -1,0 +1,68 @@
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.cards-item {
+  display: flex;
+  height: 100px;
+  flex-grow: 1;
+  padding: 1rem 1rem 1rem 0;
+  @media (min-width: 40rem) {
+    width: 50%;
+  }
+  @media (min-width: 56rem) {
+    width: 33.3333%;
+  }
+}
+.selected {
+  background-color: @primary-color !important;
+}
+.card {
+  font-size: 1.45rem;
+  // start :: this is a fix for  a element decoration
+  color: @gray-lightest;
+  text-decoration: none;
+  // end :: this is a fix for  a element decoration
+  background-color: @secondary-color;
+  cursor: pointer;
+  border-radius: 0.25rem;
+  box-shadow: 0 20px 40px -14px rgba(0, 0, 0, 0.25);
+  display: flex;
+  width: 100%;
+  flex-direction: column;
+  overflow: hidden;
+  &:hover {
+    opacity: 0.9;
+  }
+
+  .card-content {
+    display: flex;
+    flex: 1 1 auto;
+    flex-direction: column;
+    padding: 1rem;
+  }
+
+  .card-title {
+    // color: @gray-dark;
+    font-size: 1.55rem;
+    font-weight: 300;
+    // letter-spacing: 2px;
+    text-transform: uppercase;
+  }
+  .card-price {
+    font-size: 2.2rem;
+  }
+  .card-footnote {
+    font-size: 0.875rem;
+  }
+}

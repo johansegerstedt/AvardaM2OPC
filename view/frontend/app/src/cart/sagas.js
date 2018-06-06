@@ -1,6 +1,5 @@
 // @flow
-import {takeEvery, takeLatest} from 'redux-saga';
-import {all, call, fork, put} from 'redux-saga/effects';
+import {takeEvery, takeLatest, all, call, fork, put} from 'redux-saga/effects';
 import {$, interpolate} from '$i18n';
 import toast, {TYPES} from '$src/utils/toast';
 import {getCartApiPath} from './utils';
@@ -19,14 +18,18 @@ import {
   refreshCart as refreshCartAction,
   removeCouponSuccess,
   removeCouponFailure,
+  FETCH_REQUEST,
+  UPDATE_ITEMS_REQUEST,
+  DELETE_ITEM_REQUEST,
+  APPLY_COUPON_REQUEST,
+  REMOVE_COUPON_REQUEST,
 } from './actions';
 import {fetchCart as apiFetchCart} from './api';
-import {ActionTypes as Cart} from './constants';
 import {getApiUrl, apiDelete, apiPut} from '$src/m2api';
 import {getConfig} from '$src/config';
 import type {ActionType} from 'redux-actions';
 
-function* fetchCart(): Generator<*, *, *> {
+function* fetchCart(): Saga {
   try {
     const cart = yield call(apiFetchCart);
     yield put(fetchCartSuccess(cart));
@@ -41,7 +44,7 @@ function* fetchCart(): Generator<*, *, *> {
   }
 }
 
-export function* refreshCart(): Generator<*, *, *> {
+export function* refreshCart(): Saga {
   try {
     const cart = yield call(apiFetchCart);
     yield put(refreshCartAction(cart));
@@ -56,9 +59,7 @@ export function* refreshCart(): Generator<*, *, *> {
   }
 }
 
-function* updateCartItems(
-  {payload = []}: {payload: any[]} = {},
-): Generator<*, *, *> {
+function* updateCartItems({payload = []}: {payload: any[]} = {}): Saga {
   const baseUrl = `${getCartApiPath()}/items`;
   try {
     // Each cart item must be updated separately
@@ -130,7 +131,7 @@ function* applyCoupon({
   }
 }
 
-function* removeCoupon() {
+function* removeCoupon(): Saga {
   const url = getApiUrl(`${getCartApiPath()}/coupons`);
   try {
     const success = yield call(apiDelete, url);
@@ -145,22 +146,22 @@ function* removeCoupon() {
   }
 }
 
-export default function* saga(): Generator<*, *, *> {
+export default function* saga(): Saga {
   yield all([
     yield fork(function* watchFetchCart() {
-      yield takeLatest(Cart.FETCH_REQUEST, fetchCart);
+      yield takeLatest(FETCH_REQUEST, fetchCart);
     }),
     yield fork(function* watchUpdateItems() {
-      yield takeLatest(Cart.UPDATE_ITEMS_REQUEST, updateCartItems);
+      yield takeLatest(UPDATE_ITEMS_REQUEST, updateCartItems);
     }),
     yield fork(function* watchDeleteItem() {
-      yield takeEvery(Cart.DELETE_ITEM_REQUEST, deleteCartItem);
+      yield takeEvery(DELETE_ITEM_REQUEST, deleteCartItem);
     }),
     yield fork(function* watchApplyCoupon() {
-      yield takeEvery(Cart.APPLY_COUPON_REQUEST, applyCoupon);
+      yield takeEvery(APPLY_COUPON_REQUEST, applyCoupon);
     }),
     yield fork(function* watchRemoveCoupon() {
-      yield takeLatest(Cart.REMOVE_COUPON_REQUEST, removeCoupon);
+      yield takeLatest(REMOVE_COUPON_REQUEST, removeCoupon);
     }),
   ]);
 }

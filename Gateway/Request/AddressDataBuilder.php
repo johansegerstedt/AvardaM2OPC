@@ -88,18 +88,29 @@ class AddressDataBuilder implements BuilderInterface
     protected function setBillingAddress(OrderAdapterInterface $order)
     {
         $address = $order->getBillingAddress();
-        if ($address === null) {
-            return [];
+        if ($address !== null && $address->getPostcode() !== null) {
+            return [
+                self::INVOICING_PREFIX . self::FIRST_NAME => $address->getFirstname(),
+                self::INVOICING_PREFIX . self::LAST_NAME  => $address->getLastname(),
+                self::INVOICING_PREFIX . self::STREET_1   => $address->getStreetLine1(),
+                self::INVOICING_PREFIX . self::STREET_2   => $address->getStreetLine2(),
+                self::INVOICING_PREFIX . self::ZIP        => $address->getPostcode(),
+                self::INVOICING_PREFIX . self::CITY       => $address->getCity(),
+            ];
         }
 
-        return [
-            self::INVOICING_PREFIX . self::FIRST_NAME => $address->getFirstname(),
-            self::INVOICING_PREFIX . self::LAST_NAME  => $address->getLastname(),
-            self::INVOICING_PREFIX . self::STREET_1   => $address->getStreetLine1(),
-            self::INVOICING_PREFIX . self::STREET_2   => $address->getStreetLine2(),
-            self::INVOICING_PREFIX . self::ZIP        => $address->getPostcode(),
-            self::INVOICING_PREFIX . self::CITY       => $address->getCity(),
-        ];
+        /**
+         * Add postcode to invoicing zip if billing address is not set yet. This
+         * way it can be pre-filled in Avarda iframe.
+         */
+        $address = $order->getShippingAddress();
+        if ($address !== null) {
+            return [
+                self::INVOICING_PREFIX . self::ZIP => $address->getPostcode(),
+            ];
+        }
+
+        return [];
     }
 
     /**

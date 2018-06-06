@@ -1,12 +1,12 @@
 // @flow
-import React, {type ComponentType} from 'react';
+import React, {type ComponentType, Component} from 'react';
 type Subscription = {dispose(): void};
 type Observable = () => any & {subscribe: ((any) => any) => Subscription};
 
 const subscribe = (subscriptions: {[string]: Observable}) => (
   WrappedComponent: ComponentType<any>,
 ) => {
-  class Subscription extends React.Component<*, *> {
+  class Subscription extends Component<*, *> {
     static displayName = `subscribe(${WrappedComponent.displayName ||
       WrappedComponent.name ||
       'Component'})`;

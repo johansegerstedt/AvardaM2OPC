@@ -1,9 +1,8 @@
 // @flow
-import React, {Fragment} from 'react';
+import React, {Component} from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from 'react-redux';
 import quote from 'Magento_Checkout/js/model/quote';
-import Loader from '$src/utils/components/Loader';
 import {getConfig} from '$src/config';
 import {
   fetchCartRequest,
@@ -25,6 +24,7 @@ import CartDiscount from './CartDiscount';
 import type {Cart as CartType, CartItem} from '../types';
 import GiftCardAccount from './GiftCardAccount';
 import GiftMessage from './GiftMessage';
+import Loader from '$src/utils/components/Loader/Loader';
 
 type Props = {
   cart: null | CartType,
@@ -41,13 +41,18 @@ type Props = {
 // TODO
 const GiftOptionsCart = () => <div id="gift-options-cart" />;
 
-class Cart extends React.Component<Props> {
+class Cart extends Component<Props> {
   totalsSubscription = null;
 
   componentDidMount() {
     this.totalsSubscription = quote.totals.subscribe(() => {
       this.props.fetchCartRequest();
     });
+    const {hasItems} = getConfig();
+
+    if (hasItems) {
+      this.props.fetchCartRequest();
+    }
   }
 
   componentWillUnMount() {
@@ -63,7 +68,6 @@ class Cart extends React.Component<Props> {
       updateCartItems,
       deleteCartItem,
       isUpdatingCart,
-      isFetching,
       applyCoupon,
       removeCoupon,
     } = this.props;
@@ -71,12 +75,9 @@ class Cart extends React.Component<Props> {
     const {hasItems} = getConfig();
 
     const cartIsEmpty = !hasItems || (cart !== null && cart.items.length === 0);
-
-    const loaded = !!cart && !cartIsEmpty;
-
     return (
-      <Fragment>
-        <Loader isLoading={!loaded}>
+      <div className="side-container">
+        <Loader show={!cart || cartIsEmpty} height={335} type="circular">
           {cart
             ? [
                 <CartItems
@@ -90,7 +91,7 @@ class Cart extends React.Component<Props> {
                 <CartSummary
                   key="cartSummary"
                   totalSegments={cart.total_segments}
-                  isLoading={isFetching || isUpdatingCart}
+                  isUpdating={isUpdatingCart}
                   currency={getQuoteCurrency(cart)}
                   cart={cart}
                 />,
@@ -106,7 +107,7 @@ class Cart extends React.Component<Props> {
               ]
             : null}
         </Loader>
-      </Fragment>
+      </div>
     );
   }
 }

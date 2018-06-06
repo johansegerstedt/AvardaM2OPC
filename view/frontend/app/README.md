@@ -2,21 +2,18 @@
 * ava or jest
 * config refactor
 * extra code remove
-* less preprocessor
+* ~~less preprocessor~~
 * integrate better towards magento
 * write down the concept how it should work AVARDA-63
-* full app loader as css FB type
 
-send invoicingZip for avarda iframe if we have it check init of the call in
+~~send invoicingZip for avarda iframe if we have it check init of the call in~~
 back-end funny format
 
 shipping methods as boxes for easier selection and with some animation
-Additional content ( which comes after shipping method is selected ) could be a
-ul-li to box CSS to look and feel same way
 
 http://magento2.ddd/avarda/checkout/process/purchase/11b8b7296ed8beb1d175e507858b3d50?callback=2&purchaseId=11b8b7296ed8beb1d175e507858b3d50
 
-handle the callback when on phones from avarda side.
+~~handle the callback when on phones from avarda side.~~
 
 make sure you have States as optional..
 https://magento.stackexchange.com/questions/117496/how-to-make-the-state-region-optional-in-magento-2-0-7

@@ -5,15 +5,11 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "start":
-      "webpack-dashboard -- webpack --config webpack.dev.babel.js --watch",
-    "build:analyze":
-      "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.analyze.babel.js",
-    "build":
-      "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.prod.babel.js",
+    "start": "webpack-dashboard -- webpack --config webpack.dev.babel.js --watch",
+    "build:analyze": "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.analyze.babel.js",
+    "build": "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.prod.babel.js",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
-    "flow-typed": "flow-typed install -i dev",
     "prepush": "yarn lint && flow --quiet",
     "postinstall": "yarn flow-typed install"
   },
@@ -76,7 +72,7 @@
     "query-string": "^5.0.1",
     "react": "^16.3.2",
     "react-dom": "^16.0.0",
-    "react-redux": "^5.0.6",
+    "react-redux": "^5.0.7",
     "react-toastify": "^3.2.2",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",

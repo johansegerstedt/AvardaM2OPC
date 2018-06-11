@@ -1,7 +1,7 @@
 // @flow
 import React, {Fragment, Component} from 'react';
 import queryString from 'query-string';
-import {connect, type MapStateToProps} from 'react-redux';
+import {connect} from 'react-redux';
 import {compose} from 'redux';
 import {$, interpolateHTML} from '$i18n';
 import {getConfig} from '$src/config';
@@ -67,7 +67,7 @@ class App extends Component<Props> {
   }
 }
 
-const mapStateToProps: MapStateToProps<AppState, *, *> = state => ({
+const mapStateToProps = state => ({
   cart: getCart(state),
   config: getConfig(),
 });

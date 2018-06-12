@@ -48,7 +48,7 @@ const CartIsEmpty = () => (
 
 const PaymentSuccess = () => <AvardaContainer />;
 
-class App extends Component<Props> {
+class App extends Component<Props, AppState> {
   render() {
     const paymentSuccessful =
       queryString.parse(window.location.search).PaymentStatus === 'Success';

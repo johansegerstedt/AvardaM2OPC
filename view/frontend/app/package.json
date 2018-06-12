@@ -5,17 +5,19 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "css":
-      "concurrently -k \"yarn avardaCss:server -\" \"yarn avardaCss:build\"",
-    "avardaCss:server": "http-server ../web/css",
-    "avardaCss:build":
-      "nodemon -w src/avarda.less --exec \"npx lessc src/avarda.less ../web/css/avarda.css\"",
+    "analyze":
+      "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.analyze.babel.js",
+    "avarda":
+      "concurrently -k \"yarn avardaStyle:server -\" \"yarn watch:avardaStyle\"",
     "start":
       "webpack-dashboard -- webpack --config webpack.dev.babel.js --watch",
-    "build:analyze":
-      "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.analyze.babel.js",
+    "avardaStyle":
+      "nodemon -w src/avarda.less --exec \"lessc src/avarda.less ../web/css/avarda.css\"",
+    "avardaStyle:server": "http-server ../web/css",
     "build":
       "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.prod.babel.js",
+    "build:app": "concurrently -k \"yarn build\" \"yarn build:avardaStyle\"",
+    "build:avardaStyle": "lessc src/avarda.less ../web/css/avarda.css",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
     "prepush": "yarn lint && flow --quiet",

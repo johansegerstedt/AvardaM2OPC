@@ -1,9 +1,13 @@
 #!/usr/bin/env bash
 set -e
-# if [ "$EUID" -ne 0 ]
-#   then echo "Please run as root"
-#   exit
-# fi
+
+if [ "$EUID" -ne 0 ]
+  then echo "Please run as root"
+  exit
+fi
+
+ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+MAGENTO2_DIR="/var/www/html/magento2opc/"
 
 echo 'Fetching tags ...'
 git fetch --tags
@@ -17,12 +21,13 @@ echo "Checkout latest tag is ${LATEST_TAG}"
 git checkout tags/$LATEST_TAG
 
 echo 'Building the app ...'
-cd view/frontend/app/
-yarn build
+cd $ROOT_DIR/view/frontend/app/
+yarn build:app
+
+echo "AVARDA iframe style location ${ROOT_DIR}/view/frontend/web/css/avarda.css" 
 
 echo 'Clear caches and all magento stuff ...'
-
-cd /var/www/html/magento2opc/
+cd $MAGENTO2_DIR
 
 rm -rf var/cache/* var/page_cache/* var/di/* var/generation/* var/view_preprocessed/*
 bin/magento cache:flush

@@ -1,0 +1,60 @@
+@import 'variables';
+@import 'mixins';
+
+.alert {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+
+#personalInfoNextButton {
+  box-shadow: none !important;
+}
+
+#checkOutCompleteButton {
+  box-shadow: none !important;
+}
+
+.btn-primary {
+  color: @gray-lightest;
+  background-color: @primary-color;
+  border-color: @primary-color;
+  box-shadow: none !important;
+  &:focus {
+    color: @gray-lightest;
+    background-color: @primary-color;
+    border-color: @primary-color;
+  }
+  &:hover {
+    color: @gray-lightest;
+    background-color: @primary-color;
+    border-color: @primary-color;
+  }
+  &:active {
+    color: @gray-lightest;
+    background-color: @primary-color;
+    border-color: @primary-color;
+    background-image: none;
+    &:hover {
+      color: @gray-lightest;
+      background-color: @primary-color;
+      border-color: @primary-color;
+    }
+    &:focus {
+      color: @gray-lightest;
+      background-color: @primary-color;
+      border-color: @primary-color;
+    }
+  }
+  &:active.focus {
+    color: @gray-lightest;
+    background-color: @primary-color;
+    border-color: @primary-color;
+  }
+  .badge {
+    color: @secondary-color;
+    background-color: @primary-color;
+  }
+}
+#checkOutContainer {
+  background-color: @background-color;
+}

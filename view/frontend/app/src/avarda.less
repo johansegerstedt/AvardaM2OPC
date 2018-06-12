@@ -1,0 +1,87 @@
+@import 'variables';
+@import 'mixins';
+
+.container {
+  width: 100%;
+  padding: 0px;
+}
+.row {
+  margin: 0px;
+}
+.col-xs-12 {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.col-md-12 {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.alert {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+#checkOutContainer {
+  #checkOutTotalPrice {
+    text-align: start;
+  }
+  h1 {
+    text-align: start;
+  }
+  .borderedBox {
+    background-color: @background-color;
+    border: none;
+  }
+}
+
+#personalInfoNextButton {
+  box-shadow: none !important;
+}
+
+#checkOutCompleteButton {
+  box-shadow: none !important;
+}
+
+.btn-primary {
+  color: @gray-lightest;
+  background-color: @primary-color;
+  border-color: @primary-color;
+  box-shadow: none !important;
+  &:focus {
+    color: @gray-lightest;
+    background-color: @primary-color;
+    border-color: @primary-color;
+  }
+  &:hover {
+    color: @gray-lightest;
+    background-color: @primary-color;
+    border-color: @primary-color;
+  }
+  &:active {
+    color: @gray-lightest;
+    background-color: @primary-color;
+    border-color: @primary-color;
+    background-image: none;
+    &:hover {
+      color: @gray-lightest;
+      background-color: @primary-color;
+      border-color: @primary-color;
+    }
+    &:focus {
+      color: @gray-lightest;
+      background-color: @primary-color;
+      border-color: @primary-color;
+    }
+  }
+  &:active.focus {
+    color: @gray-lightest;
+    background-color: @primary-color;
+    border-color: @primary-color;
+  }
+  .badge {
+    color: @secondary-color;
+    background-color: @primary-color;
+  }
+}
+#checkOutContainer {
+  background-color: @background-color;
+}

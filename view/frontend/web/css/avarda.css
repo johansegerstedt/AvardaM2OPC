@@ -1,22 +1,79 @@
-/* #checkOutContainer {
-  background-color: rgb(0, 96, 175);
-  border-color: rgb(0, 96, 175);
-}
-
-#checkOutContainer #checkOutCompleteButton:enabled {
-  background-color: rgb(0, 96, 175);
-  border-color: rgb(0, 96, 175);
-}
-
-#checkOutContainer #ConfirmPhone {
-  background-color: rgb(0, 96, 175);
-  border-color: rgb(0, 96, 175);
-}
-*/
-body {
-  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
 .container {
-  margin-left: 0px;
   width: 100%;
+  padding: 0px;
+}
+.row {
+  margin: 0px;
+}
+.col-xs-12 {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.col-md-12 {
+  padding-left: 0px;
+  padding-right: 0px;
+}
+.alert {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
+}
+#checkOutContainer #checkOutTotalPrice {
+  text-align: start;
+}
+#checkOutContainer h1 {
+  text-align: start;
+}
+#checkOutContainer .borderedBox {
+  background-color: #ffffff;
+  border: none;
+}
+#personalInfoNextButton {
+  box-shadow: none !important;
+}
+#checkOutCompleteButton {
+  box-shadow: none !important;
+}
+.btn-primary {
+  color: #f6f6f6;
+  background-color: #1979c3;
+  border-color: #1979c3;
+  box-shadow: none !important;
+}
+.btn-primary:focus {
+  color: #f6f6f6;
+  background-color: #1979c3;
+  border-color: #1979c3;
+}
+.btn-primary:hover {
+  color: #f6f6f6;
+  background-color: #1979c3;
+  border-color: #1979c3;
+}
+.btn-primary:active {
+  color: #f6f6f6;
+  background-color: #1979c3;
+  border-color: #1979c3;
+  background-image: none;
+}
+.btn-primary:active:hover {
+  color: #f6f6f6;
+  background-color: #1979c3;
+  border-color: #1979c3;
+}
+.btn-primary:active:focus {
+  color: #f6f6f6;
+  background-color: #1979c3;
+  border-color: #1979c3;
+}
+.btn-primary:active.focus {
+  color: #f6f6f6;
+  background-color: #1979c3;
+  border-color: #1979c3;
+}
+.btn-primary .badge {
+  color: #f5a510;
+  background-color: #1979c3;
+}
+#checkOutContainer {
+  background-color: #ffffff;
 }

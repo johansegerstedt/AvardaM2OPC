@@ -5,9 +5,17 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "start": "webpack-dashboard -- webpack --config webpack.dev.babel.js --watch",
-    "build:analyze": "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.analyze.babel.js",
-    "build": "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.prod.babel.js",
+    "css":
+      "concurrently -k \"yarn avardaCss:server -\" \"yarn avardaCss:build\"",
+    "avardaCss:server": "http-server ../web/css",
+    "avardaCss:build":
+      "nodemon -w src/avarda.less --exec \"npx lessc src/avarda.less ../web/css/avarda.css\"",
+    "start":
+      "webpack-dashboard -- webpack --config webpack.dev.babel.js --watch",
+    "build:analyze":
+      "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.analyze.babel.js",
+    "build":
+      "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.prod.babel.js",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
     "prepush": "yarn lint && flow --quiet",
@@ -46,6 +54,7 @@
     "file-loader": "^1.1.5",
     "flow-bin": "^0.73.0",
     "flow-typed": "^2.2.0",
+    "http-serve": "^1.0.1",
     "husky": "^0.14.3",
     "less": "^3.0.1",
     "less-loader": "^4.1.0",

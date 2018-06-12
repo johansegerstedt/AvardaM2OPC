@@ -1,22 +1,54 @@
-/* #checkOutContainer {
-  background-color: rgb(0, 96, 175);
-  border-color: rgb(0, 96, 175);
+.alert {
+  margin-left: 0px !important;
+  margin-right: 0px !important;
 }
-
-#checkOutContainer #checkOutCompleteButton:enabled {
-  background-color: rgb(0, 96, 175);
-  border-color: rgb(0, 96, 175);
+#personalInfoNextButton {
+  box-shadow: none !important;
 }
-
-#checkOutContainer #ConfirmPhone {
-  background-color: rgb(0, 96, 175);
-  border-color: rgb(0, 96, 175);
+#checkOutCompleteButton {
+  box-shadow: none !important;
 }
-*/
-body {
-  font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+.btn-primary {
+  color: #f6f6f6;
+  background-color: #1979c3;
+  border-color: #1979c3;
+  box-shadow: none !important;
 }
-.container {
-  margin-left: 0px;
-  width: 100%;
+.btn-primary:focus {
+  color: #f6f6f6;
+  background-color: #1979c3;
+  border-color: #1979c3;
+}
+.btn-primary:hover {
+  color: #f6f6f6;
+  background-color: #1979c3;
+  border-color: #1979c3;
+}
+.btn-primary:active {
+  color: #f6f6f6;
+  background-color: #1979c3;
+  border-color: #1979c3;
+  background-image: none;
+}
+.btn-primary:active:hover {
+  color: #f6f6f6;
+  background-color: #1979c3;
+  border-color: #1979c3;
+}
+.btn-primary:active:focus {
+  color: #f6f6f6;
+  background-color: #1979c3;
+  border-color: #1979c3;
+}
+.btn-primary:active.focus {
+  color: #f6f6f6;
+  background-color: #1979c3;
+  border-color: #1979c3;
+}
+.btn-primary .badge {
+  color: #f5a510;
+  background-color: #1979c3;
+}
+#checkOutContainer {
+  background-color: #ffffff;
 }

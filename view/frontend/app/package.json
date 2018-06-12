@@ -5,15 +5,21 @@
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
+    "analyze":
+      "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.analyze.babel.js",
+    "avarda":
+      "concurrently -k \"yarn avardaStyle:server -\" \"yarn watch:avardaStyle\"",
     "start":
       "webpack-dashboard -- webpack --config webpack.dev.babel.js --watch",
-    "build:analyze":
-      "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.analyze.babel.js",
+    "avardaStyle":
+      "nodemon -w src/avarda.less --exec \"lessc src/avarda.less ../web/css/avarda.css\"",
+    "avardaStyle:server": "http-server ../web/css",
     "build":
       "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.prod.babel.js",
+    "build:app": "concurrently -k \"yarn build\" \"yarn build:avardaStyle\"",
+    "build:avardaStyle": "lessc src/avarda.less ../web/css/avarda.css",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
-    "flow-typed": "flow-typed install -i dev",
     "prepush": "yarn lint && flow --quiet",
     "postinstall": "yarn flow-typed install"
   },
@@ -50,6 +56,7 @@
     "file-loader": "^1.1.5",
     "flow-bin": "^0.73.0",
     "flow-typed": "^2.2.0",
+    "http-serve": "^1.0.1",
     "husky": "^0.14.3",
     "less": "^3.0.1",
     "less-loader": "^4.1.0",
@@ -76,7 +83,7 @@
     "query-string": "^5.0.1",
     "react": "^16.3.2",
     "react-dom": "^16.0.0",
-    "react-redux": "^5.0.6",
+    "react-redux": "^5.0.7",
     "react-toastify": "^3.2.2",
     "redux": "^3.7.2",
     "redux-actions": "^2.2.1",

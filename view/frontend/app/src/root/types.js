@@ -1,20 +1,17 @@
 // @flow
-import type {Selector as _Selector} from 'reselect';
-import type {CartState, CartItemState} from '$src/cart/types';
+import type {InputSelector} from 'reselect';
+import type {CartState} from '$src/cart/types';
 import type {CartActions} from '$src/cart/actions';
-import type {ShippingMethodState} from '$src/shipping/types';
 import type {ShippingActions} from '$src/shipping/actions';
-import type {AvardaState} from '$src/avarda/types';
 import type {AvardaActions} from '$src/avarda/actions';
+import type {Config} from '$src/types';
 
 export type AppState = {
   cart: CartState,
-  cartItems: CartItemState,
-  shippingMethods: ShippingMethodState,
-  avarda: AvardaState,
+  config: Config,
 };
 
-export type Selector<Props, Result> = _Selector<AppState, Props, Result>;
+export type Selector<Props, Result> = InputSelector<AppState, Props, Result>;
 
 export type Actions = CartActions | ShippingActions | AvardaActions;
 

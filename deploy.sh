@@ -20,8 +20,12 @@ LATEST_TAG=$(git tag | tail -1)
 echo "Checkout latest tag is ${LATEST_TAG}"
 git checkout tags/$LATEST_TAG
 
-echo 'Building the app ...'
 cd $ROOT_DIR/view/frontend/app/
+
+echo 'Install latest packages'
+yarn 
+
+echo 'Building the app ...'
 yarn build:app
 
 echo "AVARDA iframe style location ${ROOT_DIR}/view/frontend/web/css/avarda.css" 

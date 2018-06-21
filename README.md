@@ -6,8 +6,8 @@ Single page application checkout with integrated Avarda payment.
 
 ### Requirements
 
-* Node.js
-* yarn
+- Node.js
+- yarn
 
 ### Getting started
 
@@ -59,5 +59,20 @@ Additional content can be defined in `view/frontend/layout/avarda_checkout_index
 
 ### Addresses
 
-* Selecting a region is not supported.
-* Finland is the only supported country (hard coded value).
+- Selecting a region is not supported.
+- Finland is the only supported country (hard coded value).
+
+### Deployment
+
+- For now we only can deploy the latest released tag
+- local deployments only
+
+To deploy the app on the server navigate to module root and type
+
+```sh
+bash deploy.sh
+# or
+./deploy.sh
+```
+
+This will fetch latest TAG with latest code changes, install deps, build it and clear all caches.

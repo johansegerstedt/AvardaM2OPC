@@ -48,7 +48,6 @@ class ShippingMethodForm extends Component<Props> {
       <Fragment>
         <Loader show={isFetchingMethods} height={200}>
           <div id="checkout-shipping-method-load">
-            {/* <div className="step-title">{$.mage.__('Shipping Methods')}</div> */}
             <Methods
               selectShippingMethod={selectShippingMethod}
               selectedShippingMethod={selectedShippingMethod}

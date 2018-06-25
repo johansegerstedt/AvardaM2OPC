@@ -1,18 +1,24 @@
 {
   "name": "avarda-m2-checkout-frontend",
-  "version": "0.1.0",
+  "version": "1.1.0",
   "main": "index.js",
   "license": "UNLICENSED",
   "private": true,
   "scripts": {
-    "analyze": "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.analyze.babel.js",
-    "avarda": "concurrently -k \"yarn avardaStyle:server -\" \"yarn watch:avardaStyle\"",
-    "start": "webpack-dashboard -- webpack --config webpack.dev.babel.js --watch",
-    "avardaStyle": "nodemon -w src/avarda.less --exec \"lessc src/avarda.less ../web/css/avarda.css\"",
+    "analyze":
+      "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.analyze.babel.js",
+    "avarda":
+      "concurrently -k \"yarn avardaStyle:server -\" \"yarn avardaStyle\"",
+    "start":
+      "webpack-dashboard -- webpack --config webpack.dev.babel.js --watch",
+    "avardaStyle":
+      "nodemon -w avardaIframe/avarda.less --exec \"lessc avardaIframe/avarda.less ../web/css/avarda.css\"",
     "avardaStyle:server": "http-server ../web/css",
-    "build": "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.prod.babel.js",
-    "build:app": "concurrently -k \"yarn build\" \"yarn build:avardaStyle\"",
-    "build:avardaStyle": "lessc src/avarda.less ../web/css/avarda.css",
+    "build":
+      "cross-env NODE_ENV=production BABEL_ENV=production webpack --config webpack.prod.babel.js",
+    "build:app": "yarn build && yarn build:avardaStyle",
+    "build:avardaStyle":
+      "lessc -s -x avardaIframe/avarda.less ../web/css/avarda.css",
     "lint": "eslint ./src",
     "lint:fix": "eslint ./src --fix",
     "prepush": "yarn lint && flow --quiet",

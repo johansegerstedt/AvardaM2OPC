@@ -1,0 +1,129 @@
+﻿@import (reference) "FormCommon.less";
+
+/* The height of the personalInfo and summary boxes */
+@boxHeightWithoutDeliveryAddress: 264px;
+@boxHeightWithDeliveryAddress: 334px;
+
+div.box.ssn {
+    .noSelect();
+
+    input {
+        @media @desktop {
+            float: left;
+            width: calc(100% / 3 ~"- 72px");
+            margin-top: 0;
+
+            &[name=ZipVerification] {
+                margin-left: 0;
+            }
+        }
+
+        @media @mobile {
+            width: calc(100% ~"- 78px");
+        }
+    }
+
+    button {
+        @media @desktop {
+            width: calc(100% / 3 ~"- 35px");
+            padding: initial;
+            height: 34px;
+        }
+
+        @media @mobile {
+            width: calc(100% ~"- 40px");
+            margin: 0 20px 10px 20px;
+        }
+    }
+}
+
+div.personalDataSeparateColumn {
+    @media @mobile {
+        height: 4px;
+    }
+}
+
+div.box.personalData {
+    /* We don't want to preserve any minimal height on mobiles. */
+    @media @desktop {
+        min-height: @boxHeightWithoutDeliveryAddress;
+    }
+
+    @media @mobile {
+        float: left;
+        width: 100%;
+    }
+
+    &.withDeliveryAddress {
+        min-height: @boxHeightWithDeliveryAddress;
+    }
+}
+
+div.box.summary {
+    /* We don't want to preserve any minimal height on mobiles. */
+    @media @desktop {
+        min-height: @boxHeightWithoutDeliveryAddress;
+
+        &.withDeliveryAddress {
+            min-height: @boxHeightWithDeliveryAddress;
+        }
+    }
+
+    @media @mobile {
+        float: left;
+        width: 100%;
+    }
+
+    div.frame {
+        div.deliveryAddrCheckBoxContainer {
+            .noSelect();
+            margin: 20px;
+            padding-top: 20px;
+            border-top: @frameBorder;
+
+            input {
+                margin-left: 0;
+            }
+        }
+    }
+}
+
+div.bankIdStrip {
+    margin-top: 20px;
+    vertical-align: middle;
+    min-height: 64px;
+    border-top: 1px solid #eee;
+    border-bottom: 1px solid #eee;
+
+    img {
+        width: 64px;
+        height: 64px;
+        float: left;
+        /* Move the logo a bit below. Looks better that way if the text spans accross more than two lines. */
+        @media @mobile {
+            margin-top: 8px;
+        }
+    }
+
+    span {
+        display: inline-block;
+        min-height: 64px;
+        width: calc(100% ~"- 84px");
+        padding-left: 20px;
+
+        p {
+            vertical-align: middle;
+        }
+    }
+}
+
+#invoicingAddressLbl {
+    width: 14em;
+    overflow-wrap: break-word;
+}
+
+#contactInfoLbl {
+    width: 13em;
+    overflow-wrap: break-word;
+}
+

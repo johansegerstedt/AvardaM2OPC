@@ -1,0 +1,800 @@
+﻿@fontSize: 1em;
+@fontFamily: Arial, Helvetica, sans-serif;
+@errorColor: #c1272d;
+@boxBackground: #eee;
+@frameBorder: 1px solid #b3b3b3;
+@mobile: ~"(max-width: 639px)";
+@desktop: ~"(min-width: 640px)";
+@avardaColor: #00a8b2;
+
+/* Re-usable Parts */
+
+.noSelect {
+    -webkit-touch-callout: none;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+/* End of Re-usable Parts */
+
+body {
+    margin: 0;
+    padding: 0;
+    font-family: @fontFamily;
+    background: #ffffff;
+}
+
+/* Reading this element's color, we can tell whether we're rendering the normal or mobile layout from JavaScript. */
+#mobileFlag {
+    display: none;
+    color: red;
+
+    @media @mobile {
+        color: green;
+    }
+}
+
+h1 {
+    font: normal 22pt @fontFamily;
+    color: #00a8b2;
+}
+
+h2 {
+    font: bold 12pt @fontFamily;
+    color: #000;
+    margin: 0 20px 10px 20px;
+    padding: 0;
+}
+
+h3 {
+    font: bold 11pt @fontFamily;
+    color: #000;
+    margin: 20px 0 10px 20px;
+    padding: 0;
+}
+
+p {
+    font-family: @fontFamily;
+    color: #000;
+}
+
+a {
+    text-decoration: none;
+    color: #00a8b2;
+}
+
+a:hover {
+    text-decoration: underline;
+}
+
+hr {
+    border: 0;
+    height: 1px;
+    background: #000;
+}
+
+/* An invisible inline element that we sometimes need to put inside floating divs as a first element to make margin and padding behave consistently across browsers. */
+span.null {
+    font-size: 0;
+}
+
+.clr {
+    clear: both;
+}
+
+.paymentMethodInvoiceLabel {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAABOUlEQVR42u2abQ3CMBCGKwEJSEACEpAwCUiYAyT0B+lIgDIJSJgEJCABdpCRZQzG1ibc9d4nuX/w48l6H/0wBgAAAAD/w/nMuNPV7Mqb+HD+YraH5XfhFES70rqE69Wq7Atn44QpB6SGtbPhotUVTh4IB1D4knUxK46reMKUQ/wL2jmesNsvdAk/l/RGlzA3umkGYQhDGMIQhjCEGQvTuOh8Lirae+JRwnY3F3m495CaIixh9/MpVAlH+8J0/Mk9fwu/np7DvT9OuUpDuK7Y9AfOQWdq1EpVFa3CV2hLvw0edbWjyqxGuJHmfr1CrSiasMRKDOEhYe6t570VVWHCKYQq4fYLgF5h521iLwDy4fGYxjHJN/9NtMfKVPYD4ZsHCAu49oxxGiLqYhvCIcKpLunXoxYAAACADXfnH0qVH5lL9wAAAABJRU5ErkJggg==') /* Invoice.png */;
+}
+
+.paymentMethodLoanLabel {
+    background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAYAAAA6/NlyAAACZElEQVR42u1a0XGDMAxlhI7QETpCR+gIjNARsgEj8NFLcpeWZgRGYARG6AitZV/uQDbBJpItU+vOX6TFz5aeniSqqlixYvuyY9dW5+uv+HXsahrAOYDVgL9/iG5Y/aNcQJPYx+drdequymV6cYsFsGQrgCmtPT8r135XrnRIsuDdsIcogNv2SQR5wR5gL+yAgbikMDHspQDmBmzSQqz47SUAPkSUtocCODlgzeKqyOBRVKM8wDErKiGA+wKYp+bt4yitUMDwe+p1vLzE09KhgLMvHgrgRDF86pr/BVi/exLLuIKLBhhaQCnSElsord6wOnW+vtfoDXj6bDdaevpu/Ay6ItkDPn29LRKX/ewaDzD0mzgEB9zaHNQwK1pYmvGrpIVOmntN+1pwAOQjF0lpCZMT9gCst5nSUhP3hiftWuzWJGzt0wCI1bN2gcH1+DTOyZp4kgxu3C4lH8gkFhsKA+zKyViG7m5wZfpqoz2pQOOZgBNkknGUt6xu1K6whlka2+wyuFST49q1cyYV7N42cY1ix6iuLqoGHSpKcP1J5dYsaW1h2gmh6R3XWGBQsLWZOw8yP4Bx5btHbhlcLNXc2ZvIcHxALPv8MZCGbrcCSBjLJBywBykxuGW8WQAQUtMuN9pblhITLxpVc4cB16opOEA4FNHmIpol0K4DuoWD/lhlizBIIdhdcbgEep526u2SL7WUc4GWqsKYQQ+PVSs5gr4xb5bu6wP6nmIyjfo6D4IKY+/GK/Gbb0IMgUXPqywuHnPAJqUDc/vWOpuPw2nbL7WJYwYNLbHH5hzLUNTA2Si1YmnsDxIaKk8Bx9X3AAAAAElFTkSuQmCC') /* Loan.png */;
+}
+
+input[type=text], input[type=tel], input[type=email] {
+    width: calc(100% ~"- 52px");
+    font: normal @fontSize @fontFamily;
+    border: 1px solid #00aab4;
+    height: 30px;
+    display: block;
+    margin: 10px 20px 10px 20px;
+    padding-left: 10px;
+    /* Removes rounded edges on iOS */
+    -webkit-appearance: none;
+    -webkit-border-radius: 0px;
+    border-radius: 0;
+
+    &[name=InvoicingZip],
+    &[name=InvoicingCity],
+    &[name=DeliveryZip],
+    &[name=DeliveryCity] {
+        margin-bottom: 0;
+    }
+
+    @media @desktop {
+        &[name=InvoicingZip],
+        &[name=DeliveryZip] {
+            margin-top: 0;
+            margin-right: 0;
+            float: left;
+            width: 120px;
+        }
+
+        &[name=InvoicingCity],
+        &[name=DeliveryCity] {
+            margin-top: 0;
+            margin-left: 0;
+            float: right;
+            width: calc(100% ~"- 210px");
+        }
+    }
+
+    &.error {
+        border-color: @errorColor;
+    }
+
+    &.icon {
+        padding-left: 36px;
+        background-size: 23px;
+        background-repeat: no-repeat;
+        background-position: 6px center;
+        width: calc(100% ~"- 78px");
+
+        &.user {
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAYAAABXuSs3AAABKUlEQVR42u2XYQ3DIBBGK6ESkIAEJEwCEiYBB5NQCUhAQiUgAQkMkjZpGspKgTvIuOT9bR7fbscxTaNGoRV1sA3Suix3SIcNoB1La4fw6a4XwiE+raRsH+APOmNJs4fSR3nw8mmZTHGPgBYXBaR3QP+wpqA4WOqvgtKgvS4Ki9uexUmv4nS0SoXb0kb2GLDLp6T4AjnHl976ey9S6BKSPW2GOwZzQ+QZ0nRCrlT5FfMlRAO7ubyRsgi0B4E4iBdWkeTmbQkTJ1hkYTOHJ12Vnn8npHhnKsmL7zHIuW22xNgPWX74xWJwrN1EndAPvpEln/sgRrtVNbK4hpjPtUhuGdWIeFLqcyPSyb3OGhMXNUdgTWSv4mqID/EhPsRxxFngFYNJkf181N/WFzwckldLoPW2AAAAAElFTkSuQmCC'); /*User.png*/
+        }
+
+        &.mail {
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAYAAABXuSs3AAABR0lEQVR42u1Y0RGDIAx1BEdwhI7gCI7ACI7gBo7gCI7ACB3BERyhpT3bS2ORCIRCL+8uH55AnjF5EKpKIBAIBP+C3thQgO1wMbYau2Vq68bxjclYDcgvGZJeAOl64/x8cQXk6+05F9I2bh8D4FfNGZCeAekGBfQwj6Yfkp4c9fe1CDqkNqlJ98B/ZxEN62QFJquEpKl+DxcZE8rlY+0W+Bsd44NzjUOjKbUVJEmccheF+MtBAxzoCKR1QEDYfylXCnrlI5TLwWMNeFhqPeuGXba4ZDYKcUrksNwlJ44JKEKu4tpQqVPFVpxH6mBTo2TFifVWE/TYpdHsckjdJHZdCiGiroAk2/JxDVDnRN3yx4AiUidVI9ohq7hjbQ6NxHC2kSiydcN6m0OzrF3NcpHXE/iX5H4hhDmXdwUHz9VFXnoKBAKBoDzcAW3MWG0udcXTAAAAAElFTkSuQmCC') /*Mail.png*/;
+        }
+
+        &.phone {
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAC4AAAAuCAYAAABXuSs3AAABQElEQVR42t2YYQ2DMBCFK6ESkFAJSEACEiqhDioBCUiYhEqoBCQwSNqkWRbodcC92yXvH1u+Xq6Pdyj15zVsspu0JOhp05oUpMCPBXTWLBE6yyPP9HqiERE8VoDv6pGgTSX0riU9D1GOAA7lNBMRPMOz16sBfE0HFgnO7jS/gDtJl7PUwAluGy8nuy2ahksJE7yWSmiLHGWPBFd9JbhBhI9KwEuHmsdhEyKl65DrXG3XZ6ldh5z3WoeBXOc8AR7qsmrCyECtc9SRiWhOQ4m8cDZJWTTOnMYUIzghzftR57/9z+1p0xCib4bvPqADl6VSLmt2G5d+F7hdaVTt++nZIbVU+CAZ/pHwdhe8lwz/SHijWiVUeNM/fspjX1actFkvq7ug+54zsPUNB4hIi4lJHYwV8QC2utRRm0At6neay+oN6MQ6aQatRcAAAAAASUVORK5CYII=') /*Phone.png*/;
+        }
+
+        &.zip {
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADAAAAAwCAQAAAD9CzEMAAABKGlDQ1BpY2MAAHjalY+/SsNQFIe/G0XFoVYI4uBwJ1FQbNXBjElbiiBYq0OSrUlDldIk3Fz/9CEc3Tq4uPsETo6Cg+IT+AaKUweHCBkcSr/pOz8Oh/MDo2LXnYZRhkGsVbvpSNfz5fwrc8wAQCfMUrvVOgKIkzjiHz8fCIC3bbvuNJiOxTBVGhgDu90oC0FUgP61TjWIEWAG/VSDeARMddaugXgGSr3c34FSkPsnUFKu54P4Bsye6/lgLABmkPsaYOroRgPUknSoLnrnWlYty5J2NwkieTrMdDTI5GEcJipNVEdHXSD/D4DlfLHddORG1bIONqfsPRHX82VuXycIQKy8FFlBeKmu/lQYe5Pn4sZoFY4fYHZcZPu3cL8FS3dFtl6F8g48jX4BwMZP/VBKVwMAAAAgY0hSTQAAeiUAAICDAAD5/wAAgOgAAFIIAAEVWAAAOpcAABdv11ofkAAAAAJiS0dEAP+Hj8y/AAAACXBIWXMAAAsTAAALEwEAmpwYAAAAB3RJTUUH3wkdCiIvgSsXxgAAAyFJREFUWMPtl09oHHUUxz+Tnd1vm7RrI0HjSv/YbBX0IFVrqAgGpFACPfjn0EsI0uJBaD0Urx5UBEEMiKdYBO1Fggd7Elq9tRqI0Aqx1dZUGkWwbUgNmzabzczzkMzOJJnfZjbdU8mby/xm3+/7ee/99vfmN7Bh9715WR0FkKOAR40aVFsHEHiU6OV59tBJGxWuc4EfuZoF5K0pDj28wWv0kE/8EPIv3zPMKAtZc0mVV0EDuixzXLf0obq0GMa65Nv1nipOeZMp0GntWhdCqKD3NR+LFcy3nOUsZ/nlkO9UciNyDWo/wAdsWhwbIV3so4/nKFHjP8J4+coUOctC0GT8T+j3KMa8ddpbNmYVC82sahP2sZWTedzR4abKJIQ+iuW77Qubt+U2avvMjxHn9GBzgF26Ek3usE8ttNV23h6Ls5jTq+k5tDnqv5/di6OAlxhM3S4vcCR+Lg6m76k20q03Wn6f1yk6nF7hEcJo8AzbsgMKlBdvjG3sdZZyJ2UsGpToagbQGQG2RLcptomuGNDOA9kBXrw/Fqg5AWGy1XnpWumAGpVo1m2uOwHTTMYrW2U2O6DKZASocNYJGGMiFphiKjvAuBBn/g0XU51mOMlsnMFvmQFVgPPcjBwmeZd/UryGOJNsZT80WKyVJiSNJPtov41ZkNjFf9kJK1ohbhUTKqe3Ct/BqDLMgWjreJxhnEO8zA58bjDKt4yz7HV4ij8yx7+Ug6+hZNfPm28d9pB1W9HyyTZnMv2kUpPvgwA/5Fde5NHoiUcbIXPcJVj5l5/hBD9D0AwAfJjhJv3LW6SX1tFO8hmh69XvBAT4cI2H6V2jmr/wNlPuk0XOPTPAD7lMH90N5Gd5h3Ou8qwBAB9uM00/BafLV3xC0Ohk1BAQ4MNVtvOsw+ESx7nRKP41TQjt0XjqmeiuBtd96FqBGNCdFMApbb5n+SXEZn25Sv6KnmpB/PUcnoxPGTKZqnqzRfJ1xFHNJQAj2tIy+SVEh76uy/+pvS2Mv57D07omk2lex1osX0cM6m/N6HMVs8tn/kYDQY7H2colKtm/0TZsw+7d/gfHrIj2eMc3qwAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAxNS0wOS0yOVQxMDozNDo0Ny0wNDowMPMkyPgAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMTUtMDktMjlUMTA6MzQ6NDctMDQ6MDCCeXBEAAAAAElFTkSuQmCC'); /*Zip.png*/
+        }
+    }
+}
+
+/*  Input placeholders on validation errors.
+    http://stackoverflow.com/questions/2610497/change-an-inputs-html5-placeholder-color-with-css
+    "User agents are required to ignore a rule with an unknown selector. See Selectors Level 3:
+     'a group of selectors containing an invalid selector is invalid'. So we need separate
+     rules for each browser. Otherwise the whole group would be ignored by all browsers."  */
+input.error {
+    &::-webkit-input-placeholder { /* WebKit browsers */
+        color: @errorColor;
+        opacity: 0.5;
+    }
+
+    &:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+        color: @errorColor;
+        opacity: 0.5;
+    }
+
+    &::-moz-placeholder { /* Mozilla Firefox 19+ */
+        color: @errorColor;
+        opacity: 0.5;
+    }
+
+    &:-ms-input-placeholder { /* Internet Explorer 10+ */
+        color: @errorColor;
+        opacity: 0.5;
+    }
+}
+
+button {
+    color: #fff;
+    font: normal @fontSize @fontFamily;
+    background: #00aab4;
+    border: 1px solid #056978;
+    padding: 10px;
+
+    & span.spinner {
+        display: none;
+    }
+}
+
+button.loading span.spinner {
+    display: inline-block;
+    width: 16px;
+    height: 16px;
+    background-image: url('data:image/gif;base64,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') /*../Content/LoadingCCCCCCBackground.gif*/;
+    background-position: center center;
+    background-repeat: no-repeat;
+    margin-right: 10px;
+}
+
+button:disabled {
+    color: #333333;
+    background-color: #cccccc;
+    border-color: #cccccc;
+}
+
+button:not(:disabled):not(.nohover):hover {
+    background: #056978;
+    cursor: pointer;
+}
+
+/*div.checkOutContainer {
+    div#checkOut {
+        width: 100%;
+        height: 100%;
+        position: relative;
+    }
+
+    div#checkOutTerms {
+        background-color: white;
+        position: absolute;
+        top: 0px;
+        height: 100%;
+        width: 100%;
+    }
+
+}*/
+
+div.errorBox {
+    div.icon {
+        float: left;
+        margin: 0 10px 0 20px;
+        font-weight: bold;
+        width: 1em;
+        height: 1em;
+        border-radius: 0.5em;
+        text-align: center;
+        color: #fff;
+        background-color: @errorColor;
+        /* Align the error messages to the left (by removing margins) on mobile devices */
+        @media @mobile {
+            margin: 0;
+        }
+    }
+
+    div.message {
+        margin-left: 10px;
+        color: @errorColor;
+
+        ul {
+            @media @mobile {
+                padding-left: 10px;
+            }
+
+            list-style-type: none;
+        }
+    }
+}
+
+div.paymentMethodsBox {
+    line-height: 50px;
+    margin-bottom: 4px;
+
+    div.method {
+        /* We don't want a single option to be on two lines. */
+        display: inline-block;
+        white-space: nowrap;
+        border: 1px solid #00aab4;
+        background-color: transparent;
+        color: black;
+        padding-right: 10px;
+
+        @media @mobile {
+            padding-right: 4px;
+        }
+
+        &, * {
+            cursor: pointer;
+        }
+
+        > input[type=radio] {
+            display: none;
+        }
+
+        > div.arrowSpace {
+            width: 0;
+            height: 0;
+            border-top: 15px solid transparent;
+            border-bottom: 15px solid transparent;
+            border-left: 10px solid transparent;
+            display: inline-block;
+            vertical-align: middle;
+
+            @media @mobile {
+                border-left: 6px solid transparent;
+            }
+
+            &.arrow {
+                border-left: 10px solid #00aab4;
+
+                @media @mobile {
+                    border-left: 6px solid #00aab4;
+                }
+            }
+        }
+
+        label {
+            background-size: 30px;
+            background-repeat: no-repeat;
+            background-position: left center;
+            padding-left: 40px;
+            display: inline-block;
+            line-height: 30px;
+
+            @media @mobile {
+                background-size: 20px;
+                padding-left: 23px;
+            }
+
+            &[for=paymentMethodCard] {
+                background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAADwAAAA8CAMAAAANIilAAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAADNQTFRFv+nrQL3DEK20n97h7/n6ILK53/T1r+PmYMjNMLi+z+7wcM7Sj9jcUMPIf9PXAKev////9yTUagAAABF0Uk5T/////////////////////wAlrZliAAAA6ElEQVR42uzWyw6DIBAF0OGN2oL//7WlDRFq5DFDbLrgrmRxIjMICPtAYOKJ21gK1xkh38KkEeyL784S7JaNYPeIBJyPUFhd4s6idcThMcOIDmezvxvr76mjMJSb3sZuBJvyinXUbIorluEVYnR30w9s07QEGmc1MTTmI9iwTxYSzr4JwpsVF2cseH13H1h5z8+Y+04c96kl43O3q9MOVVLXOR69EbOEn2gs04cv0Zh2Y5SwhkYqGHjrFLdlbDvujyJ+jGC5sVpoh35tS/4aO3Tw9/N1t8lYUa0KeHXErPPfc+J/xi8BBgAgt9P4GntytwAAAABJRU5ErkJggg=='); /* Card.png */
+            }
+        }
+
+        a {
+            display: inline-block;
+            background: #cccccc;
+            font-weight: bold;
+            color: white;
+            border-radius: 0.6em;
+            line-height: 1.2em;
+            width: 1.2em;
+            text-align: center;
+            text-decoration: none;
+            margin-left: 4px;
+
+            &:hover {
+                background: #00aab4;
+            }
+        }
+    }
+
+    div.methodInfo {
+        line-height: normal;
+        margin-top: 5px;
+
+        .paymentMethodInfoFee, .paymentMethodInfoDueDate {
+            padding: 5px 10px;
+
+            label {
+                font-weight: 700;
+            }
+
+            * {
+                display: inline-block;
+            }
+        }
+    }
+}
+
+div.box {
+    background: @boxBackground;
+    position: relative;
+    margin-bottom: 4px;
+
+    & ul.tabGroup {
+        list-style-type: none;
+        list-style-position: inside;
+        margin: 20px 20px 0 20px;
+        padding: 0;
+
+        & li {
+            display: inline-block;
+            float: left;
+            width: 50%;
+            text-align: center;
+            height: 48px;
+
+            & a {
+                display: inline-block;
+                width: 100%;
+                height: 48px;
+                line-height: 48px;
+                text-decoration: none;
+                color: black;
+                border-top: 1px solid darken(#eee, 50%);
+                white-space: nowrap;
+                overflow: hidden;
+            }
+
+            &.disabled a {
+                color: darken(#eee, 50%);
+                text-shadow: 1px 1px 2px rgba(255, 255, 255, 1);
+                cursor: default;
+            }
+
+            &:not(.selected) a {
+                margin-top: 12px;
+                height: 36px;
+                line-height: 36px;
+                font-size: 0.8em;
+            }
+
+            &.selected:nth-child(1) a {
+                border-right: 1px solid darken(#eee, 50%);
+            }
+
+            &:last-child a {
+                border-left: 1px solid darken(#eee, 50%);
+            }
+        }
+    }
+
+    div.tabContent:not(.selected) {
+        display: none;
+    }
+}
+
+div.box.loan {
+    ul {
+        float: left;
+        display: table;
+        border-collapse: collapse;
+        width: calc(50% ~"- 40px");
+        margin: 0 0 0 20px;
+        padding: 0;
+        .noSelect();
+
+        @media @mobile {
+            float: none;
+            width: calc(100% ~"- 40px");
+            margin-bottom: 20px;
+        }
+
+        li {
+            display: table-cell;
+            width: auto;
+            height: 100px;
+            vertical-align: top;
+            list-style-type: none;
+            list-style-position: outside;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+
+            a {
+                display: block;
+                height: 66px;
+                border: 1px solid #cccccc;
+                border-left: none;
+                text-decoration: none;
+                color: #000;
+                background: #ffffff;
+
+                div {
+                    width: 100%;
+                    display: block;
+                    margin-top: 9px;
+                    /* Both SPANs */
+                    span {
+                        display: block;
+                        margin: 0;
+                        padding: 0;
+                    }
+
+                    hr {
+                        width: 70%;
+                        background: #cccccc;
+                    }
+                    /* Only the second SPAN */
+                    hr + span {
+                        font-size: 0.7em;
+                    }
+                }
+            }
+        }
+
+        li:nth-child(1) a {
+            border-left: 1px solid #cccccc;
+        }
+
+        li.selected {
+            background-image: url('data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACQAAAAkCAYAAADhAJiYAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAcJJREFUeNrsl+1tg0AMhuEmYATYoN2ADICUEcIELRMkTEAyQTNCJQYoG3SEsEEZoUbyRdUF+3wfhT+xhE7Ahbx+7nhtkuQZfKShD+j7PoPhG47Xqqqm0OepCEm9w5HjuC0hpHODI8NLBVAatyTU/RGjz7chBHRypGPGDigNWxD6IK4fV18yoFPCUBK3S7h/WJvQMfB+PEGYfWmZlsO801qEpNm/oS38nyDMOhdOz3xsIHUQY5qgNJzMUjkuFSWm9bAHf0FoglSt+gQC81JeGRsoYxPiNnIjoNRFE4TZUUZ31vsDxzMx70VqliqAzrRApcXri8+R2ICy0NkzJngxGzI8v1BmKemZUougG+E7I/x54fG7CTvL0ZkQrnlu2ciJow1kNqdPPUxwgAx3gpfhi1lu0iwV0yf7mKB0XicmZKFzhcxqh3LDUVrsLJWgT/aho6N2tRO1UCIoA2tdvyhwvlNJUcK1nRgXtkXDmGVHCkK1e4aO11epxSwfSooSlIjZBH3p3GseV1IeBFlKRB0oRlNqmP77YBKi9s4Q8tFniJo3N/VSdLrwqsASkUSygUwX3hQE/cQwwQhmOS9rkTzDEr8CDAAqZa6GUWCLjQAAAABJRU5ErkJggg==') /*ArrowUp.png*/;
+            background-position: bottom center;
+            background-repeat: no-repeat;
+            background-size: 18px;
+
+            a {
+                background: #edf9fa;
+            }
+        }
+    }
+
+    div.summary {
+        float: right;
+        width: calc(50% ~"- 20px");
+        margin-right: 20px;
+
+        @media @mobile {
+            float: none;
+            width: calc(100% ~"- 40px");
+            margin-left: 20px;
+        }
+
+        div.frame {
+            color: #00aab4;
+            width: 100%;
+            font-size: 1.7em;
+            height: 66px;
+            line-height: 66px;
+            overflow: hidden;
+            text-align: center;
+            vertical-align: middle;
+            border: 1px solid #cccccc;
+        }
+
+        div.loanFeesDescriptions {
+            text-align: center;
+            margin-top: 5px;
+            font-size: 0.7em;
+        }
+    }
+}
+
+div.box.personalData {
+    display: table-cell;
+    width: calc(40% ~"- 2px");
+
+    @media @mobile {
+        float: none;
+        min-height: 0;
+        width: 100%;
+    }
+
+    div.deliveryAddressContainer {
+        margin-left: 20px;
+    }
+}
+
+div.box.conditions {
+    clear: both;
+    padding: 20px;
+    .noSelect();
+}
+
+div.box.termsConditions {
+    div.frame {
+        background-color: #fff;
+        margin: 10px 20px 0 20px;
+        border: @frameBorder;
+
+        p {
+            margin: 0 20px 20px 20px;
+
+            &:nth-child(1) {
+                margin-top: 20px;
+            }
+        }
+    }
+
+    button {
+        width: 100% / 3;
+        margin: 20px 20px 0 20px;
+        float: right;
+
+        @media @mobile {
+            width: calc(100% ~"- 40px");
+            float: none;
+        }
+    }
+}
+
+#completeBtn {
+    width: 100%;
+    margin-top: 20px;
+}
+
+div.personalDataTable {
+    width: 100%;
+    display: table;
+    border-collapse: separate;
+}
+
+div.personalDataTableCard {
+    width: 100%;
+    display: table;
+    border-collapse: separate;
+}
+
+div.personalDataRow {
+    width: 100%;
+    display: table-row;
+}
+
+div.personalDataSeparateColumn {
+    width: 3px;
+
+    @media @mobile {
+        display: none;
+    }
+}
+
+
+
+
+/* TODO: Seems duplicite. Clean-up. */
+div.box.summary {
+    width: calc(60% ~"- 2px");
+    display: table-cell;
+
+    @media @mobile {
+        display: none;
+        /*width: 100%;
+        float: none;
+        min-height: 0;*/
+    }
+
+    div.frame {
+        background-color: #fff;
+        margin: 10px 20px 0 20px;
+        border: @frameBorder;
+
+        p {
+            margin: 0 20px 0 20px;
+        }
+
+        div.invoicingAddress {
+            float: left;
+            width: 50%;
+
+            @media @mobile {
+                float: none;
+                width: 100%;
+            }
+        }
+
+        div.contactInfo {
+            float: right;
+            width: 50%;
+
+            @media @mobile {
+                float: none;
+                width: 100%;
+            }
+        }
+
+        div.afterBoxes {
+            clear: both;
+            padding-top: 10px;
+        }
+
+        div.deliveryAddress {
+            p {
+                margin-bottom: 20px;
+            }
+        }
+    }
+}
+
+div.cardPayment {
+    display: none;
+
+    .box.summary {
+        div.contactInfo {
+            float: none !important;
+        }
+    }
+
+    .box.personalData {
+
+        input[name=DeliveryZipCard] {
+            float: left;
+            width: 120px;
+            margin-right: 0;
+        }
+
+        input[name=DeliveryCityCard] {
+            width: calc(100% ~"- 210px");
+            float: right;
+            margin-left: 0;
+        }
+
+
+        @media @desktop {
+            width: 50%;
+            max-width: 50%;
+        }
+
+        input[name=DeliveryAddressLine1Card] {
+            // this somehow prevents "double" margin between address and zip&city
+            margin-bottom: 0;
+        }
+    }
+}
+
+
+
+div.loanOrInvoice {
+    display: block;
+
+    @media @desktop {
+        .box.personalData {
+            width: 35%;
+            max-width: 50%;
+        }
+    }
+}
+
+#checkOutBankId {
+    display: none;
+    background-color: rgb(222, 222, 222);
+    height: 400px;
+
+    .bankIdContent {
+        height: 100%;
+
+        .bankIdLogo {
+            width: 130px;
+            margin: auto;
+            padding-top: 30px;
+
+            img {
+                width: 130px;
+            }
+        }
+
+        .bankIdMessage {
+            text-align: center;
+            font-size: x-large;
+            font-family: @fontFamily;
+        }
+    }
+}
+
+/* 
+    Double-slash ("//") loading animation 
+    Usage: <div class="loading"><div class="loadingInner"></div></div>
+*/
+
+.loading {
+    display: inline-block;
+    width: 100%;
+    text-align: center;
+    /*min-height: 60px;*/
+}
+
+.loading .loadingInner {
+    color: @avardaColor;
+    font-size: 1.4em;
+    line-height: 40px;
+    -webkit-animation: spin 1.5s infinite linear;
+    -moz-animation: spin 1.5s infinite linear;
+    -o-animation: spin 1.5s infinite linear;
+    animation: spin 1.5s infinite linear;
+}
+
+.loading .loadingInner:before {
+    content: '//';
+}
+
+@-moz-keyframes spin {
+    from {
+        -moz-transform: rotate(0deg);
+    }
+
+    to {
+        -moz-transform: rotate(360deg);
+    }
+}
+
+@-webkit-keyframes spin {
+    from {
+        -webkit-transform: rotate(0deg);
+    }
+
+    to {
+        -webkit-transform: rotate(360deg);
+    }
+}
+
+@keyframes spin {
+    from {
+        transform: rotate(0deg);
+    }
+
+    to {
+        transform: rotate(360deg);
+    }
+}
+/* End of double-slash ("//") loading animation */

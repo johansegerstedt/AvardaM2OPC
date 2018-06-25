@@ -1,4 +1,4 @@
-# Digia_AvardaCheckout
+# Digia AvardaCheckout
 
 Single page application checkout with integrated Avarda payment.
 

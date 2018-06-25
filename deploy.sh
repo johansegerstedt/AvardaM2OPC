@@ -1,37 +1,37 @@
 #!/usr/bin/env bash
 set -e
 
-if [ "$EUID" -ne 0 ]
-  then echo "Please run as root"
-  exit
-fi
-
+# if [ "$EUID" -ne 0 ]
+#   then echo "Please run as root"
+#   exit
+# fi
+DEFAULT_M2_PATH="/var/www/html/magento2opc/"
 ROOT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-MAGENTO2_DIR="/var/www/html/magento2opc/"
+MAGENTO2_DIR="${1:-$DEFAULT_M2_PATH}"
 
 echo 'Fetching tags ...'
 git fetch --tags
 
-echo 'Clearning all modified files ...'
-git checkout .
+echo 'Stashing changes ...'
+git stash
 
 LATEST_TAG=$(git tag | tail -1)
 
 echo "Checkout latest tag is ${LATEST_TAG}"
-git checkout tags/$LATEST_TAG
+git checkout tags/${LATEST_TAG}
 
-cd $ROOT_DIR/view/frontend/app/
+cd ${ROOT_DIR}/view/frontend/app/
 
 echo 'Install latest packages'
-yarn 
+yarn
 
 echo 'Building the app ...'
 yarn build:app
 
-echo "AVARDA iframe style location ${ROOT_DIR}/view/frontend/web/css/avarda.css" 
+echo "AVARDA iframe style location ${ROOT_DIR}/view/frontend/web/css/avarda.css"
 
 echo 'Clear caches and all magento stuff ...'
-cd $MAGENTO2_DIR
+cd ${MAGENTO2_DIR}
 
 rm -rf var/cache/* var/page_cache/* var/di/* var/generation/* var/view_preprocessed/*
 bin/magento cache:flush
